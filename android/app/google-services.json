@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "1024745406426",
+    "firebase_url": "https://wenzer-d276a.firebaseio.com",
+    "project_id": "wenzer-d276a",
+    "storage_bucket": "wenzer-d276a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024745406426:android:06fe8ab68b341faf348ae3",
+        "android_client_info": {
+          "package_name": "com.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024745406426-5p30c1m6rrbhis0p3e6i36n9rk8oubmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3weaQO9nQv-z7Ksc3aIXeVlr-ok5QLF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024745406426-5p30c1m6rrbhis0p3e6i36n9rk8oubmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024745406426:android:b853a43ed5d54ac1348ae3",
+        "android_client_info": {
+          "package_name": "com.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024745406426-5p30c1m6rrbhis0p3e6i36n9rk8oubmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3weaQO9nQv-z7Ksc3aIXeVlr-ok5QLF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024745406426-5p30c1m6rrbhis0p3e6i36n9rk8oubmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024745406426:android:cfa60252febdda63348ae3",
+        "android_client_info": {
+          "package_name": "com.wenzer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024745406426-5p30c1m6rrbhis0p3e6i36n9rk8oubmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3weaQO9nQv-z7Ksc3aIXeVlr-ok5QLF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024745406426-5p30c1m6rrbhis0p3e6i36n9rk8oubmg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
