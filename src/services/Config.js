@@ -5,7 +5,7 @@ let config = {
   databaseURL: 'https://wenzer-d276a.firebaseio.com/',
   projectId: 'wenzer-d276a',
   storageBucket: 'wenzer-d276a.appspot.com',
-  messagingSenderId: 'OK'
+  messagingSenderId: 'OK',
 };
 let app = Firebase.initializeApp(config);
 export const db = app.database();

@@ -6,9 +6,10 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 
+import {LoginButton, AccessToken} from 'react-native-fbsdk';
 import styles from '../styles/LoginStyle';
 import {addItem} from '../services/Crud';
 import {db} from '../services/Config';
@@ -17,24 +18,23 @@ import logo from '../img/logo-wenzer.png';
 const getItems = db.ref('/items');
 
 export default class App extends Component {
-  
   state = {
     login: [],
-    senha: []
-  }
+    senha: [],
+  };
 
   handleChangeLogin = e => {
     this.setState({
-      login: e.nativeEvent.text
+      login: e.nativeEvent.text,
     });
   };
 
   handleChangeSenha = e => {
     this.setState({
-      senha: e.nativeEvent.text
-    })
-  }
-  
+      senha: e.nativeEvent.text,
+    });
+  };
+
   handleSubmit = () => {
     // addItem(this.state.name, 'items');
   };
@@ -46,12 +46,11 @@ export default class App extends Component {
     //     let items = Object.values(data);
     //     this.setState({ items });
     //   }
-      
     // });
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <View style={styles.main}>
         {/* <Text style={styles.title}>Add Item</Text>
         <TextInput style={styles.itemInput} onChange={this.handleChange} />
@@ -97,14 +96,29 @@ export default class App extends Component {
               secureTextEntry={true}
               onChange={this.handleChange} />
           </View>
-          
           <View>
             <TouchableOpacity
               style={styles.buttonText} 
               onPress={() => this.props.navigation.navigate('Posts')}>
-              
               <Text>Login</Text>
             </TouchableOpacity>
+            <LoginButton
+              onLoginFinished={
+                (error, result) => {
+                  if (error) {
+                    console.log("Erro no login: " + result.error);
+                  } else if (result.isCancelled) {
+                    console.log("Login cancelado.");
+                  } else {
+                    AccessToken.getCurrentAccessToken().then(
+                      (data) => {
+                        console.log(data.accessToken.toString())
+                      }
+                    )
+                  }
+                }
+              }
+              onLogoutFinished={() => console.log("logout.")}/>
           </View>
         </View>
       </View>
