@@ -25,40 +25,28 @@ export default styles = StyleSheet.create({
   },
   itemInput: {
   },
-  inputSection: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputEmailIcon: {
-    padding: 10,
-  },
   input: {
-    flex: 1,
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    paddingLeft: 0,
+    margin: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
+    width: 320,
     backgroundColor: '#8100CB',
     color: '#FFF',
-    margin: 10,
-    width: 320,
     fontSize: 14,
     borderColor: '#707070',
     borderWidth: 1
   },
   buttonText: {
-    fontSize: 18,
+    backgroundColor: '#4ED44E',
+    borderRadius: 25,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 125,
+    paddingRight: 125,
+    fontSize: 64,
     color: '#111',
     fontWeight: '100',
     alignSelf: 'center',
-    backgroundColor: '#D863FF',
-    paddingBottom: 20,
-    paddingTop: 20,
-    paddingLeft: 60,
-    paddingRight: 60,
-    borderRadius: 10
   },
   button: {
     height: 45,
@@ -76,11 +64,13 @@ export default styles = StyleSheet.create({
     textAlign: "center",
   },
   logo: {
-    marginBottom: 60
+    margin: 20
+
   },
   formulario: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 30,
   },
   contorno: {
     flex: 1,

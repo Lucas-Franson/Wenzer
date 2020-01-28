@@ -55,41 +55,59 @@ export default class App extends Component {
       <View style={styles.main}>
         <View style={styles.logo}>
 
-          <Image source={logo} style={{ width: 192, height: 206 }} />
+          <Image source={logo} style={{ width: 112, height: 126 }} />
         </View>
         <View style={styles.contorno}>
           <View style={styles.formulario}>
-            <View style={styles.inputSection}>
-              <Icon name="email" style={styles.inputEmailIcon} size={20} color="#000" />
-              <TextInput
-                style={[styles.textInput, styles.input]}
-                placeholder="E-mail"
-                placeholderTextColor="#FFF"
-                maxLength={40}
-                autoCompleteType="username"
-                onChange={this.handleChange} />
+            <View style={{ flex: 4 }}>
+              <View style={styles.inputSection}>
+                <TextInput
+                  style={[styles.textInput, styles.input]}
+                  placeholder="E-mail"
+                  placeholderTextColor="#FFF"
+                  maxLength={40}
+                  autoCompleteType="username"
+                  onChange={this.handleChange} />
+              </View>
+
+              <View style={styles.inputSection}>
+
+                <TextInput
+                  style={[styles.textInput, styles.input]}
+                  placeholder="Senha"
+                  placeholderTextColor="#FFF"
+                  maxLength={40}
+                  autoCompleteType="password"
+                  secureTextEntry={true}
+                  onChange={this.handleChange} />
+                <Text style={{ marginLeft: 10, color: '#FFF' }}>Esqueci minha senha</Text>
+              </View>
             </View>
 
-            <View style={styles.inputSection}>
-              <Icon name="lock" style={styles.inputEmailIcon} size={20} color="#000" />
-              <TextInput
-                style={[styles.textInput, styles.input]}
-                placeholder="Senha"
-                placeholderTextColor="#FFF"
-                maxLength={40}
-                autoCompleteType="password"
-                secureTextEntry={true}
-                onChange={this.handleChange} />
-              <Text style={{ marginLeft: 10, color: '#FFF' }}>Esqueci minha senha</Text>
-            </View>
-
-            <View>
+            <View style={{ flex: 2 }}>
               <TouchableOpacity
                 style={styles.buttonText}
                 onPress={() => this.props.navigation.navigate('Posts')}>
-                <Text>Login</Text>
+                <Text style={{ color: '#FFF', fontSize: 34 }}>Entrar</Text>
               </TouchableOpacity>
+            </View>
+
+            <View style={{ flex: 1, fontSize: 28, flexDirection: 'row' }}>
+              <Text style={{ color: '#FFF' }}>Não tem uma conta? </Text>
+              <Text style={{ color: '#4ED44E' }}> Registre-se</Text>
+            </View>
+
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+              <View style={{ height: 10, borderBottomColor: '#7400AE', borderBottomWidth: 1, width: 150, margin: 10 }}></View>
+              <View>
+                <Text style={{ color: '#FFF' }}>ou</Text>
+              </View>
+              <View style={{ height: 10, borderBottomColor: '#7400AE', borderBottomWidth: 1, width: 150, margin: 10 }}></View>
+            </View>
+
+            <View style={{ flex: 3 }}>
               <LoginButton
+                style={{ paddingTop: 20, paddingBottom: 20, paddingRight: 120, paddingLeft: 120, backgroundColor: '#485496', borderRadius: 30 }}
                 onLoginFinished={
                   (error, result) => {
                     if (error) {
@@ -107,6 +125,7 @@ export default class App extends Component {
                 }
                 onLogoutFinished={() => console.log("logout.")} />
             </View>
+
           </View>
         </View>
       </View>
