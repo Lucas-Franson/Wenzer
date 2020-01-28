@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -9,11 +9,11 @@ import {
   Image,
 } from 'react-native';
 
-import {LoginButton, AccessToken} from 'react-native-fbsdk';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import styles from '../styles/LoginStyle';
-import {addItem} from '../services/Crud';
-import {db} from '../services/Config';
-import logo from '../img/logo-wenzer.png';
+import { addItem } from '../services/Crud';
+import { db } from '../services/Config';
+import logo from '../img/drawable-xhdpi/logo.png';
 
 const getItems = db.ref('/items');
 
@@ -52,73 +52,59 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.main}>
-        {/* <Text style={styles.title}>Add Item</Text>
-        <TextInput style={styles.itemInput} onChange={this.handleChange} />
-        <TouchableHighlight
-          style={styles.button}
-          underlayColor="white"
-          onPress={this.handleSubmit}
-        >
-          <Text style={styles.buttonText}>Add</Text>
-        </TouchableHighlight>
-
-        <View style={styles.itemsList}>
-          {this.state.items.map((item, index) => {
-            return (
-              <View key={index}>
-                <Text style={styles.itemtext}>{item.name}</Text>
-              </View>
-            );
-          })}
-        </View> */}
         <View style={styles.logo}>
 
-          <Image source={logo} style={{width: 210, height: 210}} />
+          <Image source={logo} style={{ width: 192, height: 206 }} />
         </View>
-        <View style={styles.formulario}>
-          <View>
+        <View style={styles.contorno}>
+          <View style={styles.formulario}>
+            <View>
+              <TextInput
+                style={[styles.textInput, styles.input]}
+                placeholder="E-mail"
+                placeholderTextColor="#FFF"
+                maxLength={40}
+                autoCompleteType="username"
+                onChange={this.handleChange} />
+            </View>
 
-            <TextInput 
-              style={[styles.textInput, styles.input]}
-              placeholder="Usuário"
-              maxLength={40}
-              autoCompleteType="username"
-              onChange={this.handleChange} />
-          </View>
+            <View>
 
-          <View>
+              <TextInput
+                style={[styles.textInput, styles.input]}
+                placeholder="Senha"
+                placeholderTextColor="#FFF"
+                maxLength={40}
+                autoCompleteType="password"
+                secureTextEntry={true}
+                onChange={this.handleChange} />
+              <Text style={{ marginLeft: 10, color: '#FFF' }}>Esqueci minha senha</Text>
+            </View>
 
-            <TextInput 
-              style={[styles.textInput, styles.input]}
-              placeholder="Senha"
-              maxLength={40}
-              autoCompleteType="password"
-              secureTextEntry={true}
-              onChange={this.handleChange} />
-          </View>
-          <View>
-            <TouchableOpacity
-              style={styles.buttonText} 
-              onPress={() => this.props.navigation.navigate('Posts')}>
-              <Text>Login</Text>
-            </TouchableOpacity>
-            <LoginButton
-              onLoginFinished={
-                (error, result) => {
-                  if (error) {
-                    console.log("Erro no login: " + result.error);
-                  } else if (result.isCancelled) {
-                    console.log("Login cancelado.");
-                  } else {
-                    AccessToken.getCurrentAccessToken().then(
-                      (data) => {
-                        console.log(data.accessToken.toString())
-                      }
-                    )
+            <View>
+              <TouchableOpacity
+                style={styles.buttonText}
+                onPress={() => this.props.navigation.navigate('Posts')}>
+                <Text>Login</Text>
+              </TouchableOpacity>
+              <LoginButton
+                onLoginFinished={
+                  (error, result) => {
+                    if (error) {
+                      console.log("Erro no login: " + result.error);
+                    } else if (result.isCancelled) {
+                      console.log("Login cancelado.");
+                    } else {
+                      AccessToken.getCurrentAccessToken().then(
+                        (data) => {
+                          console.log(data.accessToken.toString())
+                        }
+                      )
+                    }
                   }
                 }
-              }
-              onLogoutFinished={() => console.log("logout.")}/>
+                onLogoutFinished={() => console.log("logout.")} />
+            </View>
           </View>
         </View>
       </View>
