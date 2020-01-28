@@ -25,13 +25,25 @@ export default styles = StyleSheet.create({
   },
   itemInput: {
   },
+  inputSection: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputEmailIcon: {
+    padding: 10,
+  },
   input: {
-    margin: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
-    width: 320,
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
     backgroundColor: '#8100CB',
     color: '#FFF',
+    margin: 10,
+    width: 320,
     fontSize: 14,
     borderColor: '#707070',
     borderWidth: 1

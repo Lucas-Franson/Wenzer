@@ -14,6 +14,7 @@ import styles from '../styles/LoginStyle';
 import { addItem } from '../services/Crud';
 import { db } from '../services/Config';
 import logo from '../img/drawable-xhdpi/logo.png';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const getItems = db.ref('/items');
 
@@ -58,7 +59,8 @@ export default class App extends Component {
         </View>
         <View style={styles.contorno}>
           <View style={styles.formulario}>
-            <View>
+            <View style={styles.inputSection}>
+              <Icon name="email" style={styles.inputEmailIcon} size={20} color="#000" />
               <TextInput
                 style={[styles.textInput, styles.input]}
                 placeholder="E-mail"
@@ -68,8 +70,8 @@ export default class App extends Component {
                 onChange={this.handleChange} />
             </View>
 
-            <View>
-
+            <View style={styles.inputSection}>
+              <Icon name="lock" style={styles.inputEmailIcon} size={20} color="#000" />
               <TextInput
                 style={[styles.textInput, styles.input]}
                 placeholder="Senha"
