@@ -59,7 +59,7 @@ export default class App extends Component {
         </View>
         <View style={styles.contorno}>
           <View style={styles.formulario}>
-            <View style={{ flex: 4 }}>
+            <View style={{ flex: 6 }}>
               <View style={styles.inputSection}>
                 <TextInput
                   style={[styles.textInput, styles.input]}
