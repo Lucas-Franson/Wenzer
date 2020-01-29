@@ -9,12 +9,12 @@ import {
   Image,
 } from 'react-native';
 
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
+import { LoginManager, LoginButton } from 'react-native-fbsdk';
 import styles from '../styles/LoginStyle';
 import { addItem } from '../services/Crud';
 import { db } from '../services/Config';
 import logo from '../img/drawable-xhdpi/logo.png';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const getItems = db.ref('/items');
 
@@ -48,6 +48,21 @@ export default class App extends Component {
     //     this.setState({ items });
     //   }
     // });
+  }
+
+  handleFacebookLogin() {
+    LoginManager.logInWithPermissions(['public_profile']).then(
+      function (result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled')
+        } else {
+          console.log('Login success with permissions: ' + result.grantedPermissions.toString())
+        }
+      },
+      function (error) {
+        console.log('Login fail with error: ' + error)
+      }
+    )
   }
 
   render() {
@@ -92,38 +107,29 @@ export default class App extends Component {
               </TouchableOpacity>
             </View>
 
-            <View style={{ flex: 1, fontSize: 28, flexDirection: 'row' }}>
-              <Text style={{ color: '#FFF' }}>Não tem uma conta? </Text>
-              <Text style={{ color: '#4ED44E' }}> Registre-se</Text>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <Text style={{ color: '#FFF', fontSize: 16 }}>Não tem uma conta? </Text>
+              <Text style={{ color: '#4ED44E', fontSize: 16 }}> Registre-se</Text>
             </View>
 
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', flex: 1 }}>
               <View style={{ height: 10, borderBottomColor: '#7400AE', borderBottomWidth: 1, width: 150, margin: 10 }}></View>
               <View>
-                <Text style={{ color: '#FFF' }}>ou</Text>
+                <Text style={{ color: '#FFF', fontSize: 16 }}>ou</Text>
               </View>
               <View style={{ height: 10, borderBottomColor: '#7400AE', borderBottomWidth: 1, width: 150, margin: 10 }}></View>
             </View>
 
             <View style={{ flex: 3 }}>
-              <LoginButton
-                style={{ paddingTop: 20, paddingBottom: 20, paddingRight: 120, paddingLeft: 120, backgroundColor: '#485496', borderRadius: 30 }}
-                onLoginFinished={
-                  (error, result) => {
-                    if (error) {
-                      console.log("Erro no login: " + result.error);
-                    } else if (result.isCancelled) {
-                      console.log("Login cancelado.");
-                    } else {
-                      AccessToken.getCurrentAccessToken().then(
-                        (data) => {
-                          console.log(data.accessToken.toString())
-                        }
-                      )
-                    }
-                  }
-                }
-                onLogoutFinished={() => console.log("logout.")} />
+              <TouchableHighlight
+                onPress={this.handleFacebookLogin}
+                style={styles.fbButton}
+              >
+                <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                  <Icon name="facebook" style={{ marginLeft: -60 }} size={20} color="#FFF" />
+                  <Text style={{ color: '#FFF', marginLeft: 50 }}> FACEBOOK</Text>
+                </View>
+              </TouchableHighlight>
             </View>
 
           </View>

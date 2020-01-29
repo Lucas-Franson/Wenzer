@@ -76,9 +76,19 @@ export default styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#C144FF',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     borderWidth: 1,
     borderColor: '#707070',
+  },
+  fbButton: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: "#3b5998",
+    width: 260,
+    height: 45,
+    borderRadius: 20,
+    borderColor: '#8faeed',
+    borderWidth: 1
   }
 });
