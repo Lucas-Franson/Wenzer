@@ -3,14 +3,14 @@ import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Picker, Ale
 
 import styles from '../styles/PostsStyle';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import logo from '../img/logo-wenzer.png';
+import logo from '../img/drawable-ldpi/logo.png';
 import CardPost from '../components/card-post';
 import user from '../img/user.png';
 
 export default class Home extends Component {
 
   handleProfile = (itemValue) => {
-    
+
   }
 
   searchProjects = () => {
@@ -23,21 +23,21 @@ export default class Home extends Component {
         <ScrollView>
           <View style={styles.header}>
             <View style={styles.logo}>
-              <Image source={logo} style={{width: 60, height: 60}} />
+              <Image source={logo} style={{ width: 60, height: 65 }} />
             </View>
             <View style={styles.search}>
-              <TextInput style={styles.searchField} 
+              <TextInput style={styles.searchField}
                 placeholder="Pesquisar Projetos"
                 maxLength={100}
               />
               <TouchableOpacity style={styles.searchButton}
                 onPress={() => this.searchProjects()}>
-              <Icon name='search' size={30} color="#000" />
+                <Icon name='search' size={30} color="#000" />
               </TouchableOpacity>
             </View>
             <View style={styles.profile}>
-              <Image source={user} style={{width: 40, height: 40}} />
-              <Picker style={styles.pickerProfile} 
+              <Image source={user} style={{ width: 40, height: 40 }} />
+              <Picker style={styles.pickerProfile}
                 placeholder=""
                 onValueChange={(itemValue, itemIndex) => this.handleProfile(itemValue)}>
                 <Picker.Item label="Configurações" value="config" />

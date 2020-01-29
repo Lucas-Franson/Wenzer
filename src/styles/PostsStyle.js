@@ -3,14 +3,15 @@ import { StyleSheet } from 'react-native';
 export default styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#D863FF'
+        backgroundColor: '#FFF'
     },
     header: {
         flex: 1,
+        backgroundColor: '#D863FF',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: 10
+        padding: 10
     },
     content: {
         flex: 7
