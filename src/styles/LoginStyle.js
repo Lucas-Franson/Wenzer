@@ -39,14 +39,14 @@ export default styles = StyleSheet.create({
   buttonText: {
     backgroundColor: '#4ED44E',
     borderRadius: 25,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 125,
-    paddingRight: 125,
+    height: 50,
+    width: 300,
     fontSize: 64,
     color: '#111',
     fontWeight: '100',
+    flexDirection: 'row',
     alignSelf: 'center',
+    justifyContent: 'center'
   },
   button: {
     height: 45,

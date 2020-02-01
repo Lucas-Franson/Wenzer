@@ -7,6 +7,7 @@ import {
   Button,
   TouchableOpacity,
   Image,
+  Alert
 } from 'react-native';
 
 import { LoginManager, LoginButton } from 'react-native-fbsdk';
@@ -14,58 +15,32 @@ import styles from '../styles/LoginStyle';
 import { addItem } from '../services/Crud';
 import { db } from '../services/Config';
 import logo from '../img/drawable-xhdpi/logo.png';
-import Icon from 'react-native-vector-icons/FontAwesome';
+
+import LoginForm from '../components/LoginForm';
+import RegisterForm from '../components/RegisterForm';
+import ForgotPassword from '../components/ForgotPassword';
 
 const getItems = db.ref('/items');
 
 export default class App extends Component {
   state = {
-    login: [],
-    senha: [],
-  };
-
-  handleChangeLogin = e => {
-    this.setState({
-      login: e.nativeEvent.text,
-    });
-  };
-
-  handleChangeSenha = e => {
-    this.setState({
-      senha: e.nativeEvent.text,
-    });
-  };
-
-  handleSubmit = () => {
-    // addItem(this.state.name, 'items');
-  };
-
-  componentDidMount() {
-    // getItems.on('value', snapshot => {
-    //   let data = snapshot.val();
-    //   if(data != undefined && data != null){
-    //     let items = Object.values(data);
-    //     this.setState({ items });
-    //   }
-    // });
+    screen: 'login'
   }
 
-  handleFacebookLogin() {
-    LoginManager.logInWithPermissions(['public_profile']).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.log('Login cancelled')
-        } else {
-          console.log('Login success with permissions: ' + result.grantedPermissions.toString())
-        }
-      },
-      function (error) {
-        console.log('Login fail with error: ' + error)
-      }
-    )
+  handleChangeScreen (screen) {
+    this.setState({screen});
   }
 
   render() {
+    let screen = null;
+
+    if(this.state.screen == 'login')
+      screen = <LoginForm handleChangeScreen={this.handleChangeScreen.bind(this)} />
+    else if(this.state.screen == 'register')
+      screen = <RegisterForm handleChangeScreen={this.handleChangeScreen.bind(this)} />
+    else
+      screen = <ForgotPassword handleChangeScreen={this.handleChangeScreen.bind(this)} />
+
     return (
       <View style={styles.main}>
         <View style={styles.logo}>
@@ -73,66 +48,7 @@ export default class App extends Component {
           <Image source={logo} style={{ width: 112, height: 126 }} />
         </View>
         <View style={styles.contorno}>
-          <View style={styles.formulario}>
-            <View style={{ flex: 6 }}>
-              <View style={styles.inputSection}>
-                <TextInput
-                  style={[styles.textInput, styles.input]}
-                  placeholder="E-mail"
-                  placeholderTextColor="#FFF"
-                  maxLength={40}
-                  autoCompleteType="username"
-                  onChange={this.handleChange} />
-              </View>
-
-              <View style={styles.inputSection}>
-
-                <TextInput
-                  style={[styles.textInput, styles.input]}
-                  placeholder="Senha"
-                  placeholderTextColor="#FFF"
-                  maxLength={40}
-                  autoCompleteType="password"
-                  secureTextEntry={true}
-                  onChange={this.handleChange} />
-                <Text style={{ marginLeft: 10, color: '#FFF' }}>Esqueci minha senha</Text>
-              </View>
-            </View>
-
-            <View style={{ flex: 2 }}>
-              <TouchableOpacity
-                style={styles.buttonText}
-                onPress={() => this.props.navigation.navigate('Posts')}>
-                <Text style={{ color: '#FFF', fontSize: 34 }}>Entrar</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Text style={{ color: '#FFF', fontSize: 16 }}>Não tem uma conta? </Text>
-              <Text style={{ color: '#4ED44E', fontSize: 16 }}> Registre-se</Text>
-            </View>
-
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-              <View style={{ height: 10, borderBottomColor: '#7400AE', borderBottomWidth: 1, width: 150, margin: 10 }}></View>
-              <View>
-                <Text style={{ color: '#FFF', fontSize: 16 }}>ou</Text>
-              </View>
-              <View style={{ height: 10, borderBottomColor: '#7400AE', borderBottomWidth: 1, width: 150, margin: 10 }}></View>
-            </View>
-
-            <View style={{ flex: 3 }}>
-              <TouchableHighlight
-                onPress={this.handleFacebookLogin}
-                style={styles.fbButton}
-              >
-                <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                  <Icon name="facebook" style={{ marginLeft: -60 }} size={20} color="#FFF" />
-                  <Text style={{ color: '#FFF', marginLeft: 50 }}> FACEBOOK</Text>
-                </View>
-              </TouchableHighlight>
-            </View>
-
-          </View>
+          {screen}
         </View>
       </View>
     )
