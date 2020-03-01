@@ -9,8 +9,10 @@ import user from '../img/user.png';
 
 export default class Home extends Component {
 
-  handleProfile = (itemValue) => {
-
+  handleProfile = (itemValue, itemIndex) => {
+    if(itemValue == "logout"){
+      this.props.navigation.navigate("Login");
+    }
   }
 
   searchProjects = () => {

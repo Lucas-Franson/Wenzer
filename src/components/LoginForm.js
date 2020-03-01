@@ -4,17 +4,23 @@ import {
     TextInput,
     TouchableOpacity,
     Text,
-    TouchableHighlight
+    TouchableHighlight,
+    Alert
 } from 'react-native';
 
 import styles from '../styles/LoginStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { LoginManager } from 'react-native-fbsdk';
 
 export default class LoginForm extends Component {
-    state = {
-        login: [],
-        senha: [],
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            login: [],
+            senha: [],
+        };
+    }
 
     handleChangeLogin = e => {
         this.setState({
@@ -53,6 +59,7 @@ export default class LoginForm extends Component {
     handleFacebookLogin() {
         LoginManager.logInWithPermissions(['email', 'public_profile', 'user_friends']).then(
             function (result) {
+                debugger;
             if (result.isCancelled) {
                 console.log('Login cancelled')
                 Alert.alert("Canceled: "+JSON.stringify(result));
@@ -62,12 +69,14 @@ export default class LoginForm extends Component {
             }
             },
             function (error) {
-            Alert.alert("error: " + error);
+                debugger;
+                Alert.alert("error: " + error);
             }
         )
     }
 
     render() {
+
         return(
             <View style={styles.formulario}>
                 <View style={{ flex: 6 }}>
@@ -102,7 +111,7 @@ export default class LoginForm extends Component {
                 <View style={{ flex: 2 }}>
                     <TouchableOpacity
                         style={styles.buttonText}
-                        onPress={() => this.props.navigation.navigate('Posts')}>
+                        onPress={() => this.props.navigation.navigate('Initial')}>
                         <Text style={{ color: '#FFF', fontSize: 34 }}>Entrar</Text>
                     </TouchableOpacity>
                 </View>

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconTwo from 'react-native-vector-icons/MaterialIcons';
 
 import Login from './views/Login';
-import Posts from './views/Posts';
+import Feed from './views/Feed';
 import Profile from './views/Profile';
 import Projects from './views/Projects';
 import HotProjects from './views/HotProjects';
@@ -14,8 +14,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const BottomTabNavigator = createBottomTabNavigator(
   {
-    Posts: {
-        screen: Posts, navigationOptions: {
+    Feed: {
+        screen: Feed, navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon name="home" size={30} color="#000" />
         )
@@ -44,7 +44,7 @@ const BottomTabNavigator = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'Posts',
+    initialRouteName: 'Feed',
     navigationOptions: {
       headerShown: false,
       tabBarButtonComponent: TouchableOpacity
@@ -69,6 +69,8 @@ const StackNavigator = createStackNavigator(
 );
 
 const AppContainer = createAppContainer(StackNavigator);
+
+// AppRegistry.registerComponent('AppContainer', () => AppContainer);
 
 export default class Router extends Component {
   render() {

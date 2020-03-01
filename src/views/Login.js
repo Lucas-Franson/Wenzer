@@ -6,11 +6,10 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  Image,
-  Alert
+  Image
 } from 'react-native';
 
-import { LoginManager, LoginButton } from 'react-native-fbsdk';
+// import { LoginManager, LoginButton } from 'react-native-fbsdk';
 import styles from '../styles/LoginStyle';
 import { addItem } from '../services/Crud';
 import { db } from '../services/Config';
@@ -35,16 +34,15 @@ export default class App extends Component {
     let screen = null;
 
     if(this.state.screen == 'login')
-      screen = <LoginForm handleChangeScreen={this.handleChangeScreen.bind(this)} />
+      screen = <LoginForm handleChangeScreen={this.handleChangeScreen.bind(this)} navigation={this.props.navigation} />
     else if(this.state.screen == 'register')
       screen = <RegisterForm handleChangeScreen={this.handleChangeScreen.bind(this)} />
     else
       screen = <ForgotPassword handleChangeScreen={this.handleChangeScreen.bind(this)} />
-
+    
     return (
       <View style={styles.main}>
         <View style={styles.logo}>
-
           <Image source={logo} style={{ width: 112, height: 126 }} />
         </View>
         <View style={styles.contorno}>
