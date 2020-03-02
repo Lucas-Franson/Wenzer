@@ -5,6 +5,8 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import cl.json.RNSharePackage;
+import cl.json.ShareApplication;
 
 
 import com.imagepicker.ImagePickerPackage;

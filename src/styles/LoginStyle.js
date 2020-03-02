@@ -90,5 +90,15 @@ export default styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#8faeed',
     borderWidth: 1
+  },
+  waButton: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: "#128c7e",
+    width: 260,
+    height: 45,
+    borderRadius: 20,
+    borderColor: '#8faeed',
+    borderWidth: 1
   }
 });

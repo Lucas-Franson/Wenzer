@@ -5,12 +5,26 @@ import {
     TouchableOpacity,
     Text,
     TouchableHighlight,
-    Alert
+    Alert,
+    Linking
 } from 'react-native';
 
 import styles from '../styles/LoginStyle';
+import Share from 'react-native-share';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { LoginManager } from 'react-native-fbsdk';
+import { LoginManager, AccessToken } from 'react-native-fbsdk';
+
+const url = 'https://awesome.contents.com/';
+const title = 'Awesome Contents';
+const message = 'Please check this out.';
+
+const options = Platform.select({
+    default: {
+      title,
+      subject: title,
+      message: `${message} ${url}`,
+    },
+  });
 
 export default class LoginForm extends Component {
     constructor(props) {
@@ -19,6 +33,7 @@ export default class LoginForm extends Component {
         this.state = {
             login: [],
             senha: [],
+            userF: {}
         };
     }
 
@@ -46,10 +61,11 @@ export default class LoginForm extends Component {
         //     this.setState({ items });
         //   }
         // });
+        
     }
 
     handleRegister() {
-
+        Share.open(options);
     }
 
     handleForgotPassword() {
@@ -64,8 +80,23 @@ export default class LoginForm extends Component {
                 console.log('Login cancelled')
                 Alert.alert("Canceled: "+JSON.stringify(result));
             } else {
-                console.log('Login success with permissions: ' + result.grantedPermissions.toString())
-                Alert.alert("Success");
+                AccessToken.getCurrentAccessToken().then(
+                    async (data) => {
+                        const { accessToken } = data;
+                        debugger;
+                        await fetch('https://graph.facebook.com/v2.5/me?fields=email,name,friends&access_token=' + accessToken)
+                            .then((response) => response.json())
+                            .then((json) => {
+                                // Some user object has been set up somewhere, build that user here   
+
+                                this.setState({userF: json});
+                                debugger;
+                            })
+                            .catch((err) => {
+                                Alert.alert('ERROR GETTING DATA FROM FACEBOOK')
+                            })
+                    }
+                )
             }
             },
             function (error) {
@@ -73,6 +104,11 @@ export default class LoginForm extends Component {
                 Alert.alert("error: " + error);
             }
         )
+    }
+
+    handleGetUser(token) {
+        debugger;
+        
     }
 
     render() {
@@ -145,6 +181,14 @@ export default class LoginForm extends Component {
                         <View style={{ flexDirection: "row", alignItems: 'center' }}>
                         <Icon name="facebook" style={{ marginLeft: -60 }} size={20} color="#FFF" />
                         <Text style={{ color: '#FFF', marginLeft: 50 }}> FACEBOOK</Text>
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        style={styles.waButton}
+                        onPress={ this.handleRegister }>
+                        <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                        <Icon name="whatsapp" style={{ marginLeft: -60 }} size={20} color="#FFF" />
+                        <Text style={{ color: '#FFF', marginLeft: 50 }}> WHATSAPP</Text>
                         </View>
                     </TouchableHighlight>
                 </View>
