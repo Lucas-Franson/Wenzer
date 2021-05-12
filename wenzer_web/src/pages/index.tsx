@@ -1,7 +1,9 @@
 import React from 'react';
+import { Button } from '@material-ui/core';
+import Header from '../components/Header';
 
 export default function Home() {
   return (
-    <h1>Hello wenzer</h1>
+    <Header/>
   )
 }
