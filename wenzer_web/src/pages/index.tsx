@@ -1,9 +1,13 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
-import Header from '../components/Header';
+import Layout from '../components/Layout';
+import Head from 'next/head';
 
 export default function Home() {
   return (
-    <Header/>
-  )
+    <Layout>
+      <Head>
+        <title>Wenzer</title>
+      </Head>
+    </Layout>
+  );
 }
