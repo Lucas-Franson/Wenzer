@@ -1,0 +1,13 @@
+{
+   "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "strict": false,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true
+   }
+}
