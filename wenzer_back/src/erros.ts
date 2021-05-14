@@ -6,6 +6,14 @@ class UsuarioJaCadastrado extends Error {
     }
 }
 
+class NaoEncontrado extends Error {
+    constructor(mensagem) {
+        super(mensagem);
+        this.name = 'NaoEncontrado';
+    }
+}
+
 export {
-    UsuarioJaCadastrado
+    UsuarioJaCadastrado,
+    NaoEncontrado
 }

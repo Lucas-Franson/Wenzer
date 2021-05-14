@@ -1,25 +1,47 @@
 import { Request, Response } from 'express';
 import { Usuario } from '../entities/Usuario';
 import { LoginService } from '../services/LoginService';
+import { EmailVerificacao } from '../utils/Email';
 
 class LoginController {
 
-    public async logar(req: Request, res: Response) {
-        return res.status(200).json({ message: 'endpoint de login' });
+    public async login(req: Request, res: Response, proximo) {
+        const { email, senha } = req.body;
+        const loginService = new LoginService();
+        
+        try {
+            const user = await loginService.verificarUsuario({ email, senha });
+            const accessToken = await Usuario.criaTokenJWT(user.id, [1, 'h']);
+
+            res.set('Authorization', accessToken);
+            res.status(200);
+            res.end();
+        } catch(err) {
+            proximo(err);
+        }
     }
 
-    public async cadastrar(req: Request, res: Response) {
+    public async cadastrar(req: Request, res: Response, proximo) {
         const { nome, email, senha } = req.body;
         const loginService = new LoginService();
 
         try {
             const id = await loginService.cadastrar({ nome, email, senha });
 
+            const token = await Usuario.criaTokenJWT(id, [1, 'h']);
+            const endereco = this.geraEndereco('/login/verifica_email/', token);
+            const emailVerificacao = new EmailVerificacao(email, endereco);
+            emailVerificacao.enviaEmail().catch((err) => res.status(500).json(err.message));
+            
             return res.status(201).json({ id });
         } catch(err) {
-            console.log(err);
-            return res.status(500).json({ message: err.message });
+            proximo(err);
         }
+    }
+
+    private geraEndereco(rota, token) {
+        const baseUrl = process.env.BASE_URL;
+        return `${baseUrl}${rota}${token}`;
     }
 
     public async recuperaSenha(req: Request, res: Response) {
