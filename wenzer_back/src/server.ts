@@ -7,6 +7,12 @@ import { GlobalErrorHandler } from './middlewares';
 
 const app = express();
 
+app.use((req, res, proximo) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    
+    proximo();
+})
+
 const http = createServer(app);
 
 app.use(express.json());
