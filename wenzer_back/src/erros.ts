@@ -13,7 +13,15 @@ class NaoEncontrado extends Error {
     }
 }
 
+class NaoAutorizado extends Error {
+    constructor(mensagem) {
+        super(mensagem);
+        this.name = 'NaoAutorizado';
+    }
+}
+
 export {
     UsuarioJaCadastrado,
-    NaoEncontrado
+    NaoEncontrado,
+    NaoAutorizado
 }

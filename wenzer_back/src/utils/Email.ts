@@ -6,20 +6,9 @@ const configuracaoEmailProducao = {
         user: process.env.EMAIL_USUARIO,
         pass: process.env.EMAIL_SENHA
     },
-    secure: true
-}
-
-const configuracaoEmailTeste = (contaTeste) => ({
-    host: 'smtp.ethereal.email',
-    auth: contaTeste,
-});
-
-async function criaConfiguracaoEmail() {
-    if (process.env.NODE_ENV === 'production') {
-        return configuracaoEmailProducao;
-    } else {
-        const contaTeste = await nodemailer.createTestAccount();
-        return configuracaoEmailTeste(contaTeste);
+    secure: true,
+    tls: {
+        rejectUnauthorized: false
     }
 }
 
@@ -32,14 +21,15 @@ class Email {
         protected html: string) {}
 
     async enviaEmail() {
-        const configuracaoEmail = await criaConfiguracaoEmail();
-        const transportador = nodemailer.createTransport(configuracaoEmail);
-    
-        const info = await transportador.sendMail(this);
-    
-        if(process.env.NODE_ENV !== 'production'){
-            console.log('URL:' + nodemailer.getTestMessageUrl(info));
-        }
+        const transportador = nodemailer.createTransport(configuracaoEmailProducao);
+        
+        const info = await transportador.sendMail({
+            from: this.from,
+            to: this.to,
+            subject: this.subject,
+            text: this.text,
+            html: this.html,
+        });
     }
 }
 

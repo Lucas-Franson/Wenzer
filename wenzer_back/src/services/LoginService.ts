@@ -1,6 +1,6 @@
 import { getCustomRepository, Repository } from 'typeorm';
 import { Usuario } from '../entities/Usuario';
-import { NaoEncontrado, UsuarioJaCadastrado } from '../erros';
+import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado } from '../erros';
 import { ILogin, ILoginCadastro } from '../interfaces/ILogin';
 import { UsuarioRepository } from '../repositories/UsuarioRepository';
 
@@ -31,14 +31,18 @@ class LoginService {
     }
 
     async verificarUsuario({ email, senha }: ILogin) {
-        const senhaHash = await Usuario.gerarSenhaHash(senha);
-        console.log(senhaHash);
         const userOne = await this.userRepository.findOne({
-            email, senha: senhaHash
+            email
         });
         
         if (!userOne) {
             throw new NaoEncontrado('Email ou senha não encontrados.');
+        }
+
+        const valido = await Usuario.verificaSenha(senha, userOne.senha);
+
+        if (!valido) {
+            throw new NaoAutorizado('Email ou senha não encontrados');
         }
         
         return userOne;

@@ -1,5 +1,6 @@
 import {Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { v4 as uuid } from 'uuid';
+import { NaoAutorizado } from '../erros';
 const bcrypt = require('bcrypt');
 const jwt =  require('jsonwebtoken');
 
@@ -38,11 +39,16 @@ export class Usuario {
         return bcrypt.hash(senha, custoHash);
     }
 
+    static verificaSenha(senha, senhaHash) {
+        const senhaValida = bcrypt.compare(senha, senhaHash);    
+        return senhaValida;
+    }
+
     static criaTokenJWT(id, [tempoQuantidade, tempoUnidade]) {
         const payload = { 
           id
         };
-        console.log(process.env.CHAVE_JWT);
+        
         const token = jwt.sign(payload, process.env.CHAVE_JWT, { expiresIn: tempoQuantidade+tempoUnidade });
         return token;
     }
