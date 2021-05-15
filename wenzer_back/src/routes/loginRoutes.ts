@@ -5,7 +5,7 @@ const routes = Router();
 
 const loginController = new LoginController();
 
-routes.get('/api/login', loginController.logar)
+routes.post('/api/login', loginController.login)
     .post('/api/cadastrar', loginController.cadastrar)
     .post('/api/recupera-senha', loginController.recuperaSenha)
 
