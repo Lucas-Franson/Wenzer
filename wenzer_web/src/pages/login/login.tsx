@@ -1,12 +1,16 @@
 import { Paper } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
-import Layout from '../../components/Layout';
 import { useStyles } from '../styles';
+import api from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function login(){
-  const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const classes = useStyles();
+  const router = useRouter();
+  const { Authentication } = useAuth();
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -17,15 +21,25 @@ export default function login(){
     };
 
     await fetch('http://localhost:3333/api/login', {
-      method: "POST",
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
+    Authentication();
+    await router.push('/');
+
+    // await api.post('/api/login', data).then(async (data) => {
+    //   Authentication();
+    //   console.log(data.headers);
+    //   await router.push('/');
+
+    // }).catch((e) => {
+    //   alert(e.message);
+    // })
   }
 
   return (
-    <Layout>
       <Paper className={classes.root} elevation={20}>
         <form className={classes.formLogin} onSubmit={submit}>
           <h1>Log-in</h1>
@@ -44,6 +58,5 @@ export default function login(){
           <button type="submit">Sign in</button>
         </form>
       </Paper>
-    </Layout>
   );
 }

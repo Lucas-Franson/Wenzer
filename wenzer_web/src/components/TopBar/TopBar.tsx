@@ -1,14 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { Box, Button } from '@material-ui/core';
+import { Box, IconButton, InputBase, Menu, MenuItem } from '@material-ui/core';
+import { MdSearch, MdHome, MdWhatshot, MdPortrait, MdRateReview } from 'react-icons/md';
 
 import { useStyles } from './styles';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function PrimarySearchAppBar() {
+  const [openMenu, setOpenmenu] = useState(null);
+  
+  const { Authentication } = useAuth();
   const classes = useStyles();
+  const isMenuOpen = Boolean(openMenu);
+
+  const handleMenuClose = () => {
+    setOpenmenu(null);
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setOpenmenu(event.currentTarget);
+  };
+
+  const renderMenu = (
+    <Menu
+      anchorEl={openMenu}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem className={classes.menuItem} onClick={handleMenuClose}>
+        Perfil
+      </MenuItem>
+      <MenuItem className={classes.menuItem} onClick={handleMenuClose}>
+        Configurações
+      </MenuItem>
+      <MenuItem className={classes.menuItem} onClick={() => {
+        handleMenuClose;
+        Authentication();
+      }}>
+        Sair
+      </MenuItem>
+    </Menu>
+  );
 
   return (
     <div>
@@ -22,32 +60,43 @@ export default function PrimarySearchAppBar() {
                 style={{ width: '50px' }}
               />
             </Link>
-            <h2>Wenzer</h2>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <MdSearch />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </div>
           </Box>
-          <Box className={classes.sectionDesktop}>
-            <Link href="/login">
-              <Button
-                className={classes.button}
-                type="button"
-                variant="outlined"
-                color="primary"
-              >
-                Entrar
-              </Button>
-            </Link>
-            <Link href="register">
-              <Button
-                className={classes.button}
-                type="button"
-                variant="contained"
-                color="primary"
-              >
-                Cadastre-se
-              </Button>
-            </Link>
+          <Box>
+            <IconButton color="inherit">
+              <MdHome size={30} />
+            </IconButton>
+            <IconButton color="inherit">
+              <MdWhatshot size={30} />
+            </IconButton>
+            <IconButton color="inherit">
+              <MdRateReview size={30} />
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <MdPortrait size={30} />
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
+      {renderMenu}
     </div>
   );
 }
