@@ -9,6 +9,11 @@ export default class MyDocument extends Document {
       <Html lang="pt-br">
         <Head>
           {/* PWA primary color */}
+          <title>Wenzer</title>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width"
+          />
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link

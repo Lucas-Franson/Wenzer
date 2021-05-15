@@ -1,4 +1,4 @@
-import { Paper } from '@material-ui/core';
+import { colors, Paper } from '@material-ui/core';
 import React, { FormEvent, useState } from 'react';
 import Layout from '../../components/Layout';
 import { useStyles } from '../styles';
@@ -22,16 +22,17 @@ export default function Register(){
     };
 
     await fetch('http://localhost:3333/api/cadastrar', {
-      method: "POST",
+      method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data)
     });
+
+    // await api.post('/api/cadastrar', data);
 
     await router.push('/login');
   }
 
   return (
-    <Layout>
       <Paper className={classes.root} elevation={20}>
         <form className={classes.formLogin} onSubmit={submit}>
           <h1>Register</h1>
@@ -56,6 +57,5 @@ export default function Register(){
           <button type="submit">Sign in</button>
         </form>
       </Paper>
-    </Layout>
   );
 };

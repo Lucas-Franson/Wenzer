@@ -7,8 +7,8 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '20vh',
-    width: '20vw',
+    height: '30vh',
+    width: '30vw',
     overflow: 'hidden',
   },
   formLogin: {
