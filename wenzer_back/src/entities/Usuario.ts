@@ -53,7 +53,7 @@ export class Usuario {
         return token;
     }
 
-    async verificaTokenJWT(token) {
+    static verificaTokenJWT(token) {
         const payload = jwt.verify(token, process.env.CHAVE_JWT);
         return payload;
     }

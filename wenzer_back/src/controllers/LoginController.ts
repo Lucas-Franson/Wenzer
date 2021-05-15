@@ -47,6 +47,41 @@ class LoginController {
         }
     }
 
+    public async verificaEmail(req: Request, res: Response, proximo) {
+        const {token} = req.params;
+        const loginService = new LoginService();
+
+        try {
+            const id = await Usuario.verificaTokenJWT(token);
+            await loginService.verificaEmail(id);
+            return res.status(200).end();
+        } catch(err) {
+            if (err.name === 'JsonWebTokenError') {
+                err.message = 'Token de verificação de email não identificado.';
+            }
+            
+            proximo(err);
+        }
+    }
+
+    public async alterarSenha(req: Request, res: Response, proximo) {
+        const { token } = req.params;
+        const { senha } = req.body;
+        const loginService = new LoginService();
+
+        try {
+            const id = await Usuario.verificaTokenJWT(token);
+            await loginService.alterarSenha(id, senha);
+            return res.status(200).end();
+        } catch(err) {
+            if (err.name === 'JsonWebTokenError') {
+                err.message = 'Token de alteração de senha não identificado.';
+            }
+
+            proximo(err);
+        }
+    }
+
 }
 
 export { LoginController };

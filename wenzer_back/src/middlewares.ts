@@ -9,15 +9,19 @@ export function GlobalErrorHandler(app) {
         };
 
         if (err.name === 'UsuarioJaCadastrado') {
-            status = 200;
+            status = 204;
         }
 
         if (err.name === 'NaoEncontrado') {
-            status = 403;
+            status = 404;
         }
 
         if (err.name === 'NaoAutorizado') {
             status = 403;
+        }
+
+        if (err.name === 'JsonWebTokenError') {
+            status = 400;
         }
 
         res.status(status).json(corpo);
