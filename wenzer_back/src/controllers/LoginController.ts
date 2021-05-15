@@ -29,9 +29,11 @@ class LoginController {
             const id = await loginService.cadastrar({ nome, email, senha });
 
             const token = await Usuario.criaTokenJWT(id, [1, 'h']);
-            const endereco = this.geraEndereco('/login/verifica_email/', token);
+            const rota = '/api/verifica_email/';
+            const endereco = `${process.env.BASE_URL}${rota}${token}`;
             const emailVerificacao = new EmailVerificacao(email, endereco);
-            emailVerificacao.enviaEmail().catch((err) => res.status(500).json(err.message));
+            
+            emailVerificacao.enviaEmail();
             
             return res.status(201).json({ id });
         } catch(err) {
@@ -39,13 +41,13 @@ class LoginController {
         }
     }
 
-    private geraEndereco(rota, token) {
-        const baseUrl = process.env.BASE_URL;
-        return `${baseUrl}${rota}${token}`;
-    }
+    public async recuperaSenha(req: Request, res: Response, proximo) {
+        const resposta = { mensagem: 'Se encontrarmos um usuário com este email, enviaremos o link para alterar a senha.' };
+        try {
 
-    public async recuperaSenha(req: Request, res: Response) {
-        return res.status(200).json({ message: "endpoint de recuperar senha" });
+        } catch(err) {
+            proximo(err);
+        }
     }
 
 }

@@ -16,6 +16,10 @@ export function GlobalErrorHandler(app) {
             status = 403;
         }
 
+        if (err.name === 'NaoAutorizado') {
+            status = 403;
+        }
+
         res.status(status).json(corpo);
     });
 }
