@@ -1,8 +1,9 @@
 import { Paper } from '@material-ui/core';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Layout from '../../components/Layout';
 import { useStyles } from '../styles';
 import { useRouter } from 'next/router';
+import api from '../../services/api';
 
 export default function Register(){
   const classes = useStyles();
@@ -11,20 +12,20 @@ export default function Register(){
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  async function submit(e : SyntheticEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
 
+    const data = {
+      name,
+      email,
+      password,
+    };
+
     await fetch('http://localhost:3333/api/cadastrar', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password
-      })
-    })
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
 
     await router.push('/login');
   }
