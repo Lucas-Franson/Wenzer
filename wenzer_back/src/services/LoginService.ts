@@ -3,6 +3,7 @@ import { Usuario } from '../entities/Usuario';
 import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado } from '../erros';
 import { ILogin, ILoginCadastro } from '../interfaces/ILogin';
 import { UsuarioRepository } from '../repositories/UsuarioRepository';
+import { EmailRedefinicaoSenha, EmailVerificacao } from '../utils/Email';
 
 class LoginService {
     private userRepository: Repository<Usuario>;
@@ -27,6 +28,13 @@ class LoginService {
         });
         await this.userRepository.save(user);
 
+        const token = await Usuario.criaTokenJWT(user.id, [1, 'h']);
+        const rota = '/api/verifica_email/';
+        const endereco = `${process.env.BASE_URL}${rota}${token}`;
+        const emailVerificacao = new EmailVerificacao(email, endereco);
+        
+        emailVerificacao.enviaEmail();
+
         return user.id;
     }
 
@@ -47,7 +55,23 @@ class LoginService {
         
         return userOne;
     }
+
+    async recuperarSenha({ email }) {
+        const userOne = await this.userRepository.findOne({
+            email
+        });
+
+        if (!userOne) {
+            throw new NaoEncontrado('Email não encontrado.');
+        }
+
+        const token = await Usuario.criaTokenJWT(userOne.id, [1, 'h']);
+        const rota = '/api/alterar_senha/';
+        const endereco = `${process.env.BASE_URL}${rota}${token}`;
+
+        const emailVerificacao = new EmailRedefinicaoSenha(userOne, endereco);
+        await emailVerificacao.enviaEmail();
+    }
 }
-// $2b$12$m/1E9yQutdogIKHKEe.zTuy16fKSqMTc7TQ5zUeaveqMw8sGxADeu
-// $2b$12$U6UxQsPmI5s3.nQfYHnKNej6q9j1v8HEi0UcnjeqR07fWK/XGDgaK	
+
 export { LoginService };

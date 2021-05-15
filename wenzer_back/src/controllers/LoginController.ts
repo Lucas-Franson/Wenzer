@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Usuario } from '../entities/Usuario';
 import { LoginService } from '../services/LoginService';
-import { EmailVerificacao } from '../utils/Email';
 
 class LoginController {
 
@@ -28,13 +27,6 @@ class LoginController {
         try {
             const id = await loginService.cadastrar({ nome, email, senha });
 
-            const token = await Usuario.criaTokenJWT(id, [1, 'h']);
-            const rota = '/api/verifica_email/';
-            const endereco = `${process.env.BASE_URL}${rota}${token}`;
-            const emailVerificacao = new EmailVerificacao(email, endereco);
-            
-            emailVerificacao.enviaEmail();
-            
             return res.status(201).json({ id });
         } catch(err) {
             proximo(err);
@@ -43,8 +35,13 @@ class LoginController {
 
     public async recuperaSenha(req: Request, res: Response, proximo) {
         const resposta = { mensagem: 'Se encontrarmos um usuário com este email, enviaremos o link para alterar a senha.' };
-        try {
+        const loginService = new LoginService();
 
+        try {
+            const { email } = req.body;
+            await loginService.recuperarSenha({ email });
+
+            res.status(200).json(resposta);
         } catch(err) {
             proximo(err);
         }

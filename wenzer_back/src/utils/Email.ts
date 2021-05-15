@@ -46,12 +46,12 @@ class EmailVerificacao extends Email {
 }
 
 class EmailRedefinicaoSenha extends Email {
-    constructor(usuario) {
+    constructor(usuario, endereco) {
         super(
             '"Wenzer" <noreply@wenzer.com.br>',
             usuario.email,
             'Redefinicação de senha',
-            `Olá! Você pediu para redefinir sua senha`,
+            `Olá! Segue o link de redefinição de senha: ${endereco}`,
             ''
         );
     }
