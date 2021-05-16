@@ -9,7 +9,7 @@ export default function Register(){
   const classes = useStyles();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [senha, setSenha] = useState('');
   const router = useRouter();
 
   async function submit(e: FormEvent) {
@@ -18,18 +18,13 @@ export default function Register(){
     const data = {
       name,
       email,
-      password,
+      senha,
     };
 
-    await fetch('http://localhost:3333/api/cadastrar', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data)
-    });
+    await api.post('/api/cadastrar', data).then(() => {
+      router.push('/login');
+    })
 
-    // await api.post('/api/cadastrar', data);
-
-    await router.push('/login');
   }
 
   return (
@@ -52,7 +47,7 @@ export default function Register(){
             type="password"
             required
             placeholder="Senha"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setSenha(e.target.value)}
           />
           <button type="submit">Sign in</button>
         </form>

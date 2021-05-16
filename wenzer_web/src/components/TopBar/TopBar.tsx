@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '../../contexts/AuthContext';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,7 +8,6 @@ import { Box, IconButton, InputBase, Menu, MenuItem } from '@material-ui/core';
 import { MdSearch, MdHome, MdWhatshot, MdPortrait, MdRateReview } from 'react-icons/md';
 
 import { useStyles } from './styles';
-import { useAuth } from '../../contexts/AuthContext';
 
 export default function PrimarySearchAppBar() {
   const [openMenu, setOpenmenu] = useState(null);
@@ -24,7 +24,7 @@ export default function PrimarySearchAppBar() {
     setOpenmenu(event.currentTarget);
   };
 
-  const renderMenu = (
+  const menuProfile = (
     <Menu
       anchorEl={openMenu}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -96,7 +96,7 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMenu}
+      {menuProfile}
     </div>
   );
 }
