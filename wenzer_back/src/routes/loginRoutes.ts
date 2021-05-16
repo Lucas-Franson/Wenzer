@@ -6,10 +6,10 @@ const routes = Router();
 const loginController = new LoginController();
 
 routes.post('/api/login', loginController.login)
-    .post('/api/cadastrar', loginController.cadastrar)
-    .post('/api/recupera-senha', loginController.recuperaSenha)
-    .post('/api/alterar-senha/:token', loginController.alterarSenha)
-    .get('/api/verifica-email/:token', loginController.verificaEmail);
+    .post('/api/cadastrar', loginController.register)
+    .post('/api/recupera-senha', loginController.recoverPassword)
+    .post('/api/alterar-senha/:token', loginController.alterPassword)
+    .get('/api/verifica-email/:token', loginController.verifyEmail);
 
 routes.options(
     [
