@@ -1,84 +1,83 @@
 import { Request, Response } from 'express';
-import { Usuario } from '../entities/Usuario';
+import { User } from '../entities/User';
 import { LoginService } from '../services/LoginService';
 
 class LoginController {
 
-    public async login(req: Request, res: Response, proximo) {
-        const { email, senha } = req.body;
+    public async login(req: Request, res: Response, next) {
+        const { email, password } = req.body;
         const loginService = new LoginService();
         
         try {
-            const user = await loginService.verificarUsuario({ email, senha });
-            const accessToken = await Usuario.criaTokenJWT(user.id, [1, 'h']);
+            const user = await loginService.verifyUsuario({ email, password });
+            const accessToken = await User.createTokenJWT(user.id, [1, 'h']);
 
-            res.set('Authorization', accessToken);
-            res.status(200);
-            res.end();
+            res.status(200).json({ token: accessToken });
         } catch(err) {
-            proximo(err);
+
+            next(err);
         }
     }
 
-    public async cadastrar(req: Request, res: Response, proximo) {
-        const { nome, email, senha } = req.body;
+    public async register(req: Request, res: Response, next) {
+        const { name, email, password } = req.body;
         const loginService = new LoginService();
 
         try {
-            const id = await loginService.cadastrar({ nome, email, senha });
+            const id = await loginService.register({ name, email, password });
 
             return res.status(201).json({ id });
         } catch(err) {
-            proximo(err);
+            next(err);
         }
     }
 
-    public async recuperaSenha(req: Request, res: Response, proximo) {
-        const resposta = { mensagem: 'Se encontrarmos um usuário com este email, enviaremos o link para alterar a senha.' };
+    public async recoverPassword(req: Request, res: Response, next) {
+        const response = { mensagem: 'Se encontrarmos um usuário com este email, enviaremos o link para alterar a senha.' };
         const loginService = new LoginService();
 
         try {
             const { email } = req.body;
-            await loginService.recuperarSenha({ email });
+            await loginService.recoverPassword({ email });
 
-            res.status(200).json(resposta);
+            res.status(200).json(response);
         } catch(err) {
-            proximo(err);
+            next(err);
         }
     }
 
-    public async verificaEmail(req: Request, res: Response, proximo) {
+    public async verifyEmail(req: Request, res: Response, next) {
         const {token} = req.params;
         const loginService = new LoginService();
 
         try {
-            const id = await Usuario.verificaTokenJWT(token);
-            await loginService.verificaEmail(id);
+            const id = await User.verifyTokenJWT(token);
+            await loginService.verifyEmail(id);
             return res.status(200).end();
         } catch(err) {
             if (err.name === 'JsonWebTokenError') {
                 err.message = 'Token de verificação de email não identificado.';
             }
             
-            proximo(err);
+            next(err);
         }
     }
 
-    public async alterarSenha(req: Request, res: Response, proximo) {
+    public async alterPassword(req: Request, res: Response, next) {
         const { token } = req.params;
-        const { senha } = req.body;
+        const { password } = req.body;
         const loginService = new LoginService();
 
         try {
-            const id = await Usuario.verificaTokenJWT(token);
-            await loginService.alterarSenha(id, senha);
+            const id = await User.verifyTokenJWT(token);
+            await loginService.alterPassword(id, password);
             return res.status(200).end();
         } catch(err) {
             if (err.name === 'JsonWebTokenError') {
                 err.message = 'Token de alteração de senha não identificado.';
             }
 
-            proximo(err);
+            next(err);
         }
     }
 

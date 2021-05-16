@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const configuracaoEmailProducao = {
+const configEmailProduction = {
     host: process.env.EMAIL_HOST,
     auth: {
         user: process.env.EMAIL_USUARIO,
@@ -20,10 +20,10 @@ class Email {
         protected text: string,
         protected html: string) {}
 
-    async enviaEmail() {
-        const transportador = nodemailer.createTransport(configuracaoEmailProducao);
+    async sendEmail() {
+        const transporter = nodemailer.createTransport(configEmailProduction);
         
-        const info = await transportador.sendMail({
+        const info = await transporter.sendMail({
             from: this.from,
             to: this.to,
             subject: this.subject,
@@ -33,28 +33,28 @@ class Email {
     }
 }
 
-class EmailVerificacao extends Email {
-    constructor(email, endereco) {
+class EmailVerify extends Email {
+    constructor(email, address) {
         super(
             '"Wenzer" <noreply@wenzer.com.br>',
             email,
             'Verificação de e-mail',
-            `Olá! Verifique seu e-mail aqui: ${endereco}`,
+            `Olá! Verifique seu e-mail aqui: ${address}`,
             ''
         );
     }
 }
 
-class EmailRedefinicaoSenha extends Email {
-    constructor(usuario, endereco) {
+class EmailResetPassword extends Email {
+    constructor(user, address) {
         super(
             '"Wenzer" <noreply@wenzer.com.br>',
-            usuario.email,
+            user.email,
             'Redefinicação de senha',
-            `Olá! Segue o link de redefinição de senha: ${endereco}`,
+            `Olá! Segue o link de redefinição de senha: ${address}`,
             ''
         );
     }
 }
 
-export { EmailVerificacao, EmailRedefinicaoSenha };
+export { EmailVerify, EmailResetPassword };
