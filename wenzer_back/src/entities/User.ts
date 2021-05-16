@@ -4,23 +4,23 @@ import { NaoAutorizado } from '../erros';
 const bcrypt = require('bcrypt');
 const jwt =  require('jsonwebtoken');
 
-@Entity("usuarios")
-export class Usuario {
+@Entity("users")
+export class User {
 
     @PrimaryColumn()
     id: number;
 
     @Column()
-    nome: string;
+    name: string;
 
     @Column()
     email: string;
 
     @Column()
-    emailValidado: boolean;
+    emailValid: boolean;
 
     @Column()
-    senha: string;
+    password: string;
 
     @CreateDateColumn()
     created_at: Date;
@@ -34,26 +34,26 @@ export class Usuario {
         }
     }
 
-    static gerarSenhaHash(senha): string {
+    static generatePasswordHash(password): string {
         const custoHash = 12;
-        return bcrypt.hash(senha, custoHash);
+        return bcrypt.hash(password, custoHash);
     }
 
-    static verificaSenha(senha, senhaHash) {
-        const senhaValida = bcrypt.compare(senha, senhaHash);    
-        return senhaValida;
+    static verifyPassword(password, passwordHash) {
+        const passwordValid = bcrypt.compare(password, passwordHash);    
+        return passwordValid;
     }
 
-    static criaTokenJWT(id, [tempoQuantidade, tempoUnidade]) {
+    static createTokenJWT(id, [timeAmount, timeUnit]) {
         const payload = { 
           id
         };
         
-        const token = jwt.sign(payload, process.env.CHAVE_JWT, { expiresIn: tempoQuantidade+tempoUnidade });
+        const token = jwt.sign(payload, process.env.CHAVE_JWT, { expiresIn: timeAmount+timeUnit });
         return token;
     }
 
-    static verificaTokenJWT(token) {
+    static verifyTokenJWT(token) {
         const payload = jwt.verify(token, process.env.CHAVE_JWT);
         return payload;
     }

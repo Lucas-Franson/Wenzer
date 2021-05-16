@@ -20,7 +20,7 @@ export function GlobalErrorHandler(app) {
             status = 403;
         }
 
-        if (err.name === 'JsonWebTokenError') {
+        if (err.name === 'JsonWebTokenError' || err.name === 'ValideSeuEmail') {
             status = 400;
         }
 

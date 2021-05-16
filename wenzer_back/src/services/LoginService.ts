@@ -1,18 +1,18 @@
 import { getCustomRepository, Repository } from 'typeorm';
-import { Usuario } from '../entities/Usuario';
+import { User } from '../entities/User';
 import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado } from '../erros';
 import { ILogin, ILoginCadastro } from '../interfaces/ILogin';
-import { UsuarioRepository } from '../repositories/UsuarioRepository';
-import { EmailRedefinicaoSenha, EmailVerificacao } from '../utils/Email';
+import { UserRepository } from '../repositories/UserRepository';
+import { EmailResetPassword, EmailVerify } from '../utils/Email';
 
 class LoginService {
-    private userRepository: Repository<Usuario>;
+    private userRepository: Repository<User>;
 
     constructor() {
-        this.userRepository = getCustomRepository(UsuarioRepository);
+        this.userRepository = getCustomRepository(UserRepository);
     }
 
-    async cadastrar({ nome, email, senha }: ILoginCadastro) {
+    async register({ name, email, password }: ILoginCadastro) {
         const userExists = await this.userRepository.findOne({
             email
         });
@@ -21,22 +21,22 @@ class LoginService {
             throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
         }
 
-        const senhaHash = await Usuario.gerarSenhaHash(senha);
+        const passwordHash = await User.generatePasswordHash(password);
         
         const user = this.userRepository.create({
-            nome, email, emailValidado: false, senha: senhaHash
+            name, email, emailValid: false, password: passwordHash
         });
         
-        const token = await Usuario.criaTokenJWT(user.id, [1, 'h']);
-        const rota = '/api/verifica-email/';
-        const endereco = `${process.env.BASE_URL}${rota}${token}`;
+        const token = await User.createTokenJWT(user.id, [1, 'h']);
+        const route = '/api/verifica-email/';
+        const address = `${process.env.BASE_URL}${route}${token}`;
         
-        if (process.env.ENVIRONMENT === 'desenv') console.log(endereco);
+        if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 
         try {
             await this.userRepository.save(user);
-            const emailVerificacao = new EmailVerificacao(email, endereco);
-            emailVerificacao.enviaEmail();
+            const emailVerify = new EmailVerify(email, address);
+            emailVerify.sendEmail();
 
             return user.id;
         } catch(err) {
@@ -44,7 +44,7 @@ class LoginService {
         }
     }
 
-    async verificarUsuario({ email, senha }: ILogin) {
+    async verifyUsuario({ email, password }: ILogin) {
         const userOne = await this.userRepository.findOne({
             email
         });
@@ -53,16 +53,20 @@ class LoginService {
             throw new NaoEncontrado('Email ou senha não encontrados.');
         }
 
-        const valido = await Usuario.verificaSenha(senha, userOne.senha);
+        if (!userOne.emailValid) {
+            throw new Error("Valide seu email para continuar.").name = 'ValideSeuEmail';
+        }
 
-        if (!valido) {
+        const valid = await User.verifyPassword(password, userOne.password);
+
+        if (!valid) {
             throw new NaoAutorizado('Email ou senha não encontrados');
         }
         
         return userOne;
     }
 
-    async recuperarSenha({ email }) {
+    async recoverPassword({ email }) {
         const userOne = await this.userRepository.findOne({
             email
         });
@@ -71,40 +75,40 @@ class LoginService {
             throw new NaoEncontrado('Email não encontrado.');
         }
 
-        const token = await Usuario.criaTokenJWT(userOne.id, [1, 'h']);
-        const rota = '/api/alterar-senha/';
-        const endereco = `${process.env.BASE_URL}${rota}${token}`;
+        const token = await User.createTokenJWT(userOne.id, [1, 'h']);
+        const route = '/api/alterar-senha/';
+        const address = `${process.env.BASE_URL}${route}${token}`;
 
         try {
-            const emailVerificacao = new EmailRedefinicaoSenha(userOne, endereco);
-            await emailVerificacao.enviaEmail();
+            const emailVerify = new EmailResetPassword(userOne, address);
+            await emailVerify.sendEmail();
         } catch(err) {
             throw err;
         }
     }
 
-    async verificaEmail({ id }) {
-        const usuario = await this.userRepository.findOne({
+    async verifyEmail({ id }) {
+        const user = await this.userRepository.findOne({
             id
         });
 
-        if (!usuario) {
+        if (!user) {
             throw new NaoEncontrado('Email não encontrado na plataforma.');
         }
 
-        if (usuario.emailValidado) {
+        if (user.emailValid) {
             throw new Error('Email já validado.');
         }
 
         try {
-            usuario.emailValidado = true;
-            this.userRepository.save(usuario);
+            user.emailValid = true;
+            this.userRepository.save(user);
         } catch(err) {
             throw err;
         }
     }
 
-    async alterarSenha({ id }, senha) {
+    async alterPassword({ id }, password) {
         const userExists = await this.userRepository.findOne({
             id
         });
@@ -113,13 +117,13 @@ class LoginService {
             throw new NaoEncontrado('Email ou senha não encontrados.');
         }
 
-        const valido = await Usuario.verificaSenha(senha, userExists.senha);
+        const valid = await User.verifyPassword(password, userExists.password);
 
-        if (valido) {
+        if (valid) {
             throw new Error("Essa senha é a mesma da sua conta atual.");
         }
 
-        userExists.senha = await Usuario.gerarSenhaHash(senha);
+        userExists.password = await User.generatePasswordHash(password);
         this.userRepository.save(userExists);
     }
 }
