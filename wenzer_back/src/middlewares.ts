@@ -8,10 +8,6 @@ export function GlobalErrorHandler(app) {
             mensagem: err.message
         };
 
-        if (err.name === 'UsuarioJaCadastrado') {
-            status = 204;
-        }
-
         if (err.name === 'NaoEncontrado') {
             status = 404;
         }
@@ -20,7 +16,7 @@ export function GlobalErrorHandler(app) {
             status = 403;
         }
 
-        if (err.name === 'JsonWebTokenError' || err.name === 'ValideSeuEmail') {
+        if (err.name === 'JsonWebTokenError' || err.name === 'ValideSeuEmail' || err.name === 'UsuarioJaCadastrado') {
             status = 400;
         }
 
