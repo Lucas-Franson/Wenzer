@@ -17,7 +17,7 @@ export default function Home() {
         {isAuth ? (
           <p>Usuario Autenticado</p>
         ) : (
-          <p>Faz Login para se autenticar na plataforma</p>
+          <p>Faça login para se authenticar</p>
         )}
       </Paper>
     </Layout>
