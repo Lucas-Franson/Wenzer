@@ -19,7 +19,7 @@ export default function PrimarySearchAppBar() {
               <img
                 src="/Logo_wenzer.png"
                 alt="Logo"
-                style={{ width: '50px' }}
+                style={{ width: '50px', marginRight: '10px' }}
               />
             </Link>
             <h2>Wenzer</h2>
