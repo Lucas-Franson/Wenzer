@@ -31,7 +31,7 @@ export default function InitialScreen(): ReactElement {
               color="primary"
               type="submit"
             >
-              Cadastre-se
+              Acessar
             </Button>
           </Link>
         </Box>
