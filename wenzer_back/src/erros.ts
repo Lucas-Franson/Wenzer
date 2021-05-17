@@ -20,8 +20,16 @@ class NaoAutorizado extends Error {
     }
 }
 
+class ValideSeuEmail extends Error {
+    constructor(mensagem) {
+        super(mensagem);
+        this.name = 'ValideSeuEmail';
+    }
+}
+
 export {
     UsuarioJaCadastrado,
     NaoEncontrado,
-    NaoAutorizado
+    NaoAutorizado,
+    ValideSeuEmail
 }
