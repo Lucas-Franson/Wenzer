@@ -1,6 +1,6 @@
 import { getCustomRepository, Repository } from 'typeorm';
 import { User } from '../entities/User';
-import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado } from '../erros';
+import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado, ValideSeuEmail } from '../erros';
 import { ILogin, ILoginCadastro } from '../interfaces/ILogin';
 import { UserRepository } from '../repositories/UserRepository';
 import { EmailResetPassword, EmailVerify } from '../utils/Email';
@@ -54,7 +54,7 @@ class LoginService {
         }
 
         if (!userOne.emailValid) {
-            throw new Error("Valide seu email para continuar.").name = 'ValideSeuEmail';
+            throw new ValideSeuEmail("Valide seu email para continuar.");
         }
 
         const valid = await User.verifyPassword(password, userOne.password);
