@@ -20,8 +20,8 @@ export default function login(){
     e.preventDefault();
 
     const data = {
-      email: email,
-      password: password,
+      email,
+      password,
     };
 
     await api.post('/api/login', data).then((data) => {
