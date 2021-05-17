@@ -1,25 +1,28 @@
 import React from 'react';
-import Layout from '../components/Layout';
 import Head from 'next/head';
 import { Paper } from '@material-ui/core';
 import { useStyles } from './styles';
 import { useAuth } from '../contexts/AuthContext';
+import WelcomeScreen from '../components/InitialScreen';
+import Feed from '../components/Feed';
 
 export default function Home() {
   const classes = useStyles();
   const {isAuth} = useAuth();
   return (
-    <Layout>
+    <>
       <Head>
         <title>Wenzer</title>
       </Head>
-      <Paper className={classes.root} elevation={20}>
-        {isAuth ? (
-          <p>Usuario Autenticado</p>
-        ) : (
-          <p>Faça login para se authenticar</p>
-        )}
-      </Paper>
-    </Layout>
+      {isAuth ? (
+         <Paper className={classes.feed}>
+            <Feed />
+         </Paper>
+      ) : (
+        <Paper className={classes.initialScreen}>
+          <WelcomeScreen/>
+        </Paper>
+      )}
+    </>
   );
 }
