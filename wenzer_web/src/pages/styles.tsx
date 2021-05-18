@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
   },
   feed: {
-    background: theme.palette.primary.main,
+    background: theme.palette.secondary.main,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

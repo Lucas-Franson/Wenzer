@@ -1,17 +1,25 @@
-import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper } from '@material-ui/core';
 import React, { FormEvent, useState } from 'react';
-import { useStyles } from './styles';
 import { useRouter } from 'next/router';
-import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import api from '../../services/api';
-import clsx from 'clsx';
 import Link from 'next/link';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+
+import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper } from '@material-ui/core';
+import SnackbarMessage from '../../components/SnackbarMessage';
+import { useStyles } from './styles';
+import clsx from 'clsx';
 
 export default function Register(){
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState({
+    isVisible: false,
+    message: '',
+    type: undefined,
+  });
+
 
   const router = useRouter();
   const classes = useStyles();
@@ -27,11 +35,31 @@ export default function Register(){
 
     await api.post('/api/cadastrar', data).then(() => {
       router.push('/login');
+
     }).catch((e) => {
-      alert('Erro ao cadastrar, verifique os dados novamente ' + e.message);
+      setShowSnackbar({
+        isVisible: true,
+        message: 'E-mail ja cadastrado na plataforma!',
+        type: 'error',
+      });
     })
 
   }
+
+  const handleCloseSnackbar = (
+    event?: React.SyntheticEvent,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setShowSnackbar({
+      isVisible: false,
+      message: '',
+      type: undefined,
+    });
+  };
 
   return (
     <Paper className={classes.initialScreen} elevation={20}>
@@ -95,7 +123,7 @@ export default function Register(){
                     onClick={() => setShowPassword(!showPassword)}
                     edge="end"
                   >
-                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                    {showPassword ? <MdVisibility /> : <MdVisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -119,6 +147,14 @@ export default function Register(){
           </Link>
         </form>
       </Box>
+      {showSnackbar && (
+        <SnackbarMessage
+          isVisible={showSnackbar.isVisible}
+          message={showSnackbar.message}
+          type={showSnackbar.type}
+          closeSnackbar={handleCloseSnackbar}
+        />
+      )}
     </Paper>
   );
 };

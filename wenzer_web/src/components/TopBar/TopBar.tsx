@@ -12,7 +12,7 @@ import { useStyles } from './styles';
 export default function PrimarySearchAppBar() {
   const [openMenu, setOpenmenu] = useState(null);
   
-  const { Authentication } = useAuth();
+  const { Logout } = useAuth();
   const classes = useStyles();
   const isMenuOpen = Boolean(openMenu);
 
@@ -41,7 +41,7 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
       <MenuItem className={classes.menuItem} onClick={() => {
         handleMenuClose;
-        Authentication();
+        Logout();
       }}>
         Sair
       </MenuItem>

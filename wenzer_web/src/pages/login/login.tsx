@@ -2,16 +2,24 @@ import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useStyles } from './styles';
 import api from '../../services/api';
-import { useAuth } from '../../contexts/AuthContext';
-import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper, TextField } from '@material-ui/core';
-import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
-import clsx from 'clsx';
 import Link from 'next/link';
+import { useAuth } from '../../contexts/AuthContext';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+
+import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper, TextField } from '@material-ui/core';
+import SnackbarMessage from '../../components/SnackbarMessage';
+import clsx from 'clsx';
 
 export default function login(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState({
+    isVisible: false,
+    message: '',
+    type: undefined
+  });
+
   const classes = useStyles();
   const router = useRouter();
   const { Authentication } = useAuth();
@@ -24,15 +32,35 @@ export default function login(){
       password,
     };
 
-    await api.post('/api/login', data).then((data) => {
+    await api.post('/api/login', data).then((response) => {
+      const token = response.data;
+      localStorage.setItem('WenzerToken', JSON.stringify(token));
       Authentication();
-      console.log(data)  
       router.push('/');
     })
     .catch((e) => {
-      alert('E-mail ou senhas incorretas! :( ' + e.message);
+       setShowSnackbar({
+         isVisible: true,
+         message: 'E-mail ou Senhas incorretas!',
+         type: 'error',
+       });
     })
   }
+
+   const handleCloseSnackbar = (
+     event?: React.SyntheticEvent,
+     reason?: string,
+   ) => {
+     if (reason === 'clickaway') {
+       return;
+     }
+
+     setShowSnackbar({
+       isVisible: false,
+       message: '',
+       type: undefined,
+     });
+   };
 
   return (
     <Paper className={classes.initialScreen} elevation={20}>
@@ -106,6 +134,14 @@ export default function login(){
           </Link>
         </form>
       </Box>
+      {showSnackbar && (
+        <SnackbarMessage
+          isVisible={showSnackbar.isVisible}
+          message={showSnackbar.message}
+          type={showSnackbar.type}
+          closeSnackbar={handleCloseSnackbar}
+        />
+      )}
     </Paper>
   );
 }
