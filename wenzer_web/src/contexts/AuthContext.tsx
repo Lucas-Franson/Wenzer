@@ -32,7 +32,7 @@ export function AuthContextProvider({ children }: IContextProviderProps) {
         console.log("Is authenticated!");
         api.defaults.headers.Authorization = `Bearer ${token}`;
       } else {
-        await router.push('/welcome');
+        router.push('/welcome');
       }
       setIsLoading(false);
     }
@@ -44,7 +44,7 @@ export function AuthContextProvider({ children }: IContextProviderProps) {
       const { data: token } = await api.post('api/login', { email, password })
     
       if (token) {
-        console.log('Got token');
+        console.log('Got WzrToken');
         Cookies.set('WenzerToken', token, { expires: 60 });
         api.defaults.headers.Authorization = `Bearer ${token.token}`;
         router.push('/')

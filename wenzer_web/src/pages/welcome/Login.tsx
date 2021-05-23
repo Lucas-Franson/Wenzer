@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '../../contexts/AuthContext';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import LayoutLogin from '../../components/LayoutLogin';
-import { useRouter } from 'next/router';
+import { useRouter,  } from 'next/router';
 import LoadingScreen from '../../components/LoadingScreen';
 
 import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper } from '@material-ui/core';
@@ -19,7 +19,7 @@ export interface SnackbarProps {
   isVisible: boolean;
 }
 
-export default function login(){
+export default function login({ token }){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +31,10 @@ export default function login(){
   const { query } = useRouter();
   const { Authentication, isAuthenticated } = useAuth();
 
+  useEffect(() => {
+    console.log('Got Token For Valid E-mail = ' + token)
+  }, [])
+
   async function submit(e: FormEvent) {
     e.preventDefault();
 
@@ -39,9 +43,9 @@ export default function login(){
       password
     }
 
-    if(query.token) {
+    if(token) {
       await api
-        .get(`api/verifica-email/${query.token}`)
+        .get(`api/verifica-email/${token}`)
         .then(async () => {
           await api
             .post('api/login', user)
@@ -191,4 +195,10 @@ export default function login(){
     </LayoutLogin>
   );
 }
+
+login.getInitialProps = async ({ query }) => {
+  const { token } = query;
+
+  return { token };
+};
 
