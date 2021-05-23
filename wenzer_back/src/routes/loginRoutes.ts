@@ -9,8 +9,7 @@ routes.post('/api/login', loginController.login)
     .post('/api/cadastrar', loginController.register)
     .post('/api/recupera-senha', loginController.recoverPassword)
     .post('/api/alterar-senha/:token', loginController.alterPassword)
-    .get('/api/verifica-email/:token', loginController.verifyEmail)
-    .get('/api/excluir/:email', loginController.excluir);
+    .get('/api/verifica-email/:token', loginController.verifyEmail);
 
 routes.options(
     [
@@ -20,14 +19,14 @@ routes.options(
         '/api/alterar-senha'
     ], (req, res) => {
     res.set('Access-Control-Allow-Methods', 'POST');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
     res.status(204);
     res.end();
 })
 
-routes.options(['api/verifica-email', '/api/excluir/:email'], (req, res) => {
+routes.options(['api/verifica-email'], (req, res) => {
     res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
     res.status(204);
     res.end();
 })

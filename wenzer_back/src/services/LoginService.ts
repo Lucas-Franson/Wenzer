@@ -126,18 +126,6 @@ class LoginService {
         userExists.password = await User.generatePasswordHash(password);
         this.userRepository.save(userExists);
     }
-
-    async excluir(email) {
-        const userExists = await this.userRepository.findOne({
-            email
-        });
-
-        if (!userExists) {
-            throw new NaoEncontrado('Email não encontrado');
-        }
-
-        await this.userRepository.delete({ email });
-    }
 }
 
 export { LoginService };

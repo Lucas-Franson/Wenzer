@@ -80,18 +80,6 @@ class LoginController {
         }
     }
 
-    public async excluir(req: Request, res: Response, next) {
-        const { email } = req.params;
-        const loginService = new LoginService();
-
-        try {
-            await loginService.excluir(email);
-            return res.status(200).end();
-        } catch(err) {
-            next(err);
-        }
-    }
-
 }
 
 export { LoginController };
