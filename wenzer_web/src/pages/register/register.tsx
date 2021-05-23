@@ -33,7 +33,7 @@ export default function Register(){
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
       setIsLoading(true);
       router.push('/');
     }
