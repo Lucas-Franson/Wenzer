@@ -28,8 +28,8 @@ class LoginService {
         });
         
         const token = await User.createTokenJWT(user.id, [1, 'h']);
-        const route = '/api/verifica-email/';
-        const address = `${process.env.BASE_URL}${route}${token}`;
+        const route = '/welcome?token=';
+        const address = `${process.env.BASE_URL_WEB}${route}${token}`;
         
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 

@@ -39,8 +39,8 @@ class EmailVerify extends Email {
             '"Wenzer" <noreply@wenzer.com.br>',
             email,
             'Verificação de e-mail',
-            `Olá! Verifique seu e-mail aqui: ${address}`,
-            ''
+            '',
+            `Olá! Verifique seu e-mail <a href="${address}">aqui</a>`
         );
     }
 }

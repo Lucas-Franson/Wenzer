@@ -19,14 +19,14 @@ routes.options(
         '/api/alterar-senha'
     ], (req, res) => {
     res.set('Access-Control-Allow-Methods', 'POST');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
     res.status(204);
     res.end();
 })
 
-routes.options('api/verifica-email', (req, res) => {
+routes.options(['api/verifica-email'], (req, res) => {
     res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
     res.status(204);
     res.end();
 })
