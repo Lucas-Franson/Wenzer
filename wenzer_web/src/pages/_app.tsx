@@ -11,7 +11,7 @@ import 'nprogress/nprogress.css';
 import { Router } from 'next/dist/client/router';
 
 NProgress.configure({
-  showSpinner: false, 
+  showSpinner: true, 
   trickRate: 0.1,
   trickSpeed: 300,
 })

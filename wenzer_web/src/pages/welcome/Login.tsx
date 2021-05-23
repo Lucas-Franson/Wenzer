@@ -28,11 +28,27 @@ export default function login({ token }){
 
   const classes = useStyles();
   const router = useRouter();
-  const { query } = useRouter();
-  const { Authentication, isAuthenticated } = useAuth();
+  const { Authentication } = useAuth();
 
   useEffect(() => {
-    console.log('Got Token For Valid E-mail = ' + token)
+      (async function getTokenFromURL() {
+        if (token) {
+          await api.get(`api/verifica-email/${token}`).then(() => {
+             setShowSnackbar({
+               isVisible: true,
+               message: 'Seu e-mail foi verificado com sucesso!',
+               type: 'success',
+             });
+             
+          }).catch(() => {
+            setShowSnackbar({
+              isVisible: true,
+              message: 'Verifique seu email para validação!',
+              type: 'error',
+            });
+          })
+        }
+      })();
   }, [])
 
   async function submit(e: FormEvent) {
@@ -43,53 +59,22 @@ export default function login({ token }){
       password
     }
 
-    if(token) {
-      await api
-        .get(`api/verifica-email/${token}`)
-        .then(async () => {
-          await api
-            .post('api/login', user)
-            .then((data) => {
-              const token = data.data;
-              Cookies.set('WenzerToken', token, { expires: 60 });
-              api.defaults.headers.Authorization = `Bearer ${token.token}`;
-              Authentication();
-              router.push('/');
-            })
-            .catch((error) => {
-              setShowSnackbar({
-                isVisible: true,
-                message: 'E-mail ou Senhas incorretas!',
-                type: 'error',
-              });
-            });
-        })
-        .catch((error) => {
-          setShowSnackbar({
-            isVisible: true,
-            message: 'Valide seu e-mail para logar!',
-            type: 'error',
-          });
+    await api
+      .post('api/login', user)
+      .then((data) => {
+        const token = data.data;
+        Cookies.set('WenzerToken', token, { expires: 60 });
+        api.defaults.headers.Authorization = `Bearer ${token.token}`;
+        Authentication();
+        router.push('/');
+      })
+      .catch((error) => {
+        setShowSnackbar({
+          isVisible: true,
+          message: 'E-mail ou Senhas incorretas!',
+          type: 'error',
         });
-
-    } else {
-      await api
-        .post('api/login', user)
-        .then((data) => {
-          const token = data.data;
-          Cookies.set('WenzerToken', token, { expires: 60 });
-          api.defaults.headers.Authorization = `Bearer ${token.token}`;
-          Authentication();
-          router.push('/');
-        })
-        .catch((error) => {
-          setShowSnackbar({
-            isVisible: true,
-            message: 'E-mail ou Senhas incorretas!',
-            type: 'error',
-          });
-        });
-    }
+      });    
   }
 
    const handleCloseSnackbar = (

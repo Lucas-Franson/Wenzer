@@ -31,6 +31,7 @@ export function AuthContextProvider({ children }: IContextProviderProps) {
         setIsAuthenticated(true);
         console.log("Is authenticated!");
         api.defaults.headers.Authorization = `Bearer ${token}`;
+        router.push('/');
       } else {
         router.push('/welcome');
       }

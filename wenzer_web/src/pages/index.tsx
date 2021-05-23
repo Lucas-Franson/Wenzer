@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useStyles } from './styles';
 import { useAuth } from '../contexts/AuthContext';
 import Feed from '../components/Feed';
 import Layout from '../components/Layout'; 
 import { Paper } from '@material-ui/core';
-import { useRouter } from 'next/router';
+import { useRouter, Router } from 'next/router';
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
 
   const classes = useStyles();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
-    useEffect(() => {
-      (async function loading() {
-        if (!isAuthenticated) {
-     
-          await router.push('/welcome');
-        }
-        setIsLoading(false);
-      })();
-    }, []);
+  // useEffect(() => {
+  //   (function loading() {
+  //     if (!isAuthenticated) {
+  //       router.push('/welcome');
+  //     }
+  //   })();
+  // }, [isAuthenticated]);
 
   return (
     <>
@@ -51,4 +48,5 @@ export default function Home() {
     </>
   );
 }
+
 
