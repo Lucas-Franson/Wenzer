@@ -9,7 +9,7 @@ export class UsuarioMigration1620862000829 implements MigrationInterface {
                 columns: [
                     {
                         name: 'id',
-                        type: 'uuid',
+                        type: 'varchar',
                         isPrimary: true
                     },
                     {
@@ -23,7 +23,7 @@ export class UsuarioMigration1620862000829 implements MigrationInterface {
                     },
                     {
                         name: 'emailValid',
-                        type: 'boolean',
+                        type: 'bool',
                         default: false
                     },
                     {

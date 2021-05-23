@@ -9,7 +9,8 @@ routes.post('/api/login', loginController.login)
     .post('/api/cadastrar', loginController.register)
     .post('/api/recupera-senha', loginController.recoverPassword)
     .post('/api/alterar-senha/:token', loginController.alterPassword)
-    .get('/api/verifica-email/:token', loginController.verifyEmail);
+    .get('/api/verifica-email/:token', loginController.verifyEmail)
+    .get('/api/excluir/:email', loginController.excluir);
 
 routes.options(
     [
@@ -24,7 +25,7 @@ routes.options(
     res.end();
 })
 
-routes.options('api/verifica-email', (req, res) => {
+routes.options(['api/verifica-email', '/api/excluir/:email'], (req, res) => {
     res.set('Access-Control-Allow-Methods', 'GET');
     res.set('Access-Control-Allow-Headers', 'Content-Type');
     res.status(204);
