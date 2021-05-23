@@ -1,17 +1,17 @@
 import React, { FormEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import { useStyles } from './styles';
 import api from '../../services/api';
 import Link from 'next/link';
-import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
-
-import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper, Modal, Backdrop } from '@material-ui/core';
-import Fade from '@material-ui/core/Fade';
-import SnackbarMessage from '../../components/SnackbarMessage';
-import LayoutLogin from '../../components/LayoutLogin';
-import LoadingScreen from '../../components/LoadingScreen';
-import { useStyles } from './styles';
-import clsx from 'clsx';
 import { useAuth } from '../../contexts/AuthContext';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import LayoutLogin from '../../components/LayoutLogin';
+import { useRouter } from 'next/router';
+import LoadingScreen from '../../components/LoadingScreen';
+
+import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper } from '@material-ui/core';
+import SnackbarMessage from '../../components/SnackbarMessage';
+import clsx from 'clsx';
 
 export interface SnackbarProps {
   message: string;
@@ -19,75 +19,89 @@ export interface SnackbarProps {
   isVisible: boolean;
 }
 
-export default function Register(){
-  const [name, setName] = useState('');
+export default function login(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState<SnackbarProps | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const router = useRouter();
+
   const classes = useStyles();
-
-  const { isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      setIsLoading(true);
-      router.push('/');
-    }
-    setIsLoading(false);
-  }, [isAuthenticated]);
+  const router = useRouter();
+  const { query } = useRouter();
+  const { Authentication, isAuthenticated } = useAuth();
 
   async function submit(e: FormEvent) {
     e.preventDefault();
 
-    const data = {
-      name,
+    const user = {
       email,
-      password,
-    };
-
-    await api.post('/api/cadastrar', data).then(() => {
-      handleCreateAccount();
-
-    }).catch((e) => {
-      setShowSnackbar({
-        isVisible: true,
-        message: 'E-mail ja cadastrado na plataforma!',
-        type: 'error',
-      });
-    })
-
-  }
-
-  const handleCloseSnackbar = (
-    event?: React.SyntheticEvent,
-    reason?: string,
-  ) => {
-    if (reason === 'clickaway') {
-      return;
+      password
     }
 
-    setShowSnackbar({
-      isVisible: false,
-      message: '',
-      type: undefined,
-    });
-  };
+    if(query.token) {
+      await api
+        .get(`api/verifica-email/${query.token}`)
+        .then(async () => {
+          await api
+            .post('api/login', user)
+            .then((data) => {
+              const token = data.data;
+              Cookies.set('WenzerToken', token, { expires: 60 });
+              api.defaults.headers.Authorization = `Bearer ${token.token}`;
+              Authentication();
+              router.push('/');
+            })
+            .catch((error) => {
+              setShowSnackbar({
+                isVisible: true,
+                message: 'E-mail ou Senhas incorretas!',
+                type: 'error',
+              });
+            });
+        })
+        .catch((error) => {
+          setShowSnackbar({
+            isVisible: true,
+            message: 'Valide seu e-mail para logar!',
+            type: 'error',
+          });
+        });
 
-  function handleCreateAccount() {
-    setOpenModal(true);
+    } else {
+      await api
+        .post('api/login', user)
+        .then((data) => {
+          const token = data.data;
+          Cookies.set('WenzerToken', token, { expires: 60 });
+          api.defaults.headers.Authorization = `Bearer ${token.token}`;
+          Authentication();
+          router.push('/');
+        })
+        .catch((error) => {
+          setShowSnackbar({
+            isVisible: true,
+            message: 'E-mail ou Senhas incorretas!',
+            type: 'error',
+          });
+        });
+    }
   }
 
-  const handleOpen = () => {
-    setOpenModal(true);
-  };
+   const handleCloseSnackbar = (
+     event?: React.SyntheticEvent,
+     reason?: string,
+   ) => {
+     if (reason === 'clickaway') {
+       return;
+     }
 
-  const handleClose = () => {
-    setOpenModal(false);
-  };
+     setShowSnackbar({
+       isVisible: false,
+       message: '',
+       type: undefined,
+     });
+   };
 
   return (
     <LayoutLogin>
@@ -99,27 +113,13 @@ export default function Register(){
             <p>Encontre pessoas, monte sua equipe e desenvolva suas ideias</p>
             <img
               className={classes.image}
-              src="/bg_register.svg"
+              src="/bg_login.svg"
               alt="login screen"
             />
           </Box>
 
           <form className={classes.formLogin} onSubmit={submit}>
-            <h1>Cadastre-se</h1>
-
-            <FormControl
-              className={clsx(classes.margin, classes.textField)}
-              variant="filled"
-            >
-              <InputLabel htmlFor="filled-adornment-password">Nome</InputLabel>
-              <FilledInput
-                id="filled-adornment-password"
-                type="text"
-                required
-                style={{ color: '#222' }}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </FormControl>
+            <h1 className={classes.loginText}>Faça login</h1>
 
             <FormControl
               className={clsx(classes.margin, classes.textField)}
@@ -155,7 +155,7 @@ export default function Register(){
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end"
                     >
-                      {showPassword ? <MdVisibility /> : <MdVisibilityOff />}
+                      {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -170,12 +170,11 @@ export default function Register(){
               color="primary"
               type="submit"
             >
-              Cadastrar
+              Entrar
             </Button>
-            <Link href="/welcome">
+            <Link href="/register">
               <p style={{ cursor: 'pointer' }}>
-                Ja possui uma conta?{' '}
-                <span style={{ color: '#B732A2' }}>Faça login aqui</span>
+                Ainda nao tem uma conta? Registre-se aqui
               </p>
             </Link>
           </form>
@@ -189,39 +188,7 @@ export default function Register(){
           />
         )}
       </Paper>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={openModal}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openModal}>
-          <div className={classes.paperModal}>
-            <h2 id="transition-modal-title">Conta cadastrada com sucesso!</h2>
-            <h3>Valide seu e-mail para acessar</h3>
-            <p id="transition-modal-description">
-              Enviamos um email de validação para {email}
-            </p>
-            <Button variant="outlined" color="primary" onClick={handleClose}>
-              Cancelar
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => router.push('/welcome')}
-              style={{ margin: '0px 5px' }}
-            >
-              Faça login
-            </Button>
-          </div>
-        </Fade>
-      </Modal>
     </LayoutLogin>
   );
-};
+}
+

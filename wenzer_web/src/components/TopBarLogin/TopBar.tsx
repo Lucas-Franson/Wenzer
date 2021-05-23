@@ -25,7 +25,7 @@ export default function PrimarySearchAppBar() {
             <h2>Wenzer</h2>
           </Box>
           <Box className={classes.sectionDesktop}>
-            <Link href="/login">
+            <Link href="/welcome">
               <Button
                 className={classes.button}
                 type="button"

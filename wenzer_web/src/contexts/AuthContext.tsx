@@ -1,56 +1,84 @@
 import { createContext, useState, ReactNode, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import api from '../services/api';
+import LoadingScreen from '../components/LoadingScreen';
 
 interface IContextProviderProps {
   children: ReactNode;
 }
 
 interface IAuthContext {
-  isAuth: boolean;
-  setIsAuth: (state: boolean) => void;
-  Authentication: () => void;
   Logout: () => void;
+  Login: (email: string, password: string) => void;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  Authentication: () => void;
 }
 
 export const AuthContext = createContext({} as IAuthContext)
 
 export function AuthContextProvider({ children }: IContextProviderProps) {
-  const [isAuth, setIsAuth] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('WenzerToken');
-
-    if(token) {
-      setIsAuth(true);
-      setLoading(true)
-    }else {
-      setIsAuth(false);
+    setIsLoading(true);
+    async function loadUserFromCookies() {
+      const token = Cookies.get('WenzerToken');
+      if (token) {
+        setIsAuthenticated(true);
+        console.log("Is authenticated!");
+        api.defaults.headers.Authorization = `Bearer ${token}`;
+      } else {
+        await router.push('/welcome');
+      }
+      setIsLoading(false);
     }
-
-    setLoading(false);
-
+    loadUserFromCookies();
   }, [])
 
+  async function Login(email: string, password: string){
+    try {
+      const { data: token } = await api.post('api/login', { email, password })
+    
+      if (token) {
+        console.log('Got token');
+        Cookies.set('WenzerToken', token, { expires: 60 });
+        api.defaults.headers.Authorization = `Bearer ${token.token}`;
+        router.push('/')
+      }
+    } catch(e) {
+      alert('E-mail ou senha incorreta!');
+    }
+   };
+
   function Authentication() {
-    setIsAuth(!isAuth);
+    setIsAuthenticated(!isAuthenticated);
   }
 
   function Logout() {
-    localStorage.removeItem('WenzerToken');
-    window.location.reload();
-  }
-
-  if(loading) {
-    return <h1>Carregando...Um loading mais bonito sera implementado em breve.</h1>
+    router.push('/welcome');
+    Cookies.remove('WenzerToken');
+    delete api.defaults.headers.Authorization;
   }
 
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth, Authentication, Logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, Login, isLoading, Logout, Authentication }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-}
+export const ProtectRoute = ({ children }) => {
+  const {isLoading } = useAuth();
+  if (isLoading){
+    return <LoadingScreen />
+  }
+  return children;
+};
+
+export const useAuth = () => useContext(AuthContext);

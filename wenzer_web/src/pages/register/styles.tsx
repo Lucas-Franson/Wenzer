@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   initialScreen: {
-    background: theme.palette.secondary.main,
+    background: theme.palette.background.default,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -51,5 +51,19 @@ export const useStyles = makeStyles((theme) => ({
   button: {
     margin: '40px 0',
     padding: '10px 130px',
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center'
+  },
+  paperModal: {
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.secondary.main,
+    borderBottom: '3px solid #B732A2',
+    borderRadius: '5px',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }));

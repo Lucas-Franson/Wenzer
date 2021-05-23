@@ -1,28 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { Paper } from '@material-ui/core';
 import { useStyles } from './styles';
 import { useAuth } from '../contexts/AuthContext';
-import WelcomeScreen from '../components/InitialScreen';
 import Feed from '../components/Feed';
+import Layout from '../components/Layout'; 
+import { Paper } from '@material-ui/core';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const classes = useStyles();
-  const {isAuth} = useAuth();
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+      (async function loading() {
+        if (!isAuthenticated) {
+     
+          await router.push('/welcome');
+        }
+        setIsLoading(false);
+      })();
+    }, []);
+
   return (
     <>
       <Head>
         <title>Wenzer</title>
       </Head>
-      {isAuth ? (
-         <Paper className={classes.feed}>
-            <Feed />
-         </Paper>
-      ) : (
-        <Paper className={classes.initialScreen}>
-          <WelcomeScreen/>
+
+      <Layout>
+        <Paper className={classes.feed}>
+          <Feed />
         </Paper>
+      </Layout>
+
+      {/* {!session && (
+        <>
+          Not signed in <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>
       )}
+      {session && (
+        <>
+          Signed in as {session.user.email} <br />
+          <button onClick={() => signOut()}>Sign out</button>
+        </>
+      )} */}
     </>
   );
 }
+

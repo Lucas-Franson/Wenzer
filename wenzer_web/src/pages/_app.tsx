@@ -1,12 +1,33 @@
 import React, { useEffect } from 'react';
+import Head from 'next/head';
+import { Provider } from 'next-auth/client';
+import { AuthContextProvider, ProtectRoute } from '../contexts/AuthContext';
 
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import theme from '../theme';
-import Layout from '../components/Layout';
-import { AuthContextProvider } from '../contexts/AuthContext';
-import Head from 'next/head';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import { Router } from 'next/dist/client/router';
+
+NProgress.configure({
+  showSpinner: false, 
+  trickRate: 0.1,
+  trickSpeed: 300,
+})
+
+Router.events.on('routerChangeStart', () => {
+  NProgress.start();
+})
+
+Router.events.on('routerChangeComplete', () => {
+  NProgress.done();
+});
+
+Router.events.on('routerChangeError', () => {
+  NProgress.done();
+});
+
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -20,7 +41,7 @@ export default function MyApp(props) {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Head>
         <title>Wenzer</title>
         <meta name="theme-color" content={theme.palette.primary.main} />
@@ -29,13 +50,26 @@ export default function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
-      <AuthContextProvider>
-        <Layout>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </Layout>
-      </AuthContextProvider>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          <ProtectRoute>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ProtectRoute>
+        </AuthContextProvider>
+      </ThemeProvider>
+      <style global jsx>
+        {`
+          #nprogress {
+            position: relative;
+            z-index: 9999999;
+          }
+          #nprogress .bar {
+            background: #b732a2 !important;
+            height: 3px;
+          }
+        `}
+      </style>
+    </>
   );
 }

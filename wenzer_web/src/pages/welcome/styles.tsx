@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   initialScreen: {
-    background: theme.palette.secondary.main,
+    background: theme.palette.background.default,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
