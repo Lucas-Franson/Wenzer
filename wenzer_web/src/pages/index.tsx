@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
-import { useStyles } from './styles';
+import { useStyles } from '../styles/pages/home/styles';
 import { useAuth } from '../contexts/AuthContext';
 import Feed from '../components/Feed';
 import Layout from '../components/Layout'; 

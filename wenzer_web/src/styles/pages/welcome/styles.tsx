@@ -58,9 +58,18 @@ export const useStyles = makeStyles((theme) => ({
   button: {
     margin: '40px 0',
     padding: '10px 130px',
+    display: 'flex',
   },
 
   loginText: {
-    marginBottom: '50px'
-  }
+    marginBottom: '50px',
+  },
+
+  circularProgrss: {
+    display: 'flex',
+    width: '20px',
+    '& > * + *': {
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));

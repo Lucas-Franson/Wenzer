@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { useStyles } from './styles';
+import { useStyles } from '../../styles/pages/welcome/styles';
 import api from '../../services/api';
 import Link from 'next/link';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,7 +9,17 @@ import LayoutLogin from '../../components/LayoutLogin';
 import { useRouter,  } from 'next/router';
 import LoadingScreen from '../../components/LoadingScreen';
 
-import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, Paper } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  FilledInput,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  Paper,
+  CircularProgress,
+} from '@material-ui/core';
 import SnackbarMessage from '../../components/SnackbarMessage';
 import clsx from 'clsx';
 
@@ -39,7 +49,7 @@ export default function login({ token }){
                message: 'Seu e-mail foi verificado com sucesso!',
                type: 'success',
              });
-             
+
           }).catch(() => {
             setShowSnackbar({
               isVisible: true,
@@ -53,6 +63,7 @@ export default function login({ token }){
 
   async function submit(e: FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
 
     const user = {
       email,
@@ -62,16 +73,19 @@ export default function login({ token }){
     await api
       .post('api/login', user)
       .then((data) => {
+        
         const token = data.data;
         Cookies.set('WenzerToken', token, { expires: 60 });
         api.defaults.headers.Authorization = `Bearer ${token.token}`;
         Authentication();
+        setIsLoading(false);
         router.push('/');
       })
       .catch((error) => {
+        setIsLoading(false);
         setShowSnackbar({
           isVisible: true,
-          message: 'E-mail ou Senhas incorretas!',
+          message: 'E-mail ou senha incorretos!',
           type: 'error',
         });
       });    
@@ -94,7 +108,6 @@ export default function login({ token }){
 
   return (
     <LayoutLogin>
-      {isLoading && <LoadingScreen />}
       <Paper className={classes.initialScreen} elevation={20}>
         <Box className={classes.container}>
           <Box className={classes.containerTitle}>
@@ -160,6 +173,9 @@ export default function login({ token }){
               type="submit"
             >
               Entrar
+              {isLoading && (
+                <CircularProgress size={25} style={{margin: '0px 5px'}} color="inherit" />
+              )}
             </Button>
             <Link href="/register">
               <p style={{ cursor: 'pointer' }}>

@@ -9,7 +9,7 @@ import Fade from '@material-ui/core/Fade';
 import SnackbarMessage from '../../components/SnackbarMessage';
 import LayoutLogin from '../../components/LayoutLogin';
 import LoadingScreen from '../../components/LoadingScreen';
-import { useStyles } from './styles';
+import { useStyles } from '../../styles/pages/register/styles';
 import clsx from 'clsx';
 import { useAuth } from '../../contexts/AuthContext';
 
