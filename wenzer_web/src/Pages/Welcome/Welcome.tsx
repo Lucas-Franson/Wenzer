@@ -5,6 +5,7 @@ import bg_university from "../../Utils/image/bg_university.svg";
 import bg_business from "../../Utils/image/bg_business.svg";
 import VipListForm from './components/VipListForm';
 import { FaInstagram, FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
 
 import {
   ContainerLogin,
@@ -14,8 +15,10 @@ import {
   ContainerFooter,
   Container
 } from "./styles";
+import { useState } from 'react';
 
 function Welcome(): ReactElement {
+  const [openDialog, SetOpenDialog] = useState(false);
 
   return (
     <Container>
@@ -109,16 +112,22 @@ function Welcome(): ReactElement {
             compartilhamento de experiência.
           </p>
           <span>
-            <a href="##" target="_blank">
+            <a href="##" target="">
               Termos e Condições
             </a>{" "}
-            <a href="##" target="_blank">
+            <a href="##" target="" onClick={() => SetOpenDialog(true)}>
               Politica de Privacidade
             </a>{" "}
             Wenzer 2021 ©
           </span>
         </footer>
       </ContainerFooter>
+
+      {openDialog && (
+        <DialogTermsAndPolicy
+          state={openDialog}
+        />
+      )}
     </Container>
   );
 }
