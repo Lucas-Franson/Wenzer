@@ -27,7 +27,7 @@ class ValideSeuEmail extends Error {
     }
 }
 
-export {
+module.exports = {
     UsuarioJaCadastrado,
     NaoEncontrado,
     NaoAutorizado,

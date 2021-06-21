@@ -1,16 +1,13 @@
-import { Request, Response } from 'express';
-import { User } from '../entities/User';
-import { LoginService } from '../services/LoginService';
+const LoginService = require("../services/LoginService");
 
-class LoginController {
+module.exports = class LoginController {
 
-    public async login(req: Request, res: Response, next) {
+    async login(req, res, next) {
         const { email, password } = req.body;
         const loginService = new LoginService();
         
         try {
-            const user = await loginService.verifyUsuario({ email, password });
-            const accessToken = await User.createTokenJWT(user.id, [1, 'h']);
+            const accessToken = await loginService.verifyUsuario({ email, password });
 
             res.status(200).json({ token: accessToken });
         } catch(err) {
@@ -18,7 +15,7 @@ class LoginController {
         }
     }
 
-    public async register(req: Request, res: Response, next) {
+    async register(req, res, next) {
         const { name, email, password } = req.body;
         const loginService = new LoginService();
 
@@ -31,7 +28,7 @@ class LoginController {
         }
     }
 
-    public async recoverPassword(req: Request, res: Response, next) {
+    async recoverPassword(req, res, next) {
         const response = { mensagem: 'Se encontrarmos um usuário com este email, enviaremos o link para alterar a senha.' };
         const loginService = new LoginService();
 
@@ -45,13 +42,12 @@ class LoginController {
         }
     }
 
-    public async verifyEmail(req: Request, res: Response, next) {
+    async verifyEmail(req, res, next) {
         const {token} = req.params;
         const loginService = new LoginService();
 
         try {
-            const id = await User.verifyTokenJWT(token);
-            await loginService.verifyEmail(id);
+            await loginService.verifyEmail(token);
             return res.status(200).end();
         } catch(err) {
             if (err.name === 'JsonWebTokenError') {
@@ -62,14 +58,13 @@ class LoginController {
         }
     }
 
-    public async alterPassword(req: Request, res: Response, next) {
+    async alterPassword(req, res, next) {
         const { token } = req.params;
         const { password } = req.body;
         const loginService = new LoginService();
 
         try {
-            const id = await User.verifyTokenJWT(token);
-            await loginService.alterPassword(id, password);
+            await loginService.alterPassword(token, password);
             return res.status(200).end();
         } catch(err) {
             if (err.name === 'JsonWebTokenError') {
@@ -80,6 +75,17 @@ class LoginController {
         }
     }
 
-}
+    async emailMarketing(req, res, next) {
+        const { token } = req.params;
+        const { email } = req.body;
+        const loginService = new LoginService();
 
-export { LoginController };
+        try {
+            await loginService.salvarEmailMarketing(email);
+            return res.status(200).end()
+        } catch(err) {
+            next(err);
+        }
+    }
+
+}

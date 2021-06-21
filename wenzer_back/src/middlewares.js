@@ -1,6 +1,4 @@
-import { UsuarioJaCadastrado } from "./erros";
-
-export function GlobalErrorHandler(app) {
+module.exports = function GlobalErrorHandler(app) {
     app.use((err, req, res, next) => {
         let status = 500;
         

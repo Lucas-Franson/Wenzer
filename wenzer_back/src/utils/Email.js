@@ -14,11 +14,19 @@ const configEmailProduction = {
 
 class Email {
 
-    constructor(protected from: string, 
-        protected to: string,
-        protected subject: string,
-        protected text: string,
-        protected html: string) {}
+    from = '';
+    to = '';
+    subject = '';
+    text = '';
+    html = '';
+
+    constructor(from, to, subject, text, html) {
+        this.from = from;
+        this.to = to;
+        this.subject = subject;
+        this.text = text;
+        this.html = html;
+    }
 
     async sendEmail() {
         const transporter = nodemailer.createTransport(configEmailProduction);
@@ -35,6 +43,7 @@ class Email {
 
 class EmailVerify extends Email {
     constructor(email, address) {
+        
         super(
             '"Wenzer" <noreply@wenzer.com.br>',
             email,
@@ -57,4 +66,4 @@ class EmailResetPassword extends Email {
     }
 }
 
-export { EmailVerify, EmailResetPassword };
+module.exports = { EmailVerify, EmailResetPassword };
