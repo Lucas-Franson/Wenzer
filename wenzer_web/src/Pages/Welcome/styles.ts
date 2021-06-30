@@ -133,6 +133,7 @@ export const ContainerLogin = styled.header`
       font-size: 3rem;
       text-align: left;
       line-height: 3.8rem;
+      max-width: 40rem;
     }
 
     h2 {
@@ -153,6 +154,45 @@ export const ContainerLogin = styled.header`
 
       button {
         padding: 0.5rem 5rem;
+      }
+    }
+  }
+
+  @media (max-width: 1390px) {
+    margin-top: 5rem;
+    height: 100vh;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      h1 {
+        font-size: 2.8rem;
+        text-align: center;
+        line-height: 3.8rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 300;
+        max-width: 40rem;
+        text-align: center;
+      }
+
+      img {
+        margin-top: 3rem;
+        width: 20rem;
+      }
+
+      a {
+        text-decoration: none;
+        margin: 2rem 0;
+
+        button {
+          padding: 0.5rem 5rem;
+        }
       }
     }
   }
@@ -208,9 +248,6 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
-    margin-top: 11rem;
-    height: 100vh;
-
     header {
       display: flex;
       flex-direction: column;
@@ -218,6 +255,7 @@ export const ContainerLogin = styled.header`
       justify-content: center;
 
       h1 {
+        margin-top: 100px;
         font-size: 2.5rem;
         text-align: center;
         line-height: 3rem;
@@ -232,7 +270,7 @@ export const ContainerLogin = styled.header`
 
       img {
         margin-top: 3rem;
-        width: 20rem;
+        max-width: 200px;
       }
 
       a {
@@ -345,6 +383,7 @@ export const ContainerFooter = styled.footer`
     p {
       display: flex;
       justify-content: center;
+     
 
       svg {
         margin: 0 0.2rem;
@@ -373,6 +412,72 @@ export const ContainerFooter = styled.footer`
 
       &:hover {
         color: ${(props) => props.theme.colors.primaryLight};
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    height: 45vh;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      section {
+        display: flex;
+        flex-direction: column;
+
+        font-weight: 400;
+        font-size: 1rem;
+
+        a {
+          margin: 0.5rem 0;
+          text-decoration: none;
+          font-weight: 300;
+          color: ${(props) => props.theme.colors.white.light};
+
+          &:hover {
+            color: ${(props) => props.theme.colors.primaryLight};
+          }
+        }
+      }
+
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        font-size: 1rem;
+        margin-top: 2rem;
+
+        svg {
+          margin: 0 0.2rem;
+          cursor: pointer;
+        }
+      }
+    }
+
+    footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      font-weight: 300;
+      font-size: 1rem;
+      padding: 0px 10px;
+
+      a {
+        margin: 0.6rem 0;
+        text-decoration: none;
+        font-weight: 300;
+        color: ${(props) => props.theme.colors.white.light};
       }
     }
   }

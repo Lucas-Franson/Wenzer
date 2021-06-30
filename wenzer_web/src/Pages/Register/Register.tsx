@@ -1,9 +1,15 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import RegisterForm from './RegisterForm';
 import { MdArrowBack } from 'react-icons/md'
 import { Container } from './styles';
+import DialogTermsAndPolicy from "../../Components/DialogTermsPolicy";
 
 function Register(): ReactElement {
+  const [isTerms, setIsTerms] = useState(false);
+
+  function handleShowTerms() {
+    setIsTerms(!isTerms);
+  }
   return (
     <Container>
       <header>
@@ -16,11 +22,16 @@ function Register(): ReactElement {
           projetos publicados pelos membros da comunidade!
         </h2>
 
-        <a href="/"> <MdArrowBack size={22} /> Voltar para home</a>
+        <a href="/">
+          {" "}
+          <MdArrowBack size={22} /> Voltar para home
+        </a>
       </header>
       <div>
         <RegisterForm />
       </div>
+
+      <DialogTermsAndPolicy state={isTerms} handleChange={handleShowTerms} />
     </Container>
   );
 }

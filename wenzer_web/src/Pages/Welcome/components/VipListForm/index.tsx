@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useContext, FormEvent } from "react";
 import { memo } from "react";
 import { Container } from "./styles";
 import InputText from '../../../../Components/InputText';
+import WelcomeContext from '../../context';
 
 function Login() {
   const [email, setEmail] = useState('');
+  const { isEmailConfirmed, setIsEmailConfirmed } = useContext(WelcomeContext);
 
-  function onSubmit() {
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
     console.log(email);
+    setIsEmailConfirmed(!isEmailConfirmed);
   }
 
   return (
@@ -16,10 +20,7 @@ function Login() {
         Cadastre seu melhor e-mail para ter acesso antecipado ao Wenzer!
       </strong>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
+        onSubmit={onSubmit}
       >
         <InputText
           type="Email"

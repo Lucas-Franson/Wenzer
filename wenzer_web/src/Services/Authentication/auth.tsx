@@ -6,19 +6,19 @@ import {
 import Cookies from 'js-cookie';
 
 interface IAuthContext {
-    logged: boolean;
-    singIn(email: string, password: string): void;
-    singOut(): void;
+  logged: boolean;
+  singIn(email: string, password: string): void;
+  singOut(): void;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-const AuthProvider = ({ children }: any) => {
+const AuthProvider = ({ children }: any) => {     
     const [logged, setLogged] = useState<boolean>(() => {
         const isLogged = Cookies.get('WenzerLogged');
 
         return !!isLogged;
-    });           
+    });
 
     function singIn(email: string, password: string) {
         if (email === 'dev@wenzer.com' && password === 'dev') {
@@ -39,9 +39,15 @@ const AuthProvider = ({ children }: any) => {
     }
 
     return (
-        <AuthContext.Provider value={{ logged, singIn, singOut }}>
-            {children}
-        </AuthContext.Provider>
+      <AuthContext.Provider
+        value={{
+          logged,
+          singIn,
+          singOut
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
     );
 }
 
