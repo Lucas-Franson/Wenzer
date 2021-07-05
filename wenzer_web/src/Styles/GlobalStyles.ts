@@ -13,12 +13,6 @@ export default createGlobalStyle`
     }
   }
 
-  @media(max-width: 720px) {
-    html {
-      font-size: 87.5%;
-    }
-  }
-
   body{
       width: 100%;
       background-color: ${(props) => props.theme.colors.background};

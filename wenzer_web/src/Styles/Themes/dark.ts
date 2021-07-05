@@ -1,23 +1,23 @@
 /* eslint-disable import/no-anonymous-default-export */
-export default  {
-    title: 'dark',
+export default {
+  title: "dark",
 
-    colors: {
-        primary: '#A020F0',
-        primaryLight: '#b20fda',
-        secondary: '#151515',
-        tertiary: '#323232',
-        background: '#222222',
+  colors: {
+    primary: "#8a00ff",
+    primaryLight: "#b501ca",
+    secondary: "#151515",
+    tertiary: "#323232",
+    background: "#222222",
 
-        white: {
-            light: '#FFFFFF',
-            dark: '#e6e6e6',
-        },
-        black: '#000',
-        grey: '#F3F2EF',
+    white: {
+      light: "#FFFFFF",
+      dark: "#e6e6e6",
+    },
+    black: "#000",
+    grey: "#F3F2EF",
 
-        succes: '#00ff30',
-        info: '#f7931b',
-        warning: '#e44c4e',
-    }
+    succes: "#07d34f",
+    info: "#f7931b",
+    warning: "#e44c4e",
+  },
 };

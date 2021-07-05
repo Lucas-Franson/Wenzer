@@ -3,6 +3,7 @@ import { memo } from "react";
 import { Container } from "./styles";
 import InputText from '../../../../Components/InputText';
 import WelcomeContext from '../../context';
+import api from '../../../../Services/api/api'
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -10,8 +11,23 @@ function Login() {
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log(email);
-    setIsEmailConfirmed(!isEmailConfirmed);
+
+    const data = { email: email}
+
+    api
+      .post("/api/salvar-email-marketing", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(() => {
+        setIsEmailConfirmed(!isEmailConfirmed);
+        console.log("deu certo");
+      })
+      .catch(() => {
+        setIsEmailConfirmed(!isEmailConfirmed);
+        console.log("falhou");
+      });    
   }
 
   return (

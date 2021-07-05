@@ -12,7 +12,7 @@ export const Container = styled.div`
     margin-left: 2rem;
 
     p {
-      font-size: 2.5rem;
+      font-size: 3rem;
       text-align: right;
     }
 
@@ -30,7 +30,7 @@ export const Container = styled.div`
     margin-right: 2rem;
 
     p {
-      font-size: 2.5rem;
+      font-size: 3rem;
       text-align: left;
     }
 
@@ -110,8 +110,9 @@ export const ContainerLogin = styled.header`
   justify-content: space-between;
   align-items: center;
 
-  margin-top: 4.5rem;
-  height: 90vh;
+  height: 100vh;
+
+  border-bottom: 1px solid ${potato => potato.theme.colors.secondary};
 
   header {
     display: flex;
@@ -130,16 +131,17 @@ export const ContainerLogin = styled.header`
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       text-align: left;
       line-height: 3.8rem;
-      max-width: 40rem;
+      max-width: 35rem;
+      margin-bottom: 15px;
     }
 
     h2 {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 300;
-      max-width: 40rem;
+      max-width: 35rem;
       text-align: left;
     }
 
@@ -159,7 +161,6 @@ export const ContainerLogin = styled.header`
   }
 
   @media (max-width: 1390px) {
-    margin-top: 5rem;
     height: 100vh;
 
     header {
@@ -198,7 +199,6 @@ export const ContainerLogin = styled.header`
   }
 
   @media (max-width: 1100px) {
-    font-size: 95%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -228,7 +228,7 @@ export const ContainerLogin = styled.header`
 
       img {
         margin-top: 3rem;
-        width: 20rem;
+        width: 350px;
       }
 
       a {
@@ -248,15 +248,18 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
+    margin-top: 0rem;
+
     header {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
 
+      margin-top: 4.5rem;
+
       h1 {
-        margin-top: 100px;
-        font-size: 2.5rem;
+        font-size: 2.3rem;
         text-align: center;
         line-height: 3rem;
       }
@@ -283,6 +286,141 @@ export const ContainerLogin = styled.header`
       }
     }
   }
+
+  @media (max-width: 420px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 6rem;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      margin-top: 9.5rem;
+
+      h1 {
+        font-size: 2.3rem;
+        text-align: center;
+        line-height: 3rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 300;
+        max-width: 40rem;
+        text-align: center;
+      }
+
+      img {
+        margin-top: 3rem;
+        max-width: 200px;
+      }
+
+      a {
+        text-decoration: none;
+        margin: 2rem 0;
+
+        button {
+          padding: 0.5rem 5rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 380px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 6rem;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      margin-top: 6.5rem;
+
+      h1 {
+        font-size: 2.3rem;
+        text-align: center;
+        line-height: 3rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 300;
+        max-width: 40rem;
+        text-align: center;
+      }
+
+      img {
+        margin-top: 3rem;
+        max-width: 320px;
+      }
+
+      a {
+        text-decoration: none;
+        margin: 2rem 0;
+
+        button {
+          padding: 0.5rem 5rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 375px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 160px;
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      margin-top: 6.5rem;
+
+      h1 {
+        font-size: 2.3rem;
+        text-align: center;
+        line-height: 3rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+        font-weight: 300;
+        max-width: 40rem;
+        text-align: center;
+      }
+
+      img {
+        margin-top: 3rem;
+        max-width: 320px;
+      }
+
+      a {
+        text-decoration: none;
+        margin: 2rem 0;
+
+        button {
+          padding: 0.5rem 5rem;
+        }
+      }
+    }
+  }
 `;
 
 export const ContainerAbout = styled.main`
@@ -290,15 +428,14 @@ export const ContainerAbout = styled.main`
   justify-content: space-between;
   align-items: center;
   height: 100vh;
+  border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
 
   @media (max-width: 1100px) {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
     justify-content: center;
-
   }
-
 `;
 
 export const ContainerUniversity = styled.div`
@@ -306,6 +443,7 @@ export const ContainerUniversity = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 100vh;
+  border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
 
   @media (max-width: 1100px) {
     display: flex;
@@ -317,9 +455,22 @@ export const ContainerUniversity = styled.div`
 
 export const ContainerBusiness = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100vh;
+  height: auto;
+  margin: 220px 0;
+  gap: 50px;
+
+  header {
+    p {
+      font-size: 2.5rem;
+    }
+  }
+
+  main {
+    display: flex;
+  }
 
   button {
     color: #fff;
@@ -337,9 +488,16 @@ export const ContainerBusiness = styled.div`
 
   @media (max-width: 1100px) {
     display: flex;
-    flex-direction: column-reverse;
     align-items: center;
     justify-content: center;
+    margin: 100px 0;
+    text-align: center;
+
+    main {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
   }
 `;
 
@@ -383,7 +541,10 @@ export const ContainerFooter = styled.footer`
     p {
       display: flex;
       justify-content: center;
-     
+
+      a {
+        color: ${(props) => props.theme.colors.white.light};
+      }
 
       svg {
         margin: 0 0.2rem;

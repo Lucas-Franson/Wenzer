@@ -1,13 +1,14 @@
 import { ReactElement, useState } from 'react';
-import bg_register from '../../Utils/image/bg_home.svg';
-import bg_about from "../../Utils/image/bg_about.svg";
-import bg_university from "../../Utils/image/bg_university.svg";
-import bg_business from "../../Utils/image/bg_business.svg";
+import { FaInstagram, FaLinkedin, FaTwitter, FaLock, FaLightbulb, FaHandHoldingUsd } from 'react-icons/fa';
+import WelcomeContext from './context';
+
 import VipListForm from './components/VipListForm';
 import EmailConfirmed from './components/EmailConfirmed';
-import { FaInstagram, FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
-import WelcomeContext from './context';
+import CardProject from './components/CardProject';
+
+import bg_university from "../../Utils/image/bg_university.svg";
+import bg_about from "../../Utils/image/bg_about.svg";
 
 import {
   ContainerLogin,
@@ -19,7 +20,7 @@ import {
 } from "./styles";
 
 function Welcome(): ReactElement {
-  const [isEmailConfirmed, setIsEmailConfirmed] = useState(true);
+  const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isTerms, setIsTerms] = useState(false);
 
   const initialContext = {
@@ -27,9 +28,12 @@ function Welcome(): ReactElement {
     setIsEmailConfirmed,
   };
 
-  function handleShowTerms () {
+  function handleShowTerms() {
     setIsTerms(!isTerms);
   }
+
+  //https://www.instagram.com/wenzeroficial/
+
 
   return (
     <WelcomeContext.Provider value={initialContext}>
@@ -39,10 +43,10 @@ function Welcome(): ReactElement {
             <h1>Compartilhe experiência, ideias e projetos!</h1>
             <h2>
               Uma plataforma para publicar suas ideias ou participar projetos,
-              ganhar experiencias em projetos que poderá somar no seu
+              ganhar experiencias em projetos que poderá agregar no seu
               portifólio!!{" "}
             </h2>
-            <img src={bg_register} alt="" />
+            {/* <img src={bg_register} alt="" /> */}
             <a href="#about">
               <button type="button">Saiba mais</button>
             </a>
@@ -58,23 +62,22 @@ function Welcome(): ReactElement {
           <div className="alignRight">
             <p>Wenzer é uma rede social para projetos e ideias</p>
             <span>
-              Publique suas ideias, encontre pessoas que possam te ajudar a
-              desenvolve-las, e assim ganhar experiencia em projetos!
+              No Wenzer você pode publicar seu projeto ou ideia (ex: um website
+              e-commerce), seja ele colaborativo para você ganhar experiencia
+              encontrando outras pessoas para desenvolver com você, ou cobrando
+              um valor $$ para que alguem desenvolva sua ideia!
             </span>
           </div>
         </ContainerAbout>
 
         <ContainerUniversity id="university">
           <div className="alignLeft">
-            <p>
-              Precisa desenvolver um projeto que envolva uma área de estudo
-              diferente da sua?
-            </p>
+            <p>Faça conexões e networking!</p>
             <span>
-              Publique seu projeto com tags da sua universidade para encontrar
-              universitários de areas comum com a suas ideias no seu proprio
-              campus! Também sinta-se livre para colocar qualquer tag e expandir
-              seu projeto para o mundo!
+              Publique seu projeto com tags do seu interesse ou da universidade
+              para encontrar universitários de areas comum com a suas ideias no
+              seu próprio campus! Encontre pessoas com o mesmo interesse que
+              você e expanda seu projeto para o mundo!
             </span>
           </div>
           <div>
@@ -83,19 +86,30 @@ function Welcome(): ReactElement {
         </ContainerUniversity>
 
         <ContainerBusiness id="business">
-          <div>
-            <img src={bg_business} alt="" />
-          </div>
-          <div className="alignRight">
-            <p>Participe de projetos e receba por isso! $</p>
-            <span>
-              No wenzer, você pode participar de projetos remunerados, assim
-              como também pode pagar alguém para participar de um projeto seu!
-            </span>
-            <a href="#home">
-              <button type="button">Entrar pra lista de espera</button>
-            </a>
-          </div>
+          <header>
+            <p>Você pode publicar seu projeto em 3 modalidades</p>
+          </header>
+          <main>
+            <CardProject
+              title="Projeto Gratuito!"
+              description="Publique sua ideia de modo colaborativo para ganhar experiencia!"
+            >
+              <FaLightbulb size={100} />
+            </CardProject>
+
+            <CardProject
+              title="Projeto Pago"
+              description="Você pode pagar para uma alguem ou uma equipe desenvolver suas ideias direto pelo Wenzer!"
+            >
+              <FaHandHoldingUsd size={100} />
+            </CardProject>
+            <CardProject
+              title="Projeto Privado"
+              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas selecionadas"
+            >
+              <FaLock size={100} />
+            </CardProject>
+          </main>
         </ContainerBusiness>
 
         <ContainerFooter>
@@ -112,8 +126,28 @@ function Welcome(): ReactElement {
               <a href="#home">Cadastre-se</a>
             </section>
             <p>
-              Siga o Wenzer: <FaTwitter size={30} /> <FaInstagram size={30} />{" "}
-              <FaLinkedin size={30} /> <FaFacebook size={30} />{" "}
+              Siga o Wenzer:
+              <a
+                href="https://twitter.com/wenzeroficial"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FaTwitter size={30} />{" "}
+              </a>
+              <a
+                href="https://www.instagram.com/wenzeroficial/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FaInstagram size={30} />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/wenzer"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FaLinkedin size={30} />
+              </a>
             </p>
             <section></section>
           </div>
@@ -123,11 +157,11 @@ function Welcome(): ReactElement {
               compartilhamento de experiência.
             </p>
             <span>
-              <a href="##" target="">
-                Termos e Condições
+              <a href="##" target="" onClick={handleShowTerms}>
+                Termos e Condições |
               </a>{" "}
               <a href="##" target="" onClick={handleShowTerms}>
-                Politica de Privacidade
+                Politica de Privacidade |
               </a>{" "}
               Wenzer 2021 ©
             </span>

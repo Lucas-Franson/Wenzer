@@ -132,3 +132,77 @@ export const Container = styled.div`
     }
   }
 `;
+
+export const ContentMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100vh;
+
+  margin-right: 25px;
+
+  background-color: ${(props) => props.theme.colors.background};
+  gap: 10px;
+
+  &:first-child {
+    margin-top: 80px;
+  }
+
+  div {
+    width: 100px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    margin-left: 15px;
+
+    a {
+      text-decoration: none;
+      color: ${(props) => props.theme.colors.white.light};
+
+      &:hover {
+        color: ${(props) => props.theme.colors.primary};
+      }
+    }
+
+    .entrarButton {
+      color: ${(props) => props.theme.colors.primary};
+      border-radius: 0.2rem;
+      width: 150px;
+      border: 1px solid ${(props) => props.theme.colors.primary};
+
+      transition: ease 0.2s;
+
+      &:hover {
+        border: 1px solid ${(props) => props.theme.colors.primaryLight};
+        color: ${(props) => props.theme.colors.primaryLight};
+      }
+    }
+
+    .cadastrarButton {
+      color: #fff;
+      width: 150px;
+      border-radius: 0.2rem;
+      background: ${(props) => props.theme.colors.primary};
+
+      transition: ease 0.2s;
+
+      &:hover {
+        background: ${(props) => props.theme.colors.primaryLight};
+      }
+    }
+
+    button {
+      .iconTheme {
+        color: ${(props) => props.theme.colors.white.light};
+      }
+    }
+  }
+`;
+
+export const ContainerMenu = styled.div`
+  width: 280px;
+  background-color: ${(props) => props.theme.colors.background};
+`;
