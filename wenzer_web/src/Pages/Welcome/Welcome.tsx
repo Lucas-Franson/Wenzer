@@ -1,5 +1,13 @@
 import { ReactElement, useState } from 'react';
-import { FaInstagram, FaLinkedin, FaTwitter, FaLock, FaLightbulb, FaHandHoldingUsd } from 'react-icons/fa';
+import {
+  FaInstagram,
+  FaLinkedin,
+  FaTwitter,
+  FaLock,
+  FaLightbulb,
+  FaHandHoldingUsd,
+  FaAngleDoubleUp,
+} from "react-icons/fa";
 import WelcomeContext from './context';
 
 import VipListForm from './components/VipListForm';
@@ -56,18 +64,30 @@ function Welcome(): ReactElement {
         </ContainerLogin>
 
         <ContainerAbout id="about">
-          <div>
-            <img src={bg_about} alt="" />
-          </div>
-          <div className="alignRight">
-            <p>Wenzer é uma rede social para projetos e ideias</p>
-            <span>
-              No Wenzer você pode publicar seu projeto ou ideia (ex: um website
-              e-commerce), seja ele colaborativo para você ganhar experiencia
-              encontrando outras pessoas para desenvolver com você, ou cobrando
-              um valor $$ para que alguem desenvolva sua ideia!
-            </span>
-          </div>
+          <header>
+            <div>
+              <img src={bg_about} alt="Sobre o Wenzer" />
+            </div>
+            <div className="alignRight">
+              <p>Wenzer é uma rede social para projetos e ideias</p>
+              <span>
+                No Wenzer você pode publicar seu projeto ou ideia (ex: um
+                website e-commerce), seja ele colaborativo para você ganhar
+                experiencia encontrando outras pessoas para desenvolver com
+                você, ou cobrando um valor $$ para que alguem desenvolva sua
+                ideia!
+              </span>
+            </div>
+          </header>
+          <main>
+            <div className="AboutIcon">
+              <FaAngleDoubleUp size={50} />
+            </div>
+            <div className="AboutContent">
+              <p>Sua primeira experiêcia para o mercado de trabalho</p>
+            </div>
+            <div className="AboutNone"></div>
+          </main>
         </ContainerAbout>
 
         <ContainerUniversity id="university">

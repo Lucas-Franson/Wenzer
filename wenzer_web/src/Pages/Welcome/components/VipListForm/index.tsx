@@ -1,16 +1,18 @@
-import { useState, useContext, FormEvent } from "react";
-import { memo } from "react";
+import { useState, useContext, FormEvent, memo } from "react";
 import { Container } from "./styles";
 import InputText from '../../../../Components/InputText';
 import WelcomeContext from '../../context';
 import api from '../../../../Services/api/api'
+import { CircularProgress } from '@material-ui/core';
 
 function Login() {
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { isEmailConfirmed, setIsEmailConfirmed } = useContext(WelcomeContext);
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
 
     const data = { email: email}
 
@@ -23,10 +25,12 @@ function Login() {
       .then(() => {
         setIsEmailConfirmed(!isEmailConfirmed);
         console.log("deu certo");
+        setIsLoading(false);
       })
       .catch(() => {
         setIsEmailConfirmed(!isEmailConfirmed);
         console.log("falhou");
+        setIsLoading(false);
       });    
   }
 
@@ -44,7 +48,7 @@ function Login() {
           onChange={(e) => setEmail(e.target.value)}
           required={true}
         />
-        <button type="submit">Cadastrar</button>
+        <button type="submit">{isLoading ? <CircularProgress size={16} color="inherit"/> : 'Cadastrar' }</button>
       </form>
 
       <span>

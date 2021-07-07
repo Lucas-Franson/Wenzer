@@ -41,7 +41,11 @@ export const Container = styled.div`
     }
   }
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1390px) {
+    img {
+      width: 33rem;
+      margin-top: 30px;
+    }
     .alignRight {
       p {
         font-size: 2.2rem;
@@ -62,8 +66,8 @@ export const Container = styled.div`
       }
 
       span {
-        margin-top: 1rem;
-        font-size: 0.8rem;
+        margin-top: 0.8rem;
+        font-size: 1rem;
         text-align: center;
       }
     }
@@ -71,27 +75,31 @@ export const Container = styled.div`
 
   @media (max-width: 600px) {
     .alignRight {
+      margin-left: 0;
       p {
-        font-size: 1.7rem;
+        font-size: 2rem;
         text-align: center;
       }
 
       span {
         margin-top: 1rem;
-        font-size: 0.7rem;
+        font-size: 0.9rem;
+        font-weight: 400;
         text-align: center;
       }
     }
 
     .alignLeft {
+      margin-right: 0;
       p {
-        font-size: 1.7rem;
+        font-size: 2rem;
         text-align: center;
       }
 
       span {
-        margin-top: 1rem;
-        font-size: 0.7rem;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 400;
         text-align: center;
       }
     }
@@ -293,8 +301,6 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
-    margin-top: 6rem;
-
     header {
       display: flex;
       flex-direction: column;
@@ -338,15 +344,11 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
-    margin-top: 6rem;
-
     header {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
-      margin-top: 6.5rem;
 
       h1 {
         font-size: 2.3rem;
@@ -383,24 +385,20 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
-    margin-top: 160px;
-
     header {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
 
-      margin-top: 6.5rem;
-
       h1 {
-        font-size: 2.3rem;
+        font-size: 2rem;
         text-align: center;
         line-height: 3rem;
       }
 
       h2 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 300;
         max-width: 40rem;
         text-align: center;
@@ -425,16 +423,76 @@ export const ContainerLogin = styled.header`
 
 export const ContainerAbout = styled.main`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
   height: 100vh;
   border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 150px;
+    background-color: ${(props) => props.theme.colors.secondary};
+    border-radius: 8px;
+
+    .AboutIcon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px 0 0 8px;
+
+      width: 12%;
+      height: 100%;
+      background-color: ${(props) => props.theme.colors.succes};
+    }
+  }
 
   @media (max-width: 1100px) {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    justify-content: center;
+    header {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: center;
+    }
+
+    main {
+      .AboutIcon {
+        width: 20%;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    header {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: center;
+    }
+
+    main {
+      height: 100px;
+      .AboutIcon {
+        width: 25%;
+      }
+
+      .AboutContent {
+        p {
+          font-size: 1rem;
+          text-align: center;
+        }
+      }
+
+      .AboutNone {
+        display: none;
+      }
+    }
   }
 `;
 
@@ -631,8 +689,9 @@ export const ContainerFooter = styled.footer`
       justify-content: center;
 
       font-weight: 300;
-      font-size: 1rem;
+      font-size: 0.9rem;
       padding: 0px 10px;
+      max-width: 300px;
 
       a {
         margin: 0.6rem 0;
