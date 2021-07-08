@@ -496,22 +496,52 @@ export const ContainerAbout = styled.main`
   }
 `;
 
-export const ContainerUniversity = styled.div`
+export const ContainerNetworking = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
   height: 100vh;
   border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
 
-  @media (max-width: 1100px) {
+  header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer {
+    width: 100%;
+    display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    font-size: 2rem;
+    border-left: 5px solid ${(props) => props.theme.colors.primary};
+    height: 100px;
+
+    p {
+      span {
+        color: ${(props) => props.theme.colors.primary};
+      }
+    }
+  }
+
+  @media (max-width: 1100px) {
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    footer { 
+      font-size: 1.5rem;
+    }
   }
 `;
 
-export const ContainerBusiness = styled.div`
+export const ContainerProject = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;

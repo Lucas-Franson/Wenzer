@@ -21,8 +21,8 @@ import bg_about from "../../Utils/image/bg_about.svg";
 import {
   ContainerLogin,
   ContainerAbout, 
-  ContainerUniversity,
-  ContainerBusiness, 
+  ContainerNetworking,
+  ContainerProject, 
   ContainerFooter,
   Container
 } from "./styles";
@@ -90,22 +90,29 @@ function Welcome(): ReactElement {
           </main>
         </ContainerAbout>
 
-        <ContainerUniversity id="university">
-          <div className="alignLeft">
-            <p>Faça conexões e networking!</p>
-            <span>
-              Publique seu projeto com tags do seu interesse ou da universidade
-              para encontrar universitários de areas comum com a suas ideias no
-              seu próprio campus! Encontre pessoas com o mesmo interesse que
-              você e expanda seu projeto para o mundo!
-            </span>
-          </div>
-          <div>
-            <img src={bg_university} alt="" />
-          </div>
-        </ContainerUniversity>
+        <ContainerNetworking id="networking">
+          <header>
+            <div className="alignLeft">
+              <p>Faça conexões e networking!</p>
+              <span>
+                Publique seu projeto com tags do seu interesse ou da
+                universidade para encontrar universitários de areas comum com a
+                suas ideias no seu próprio campus! Encontre pessoas com o mesmo
+                interesse que você e expanda seu projeto para o mundo!
+              </span>
+            </div>
+            <div>
+              <img src={bg_university} alt="" />
+            </div>
+          </header>
+          <footer>
+            <p>
+              Conectando você e o mundo através da <span>sua ideia!</span>
+            </p>
+          </footer>
+        </ContainerNetworking>
 
-        <ContainerBusiness id="business">
+        <ContainerProject id="project">
           <header>
             <p>Você pode publicar seu projeto em 3 modalidades</p>
           </header>
@@ -130,7 +137,7 @@ function Welcome(): ReactElement {
               <FaLock size={100} />
             </CardProject>
           </main>
-        </ContainerBusiness>
+        </ContainerProject>
 
         <ContainerFooter>
           <div>

@@ -21,7 +21,7 @@ function TopBarWelcome(): ReactElement {
     setOpenSideMenu(!openSideMenu);
   }
 
-   const list = () => (
+   const sideBarMobile = () => (
      <ContainerMenu
        role="presentation"
        onClick={() => setOpenSideMenu(false)}
@@ -33,11 +33,11 @@ function TopBarWelcome(): ReactElement {
          </div>
 
          <div>
-           <a href="/#university">Networking</a>
+           <a href="/#networking">Networking</a>
          </div>
 
          <div>
-           <a href="/#business">Projetos</a>
+           <a href="/#project">Projetos</a>
          </div>
 
          {/* <div>
@@ -80,8 +80,8 @@ function TopBarWelcome(): ReactElement {
       </header>
       <div>
         <a href="/#about">O que é</a>
-        <a href="/#university">Networking</a>
-        <a href="/#business">Projetos</a>
+        <a href="/#networking">Networking</a>
+        <a href="/#project">Projetos</a>
 
         <a href="/login" className="a-Button">
           <Button type="button" className="entrarButton">
@@ -102,7 +102,7 @@ function TopBarWelcome(): ReactElement {
             <BsMoon size={25} className="iconTheme" />
           )}
         </Button>
-      </div>  
+      </div>
 
       <div className="IconMenuMobile">
         <Button>
@@ -115,7 +115,7 @@ function TopBarWelcome(): ReactElement {
             onClose={openMenu}
             onOpen={openMenu}
           >
-            {list()}
+            {sideBarMobile()}
           </SwipeableDrawer>
         </div>
       </div>
