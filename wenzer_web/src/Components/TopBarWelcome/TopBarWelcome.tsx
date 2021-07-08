@@ -37,10 +37,10 @@ function TopBarWelcome(): ReactElement {
          </div>
 
          <div>
-           <a href="/#business">Negócios</a>
+           <a href="/#business">Projetos</a>
          </div>
 
-         <div>
+         {/* <div>
            <a href="/login">
              <Button type="button" className="entrarButton">
                Entrar
@@ -54,7 +54,7 @@ function TopBarWelcome(): ReactElement {
                Cadastre-se
              </Button>
            </a>
-         </div>
+         </div> */}
 
          <div>
            <Button onClick={handleChangeTheme}>
@@ -81,7 +81,7 @@ function TopBarWelcome(): ReactElement {
       <div>
         <a href="/#about">O que é</a>
         <a href="/#university">Networking</a>
-        <a href="/#business">Negócios</a>
+        <a href="/#business">Projetos</a>
 
         <a href="/login" className="a-Button">
           <Button type="button" className="entrarButton">
@@ -102,7 +102,7 @@ function TopBarWelcome(): ReactElement {
             <BsMoon size={25} className="iconTheme" />
           )}
         </Button>
-      </div>
+      </div>  
 
       <div className="IconMenuMobile">
         <Button>
