@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import {
   FaInstagram,
   FaLinkedin,
@@ -9,6 +9,7 @@ import {
   FaAngleDoubleUp,
 } from "react-icons/fa";
 import WelcomeContext from './context';
+import { useParams } from 'react-router-dom';
 
 import VipListForm from './components/VipListForm';
 import EmailConfirmed from './components/EmailConfirmed';
@@ -27,14 +28,28 @@ import {
   Container
 } from "./styles";
 
+type TokenParams = {
+  token: string;
+}
+
 function Welcome(): ReactElement {
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isTerms, setIsTerms] = useState(false);
+  const params = useParams<TokenParams>();
+  const token = params.token;
 
   const initialContext = {
     isEmailConfirmed,
     setIsEmailConfirmed,
   };
+
+  useEffect(() => {
+    if (token) {
+      console.log("token: ", token);
+      //get para confirmar token email marketing
+      setIsEmailConfirmed(true);
+    }
+  }, [token]);
 
   function handleShowTerms() {
     setIsTerms(!isTerms);

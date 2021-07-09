@@ -39,12 +39,14 @@ export const Container = styled.div`
     padding-right: 5rem;
 
     a {
+      display: flex;
+      align-items: center;
       font-weight: 400;
       margin: 0 0.8rem;
       text-decoration: none;
       color: ${(props) => props.theme.colors.white.light};
 
-      transition: ease 0.3s;
+      transition: ease 0.1s;
 
       &:hover {
         color: ${(props) => props.theme.colors.primary};

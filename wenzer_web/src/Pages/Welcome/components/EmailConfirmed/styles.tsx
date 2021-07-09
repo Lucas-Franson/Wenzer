@@ -5,7 +5,7 @@ export const Container = styled.div`
   height: 20rem;
   box-sizing: border-box;
   padding: 1.5rem 2.5rem;
-  margin-left: 1rem;
+  margin-left: 2rem;
 
   display: flex;
   flex-direction: column;
@@ -80,6 +80,7 @@ export const Container = styled.div`
     height: 24rem;
     box-sizing: border-box;
     padding: 1.5rem 2.5rem;
+    margin-left: 0;
 
     a {
       display: flex;

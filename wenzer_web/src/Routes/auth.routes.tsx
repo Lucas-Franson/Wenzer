@@ -8,7 +8,7 @@ function Routes() {
     return (
       <LayoutWelcome>
         <Switch>
-          <Route path="/" exact component={Welcome} />
+          <Route path="/:token?" exact component={Welcome} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Redirect to="/" />

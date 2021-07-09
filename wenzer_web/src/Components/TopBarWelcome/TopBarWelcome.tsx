@@ -1,9 +1,9 @@
-import { memo, ReactElement, useState } from "react";
+import { memo, ReactElement, useState, useRef } from "react";
 import { Button } from '@material-ui/core';
 import { BsSun, BsMoon } from 'react-icons/bs';
 import { MdMenu } from 'react-icons/md';
 import { useTheme } from '../../Styles/Hook/theme';
-import WenzerLogo from '../../Utils/image/WenzerLogo.svg';
+import WenzerLogo from '../../Utils/image/LogoWenzerOriginal.svg';
 import { Container, ContentMenu, ContainerMenu } from "./styles";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 
@@ -11,13 +11,14 @@ function TopBarWelcome(): ReactElement {
   const { toggleTheme, theme } = useTheme();
   const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark' ? true : false);
   const [openSideMenu, setOpenSideMenu] = useState(false);
+  const openMenuRef = useRef(false);
   
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
     toggleTheme();
   }
 
-  function openMenu() {
+  function handleOpenMenu() {
     setOpenSideMenu(!openSideMenu);
   }
 
@@ -83,7 +84,7 @@ function TopBarWelcome(): ReactElement {
         <a href="/#networking">Networking</a>
         <a href="/#project">Projetos</a>
 
-        <a href="/login" className="a-Button">
+        {/* <a href="/login" className="a-Button">
           <Button type="button" className="entrarButton">
             Entrar
           </Button>
@@ -93,8 +94,10 @@ function TopBarWelcome(): ReactElement {
           <Button type="button" className="cadastrarButton">
             Cadastre-se
           </Button>
-        </a>
+        </a> */}
+      </div>
 
+      <div>
         <Button onClick={handleChangeTheme}>
           {darkTheme ? (
             <BsSun size={25} className="iconTheme" />
@@ -106,14 +109,15 @@ function TopBarWelcome(): ReactElement {
 
       <div className="IconMenuMobile">
         <Button>
-          <MdMenu size={25} className="iconTheme" onClick={openMenu} />
+          <MdMenu size={25} className="iconTheme" onClick={handleOpenMenu} />
         </Button>
         <div>
           <SwipeableDrawer
             anchor="right"
             open={openSideMenu}
-            onClose={openMenu}
-            onOpen={openMenu}
+            onClose={handleOpenMenu}
+            onOpen={handleOpenMenu}
+            ref={openMenuRef}
           >
             {sideBarMobile()}
           </SwipeableDrawer>
