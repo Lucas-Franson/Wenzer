@@ -79,6 +79,7 @@ module.exports = class LoginController {
         const { token } = req.params;
         const { email } = req.body;
         const loginService = new LoginService();
+     
 
         try {
             await loginService.salvarEmailMarketing(email);
