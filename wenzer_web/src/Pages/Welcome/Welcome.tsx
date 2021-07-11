@@ -160,8 +160,8 @@ function Welcome(): ReactElement {
             <section>
               <strong>Informações</strong>
               <a href="#about">O que é o wenzer</a>
-              <a href="#university">Como ganhar experiencia</a>
-              <a href="#university">Como cobrar por um projeto</a>
+              <a href="#networking">Networking</a>
+              <a href="#projects">Projetos</a>
             </section>
             <section>
               <strong>Plataforma</strong>
