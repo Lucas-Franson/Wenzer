@@ -2,12 +2,14 @@ import { memo, useState } from "react";
 import { Container } from "./styles";
 import InputText from "../../../Components/InputText";
 import InputPassword from "../../../Components/InputPassword";
+import DialogTermsAndPolicy from "../../../Components/DialogTermsPolicy";
 
 function Login() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isTerms, setIsTerms] = useState(false);
 
   function onSubmit() {
     if(password !== confirmPassword) {
@@ -20,6 +22,10 @@ function Login() {
 
     console.log(data);
   }
+
+   function handleShowTerms() {
+     setIsTerms(!isTerms);
+   }
 
   return (
     <Container>
@@ -55,9 +61,18 @@ function Login() {
         <button type="submit">Cadastrar</button>
       </form>
       <span>
-        Ao se registrar, você aceita nossos <a href="##">termos de uso</a> e a
-        nossa <a href="##"> política de privacidade</a>.
+        Ao se registrar, você aceita nossos{" "}
+        <a href="##" onClick={handleShowTerms}>
+          termos de uso
+        </a>{" "}
+        e a nossa{" "}
+        <a href="##" onClick={handleShowTerms}>
+          {" "}
+          política de privacidade
+        </a>
+        .
       </span>
+      <DialogTermsAndPolicy state={isTerms} handleChange={handleShowTerms} />
     </Container>
   );
 }

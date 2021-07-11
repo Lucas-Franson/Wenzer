@@ -41,7 +41,7 @@ function TopBarWelcome(): ReactElement {
            <a href="/#project">Projetos</a>
          </div>
 
-         {/* <div>
+         <div>
            <a href="/login">
              <Button type="button" className="entrarButton">
                Entrar
@@ -55,7 +55,7 @@ function TopBarWelcome(): ReactElement {
                Cadastre-se
              </Button>
            </a>
-         </div> */}
+         </div>
 
          <div>
            <Button onClick={handleChangeTheme}>
@@ -74,7 +74,7 @@ function TopBarWelcome(): ReactElement {
   return (
     <Container>
       <header>
-        <a href="/">
+        <a href="/welcome">
           <img src={WenzerLogo} alt="Wenzer" />
         </a>
         <h1>Wenzer</h1>
@@ -84,7 +84,7 @@ function TopBarWelcome(): ReactElement {
         <a href="/#networking">Networking</a>
         <a href="/#project">Projetos</a>
 
-        {/* <a href="/login" className="a-Button">
+        <a href="/login" className="a-Button">
           <Button type="button" className="entrarButton">
             Entrar
           </Button>
@@ -94,10 +94,8 @@ function TopBarWelcome(): ReactElement {
           <Button type="button" className="cadastrarButton">
             Cadastre-se
           </Button>
-        </a> */}
-      </div>
+        </a>
 
-      <div>
         <Button onClick={handleChangeTheme}>
           {darkTheme ? (
             <BsSun size={25} className="iconTheme" />
