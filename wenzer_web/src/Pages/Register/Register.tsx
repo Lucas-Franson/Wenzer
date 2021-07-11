@@ -1,15 +1,9 @@
-import React, { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import RegisterForm from './RegisterForm';
 import { MdArrowBack } from 'react-icons/md'
 import { Container } from './styles';
-import DialogTermsAndPolicy from "../../Components/DialogTermsPolicy";
 
 function Register(): ReactElement {
-  const [isTerms, setIsTerms] = useState(false);
-
-  function handleShowTerms() {
-    setIsTerms(!isTerms);
-  }
   return (
     <Container>
       <header>
@@ -30,8 +24,6 @@ function Register(): ReactElement {
       <div>
         <RegisterForm />
       </div>
-
-      <DialogTermsAndPolicy state={isTerms} handleChange={handleShowTerms} />
     </Container>
   );
 }
