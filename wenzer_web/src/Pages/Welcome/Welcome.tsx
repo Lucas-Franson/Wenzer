@@ -13,11 +13,11 @@ import { useParams } from 'react-router-dom';
 
 import VipListForm from './components/VipListForm';
 import EmailConfirmed from './components/EmailConfirmed';
-import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
+import DialogTermsAndPolicy from '../../components/DialogTermsPolicy';
 import CardProject from './components/CardProject';
 
-import bg_university from "../../Utils/image/bg_university.svg";
-import bg_about from "../../Utils/image/bg_about.svg";
+import bg_university from "../../utils/image/bg_university.svg";
+import bg_about from "../../utils/image/bg_about.svg";
 
 import {
   ContainerLogin,

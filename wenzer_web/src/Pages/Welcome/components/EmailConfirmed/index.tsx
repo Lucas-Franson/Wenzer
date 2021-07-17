@@ -1,6 +1,6 @@
 import { memo, useContext } from "react";
 import { Container } from "./styles";
-import LogoWenzer from '../../../../Utils/image/LogoWenzerOriginal.svg';
+import LogoWenzer from '../../../../utils/image/LogoWenzerOriginal.svg';
 import WelcomeContext from '../../context';
 
 function ConfirmedEmail() {

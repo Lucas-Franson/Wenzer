@@ -1,8 +1,8 @@
 import { useState, useContext, FormEvent, memo } from "react";
 import { Container } from "./styles";
-import InputText from '../../../../Components/InputText';
+import InputText from '../../../../components/InputText';
 import WelcomeContext from '../../context';
-import api from '../../../../Services/api/api'
+import api from '../../../../services/api/api'
 import { CircularProgress } from '@material-ui/core';
 
 function Login() {

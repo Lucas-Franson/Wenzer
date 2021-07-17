@@ -1,4 +1,8 @@
 const nodemailer = require("nodemailer");
+const fs = require('fs');
+const { promisify } = require('util');
+
+const readFile = promisify(fs.readFile);
 
 const configEmailProduction = {
     host: process.env.EMAIL_HOST,
@@ -42,15 +46,25 @@ class Email {
 }
 
 class EmailVerify extends Email {
-    constructor(email, address) {
+    constructor(email) {
         
         super(
             '"Wenzer" <noreply@wenzer.com.br>',
             email,
             'Verificação de e-mail',
             '',
-            `Olá! Verifique seu e-mail <a href="${address}">aqui</a>`
+            ''
         );
+    }
+
+    async prepareHTML(link) {
+        const _self = this;
+        const text = await readFile(
+            './src/views/email-confirmed-community.html', 
+            'utf8').then(data => {
+            console.log(data);
+            _self.html = data.replace('$_TOKEN_$', link);
+        });
     }
 }
 
@@ -66,4 +80,26 @@ class EmailResetPassword extends Email {
     }
 }
 
-module.exports = { EmailVerify, EmailResetPassword };
+class EmailMarketingSend extends Email {
+    constructor(email) {
+        super(
+            '"Wenzer" <noreply@wenzer.com.br>',
+            email,
+            'Bem-vindo ao Wenzer',
+            ``,
+            ''
+        );
+    }
+
+    async prepareHTML(link) {
+        const _self = this;
+        const text = await readFile(
+            './src/views/email-marketing-welcome.html', 
+            'utf8').then(data => {
+            console.log(data);
+            _self.html = data.replace('$_TOKEN_$', link);
+        });
+    }
+}
+
+module.exports = { EmailVerify, EmailResetPassword, EmailMarketingSend };

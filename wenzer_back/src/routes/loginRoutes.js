@@ -10,6 +10,7 @@ routes.post('/api/login', loginController.login)
     .post('/api/recupera-senha', loginController.recoverPassword)
     .post('/api/alterar-senha/:token', loginController.alterPassword)
     .post('/api/salvar-email-marketing', loginController.emailMarketing)
+    .post('/api/confirmar-email-marketing/:token', loginController.confirmarEmailMarketing)
     .get('/api/verifica-email/:token', loginController.verifyEmail);
 
 routes.options(
@@ -18,6 +19,7 @@ routes.options(
         '/api/login', 
         '/api/recupera-senha', 
         '/api/alterar-senha',
+        '/api/confirmar-email-marketing',
         '/api/salvar-email-marketing'
     ], (req, res) => {
     res.set('Access-Control-Allow-Methods', 'POST');

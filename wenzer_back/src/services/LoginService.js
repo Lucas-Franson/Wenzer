@@ -1,5 +1,5 @@
 const { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado, ValideSeuEmail } = require('../erros.js');
-const { EmailVerify, EmailResetPassword } = require('../utils/Email.js');
+const { EmailVerify, EmailResetPassword, EmailMarketingSend } = require('../utils/Email.js');
 const jwt =  require('jsonwebtoken');
 const User = require('../repositories/user');
 const EmailMarketing = require('../repositories/emailMarketing');
@@ -41,7 +41,8 @@ module.exports = class LoginService {
             
             if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 
-            const emailVerify = new EmailVerify(email, address);
+            const emailVerify = new EmailVerify(email);
+            await emailVerify.prepareHTML(address);
             emailVerify.sendEmail();
 
             return usuario.id;
@@ -174,6 +175,39 @@ module.exports = class LoginService {
             return true;
         }
 
+        const token = this.createTokenJWT(save.email, [1, 'h']);
+        const route = '?token=';
+        const address = `${process.env.BASE_URL_WEB}${route}${token}`;
+        
+        if (process.env.ENVIRONMENT === 'desenv') console.log(address);
+
         save.Adiciona();
+        const sendEmail = new EmailMarketingSend(save.email);
+        await sendEmail.prepareHTML(address);
+        sendEmail.sendEmail();
     }
+
+    async confirmarEmailMarketing(token) {
+        const email = this.verifyTokenJWT(token);
+        let emailMarketing = new EmailMarketing();
+        emailMarketing.email = email;
+        emailMarketing.id = null;
+        await emailMarketing.Buscar();
+        
+        if (!emailMarketing.id) {
+            throw new NaoEncontrado('Email não encontrado na plataforma.');
+        }
+
+        if (emailMarketing.emailValid) {
+            throw new Error('Email já validado.');
+        }
+
+        try {
+            emailMarketing.emailValid = 1;
+            emailMarketing.Update();
+        } catch(err) {
+            throw err;
+        }
+    }
+
 }

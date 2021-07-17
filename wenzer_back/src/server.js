@@ -11,7 +11,7 @@ conexao.connect(err => {
     if (err) {
         console.log(err);
     } else {
-        const app = express();
+        const app = express(); 
 
         app.use((req, res, proximo) => {
             res.set('Access-Control-Allow-Origin', '*');

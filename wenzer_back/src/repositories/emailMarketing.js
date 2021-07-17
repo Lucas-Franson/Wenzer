@@ -45,6 +45,18 @@ module.exports = class EmailMarketing {
         }
     }
 
+    async Update() {
+        const sql = `UPDATE EmailMarketing
+                     SET email = '${this.email}', emailValid = '${this.emailValid}'
+                     WHERE ${this.ConstruirWhere()}`;
+        
+        conexao.query(sql, (err) => {
+            if (err) {
+                console.error(err);
+            }
+        })
+    }
+
     ConstruirWhere() {
         let where = "";
 
