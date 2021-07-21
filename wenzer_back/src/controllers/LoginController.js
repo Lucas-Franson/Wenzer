@@ -79,28 +79,11 @@ module.exports = class LoginController {
         const { token } = req.params;
         const { email } = req.body;
         const loginService = new LoginService();
-     
 
         try {
             await loginService.salvarEmailMarketing(email);
             return res.status(200).end()
         } catch(err) {
-            next(err);
-        }
-    }
-
-    async confirmarEmailMarketing(req, res, next) {
-        const { token } = req.params;
-        const loginService = new LoginService();
-
-        try {
-            await loginService.confirmarEmailMarketing(token);
-            return res.status(200).end();
-        } catch(err) {
-            if (err.name === 'JsonWebTokenError') {
-                err.message = 'Token de verificação de email não identificado.';
-            }
-
             next(err);
         }
     }
