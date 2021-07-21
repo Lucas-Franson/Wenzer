@@ -1,11 +1,11 @@
 import { useState, useContext, FormEvent, memo } from "react";
 import { Container } from "./styles";
-import InputText from '../../../../components/InputText';
+import InputText from '../../../../Components/InputText';
 import WelcomeContext from '../../context';
-import api from '../../../../services/api/api'
+import api from '../../../../Services/api/api'
 import { CircularProgress } from '@material-ui/core';
 
-function Login() {
+function VipListForm() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { isEmailConfirmed, setIsEmailConfirmed } = useContext(WelcomeContext);
@@ -23,12 +23,12 @@ function Login() {
         },
       })
       .then(() => {
-        setIsEmailConfirmed(!isEmailConfirmed);
+        setIsEmailConfirmed(true);
         console.log("deu certo");
-        setIsLoading(false);
+        setIsLoading(!isEmailConfirmed);
       })
       .catch(() => {
-        setIsEmailConfirmed(!isEmailConfirmed);
+        setIsEmailConfirmed(false);
         console.log("falhou");
         setIsLoading(false);
       });    
@@ -58,4 +58,4 @@ function Login() {
   );
 }
 
-export default memo(Login);
+export default memo(VipListForm);
