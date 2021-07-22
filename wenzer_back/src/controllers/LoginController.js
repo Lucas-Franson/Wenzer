@@ -102,7 +102,7 @@ module.exports = class LoginController {
             }
 
             next(err);
-        }
+        } 
     }
 
 }
