@@ -21,6 +21,7 @@ export const Container = styled.div`
   section {
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
 
     img {
@@ -45,6 +46,7 @@ export const Container = styled.div`
   div {
     button {
       width: 100%;
+      margin-top: 2rem;
       border-radius: 0.3rem;
       padding: 0.8rem 2.5rem;
 

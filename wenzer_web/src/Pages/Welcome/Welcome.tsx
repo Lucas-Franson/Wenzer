@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect, useRef } from 'react';
 import {
   FaInstagram,
   FaLinkedin,
@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa";
 import WelcomeContext from './context';
 import { useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import VipListForm from './components/VipListForm';
 import EmailConfirmed from './components/EmailConfirmed';
@@ -37,6 +39,7 @@ function Welcome(): ReactElement {
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isTerms, setIsTerms] = useState(false);
   const params = useParams<TokenParams>();
+  const mountedRef = useRef(true);
   const token = params.token;
 
   const initialContext = {
@@ -44,26 +47,55 @@ function Welcome(): ReactElement {
     setIsEmailConfirmed,
   };
 
-  useEffect(() => {
-   async function loadTokenEmailMarketing() {
-      if (token) {
-        console.log("token: ", token);
-        await api.get(`/api/confirmar-email-marketing/${token}`).then(() => {
-          setIsEmailConfirmed(true);
-        }).catch(() => {
-          alert('Erro ao confirmar seu e-mail, verifica sua caixa de entrada.');
-        })
-      }
-      setIsEmailConfirmed(false);
+  function toastfySuccess() {
+    return toast.success("E-mail confirmado!", {
+      position: "top-right",
+      autoClose: 3500,
+      closeOnClick: true,
+      pauseOnFocusLoss: true,
+      progress: undefined,
+    });
+  }
+
+   function toastfyWarning() {
+     return toast.warning("Falha ao autenticar seu e-mail, verifique sua caixa de entrada!", {
+       position: "top-right",
+       autoClose: 3500,
+       closeOnClick: true,
+       pauseOnFocusLoss: true,
+       progress: undefined,
+     });
    }
 
-   loadTokenEmailMarketing();
+  useEffect(() => {
+    async function loadTokenEmailMarketing() {
+      if (token) {
+        console.log("token: ", token);
+        await api
+          .get(`/api/confirmar-email-marketing/${token}`)
+          .then(() => {
+            setIsEmailConfirmed(true);
+            toastfySuccess();
+            if (!mountedRef.current) return null;
+          })
+          .catch(() => {
+            toastfyWarning();
+          });
+      }
+      setIsEmailConfirmed(false);
+    }
+
+    loadTokenEmailMarketing();
+
+    return () => {
+       mountedRef.current = false;
+    }
   }, [token]);
 
   function handleShowTerms() {
     setIsTerms(!isTerms);
   }
-  
+
   return (
     <WelcomeContext.Provider value={initialContext}>
       <Container>
@@ -105,7 +137,7 @@ function Welcome(): ReactElement {
               <FaAngleDoubleUp size={50} />
             </div>
             <div className="AboutContent">
-              <p>Sua primeira experiêcia para o mercado de trabalho</p>
+              <p>Tenha sua primeira experiêcia em projetos reais!</p>
             </div>
             <div className="AboutNone"></div>
           </main>
@@ -217,6 +249,7 @@ function Welcome(): ReactElement {
         </ContainerFooter>
 
         <DialogTermsAndPolicy state={isTerms} handleChange={handleShowTerms} />
+        <ToastContainer />
       </Container>
     </WelcomeContext.Provider>
   );

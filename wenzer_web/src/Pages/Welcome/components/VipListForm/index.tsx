@@ -1,14 +1,27 @@
 import { useState, useContext, FormEvent, memo } from "react";
-import { Container } from "./styles";
-import InputText from '../../../../Components/InputText';
 import WelcomeContext from '../../context';
-import api from '../../../../Services/api/api'
+import api from '../../../../Services/api/api';
+import { toast } from 'react-toastify';
+
 import { CircularProgress } from '@material-ui/core';
+import InputText from '../../../../Components/InputText';
+
+import { Container } from "./styles";
 
 function VipListForm() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { isEmailConfirmed, setIsEmailConfirmed } = useContext(WelcomeContext);
+  
+  function toastfyError() {
+    return toast.error("Falha ao cadastrar e-mail", {
+      position: "top-right",
+      autoClose: 3500,
+      closeOnClick: true,
+      pauseOnFocusLoss: true,
+      progress: undefined,
+    });
+  };
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -17,19 +30,14 @@ function VipListForm() {
     const data = { email: email}
 
     api
-      .post("/api/salvar-email-marketing", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post("/api/salvar-email-marketing", data)
       .then(() => {
         setIsEmailConfirmed(true);
-        console.log("deu certo");
         setIsLoading(!isEmailConfirmed);
       })
       .catch(() => {
         setIsEmailConfirmed(false);
-        console.log("falhou");
+        toastfyError();
         setIsLoading(false);
       });    
   }
@@ -39,16 +47,20 @@ function VipListForm() {
       <strong>
         Cadastre seu melhor e-mail para ter acesso antecipado ao Wenzer!
       </strong>
-      <form
-        onSubmit={onSubmit}
-      >
+      <form onSubmit={onSubmit}>
         <InputText
           type="Email"
           placeholder="E-mail"
           onChange={(e) => setEmail(e.target.value)}
           required={true}
         />
-        <button type="submit">{isLoading ? <CircularProgress size={16} color="inherit"/> : 'Cadastrar' }</button>
+        <button type="submit">
+          {isLoading ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : (
+            "Cadastrar"
+          )}
+        </button>
       </form>
 
       <span>
