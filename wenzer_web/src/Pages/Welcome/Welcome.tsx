@@ -13,11 +13,11 @@ import { useParams } from 'react-router-dom';
 
 import VipListForm from './components/VipListForm';
 import EmailConfirmed from './components/EmailConfirmed';
-import DialogTermsAndPolicy from '../../components/DialogTermsPolicy';
+import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
 import CardProject from './components/CardProject';
 
-import bg_university from "../../utils/image/bg_university.svg";
-import bg_about from "../../utils/image/bg_about.svg";
+import bg_university from "../../Utils/image/bg_university.svg";
+import bg_about from "../../Utils/image/bg_about.svg";
 
 import {
   ContainerLogin,
@@ -27,6 +27,7 @@ import {
   ContainerFooter,
   Container
 } from "./styles";
+import api from '../../Services/api/api';
 
 type TokenParams = {
   token: string;
@@ -44,20 +45,25 @@ function Welcome(): ReactElement {
   };
 
   useEffect(() => {
-    if (token) {
-      console.log("token: ", token);
-      //get para confirmar token email marketing
-      setIsEmailConfirmed(true);
-    }
+   async function loadTokenEmailMarketing() {
+      if (token) {
+        console.log("token: ", token);
+        await api.get(`/api/confirmar-email-marketing/${token}`).then(() => {
+          setIsEmailConfirmed(true);
+        }).catch(() => {
+          alert('Erro ao confirmar seu e-mail, verifica sua caixa de entrada.');
+        })
+      }
+      setIsEmailConfirmed(false);
+   }
+
+   loadTokenEmailMarketing();
   }, [token]);
 
   function handleShowTerms() {
     setIsTerms(!isTerms);
   }
-
-  //https://www.instagram.com/wenzeroficial/
-
-
+  
   return (
     <WelcomeContext.Provider value={initialContext}>
       <Container>
