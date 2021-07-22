@@ -88,7 +88,7 @@ module.exports = class LoginController {
         }
     }
 
-    async confirmarEmailMarketing(req, res, next) {
+      async confirmarEmailMarketing(req, res, next) {
         const { token } = req.params;
         const loginService = new LoginService();
 
