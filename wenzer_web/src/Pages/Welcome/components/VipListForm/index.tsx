@@ -9,25 +9,25 @@ import InputText from '../../../../Components/InputText';
 import { Container } from "./styles";
 
 function VipListForm() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { isEmailConfirmed, setIsEmailConfirmed } = useContext(WelcomeContext);
-  
-  function toastfyError() {
-    return toast.error("Falha ao cadastrar e-mail", {
+
+  function toastfyWarning() {
+    return toast.warning("E-mail ja cadastrado.", {
       position: "top-right",
       autoClose: 3500,
       closeOnClick: true,
       pauseOnFocusLoss: true,
       progress: undefined,
     });
-  };
+  }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setIsLoading(true);
 
-    const data = { email: email}
+    const data = { email: email };
 
     api
       .post("/api/salvar-email-marketing", data)
@@ -37,9 +37,9 @@ function VipListForm() {
       })
       .catch(() => {
         setIsEmailConfirmed(false);
-        toastfyError();
+        toastfyWarning();
         setIsLoading(false);
-      });    
+      });
   }
 
   return (

@@ -69,10 +69,14 @@ function Welcome(): ReactElement {
 
   useEffect(() => {
     async function loadTokenEmailMarketing() {
-      if (token) {
+      let a = window.location.search;
+      let b = new URLSearchParams(a);
+      let c = b.get("token");
+      console.log(c);
+      if (c) {
         console.log("token: ", token);
         await api
-          .get(`/api/confirmar-email-marketing/${token}`)
+          .post(`/api/confirmar-email-marketing/${c}`)
           .then(() => {
             setIsEmailConfirmed(true);
             toastfySuccess();
