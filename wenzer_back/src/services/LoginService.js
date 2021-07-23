@@ -172,7 +172,7 @@ module.exports = class LoginService {
         await save.Buscar();
 
         if (save.id) {
-            return true;
+            throw new  NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
         }
 
         const token = this.createTokenJWT(save.email, [1, 'h']);

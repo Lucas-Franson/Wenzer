@@ -76,7 +76,6 @@ module.exports = class LoginController {
     }
 
     async emailMarketing(req, res, next) {
-        const { token } = req.params;
         const { email } = req.body;
         const loginService = new LoginService();
 
@@ -84,6 +83,7 @@ module.exports = class LoginController {
             await loginService.salvarEmailMarketing(email);
             return res.status(200).end()
         } catch(err) {
+            console.log(err);
             next(err);
         }
     }
