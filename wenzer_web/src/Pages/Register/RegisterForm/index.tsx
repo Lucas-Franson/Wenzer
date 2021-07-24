@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { Container } from "./styles";
-import InputText from "../../../Components/InputText";
-import InputPassword from "../../../Components/InputPassword";
+import InputText from "../../../components/InputText";
+import InputPassword from "../../../components/InputPassword";
 
 function Login() {
   const [name, setName] = useState('');
