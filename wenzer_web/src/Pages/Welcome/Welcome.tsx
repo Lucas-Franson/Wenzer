@@ -72,7 +72,6 @@ function Welcome(): ReactElement {
       let a = window.location.search;
       let b = new URLSearchParams(a);
       let c = b.get("token");
-      console.log(c);
       if (c) {
         console.log("token: ", token);
         await api

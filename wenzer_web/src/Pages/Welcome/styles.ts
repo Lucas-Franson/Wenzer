@@ -483,6 +483,7 @@ export const ContainerAbout = styled.main`
       }
 
       .AboutContent {
+        padding: 10px;
         p {
           font-size: 1rem;
           text-align: center;
@@ -666,14 +667,12 @@ export const ContainerFooter = styled.footer`
   }
 
   @media (max-width: 600px) {
-    display: flex;
-    flex-direction: column;
     text-align: center;
-    position: absolute;
     left: 0;
-    height: 45vh;
+    height: 60vh;
 
     div {
+      margin-top: 15px;
       display: flex;
       flex-direction: column;
       width: 100%;
@@ -705,6 +704,15 @@ export const ContainerFooter = styled.footer`
         font-size: 1rem;
         margin-top: 2rem;
 
+        
+        a {
+          &:first-child {
+            margin-left: 15px;
+          }
+          margin-right: 5px;
+        }
+        
+
         svg {
           margin: 0 0.2rem;
           cursor: pointer;
@@ -719,9 +727,9 @@ export const ContainerFooter = styled.footer`
       justify-content: center;
 
       font-weight: 300;
-      font-size: 0.9rem;
+      font-size: 1rem;
       padding: 0px 10px;
-      max-width: 300px;
+      max-width: 360px;
 
       a {
         margin: 0.6rem 0;
