@@ -1,7 +1,7 @@
 import { memo, useContext } from "react";
 import { Container } from "./styles";
 import WelcomeContext from '../../context';
-import FeedbackOk from "../../../../Components/Animation/FeedbackOK";
+import FeedbackOk from "../../../../components/Animation/FeedbackOK";
 
 function ConfirmedEmail() {
   const { setIsEmailConfirmed, isEmailConfirmed } = useContext(WelcomeContext);

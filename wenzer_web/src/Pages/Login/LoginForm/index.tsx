@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { Container } from "./styles";
-import InputPassword from '../../../Components/InputPassword';
-import InputText from "../../../Components/InputText";
+import InputPassword from '../../../components/InputPassword';
+import InputText from "../../../components/InputPassword";
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ function Login() {
         e.preventDefault();
         onSubmit();
       }}>
-        <InputText type="Email" placeholder="E-mail" required={true} onChange={(e) => setEmail(e.target.value)} />
+        <InputText placeholder="E-mail" required={true} onChange={(e) => setEmail(e.target.value)} />
         <InputPassword placeholder="Senha" required={true} onChange={(e) => setPassword(e.target.value)} />
         <a href="##">Esqueceu sua senha?</a>
         <button type="submit">Entrar</button>

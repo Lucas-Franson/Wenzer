@@ -2,8 +2,8 @@ import { memo, ReactElement, useState, useRef } from "react";
 import { Button } from '@material-ui/core';
 import { BsSun, BsMoon } from 'react-icons/bs';
 import { MdMenu } from 'react-icons/md';
-import { useTheme } from '../../Styles/Hook/theme';
-import WenzerLogo from '../../Utils/image/LogoWenzerOriginal.svg';
+import { useTheme } from '../../styles/Hook/theme';
+import WenzerLogo from '../../utils/image/LogoWenzerOriginal.svg';
 import { Container, ContentMenu, ContainerMenu } from "./styles";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 
