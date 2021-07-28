@@ -1,4 +1,4 @@
-import Routes from './Routes';
+import Routes from './routes';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
 import { useTheme } from './styles/Hook/theme';

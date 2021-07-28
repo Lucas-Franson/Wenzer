@@ -1,8 +1,8 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
 import LayoutWelcome from '../components/Layout/LayoutWelcome';
 import Login from '../pages/Login';
-import Register from '../pages/register';
-import Welcome from '../pages/welcome';
+import Register from '../pages/Register';
+import Welcome from '../pages/Welcome';
 
 function Routes() {
     return (
