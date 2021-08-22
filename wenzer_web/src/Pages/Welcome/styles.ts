@@ -469,11 +469,18 @@ export const ContainerAbout = styled.main`
   }
 
   @media (max-width: 600px) {
+    .alignRight {
+      > p {
+        margin-top: 9rem;
+      }
+    }
+
     header {
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
       justify-content: center;
+
     }
 
     main {
