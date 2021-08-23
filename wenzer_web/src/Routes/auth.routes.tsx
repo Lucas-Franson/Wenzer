@@ -1,8 +1,9 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
-import LayoutWelcome from '../Components/Layout/LayoutWelcome';
-import Login from '../Pages/Login';
-import Register from '../Pages/Register';
-import Welcome from '../Pages/Welcome';
+import LayoutWelcome from '../components/Layout/LayoutWelcome';
+import EsqueceuSenha from '../pages/EsqueceuSenha';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import Welcome from '../pages/Welcome';
 
 function Routes() {
     return (
@@ -11,6 +12,7 @@ function Routes() {
           <Route path="/welcome/:token?" exact component={Welcome} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/esqueceu-senha" component={EsqueceuSenha} />
           <Redirect to="/welcome" />
         </Switch>
       </LayoutWelcome>

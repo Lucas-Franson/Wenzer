@@ -14,13 +14,11 @@ import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import VipListForm from './components/VipListForm';
-import EmailConfirmed from './components/EmailConfirmed';
-import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
+import DialogTermsAndPolicy from '../../components/DialogTermsPolicy';
 import CardProject from './components/CardProject';
 
-import bg_university from "../../Utils/image/bg_university.svg";
-import bg_about from "../../Utils/image/bg_about.svg";
+import bg_university from "../../utils/image/bg_university.svg";
+import bg_about from "../../utils/image/bg_about.svg";
 
 import {
   ContainerLogin,
@@ -174,21 +172,21 @@ function Welcome(): ReactElement {
           </header>
           <main>
             <CardProject
-              title="Projeto Gratuito!"
-              description="Publique sua ideia de modo colaborativo para ganhar experiencia!"
+              title="Projeto Gratuito"
+              description="Publique sua ideia de modo colaborativo para ganhar experiencia e network."
             >
               <FaLightbulb size={80} />
             </CardProject>
 
             <CardProject
               title="Projeto Pago"
-              description="Você pode pagar para uma alguem ou uma equipe desenvolver suas ideias direto pelo Wenzer!"
+              description="Você pode pagar para alguem ou uma equipe desenvolver suas ideias direto pelo Wenzer."
             >
               <FaHandHoldingUsd size={80} />
             </CardProject>
             <CardProject
               title="Projeto Privado"
-              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas selecionadas"
+              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas selecionadas."
             >
               <FaLock size={80} />
             </CardProject>

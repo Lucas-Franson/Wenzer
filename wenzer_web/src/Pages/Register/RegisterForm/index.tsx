@@ -1,8 +1,8 @@
 import { memo, useState } from "react";
 import { Container } from "./styles";
-import InputText from "../../../Components/InputText";
-import InputPassword from "../../../Components/InputPassword";
-import DialogTermsAndPolicy from "../../../Components/DialogTermsPolicy";
+import InputText from "../../../components/InputText";
+import InputPassword from "../../../components/InputPassword";
+import DialogTermsAndPolicy from "../../../components/DialogTermsPolicy";
 
 function Login() {
   const [name, setName] = useState('');

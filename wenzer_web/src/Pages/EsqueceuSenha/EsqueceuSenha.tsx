@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import LoginForm from './LoginForm';
+import Form from "./Form";
 import { MdArrowBack } from "react-icons/md";
 
 
@@ -9,14 +9,14 @@ function Login(): ReactElement {
   return (
     <Container>
       <header>
-        <h1>Faça seu login na plataforma</h1>
+        <h1>Insira seu e-mail cadastrado para recuperar a senha!</h1>
         <a href="/">
           {" "}
           <MdArrowBack size={22} /> Voltar para home
         </a>
       </header>
       <div>
-        <LoginForm />
+        <Form />
       </div>
     </Container>
   );
