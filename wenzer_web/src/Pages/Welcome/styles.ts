@@ -352,6 +352,14 @@ export const ContainerAbout = styled.div`
       height: 100%;
       background-color: ${(props) => props.theme.colors.succes};
     }
+
+    .AboutContent {
+      p {
+        padding: 0 5px;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+    }
   }
 
   @media (max-width: 1100px) {

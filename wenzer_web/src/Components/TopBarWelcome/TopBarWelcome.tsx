@@ -80,9 +80,9 @@ function TopBarWelcome(): ReactElement {
         <h1>Wenzer</h1>
       </header>
       <div>
-        <a href="/#about">O que é</a>
-        <a href="/#networking">Networking</a>
-        <a href="/#project">Projetos</a>
+        <a href="/welcome/#about">O que é</a>
+        <a href="/welcome/#networking">Networking</a>
+        <a href="/welcome/#project">Projetos</a>
 
         <a href="/login" className="a-Button">
           <Button type="button" className="entrarButton">

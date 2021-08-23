@@ -1,7 +1,7 @@
 import Routes from './Routes/index';
 import { ThemeProvider } from 'styled-components';
-import GlobalStyles from './Styles/GlobalStyles';
-import { useTheme } from './Styles/Hook/theme';
+import GlobalStyles from './styles/GlobalStyles';
+import { useTheme } from './styles/Hook/theme';
 
 function App() {
   const { theme } = useTheme();
