@@ -28,7 +28,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: ls
     - run: cd wenzer_web
+    - run: ls
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
