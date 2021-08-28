@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import VipListForm from './components/VipListForm';
 import EmailConfirmed from './components/EmailConfirmed';
-import DialogTermsAndPolicy from '../../components/DialogTermsPolicy';
+import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
 import CardProject from './components/CardProject';
 
 import bg_university from "../../utils/image/bg_university.svg";
@@ -29,7 +29,7 @@ import {
   ContainerFooter,
   Container
 } from "./styles";
-import api from '../../services/api/api';
+import api from '../../Services/api/api';
 
 type TokenParams = {
   token: string;

@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { Container } from "./styles";
-import InputPassword from '../../../components/InputPassword';
-import InputText from "../../../components/InputPassword";
+import InputPassword from '../../../Components/InputPassword';
+import InputText from "../../../Components/InputPassword";
 
 function Login() {
   const [email, setEmail] = useState('');

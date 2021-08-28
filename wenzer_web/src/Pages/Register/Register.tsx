@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import RegisterForm from './RegisterForm';
 import { MdArrowBack } from 'react-icons/md'
 import { Container } from './styles';
-import DialogTermsAndPolicy from "../../components/DialogTermsPolicy";
+import DialogTermsAndPolicy from "../../Components/DialogTermsPolicy";
 
 function Register(): ReactElement {
   const [isTerms, setIsTerms] = useState(false);
