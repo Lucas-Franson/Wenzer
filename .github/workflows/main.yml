@@ -21,15 +21,18 @@ jobs:
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]
-
+    
+    defaults:
+      run:
+        shell: bash
+        working-directory: wenzer_web
+    
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: ls
-    - run: cd wenzer_web
     - run: ls
     - run: npm ci
     - run: npm run build --if-present
