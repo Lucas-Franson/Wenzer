@@ -26,7 +26,7 @@ jobs:
       run:
         shell: bash
         working-directory: wenzer_web
-    
+     
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -36,7 +36,9 @@ jobs:
     - run: ls
     - run: npm ci
     - run: npm run build --if-present
-    - run: git status
+    - run: git add --all
+    - run: git commit -m 'Pushing build files...'
+    - run: git push
 
   test_web:
     runs-on: ubuntu-latest

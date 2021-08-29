@@ -46,7 +46,7 @@ function Welcome(): ReactElement {
     isEmailConfirmed,
     setIsEmailConfirmed,
   };
-
+ 
   function toastfySuccess() {
     return toast.success("E-mail confirmado!", {
       position: "top-right",
