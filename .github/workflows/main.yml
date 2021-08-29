@@ -86,8 +86,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Deploying back and front
-        run: pwd
-        run: ls
-        run: ssh -i "lucas-franson.pem" ec2-user@ec2-54-85-23-205.compute-1.amazonaws.com
-        run: pwd
-        run: ls
+        run: | 
+          pwd
+          ls
+          ssh -i "lucas-franson.pem" ec2-user@ec2-54-85-23-205.compute-1.amazonaws.com
+          pwd
+          ls
