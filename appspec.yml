@@ -2,4 +2,4 @@ version: 0.0
 os: linux
 files:
  - source: /home/ec2-user/Wenzer_Project/wenzer_web/build
-   destination: /var/www/html
+   destination: /var/www/html 
