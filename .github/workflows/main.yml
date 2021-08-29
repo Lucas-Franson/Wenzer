@@ -36,6 +36,7 @@ jobs:
     - run: ls
     - run: npm ci
     - run: npm run build --if-present
+    - run: git status
 
   test_web:
     runs-on: ubuntu-latest
