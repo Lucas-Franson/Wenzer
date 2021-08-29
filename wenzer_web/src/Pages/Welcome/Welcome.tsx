@@ -106,7 +106,7 @@ function Welcome(): ReactElement {
           <header>
             <h1>Compartilhe experiência, ideias e projetos!</h1>
             <h2>
-              Uma plataforma para publicar suas ideias ou participar projetos,
+              Uma plataforma para publicar suas ideias ou participar de projetos,
               ganhar experiencias em projetos que poderá agregar no seu
               portifólio!!{" "}
             </h2>
