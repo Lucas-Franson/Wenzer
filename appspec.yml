@@ -3,12 +3,3 @@ os: linux
 files:
  - source: /home/ec2-user/Wenzer_Project/wenzer_web/build
    destination: /var/www/html
-hooks:
-  ApplicationStop:
-   - location: scripts/application_stop.sh
-     timeout: 300
-     runas: ec2-user
-  BeforeInstall:
-   - location: scripts/before_install.sh
-     timeout: 300
-     runas: ec2-user
