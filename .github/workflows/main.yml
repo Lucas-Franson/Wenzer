@@ -76,7 +76,7 @@ jobs:
           npm ci
           npm run test
 
-continuous-deployment:
+  continuous-deployment:
     runs-on: ubuntu-latest
     needs: [test_web, test_back]
     if: github.ref == 'refs/heads/main'
