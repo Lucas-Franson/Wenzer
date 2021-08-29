@@ -4,11 +4,11 @@ files:
  - source: /home/ec2-user/Wenzer_Project/wenzer_web/build
    destination: /var/www/html
 hooks:
-  AfterInstall:
-   - location: scripts/install_app_dependencies
+  ApplicationStop:
+   - location: scripts/application_stop.sh
      timeout: 300
-     runas: root
-  ApplicationStart:
-   - location: scripts/start_server
+     runas: ec2-user
+  BeforeInstall:
+   - location: scripts/before_install.sh
      timeout: 300
-     runas: root
+     runas: ec2-user
