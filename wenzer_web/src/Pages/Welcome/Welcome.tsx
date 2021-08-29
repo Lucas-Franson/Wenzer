@@ -108,7 +108,7 @@ function Welcome(): ReactElement {
             <h2>
               Uma plataforma para publicar suas ideias ou participar de projetos,
               ganhar experiencias em projetos que poderá agregar no seu
-              portifólio!!{" "}
+              portifólio!!{" "} Teste
             </h2>
             {/* <img src={bg_register} alt="" /> */}
             <a href="#about">
