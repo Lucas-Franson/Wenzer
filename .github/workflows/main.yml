@@ -37,6 +37,8 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: git add --all
+    - run: git config --global user.email "lucasfranson.8@hotmail.com"
+    - run: git config --global user.name "Lucas-Franson"
     - run: git commit -m 'Pushing build files...'
     - run: git push
 
