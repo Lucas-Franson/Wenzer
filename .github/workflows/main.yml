@@ -75,3 +75,19 @@ jobs:
         run: |
           npm ci
           npm run test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test_web, test_back]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploying back and front
+      - run: pwd
+      - run: ls
+      - run: ssh -i "lucas-franson.pem" ec2-user@ec2-54-85-23-205.compute-1.amazonaws.com
+      - run: pwd
+      - run: ls
