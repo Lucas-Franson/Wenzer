@@ -110,7 +110,6 @@ function Welcome(): ReactElement {
               ganhar experiencias em projetos que poderá agregar no seu
               portifólio.
             </h2>
-            {/* <img src={bg_register} alt="" /> */}
             <a href="#about">
               <button type="button">Saiba mais</button>
             </a>
