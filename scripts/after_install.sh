@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
-pwd
+cd /home/ec2-user/Wenzer_Project/wenzer_back
+git pull
 npm install
-npm run build
+pm2 restart server
+
