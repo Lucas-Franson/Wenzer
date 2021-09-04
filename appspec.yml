@@ -3,3 +3,10 @@ os: linux
 files:
  - source: /wenzer_web/build
    destination: /var/www/html 
+hooks:
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 300
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
