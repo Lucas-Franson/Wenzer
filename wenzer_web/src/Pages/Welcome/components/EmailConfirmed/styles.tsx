@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 30rem;
-  height: 20rem;
+  height: 22rem;
   box-sizing: border-box;
   padding: 1.5rem 2.5rem;
   margin-left: 2rem;
@@ -75,6 +75,24 @@ export const Container = styled.div`
 
   :-ms-input-placeholder {
     color: ${(props) => props.theme.colors.secondary};
+  }
+
+  @media (max-width: 1390px) {
+    width: 26rem;
+    height: 23rem;
+
+    section {
+      div {
+        h3 {
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   @media (max-width: 600px) {

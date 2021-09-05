@@ -46,29 +46,35 @@ export const Container = styled.div`
       width: 33rem;
       margin-top: 30px;
     }
+
     .alignRight {
+      align-items: flex-end;
       p {
         font-size: 2.2rem;
-        text-align: center;
+        text-align: right;
       }
 
       span {
         margin-top: 0.8rem;
         font-size: 1rem;
-        text-align: center;
+        text-align: right;
+        font-weight: 400;
       }
     }
 
     .alignLeft {
+      align-items: flex-start;
+
       p {
         font-size: 2.2rem;
-        text-align: center;
+        text-align: left;
       }
 
       span {
         margin-top: 0.8rem;
+        font-weight: 400;
         font-size: 1rem;
-        text-align: center;
+        text-align: left;
       }
     }
   }
@@ -127,6 +133,8 @@ export const ContainerLogin = styled.header`
     flex-direction: column;
     align-items: flex-start;
 
+    margin-bottom: 30px;
+
     button {
       color: #fff;
       background-color: ${(props) => props.theme.colors.primary};
@@ -174,20 +182,18 @@ export const ContainerLogin = styled.header`
     header {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
 
       h1 {
         font-size: 2.8rem;
-        text-align: center;
+        text-align: left;
         line-height: 3.8rem;
       }
 
       h2 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 300;
         max-width: 40rem;
-        text-align: center;
+        text-align: left;
       }
 
       img {
@@ -212,7 +218,7 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
-    margin-top: 5rem;
+    margin-top: 80px;
     height: 100vh;
 
     header {
@@ -256,8 +262,6 @@ export const ContainerLogin = styled.header`
     justify-content: center;
     align-items: center;
 
-    margin-top: 0rem;
-
     header {
       display: flex;
       flex-direction: column;
@@ -293,21 +297,20 @@ export const ContainerLogin = styled.header`
         }
       }
     }
+
   }
 
   @media (max-width: 420px) {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+
 
     header {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
-      margin-top: 9.5rem;
 
       h1 {
         font-size: 2.3rem;
@@ -427,6 +430,7 @@ export const ContainerAbout = styled.main`
   justify-content: space-around;
   height: 100vh;
   border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
+
   header {
     display: flex;
     justify-content: space-between;
@@ -440,6 +444,9 @@ export const ContainerAbout = styled.main`
     height: 150px;
     background-color: ${(props) => props.theme.colors.secondary};
     border-radius: 8px;
+
+    font-size: 1.3rem;
+    text-align: center;
 
     .AboutIcon {
       display: flex;
@@ -462,6 +469,8 @@ export const ContainerAbout = styled.main`
     }
 
     main {
+      font-size: 1.2rem;
+
       .AboutIcon {
         width: 20%;
       }
@@ -475,14 +484,6 @@ export const ContainerAbout = styled.main`
       }
     }
 
-    header {
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: center;
-      justify-content: center;
-
-    }
-
     main {
       height: 100px;
       .AboutIcon {
@@ -493,7 +494,6 @@ export const ContainerAbout = styled.main`
         padding: 10px;
         p {
           font-size: 1rem;
-          text-align: center;
         }
       }
 
@@ -608,7 +608,7 @@ export const ContainerFooter = styled.footer`
 
   background-color: ${(props) => props.theme.colors.black};
 
-  padding-bottom: 1rem;
+  padding: 2rem 0;
   height: 30vh;
 
   div {
@@ -626,28 +626,11 @@ export const ContainerFooter = styled.footer`
         margin: 0.5rem 0;
         text-decoration: none;
         font-weight: 300;
+        font-size: 15px;
         color: ${(props) => props.theme.colors.white.light};
 
         &:hover {
-          color: ${(props) => props.theme.colors.primaryLight};
-        }
-      }
-    }
-
-    p {
-      display: flex;
-      justify-content: center;
-
-      a {
-        color: ${(props) => props.theme.colors.white.light};
-      }
-
-      svg {
-        margin: 0 0.2rem;
-        cursor: pointer;
-
-        &:hover {
-          color: ${(props) => props.theme.colors.primaryLight};
+          color: ${(props) => props.theme.colors.primary};
         }
       }
     }
@@ -659,7 +642,7 @@ export const ContainerFooter = styled.footer`
     align-items: center;
 
     font-weight: 300;
-    font-size: 1rem;
+    font-size: 0.9rem;
 
     a {
       margin: 0.6rem 0;
@@ -668,7 +651,7 @@ export const ContainerFooter = styled.footer`
       color: ${(props) => props.theme.colors.white.light};
 
       &:hover {
-        color: ${(props) => props.theme.colors.primaryLight};
+        color: ${(props) => props.theme.colors.primary};
       }
     }
   }

@@ -7,6 +7,7 @@ import {
   FaLightbulb,
   FaHandHoldingUsd,
   FaAngleDoubleUp,
+  FaArrowUp
 } from "react-icons/fa";
 import WelcomeContext from './context';
 import { useParams } from 'react-router-dom';
@@ -106,9 +107,9 @@ function Welcome(): ReactElement {
           <header>
             <h1>Compartilhe experiência, ideias e projetos!</h1>
             <h2>
-              Uma plataforma para publicar suas ideias ou participar de projetos,
-              ganhar experiencias em projetos que poderá agregar no seu
-              portifólio.
+              Uma plataforma para publicar suas ideias ou participar de
+              projetos, ganhar experiencias em projetos que poderá agregar no
+              seu portifólio.
             </h2>
             <a href="#about">
               <button type="button">Saiba mais</button>
@@ -128,7 +129,7 @@ function Welcome(): ReactElement {
               <span>
                 No Wenzer você pode publicar seu projeto ou ideia (ex: um
                 website e-commerce), seja ele colaborativo para você ganhar
-                experiencia encontrando outras pessoas para desenvolver com
+                experiência encontrando outras pessoas para desenvolver com
                 você, ou cobrando um valor $$ para que alguem desenvolva sua
                 ideia!
               </span>
@@ -199,7 +200,7 @@ function Welcome(): ReactElement {
             <section></section>
             <section>
               <strong>Informações</strong>
-              <a href="#about">O que é o wenzer</a>
+              <a href="#about">O que é o Wenzer</a>
               <a href="#networking">Networking</a>
               <a href="#projects">Projetos</a>
             </section>
@@ -207,37 +208,40 @@ function Welcome(): ReactElement {
               <strong>Plataforma</strong>
               <a href="#home">Cadastre-se</a>
             </section>
-            <p>
-              Siga o Wenzer:
-              <a
-                href="https://twitter.com/wenzeroficial"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaTwitter size={30} />{" "}
+            <section>
+              <strong>Siga o Wenzer:</strong>
+              <div>
+                <a
+                  href="https://twitter.com/wenzeroficial"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaTwitter size={25} />{" "}
+                </a>
+                <a
+                  href="https://www.instagram.com/wenzeroficial/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaInstagram size={25} />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/wenzer"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaLinkedin size={25} />
+                </a>
+              </div>
+            </section>
+            <section>
+              <a href="#home">
+                <FaArrowUp size={30} />
               </a>
-              <a
-                href="https://www.instagram.com/wenzeroficial/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaInstagram size={30} />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/wenzer"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaLinkedin size={30} />
-              </a>
-            </p>
-            <section></section>
+            </section>
           </div>
+
           <footer>
-            <p>
-              Wenzer é uma rede social com foco em publicações de projetos e
-              compartilhamento de experiência.
-            </p>
             <span>
               <a href="##" target="" onClick={handleShowTerms}>
                 Termos e Condições |

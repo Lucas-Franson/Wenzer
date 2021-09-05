@@ -1,40 +1,23 @@
 {
   "files": {
-<<<<<<< HEAD
-    "main.js": "/static/js/main.7c1ad19e.chunk.js",
-    "main.js.map": "/static/js/main.7c1ad19e.chunk.js.map",
+    "main.js": "/static/js/main.288c77ba.chunk.js",
+    "main.js.map": "/static/js/main.288c77ba.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.62a4a52f.js",
     "runtime-main.js.map": "/static/js/runtime-main.62a4a52f.js.map",
     "static/css/2.c55f41dc.chunk.css": "/static/css/2.c55f41dc.chunk.css",
-    "static/js/2.1bfa7ceb.chunk.js": "/static/js/2.1bfa7ceb.chunk.js",
-    "static/js/2.1bfa7ceb.chunk.js.map": "/static/js/2.1bfa7ceb.chunk.js.map",
-=======
-    "main.js": "/static/js/main.5d9b315e.chunk.js",
-    "main.js.map": "/static/js/main.5d9b315e.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.d820a9fd.js",
-    "runtime-main.js.map": "/static/js/runtime-main.d820a9fd.js.map",
-    "static/css/2.68b64559.chunk.css": "/static/css/2.68b64559.chunk.css",
-    "static/js/2.8a9ad540.chunk.js": "/static/js/2.8a9ad540.chunk.js",
-    "static/js/2.8a9ad540.chunk.js.map": "/static/js/2.8a9ad540.chunk.js.map",
->>>>>>> b98e1f0ea02352748df836a4ecdbd6a0d2f8c14b
+    "static/js/2.80bdcb6d.chunk.js": "/static/js/2.80bdcb6d.chunk.js",
+    "static/js/2.80bdcb6d.chunk.js.map": "/static/js/2.80bdcb6d.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.c55f41dc.chunk.css.map": "/static/css/2.c55f41dc.chunk.css.map",
-    "static/js/2.1bfa7ceb.chunk.js.LICENSE.txt": "/static/js/2.1bfa7ceb.chunk.js.LICENSE.txt",
+    "static/js/2.80bdcb6d.chunk.js.LICENSE.txt": "/static/js/2.80bdcb6d.chunk.js.LICENSE.txt",
     "static/media/LogoWenzerOriginal.d5570166.svg": "/static/media/LogoWenzerOriginal.d5570166.svg",
     "static/media/bg_about.04ef4440.svg": "/static/media/bg_about.04ef4440.svg",
     "static/media/bg_university.10233505.svg": "/static/media/bg_university.10233505.svg"
   },
   "entrypoints": [
-<<<<<<< HEAD
     "static/js/runtime-main.62a4a52f.js",
     "static/css/2.c55f41dc.chunk.css",
-    "static/js/2.1bfa7ceb.chunk.js",
-    "static/js/main.7c1ad19e.chunk.js"
-=======
-    "static/js/runtime-main.d820a9fd.js",
-    "static/css/2.68b64559.chunk.css",
-    "static/js/2.8a9ad540.chunk.js",
-    "static/js/main.5d9b315e.chunk.js"
->>>>>>> b98e1f0ea02352748df836a4ecdbd6a0d2f8c14b
+    "static/js/2.80bdcb6d.chunk.js",
+    "static/js/main.288c77ba.chunk.js"
   ]
 }

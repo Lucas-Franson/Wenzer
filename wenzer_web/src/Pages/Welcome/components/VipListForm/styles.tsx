@@ -90,6 +90,23 @@ export const Container = styled.div`
     color: ${(props) => props.theme.colors.secondary};
   }
 
+  @media (max-width: 1390px) {
+    width: 23rem;
+    height: 25rem;
+    box-sizing: border-box;
+    padding: 1.5rem 1.8rem;
+
+    strong {
+      font-weight: 400;
+      font-size: 17px;
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
   @media (max-width: 600px) {
     width: 22rem;
     height: 24rem;
