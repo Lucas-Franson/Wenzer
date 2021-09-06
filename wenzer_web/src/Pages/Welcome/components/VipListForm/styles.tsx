@@ -65,10 +65,16 @@ export const Container = styled.div`
   span {
     font-size: 0.9rem;
     font-weight: 400;
+    text-align: center;
+    max-width: 18rem;
 
     a {
       text-decoration: none;
       color: ${(props) => props.theme.colors.primary};
+
+      &:hover {
+        color: ${(props) => props.theme.colors.primaryLight};
+      }
     }
   }
 

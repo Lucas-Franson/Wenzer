@@ -116,7 +116,7 @@ function Welcome(): ReactElement {
             </a>
           </header>
 
-          <div>{!isEmailConfirmed ? <VipListForm /> : <EmailConfirmed />}</div>
+          <main>{!isEmailConfirmed ? <VipListForm /> : <EmailConfirmed />}</main>
         </ContainerLogin>
 
         <ContainerAbout id="about">
