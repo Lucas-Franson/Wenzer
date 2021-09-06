@@ -5,6 +5,8 @@ export const Container = styled.div`
   height: 25rem;
   box-sizing: border-box;
   padding: 1.5rem 2.5rem;
+  
+  z-index: 99;
 
   display: flex;
   flex-direction: column;
