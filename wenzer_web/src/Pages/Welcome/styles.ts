@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  /* display: flex;
+  flex-direction: column; */
+  height: 100vh;
+
   img {
-    width: 40rem;
+    width: 38rem;
   }
 
   .alignRight {
@@ -460,6 +464,7 @@ export const ContainerAbout = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+
   height: 100vh;
   border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
 
@@ -535,8 +540,16 @@ export const ContainerAbout = styled.main`
     }
   }
 
+  @media (max-width: 375px) {
+    @media (max-height: 540px) {
+      header {
+        margin-top: 220px;
+      }
+    }
+  }
+
   @media (max-width: 350px) {
-    margin-top: 120px;
+    margin-top: 100px;
   }
 `;
 
