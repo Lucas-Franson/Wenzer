@@ -80,7 +80,6 @@ export const Container = styled.div`
   }
 
   @media (max-width: 600px) {
-    
     .alignRight {
       margin-left: 0;
       p {
@@ -118,6 +117,44 @@ export const Container = styled.div`
       }
     }
   }
+
+  @media (max-width: 350px) {
+    .alignRight {
+      p {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      span {
+        margin-top: 1rem;
+        font-size: 0.8rem;
+        font-weight: 400;
+        text-align: center;
+      }
+    }
+
+    .alignLeft {
+      margin-right: 0;
+      p {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      span {
+        margin-top: 1.5rem;
+        font-size: 0.8rem;
+        font-weight: 400;
+        text-align: center;
+      }
+    }
+
+    div {
+      img {
+        margin: 2rem 0;
+        width: 15rem;
+      }
+    }
+  }
 `;
 
 export const ContainerLogin = styled.header`
@@ -127,7 +164,7 @@ export const ContainerLogin = styled.header`
 
   height: 100vh;
 
-  border-bottom: 1px solid ${potato => potato.theme.colors.secondary};
+  border-bottom: 1px solid ${(potato) => potato.theme.colors.secondary};
 
   header {
     display: flex;
@@ -223,8 +260,6 @@ export const ContainerLogin = styled.header`
     height: 100vh;
 
     header {
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
 
@@ -298,14 +333,12 @@ export const ContainerLogin = styled.header`
         }
       }
     }
-
   }
 
   @media (max-width: 420px) {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
 
     header {
       display: flex;
@@ -343,25 +376,15 @@ export const ContainerLogin = styled.header`
   }
 
   @media (max-width: 380px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
     header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
       h1 {
-        font-size: 2.3rem;
+        font-size: 2rem;
         text-align: center;
         line-height: 3rem;
       }
 
       h2 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         font-weight: 300;
         max-width: 40rem;
         text-align: center;
@@ -384,17 +407,7 @@ export const ContainerLogin = styled.header`
   }
 
   @media (max-width: 375px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
     header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
       h1 {
         font-size: 2rem;
         text-align: center;
@@ -422,6 +435,24 @@ export const ContainerLogin = styled.header`
         }
       }
     }
+  }
+
+  @media (max-width: 360px) {
+    margin-top: 50px;
+    header {
+      h1 {
+        font-size: 1.8rem;
+        line-height: 2.5rem;
+      }
+
+      h2 {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  @media (max-width: 350px) {
+    margin-top: 150px;
   }
 `;
 
@@ -503,6 +534,10 @@ export const ContainerAbout = styled.main`
       }
     }
   }
+
+  @media (max-width: 350px) {
+    margin-top: 120px;
+  }
 `;
 
 export const ContainerNetworking = styled.div`
@@ -544,8 +579,16 @@ export const ContainerNetworking = styled.div`
       justify-content: center;
     }
 
-    footer { 
+    footer {
       font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    margin-top: 120px;
+
+    footer {
+      font-size: 1.1rem;
     }
   }
 `;
@@ -594,6 +637,14 @@ export const ContainerProject = styled.div`
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 375px) {
+    header {
+      p {
+        font-size: 1.3rem;
+      }
     }
   }
 `;
@@ -695,14 +746,12 @@ export const ContainerFooter = styled.footer`
         font-size: 1rem;
         margin-top: 2rem;
 
-        
         a {
           &:first-child {
             margin-left: 15px;
           }
           margin-right: 5px;
         }
-        
 
         svg {
           margin: 0 0.2rem;
@@ -729,6 +778,28 @@ export const ContainerFooter = styled.footer`
         color: ${(props) => props.theme.colors.white.light};
       }
     }
+  }
+
+  @media (max-width: 375px) {
+    height: 70vh;
+    padding: 2.5rem 0;
+
+    div {
+      section {
+        strong {
+          font-size: 1.1rem;
+        }
+
+        a {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    height: 70vh;
+    padding: 4rem 0;
   }
 `;
 

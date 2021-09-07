@@ -5,8 +5,6 @@ export const Container = styled.div`
   height: 25rem;
   box-sizing: border-box;
   padding: 1.5rem 2.5rem;
-  
-  z-index: 99;
 
   display: flex;
   flex-direction: column;
@@ -125,5 +123,13 @@ export const Container = styled.div`
       display: flex;
       justify-content: center;
     }
+  }
+
+  @media (max-width: 365px) {
+    width: 19rem;
+    height: 24rem;
+    box-sizing: border-box;
+    padding: 1.5rem 1.1rem;
+    
   }
 `;

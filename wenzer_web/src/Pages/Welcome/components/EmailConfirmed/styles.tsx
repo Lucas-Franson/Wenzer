@@ -107,4 +107,11 @@ export const Container = styled.div`
       justify-content: center;
     }
   }
+
+  @media (max-width: 365px) {
+    width: 18rem;
+    height: 24rem;
+    box-sizing: border-box;
+    padding: 1.5rem 1.1rem;
+  }
 `;

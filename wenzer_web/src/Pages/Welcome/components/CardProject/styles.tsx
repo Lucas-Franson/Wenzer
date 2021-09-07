@@ -90,4 +90,32 @@ export const Container = styled.div`
       justify-content: center;
     }
   }
+
+  @media (max-width: 375px) {
+    width: 330px;
+    height: 420px;
+    box-sizing: border-box;
+    padding: 1.5rem 2.5rem;
+
+    margin: 20px;
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 365px) {
+    width: 290px;
+    height: 420px;
+    box-sizing: border-box;
+    padding: 1.5rem 2.5rem;
+
+    margin: 20px;
+
+    a {
+      display: flex;
+      justify-content: center;
+    }
+  }
 `;

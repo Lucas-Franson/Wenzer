@@ -20,7 +20,7 @@ function CardProject({ title, description, children }: CardProps) {
       </div>
 
       <span>
-        Quer conhecer mais sobre o Wenzer? <a href="#home">Cadastre-se.</a>
+        Quer conhecer mais sobre o Wenzer? <a href="#home">Saiba mais.</a>
       </span>
     </Container>
   );
