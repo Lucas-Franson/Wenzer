@@ -88,12 +88,12 @@ module.exports = class LoginController {
         }
     }
 
-      async confirmarEmailMarketing(req, res, next) {
+    async confirmEmailMarketing(req, res, next) {
         const { token } = req.params;
         const loginService = new LoginService();
 
         try {
-            await loginService.confirmarEmailMarketing(token);
+            await loginService.confirmEmailMarketing(token);
             return res.status(200).end();
         } catch(err) {
             if (err.name === 'JsonWebTokenError') {

@@ -1,31 +1,21 @@
 const { v4: uuid } = require('uuid');
-const { conexao, queryPromise } = require('./conexao');
-const util = require('util');
+const { queryPromise } = require('./connection');
+const Crud = require("./crud");
 
-module.exports = class EmailMarketing {
+module.exports = class EmailMarketing extends Crud {
 
     id = '';
     email = '';
     created_at = '';
 
     constructor() {
+        super("EmailMarketing");
         if (!this.id) {
             this.id = uuid();
         }
     }
 
-    async Adiciona() {
-        const sql = `INSERT INTO EmailMarketing SET ?`;
-
-        this.id = uuid();
-        this.created_at = new Date();
-
-        await conexao.query(sql, this, (err) => {
-            if (err) console.error(err);
-        });
-    }
-
-    async Buscar() {
+    async get() {
         const sql = `SELECT * FROM EmailMarketing WHERE ${this.ConstruirWhere()} LIMIT 1`;
 
         try {
@@ -45,19 +35,7 @@ module.exports = class EmailMarketing {
         }
     }
 
-    async Update() {
-        const sql = `UPDATE EmailMarketing
-                     SET email = '${this.email}', emailValid = '${this.emailValid}'
-                     WHERE ${this.ConstruirWhere()}`;
-        
-        conexao.query(sql, (err) => {
-            if (err) {
-                console.error(err);
-            }
-        })
-    }
-
-    ConstruirWhere() {
+    buildWhereClause() {
         let where = "";
 
         if (this.id) {
@@ -70,6 +48,16 @@ module.exports = class EmailMarketing {
         }
 
         return where;
+    }
+
+    validateData() {
+        let isValid = true;
+
+        if (!this.email) {
+            isValid = false;
+        } 
+
+        if (!isValid) throw Error("Email não é válido."); 
     }
 
 }

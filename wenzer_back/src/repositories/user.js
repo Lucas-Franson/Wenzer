@@ -1,8 +1,8 @@
-const { conexao, queryPromise } = require('./conexao');
+const { queryPromise } = require('./connection');
 const { v4: uuid } = require('uuid');
-const util = require('util');
+const Crud = require('./crud.js');
 
-module.exports = class User {
+module.exports = class User extends Crud {
 
     id = '';
     name = '';
@@ -13,27 +13,14 @@ module.exports = class User {
     updated_at = '';
 
     constructor() {
+        super("User");
         if (!this.id) {
             this.id = uuid();
         }
     }
 
-    async Adiciona() {
-        if (!this.ValidarDados()) {
-            return new Error("Usuário possui dados incorretos.");
-        }
-
-        const sql = `INSERT INTO User SET ?`;
-
-        await conexao.query(sql, this, (err) => {
-            if (err) console.error(err);
-        });
-    }
-
-    
-
-    async Buscar() {
-        const sql = `SELECT * FROM User WHERE ${this.ConstruirWhere()} LIMIT 1`;
+    async get() {
+        const sql = `SELECT * FROM User WHERE ${this.buildWhereClause()} LIMIT 1`;
         let result = await queryPromise(sql);
 
         if (result.length > 0) {
@@ -51,24 +38,7 @@ module.exports = class User {
         }
     }
 
-    async Update() {
-        if (!this.ValidarDados()) {
-            return new Error("Usuário possui dados incorretos.");
-        }
-
-        const sql = `UPDATE User
-                     SET email = '${this.email}', name = '${this.name}', password = '${this.password}', 
-                     updated_at = '${this.updated_at}', emailValid = '${this.emailValid ? 1 : 0}'
-                     WHERE ${this.ConstruirWhere()}`;
-        
-        conexao.query(sql, (err) => {
-            if (err) {
-                console.error(err);
-            }
-        })
-    }
-
-    ConstruirWhere() {
+    buildWhereClause() {
         let where = "";
 
         if (this.id) {
@@ -83,7 +53,7 @@ module.exports = class User {
         return where;
     }
 
-    ValidarDados() {
+    validateData() {
         let isValid = true;
 
         if (this.name == null) {
@@ -98,7 +68,8 @@ module.exports = class User {
             isValid = false;
         }
 
-        return isValid;
+        if (!isValid) throw Error("Usuário não está válido."); 
     }
+
 
 }

@@ -10,7 +10,7 @@ routes.post('/api/login', loginController.login)
     .post('/api/recupera-senha', loginController.recoverPassword)
     .post('/api/alterar-senha/:token', loginController.alterPassword)
     .post('/api/salvar-email-marketing', loginController.emailMarketing)
-    .post('/api/confirmar-email-marketing/:token', loginController.confirmarEmailMarketing)
+    .post('/api/confirmar-email-marketing/:token', loginController.confirmEmailMarketing)
     .get('/api/verifica-email/:token', loginController.verifyEmail);
 
 routes.options(

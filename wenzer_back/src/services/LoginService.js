@@ -1,4 +1,7 @@
-const { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado, ValideSeuEmail } = require('../erros.js');
+const NotAuthorized = require("../errors/notAuthorized");
+const NotFound = require("../errors/notFound");
+const AlreadyRegistered = require("../errors/alreadyRegistered");
+const EmailNotValid = require("../errors/emailNotValid");
 const { EmailVerify, EmailResetPassword, EmailMarketingSend } = require('../utils/Email.js');
 const jwt =  require('jsonwebtoken');
 const User = require('../repositories/user');
@@ -13,29 +16,29 @@ module.exports = class LoginService {
     }
 
     async register({ name, email, password }) {
-        let user = new User();
-        user.email = email;
-        user.id = null;
-        await user.Buscar();
+        let userToFind = new User();
+        userToFind.email = email;
+        userToFind.id = null;
+        await userToFind.get();
 
-        if (user.id) {
-            throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
+        if (userToFind.id) {
+            throw new AlreadyRegistered("Usuário já cadastrado na plataforma.");
         }
 
         const passwordHash = await this.generatePasswordHash(password);
         
-        var usuario = new User();
-        usuario.name = name;
-        usuario.email = email;
-        usuario.emailValid = false;
-        usuario.password = passwordHash;
-        usuario.created_at = new Date();
-        usuario.updated_at = new Date();
+        var userToCreate = new User();
+        userToCreate.name = name;
+        userToCreate.email = email;
+        userToCreate.emailValid = false;
+        userToCreate.password = passwordHash;
+        userToCreate.created_at = new Date();
+        userToCreate.updated_at = new Date();
         
         try {
-            await usuario.Adiciona();
+            await userToCreate.add(userToCreate);
             
-            const token = this.createTokenJWT(usuario.id, [1, 'h']);
+            const token = this.createTokenJWT(userToCreate.id, [1, 'h']);
             const route = '/welcome?token=';
             const address = `${process.env.BASE_URL_WEB}${route}${token}`;
             
@@ -45,31 +48,30 @@ module.exports = class LoginService {
             await emailVerify.prepareHTML(address);
             emailVerify.sendEmail();
 
-            return usuario.id;
+            return userToCreate.id;
         } catch(err) {
-            console.log("Chegou aqui")
             throw err;
         }
     }
 
-    async verifyUsuario({ email, password }) {
-        let user = new User();
-        user.id = null;
-        user.email = email;
-        await user.Buscar();
+    async verifyUser({ email, password }) {
+        let userToFind = new User();
+        userToFind.id = null;
+        userToFind.email = email;
+        await userToFind.get();
 
-        if (!user.id) {
-            throw new NaoEncontrado('Email ou senha não encontrados.');
+        if (!userToFind.id) {
+            throw new NotFound('Email ou senha não encontrados.');
         }
 
-        const valid = await this.verifyPassword(password, user.password);
+        const valid = await this.verifyPassword(password, userToFind.password);
 
         if (!valid) {
-            throw new NaoAutorizado('Email ou senha não encontrados');
+            throw new NotAuthorized('Email ou senha não encontrados');
         }
 
-        if (!user.emailValid) {
-            throw new ValideSeuEmail("Valide seu email para continuar.");
+        if (!userToFind.emailValid) {
+            throw new EmailNotValid("Valide seu email para continuar.");
         }
 
         const accessToken = this.createTokenJWT(user.id, [1, 'h']);
@@ -101,21 +103,21 @@ module.exports = class LoginService {
     }
 
     async recoverPassword({ email }) {
-        let user = new User();
-        user.email = email;
-        user.id = null;
-        await user.Buscar();
+        let userToFind = new User();
+        userToFind.email = email;
+        userToFind.id = null;
+        await userToFind.get();
         
-        if (!user.id) {
-            throw new NaoEncontrado('Email não encontrado.');
+        if (!userToFind.id) {
+            throw new NotFound('Email não encontrado.');
         }
 
-        const token = this.createTokenJWT(user.id, [1, 'h']);
+        const token = this.createTokenJWT(userToFind.id, [1, 'h']);
         const route = '/api/alterar-senha/';
         const address = `${process.env.BASE_URL}${route}${token}`;
 
         try {
-            const emailVerify = new EmailResetPassword(user, address);
+            const emailVerify = new EmailResetPassword(userToFind, address);
             await emailVerify.sendEmail();
         } catch(err) {
             throw err;
@@ -124,21 +126,21 @@ module.exports = class LoginService {
 
     async verifyEmail(token) {
         const id = this.verifyTokenJWT(token);
-        let user = new User();
-        user.id = id;
-        await user.Buscar();
+        let userToFind = new User();
+        userToFind.id = id;
+        await userToFind.get();
         
-        if (!user.id) {
-            throw new NaoEncontrado('Usuário não encontrado na plataforma.');
+        if (!userToFind.id) {
+            throw new NotFound('Usuário não encontrado na plataforma.');
         }
 
-        if (user.emailValid) {
+        if (userToFind.emailValid) {
             throw new Error('Email já validado.');
         }
 
         try {
-            user.emailValid = true;
-            user.Update();
+            userToFind.emailValid = true;
+            userToFind.update(userToFind);
         } catch(err) {
             throw err;
         }
@@ -147,55 +149,55 @@ module.exports = class LoginService {
     async alterPassword(token, password) {
         const id = await this.verifyTokenJWT(token);
 
-        let user = new User();
-        user.id = id;
-        await user.Buscar();
+        let userToFind = new User();
+        userToFind.id = id;
+        await userToFind.get();
 
-        if (!user) {
-            throw new NaoEncontrado('Email ou senha não encontrados.');
+        if (!userToFind) {
+            throw new NotFound('Email ou senha não encontrados.');
         }
 
-        const valid = await this.verifyPassword(password, user.password);
+        const valid = await this.verifyPassword(password, userToFind.password);
 
         if (valid) {
             throw new Error("Essa senha é a mesma da sua conta atual.");
         }
 
-        user.password = await this.generatePasswordHash(password);
-        user.Update();
+        userToFind.password = await this.generatePasswordHash(password);
+        userToFind.update(userToFind);
     }
 
     async salvarEmailMarketing(email) {
-        let save = new EmailMarketing();
-        save.email = email;
-        save.id = null;
-        await save.Buscar();
+        let emailToSave = new EmailMarketing();
+        emailToSave.email = email;
+        emailToSave.id = null;
+        await emailToSave.get();
 
-        if (save.id) {
-            throw new  NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
+        if (emailToSave.id) {
+            throw new AlreadyRegistered('E-mail já cadastrado, verifique sua caixa de entrada.');
         }
 
-        const token = this.createTokenJWT(save.email, [1, 'h']);
+        const token = this.createTokenJWT(emailToSave.email, [1, 'h']);
         const route = '?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
         
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 
-        save.Adiciona();
-        const sendEmail = new EmailMarketingSend(save.email);
+        emailToSave.add(emailToSave);
+        const sendEmail = new EmailMarketingSend(emailToSave.email);
         await sendEmail.prepareHTML(address);
         sendEmail.sendEmail();
     }
 
-    async confirmarEmailMarketing(token) {
+    async confirmEmailMarketing(token) {
         const email = this.verifyTokenJWT(token);
         let emailMarketing = new EmailMarketing();
         emailMarketing.email = email;
         emailMarketing.id = null;
-        await emailMarketing.Buscar();
+        await emailMarketing.get();
         
         if (!emailMarketing.id) {
-            throw new NaoEncontrado('Email não encontrado na plataforma.');
+            throw new NotFound('Email não encontrado na plataforma.');
         }
 
         if (emailMarketing.emailValid) {
@@ -204,7 +206,7 @@ module.exports = class LoginService {
 
         try {
             emailMarketing.emailValid = 1;
-            emailMarketing.Update();
+            emailMarketing.update(emailMarketing);
         } catch(err) {
             throw err;
         }

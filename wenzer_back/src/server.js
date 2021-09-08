@@ -2,12 +2,12 @@ require('dotenv').config();
 const express = require('express')
 const router = require('./routes/index');
 const GlobalErrorHandler = require('./middlewares');
-const { conexao } = require('./repositories/conexao');
-const Tabelas = require('./repositories/tabelas');
+const { connection } = require('./repositories/connection');
+const Tables = require('./repositories/tables');
 
 const port = 3333;
 
-conexao.connect(err => {
+connection.connect(err => {
     if (err) {
         console.log(err);
     } else {
@@ -19,7 +19,7 @@ conexao.connect(err => {
             proximo();
         });
 
-        Tabelas.init(conexao);
+        Tables.init(connection);
 
         app.use(express.json());
 

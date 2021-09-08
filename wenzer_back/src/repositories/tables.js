@@ -1,29 +1,29 @@
-class Tabelas {
-    init(conexao) {
-        this.conexao = conexao;
+class Tables {
+    init(connection) {
+        this.connection = connection;
 
-        this.criarUsuarios();
-        this.criarEmailMarketing();
+        this.createUsers();
+        this.createEmailMarketing();
     }
 
-    criarUsuarios() {
+    createUsers() {
         const sql = `CREATE TABLE IF NOT EXISTS User (id varchar(255) NOT NULL,
             email varchar(255) NOT NULL, name varchar(255) NOT NULL, emailValid 
             tinyint(1), password varchar(255) NOT NULL, updated_at timestamp,
             created_at timestamp, PRIMARY KEY(id))`;
 
-        this.conexao.query(sql, (err) => {
+        this.connection.query(sql, (err) => {
             if (err) {
                 console.error(err);
             }
         });
     }
 
-    criarEmailMarketing() {
+    createEmailMarketing() {
         const sql = `CREATE TABLE IF NOT EXISTS EmailMarketing (id varchar(255) NOT NULL, 
             email varchar(255) NOT NULL, created_at timestamp, PRIMARY KEY(id))`
 
-        this.conexao.query(sql, (err) => {
+        this.connection.query(sql, (err) => {
             if (err) {
                 console.error(err);
             }
@@ -31,4 +31,4 @@ class Tabelas {
     }
 }
 
-module.exports = new Tabelas;
+module.exports = new Tables;
