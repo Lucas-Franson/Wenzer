@@ -96,22 +96,14 @@ export const Container = styled.div`
   }
 
   @media (max-width: 600px) {
-    width: 22rem;
+    width: 18rem;
     height: 24rem;
-    box-sizing: border-box;
-    padding: 1.5rem 2.5rem;
+    padding: 1.5rem 1.1rem;
     margin-left: 0;
 
     a {
       display: flex;
       justify-content: center;
     }
-  }
-
-  @media (max-width: 365px) {
-    width: 18rem;
-    height: 24rem;
-    box-sizing: border-box;
-    padding: 1.5rem 1.1rem;
   }
 `;

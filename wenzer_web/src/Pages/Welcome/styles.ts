@@ -161,7 +161,7 @@ export const Container = styled.div`
   }
 `;
 
-export const ContainerLogin = styled.header`
+export const ContainerLogin = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -460,7 +460,7 @@ export const ContainerLogin = styled.header`
   }
 `;
 
-export const ContainerAbout = styled.main`
+export const ContainerAbout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -540,16 +540,10 @@ export const ContainerAbout = styled.main`
     }
   }
 
-  @media (max-width: 375px) {
-    @media (max-height: 540px) {
-      header {
-        margin-top: 220px;
-      }
+  @media (max-width: 380px) {
+    @media (max-height: 538px) {
+      height: 300vh;
     }
-  }
-
-  @media (max-width: 350px) {
-    margin-top: 100px;
   }
 `;
 
