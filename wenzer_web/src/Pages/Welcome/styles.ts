@@ -218,6 +218,10 @@ export const ContainerLogin = styled.div`
     }
   }
 
+  main {
+    display: flex;
+  }
+
   @media (max-width: 1390px) {
     height: 100vh;
 
@@ -411,6 +415,7 @@ export const ContainerLogin = styled.div`
   }
 
   @media (max-width: 375px) {
+    margin-top: 150px;
     header {
       h1 {
         font-size: 2rem;
@@ -442,7 +447,6 @@ export const ContainerLogin = styled.div`
   }
 
   @media (max-width: 360px) {
-    margin-top: 50px;
     header {
       h1 {
         font-size: 1.8rem;
@@ -515,14 +519,20 @@ export const ContainerAbout = styled.div`
   }
 
   @media (max-width: 600px) {
+    @media (max-height: 538px) {
+      height: 1600px;
+    }
+   
+
+    height: 800px;
+    
     .alignRight {
       > p {
         margin-top: 9rem;
       }
-    }
+    } 
 
     main {
-      height: 100px;
       .AboutIcon {
         width: 25%;
       }
@@ -537,12 +547,6 @@ export const ContainerAbout = styled.div`
       .AboutNone {
         display: none;
       }
-    }
-  }
-
-  @media (max-width: 380px) {
-    @media (max-height: 538px) {
-      height: 300vh;
     }
   }
 `;
@@ -735,6 +739,7 @@ export const ContainerFooter = styled.footer`
 
         a {
           margin: 0.5rem 0;
+          padding: 5px;
           text-decoration: none;
           font-weight: 300;
           color: ${(props) => props.theme.colors.white.light};
@@ -743,37 +748,16 @@ export const ContainerFooter = styled.footer`
             color: ${(props) => props.theme.colors.primaryLight};
           }
         }
-      }
 
-      p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: 500;
-        font-size: 1rem;
-        margin-top: 2rem;
-
-        a {
-          &:first-child {
-            margin-left: 15px;
-          }
-          margin-right: 5px;
-        }
-
-        svg {
-          margin: 0 0.2rem;
-          cursor: pointer;
+        .social-media {
+          flex-direction: row;
+          justify-content: center;
         }
       }
+
     }
 
     footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      font-weight: 300;
       font-size: 1rem;
       padding: 0px 10px;
       max-width: 360px;
