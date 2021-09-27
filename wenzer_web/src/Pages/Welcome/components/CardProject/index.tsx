@@ -19,9 +19,7 @@ function CardProject({ title, description, children }: CardProps) {
         <a href="#home">Cadastrar</a>
       </div>
 
-      <span>
-        Quer conhecer mais sobre o Wenzer? <a href="#home">Saiba mais.</a>
-      </span>
+  
     </Container>
   );
 }
