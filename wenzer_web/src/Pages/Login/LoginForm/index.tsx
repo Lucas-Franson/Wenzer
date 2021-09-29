@@ -1,7 +1,8 @@
 import { memo, useState } from "react";
 import { Container } from "./styles";
 import InputPassword from '../../../Components/InputPassword';
-import InputText from "../../../Components/InputPassword";
+import InputText from "../../../Components/InputText";
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,13 +14,24 @@ function Login() {
 
   return (
     <Container>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}>
-        <InputText placeholder="E-mail" required={true} onChange={(e) => setEmail(e.target.value)} />
-        <InputPassword placeholder="Senha" required={true} onChange={(e) => setPassword(e.target.value)} />
-        <Link to="/esqueceu-senha">Esqueceu sua senha?</Link>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
+        <InputText
+          type="Email"
+          placeholder="E-mail"
+          required={true}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <InputPassword
+          placeholder="Senha"
+          required={true}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Link to="/forgot-password">Esqueceu sua senha?</Link>
         <button type="submit">Entrar</button>
       </form>
       <span>

@@ -63,7 +63,7 @@ export const Container = styled.div`
 
   span {
     font-size: 0.9rem;
-    font-weight: 400;
+    font-weight: 300;
 
     transition: ease all 0.2s;
 
