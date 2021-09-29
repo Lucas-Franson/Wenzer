@@ -209,7 +209,7 @@ function Welcome(): ReactElement {
             </section>
             <section>
               <strong>Siga o Wenzer:</strong>
-              <div>
+              <div className="social-media">
                 <a
                   href="https://twitter.com/wenzeroficial"
                   target="_blank"

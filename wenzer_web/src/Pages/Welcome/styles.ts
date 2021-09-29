@@ -53,15 +53,13 @@ export const Container = styled.div`
 
     .alignRight {
       align-items: flex-end;
+
       p {
         font-size: 2.2rem;
-        text-align: right;
       }
 
       span {
         margin-top: 0.8rem;
-        font-size: 1rem;
-        text-align: right;
         font-weight: 400;
       }
     }
@@ -71,28 +69,27 @@ export const Container = styled.div`
 
       p {
         font-size: 2.2rem;
-        text-align: left;
       }
 
       span {
         margin-top: 0.8rem;
         font-weight: 400;
-        font-size: 1rem;
-        text-align: left;
       }
     }
   }
 
   @media (max-width: 600px) {
     .alignRight {
+      align-items: center;
       margin-left: 0;
+
       p {
         font-size: 2rem;
         text-align: center;
       }
 
       span {
-        margin-top: 1rem;
+        margin-top: 1.5rem;
         font-size: 0.9rem;
         font-weight: 400;
         text-align: center;
@@ -100,7 +97,9 @@ export const Container = styled.div`
     }
 
     .alignLeft {
+      align-items: center;
       margin-right: 0;
+
       p {
         font-size: 2rem;
         text-align: center;
@@ -124,31 +123,28 @@ export const Container = styled.div`
 
   @media (max-width: 350px) {
     .alignRight {
+
       p {
         font-size: 1.5rem;
-        text-align: center;
       }
 
       span {
-        margin-top: 1rem;
         font-size: 0.8rem;
         font-weight: 400;
-        text-align: center;
       }
     }
 
     .alignLeft {
       margin-right: 0;
+
       p {
         font-size: 1.5rem;
-        text-align: center;
       }
 
       span {
         margin-top: 1.5rem;
         font-size: 0.8rem;
         font-weight: 400;
-        text-align: center;
       }
     }
 
@@ -161,7 +157,7 @@ export const Container = styled.div`
   }
 `;
 
-export const ContainerLogin = styled.header`
+export const ContainerLogin = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -203,11 +199,6 @@ export const ContainerLogin = styled.header`
       text-align: left;
     }
 
-    img {
-      margin-top: 3rem;
-      width: 30rem;
-    }
-
     a {
       text-decoration: none;
       margin-top: 2rem;
@@ -218,50 +209,29 @@ export const ContainerLogin = styled.header`
     }
   }
 
+  main {
+    display: flex;
+  }
+
   @media (max-width: 1390px) {
-    height: 100vh;
-
     header {
-      display: flex;
-      flex-direction: column;
-
       h1 {
         font-size: 2.8rem;
-        text-align: left;
-        line-height: 3.8rem;
       }
 
       h2 {
         font-size: 1.1rem;
-        font-weight: 300;
         max-width: 40rem;
-        text-align: left;
-      }
-
-      img {
-        margin-top: 3rem;
-        width: 20rem;
-      }
-
-      a {
-        text-decoration: none;
-        margin: 2rem 0;
-
-        button {
-          padding: 0.5rem 5rem;
-        }
       }
     }
   }
 
   @media (max-width: 1100px) {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
     margin-top: 80px;
-    height: 100vh;
 
     header {
       align-items: center;
@@ -270,7 +240,6 @@ export const ContainerLogin = styled.header`
       h1 {
         font-size: 2.8rem;
         text-align: center;
-        line-height: 3.8rem;
       }
 
       h2 {
@@ -280,31 +249,15 @@ export const ContainerLogin = styled.header`
         text-align: center;
       }
 
-      img {
-        margin-top: 3rem;
-        width: 350px;
-      }
-
       a {
-        text-decoration: none;
         margin: 2rem 0;
-
-        button {
-          padding: 0.5rem 5rem;
-        }
       }
     }
   }
 
   @media (max-width: 600px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
     header {
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
 
@@ -312,69 +265,16 @@ export const ContainerLogin = styled.header`
 
       h1 {
         font-size: 2.3rem;
-        text-align: center;
         line-height: 3rem;
-      }
-
-      h2 {
-        font-size: 1.3rem;
-        font-weight: 300;
-        max-width: 40rem;
-        text-align: center;
-      }
-
-      img {
-        margin-top: 3rem;
-        max-width: 200px;
-      }
-
-      a {
-        text-decoration: none;
-        margin: 2rem 0;
-
-        button {
-          padding: 0.5rem 5rem;
-        }
       }
     }
   }
 
   @media (max-width: 420px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 
     header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
       h1 {
-        font-size: 2.3rem;
         text-align: center;
-        line-height: 3rem;
-      }
-
-      h2 {
-        font-size: 1.3rem;
-        font-weight: 300;
-        max-width: 40rem;
-        text-align: center;
-      }
-
-      img {
-        margin-top: 3rem;
-        max-width: 200px;
-      }
-
-      a {
-        text-decoration: none;
-        margin: 2rem 0;
-
-        button {
-          padding: 0.5rem 5rem;
-        }
       }
     }
   }
@@ -383,66 +283,23 @@ export const ContainerLogin = styled.header`
     header {
       h1 {
         font-size: 2rem;
-        text-align: center;
-        line-height: 3rem;
-      }
-
-      h2 {
-        font-size: 1.2rem;
-        font-weight: 300;
-        max-width: 40rem;
-        text-align: center;
-      }
-
-      img {
-        margin-top: 3rem;
-        max-width: 320px;
-      }
-
-      a {
-        text-decoration: none;
-        margin: 2rem 0;
-
-        button {
-          padding: 0.5rem 5rem;
-        }
       }
     }
   }
 
   @media (max-width: 375px) {
+    margin-top: 150px;
     header {
-      h1 {
-        font-size: 2rem;
-        text-align: center;
-        line-height: 3rem;
-      }
 
       h2 {
         font-size: 1.1rem;
-        font-weight: 300;
         max-width: 40rem;
         text-align: center;
-      }
-
-      img {
-        margin-top: 3rem;
-        max-width: 320px;
-      }
-
-      a {
-        text-decoration: none;
-        margin: 2rem 0;
-
-        button {
-          padding: 0.5rem 5rem;
-        }
       }
     }
   }
 
   @media (max-width: 360px) {
-    margin-top: 50px;
     header {
       h1 {
         font-size: 1.8rem;
@@ -460,7 +317,7 @@ export const ContainerLogin = styled.header`
   }
 `;
 
-export const ContainerAbout = styled.main`
+export const ContainerAbout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -507,9 +364,7 @@ export const ContainerAbout = styled.main`
 
   @media (max-width: 1100px) {
     header {
-      display: flex;
       flex-direction: column-reverse;
-      align-items: center;
       justify-content: center;
     }
 
@@ -523,6 +378,12 @@ export const ContainerAbout = styled.main`
   }
 
   @media (max-width: 600px) {
+    @media (max-height: 538px) {
+      height: 1600px;
+    }
+
+    height: 800px;
+
     .alignRight {
       > p {
         margin-top: 9rem;
@@ -530,7 +391,6 @@ export const ContainerAbout = styled.main`
     }
 
     main {
-      height: 100px;
       .AboutIcon {
         width: 25%;
       }
@@ -546,18 +406,6 @@ export const ContainerAbout = styled.main`
         display: none;
       }
     }
-  }
-
-  @media (max-width: 375px) {
-    @media (max-height: 540px) {
-      header {
-        margin-top: 220px;
-      }
-    }
-  }
-
-  @media (max-width: 350px) {
-    margin-top: 100px;
   }
 `;
 
@@ -594,9 +442,7 @@ export const ContainerNetworking = styled.div`
 
   @media (max-width: 1100px) {
     header {
-      display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
     }
 
@@ -648,8 +494,6 @@ export const ContainerProject = styled.div`
   }
 
   @media (max-width: 1100px) {
-    display: flex;
-    align-items: center;
     justify-content: center;
     margin: 100px 0;
     text-align: center;
@@ -731,73 +575,31 @@ export const ContainerFooter = styled.footer`
 
   @media (max-width: 600px) {
     text-align: center;
-    left: 0;
     height: 60vh;
 
     div {
       margin-top: 15px;
-      display: flex;
       flex-direction: column;
-      width: 100%;
 
       section {
-        display: flex;
-        flex-direction: column;
-
-        font-weight: 400;
         font-size: 1rem;
 
         a {
-          margin: 0.5rem 0;
-          text-decoration: none;
-          font-weight: 300;
-          color: ${(props) => props.theme.colors.white.light};
+          padding: 5px;
+        }
 
-          &:hover {
-            color: ${(props) => props.theme.colors.primaryLight};
-          }
+        .social-media {
+          flex-direction: row;
+          justify-content: center;
         }
       }
 
-      p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: 500;
-        font-size: 1rem;
-        margin-top: 2rem;
-
-        a {
-          &:first-child {
-            margin-left: 15px;
-          }
-          margin-right: 5px;
-        }
-
-        svg {
-          margin: 0 0.2rem;
-          cursor: pointer;
-        }
-      }
     }
 
     footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      font-weight: 300;
       font-size: 1rem;
       padding: 0px 10px;
       max-width: 360px;
-
-      a {
-        margin: 0.6rem 0;
-        text-decoration: none;
-        font-weight: 300;
-        color: ${(props) => props.theme.colors.white.light};
-      }
     }
   }
 

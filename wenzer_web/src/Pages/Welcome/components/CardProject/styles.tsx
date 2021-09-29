@@ -9,7 +9,7 @@ export const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 
   color: ${(props) => props.theme.colors.white.light};
@@ -29,6 +29,10 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
+
+    div {
+      margin: 10px 0;
+    }
 
     p {
       font-size: 1rem;
@@ -69,8 +73,6 @@ export const Container = styled.div`
   @media (max-width: 1390px) {
     width: 340px;
     height: 420px;
-    box-sizing: border-box;
-    padding: 1.5rem 2.5rem;
     margin: 6px;
 
     a {
@@ -81,41 +83,10 @@ export const Container = styled.div`
 
   @media (max-width: 600px) {
     width: 330px;
-    height: 420px;
-    box-sizing: border-box;
-    padding: 1.5rem 2.5rem;
-
-    a {
-      display: flex;
-      justify-content: center;
-    }
-  }
-
-  @media (max-width: 375px) {
-    width: 330px;
-    height: 420px;
-    box-sizing: border-box;
-    padding: 1.5rem 2.5rem;
-
     margin: 20px;
-
-    a {
-      display: flex;
-      justify-content: center;
-    }
   }
 
   @media (max-width: 365px) {
-    width: 290px;
-    height: 420px;
-    box-sizing: border-box;
-    padding: 1.5rem 2.5rem;
-
-    margin: 20px;
-
-    a {
-      display: flex;
-      justify-content: center;
-    }
+    width: 280px;
   }
 `;
