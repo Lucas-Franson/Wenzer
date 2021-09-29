@@ -14,11 +14,11 @@ import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import DialogTermsAndPolicy from '../../components/DialogTermsPolicy';
+import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
 import CardProject from './components/CardProject';
 
-import bg_university from "../../utils/image/bg_university.svg";
-import bg_about from "../../utils/image/bg_about.svg";
+import bg_university from "../../Utils/image/bg_university.svg";
+import bg_about from "../../Utils/image/bg_about.svg";
 
 import {
   ContainerLogin,
@@ -29,6 +29,7 @@ import {
   Container
 } from "./styles";
 import api from '../../Services/api/api';
+import Login from '../Login/LoginForm';
 
 type TokenParams = {
   token: string;
@@ -114,7 +115,7 @@ function Welcome(): ReactElement {
             </a>
           </header>
 
-          <main>{!isEmailConfirmed ? <VipListForm /> : <EmailConfirmed />}</main>
+          <main><Login/></main>
         </ContainerLogin>
 
         <ContainerAbout id="about">

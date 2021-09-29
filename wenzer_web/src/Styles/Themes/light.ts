@@ -4,7 +4,7 @@ export default {
 
   colors: {
     primary: "#8a00ff",
-    primaryLight: "#b501ca",
+    primaryLight: "#9a11b8",
     secondary: "#FFF",
     tertiary: "#f2f2f2",
     background: "#e6e6e6",

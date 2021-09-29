@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import { Container } from "./styles";
-import InputText from "../../../components/InputText";
+import InputText from "../../../Components/InputText";
 
 function Login() {
   const [email, setEmail] = useState('');
