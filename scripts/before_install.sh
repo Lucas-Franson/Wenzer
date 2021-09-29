@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
-yum update -y
+#yum update -y
 pm2 update
