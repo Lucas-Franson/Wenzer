@@ -3,8 +3,8 @@ import { EmailMarketingSend } from '../utils/Email/EmailMarketingSend';
 import { EmailResetPassword } from '../utils/Email/EmailResetPassword';
 import { EmailVerify } from '../utils/Email/EmailVerify';
 import jwt from 'jsonwebtoken';
-import { User } from '../repositories/user';
-import { EmailMarketing } from '../repositories/emailMarketing';
+import { User } from '../domain/user';
+import { EmailMarketing } from '../domain/emailMarketing';
 import bcrypt from 'bcrypt';
 
 module.exports = class LoginService {

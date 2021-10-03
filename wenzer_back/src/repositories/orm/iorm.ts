@@ -5,5 +5,5 @@ export interface IOrm<T> {
     insert(object: T): Promise<void>; 
     update(object: T): Promise<void>;
     delete(object: T): Promise<void>;
-    validateObject(object: T): boolean;
+    validateObject(object: T): Promise<boolean>;
 }

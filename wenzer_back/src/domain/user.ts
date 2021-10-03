@@ -1,8 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { IDomainBase } from '../domain/domainBase';
-import { Orm } from './orm/orm';
 
-export class User extends Orm<User> implements IDomainBase {
+export class User implements IDomainBase {
 
     id: string = '';
     name: string = '';
