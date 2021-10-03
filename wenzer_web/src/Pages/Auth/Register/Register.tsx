@@ -8,12 +8,12 @@ function Register(): ReactElement {
     <Container>
       <header>
         <h1>
-          Faça parte da comunidade Wenzer e comece agora mesmo a ganhar e
+          Faça parte da comunidade e comece a ganhar e
           compartilhar experiências!
         </h1>
         <h2>
           Faça networking, conexões, publique suas ideias ou participe dos
-          projetos publicados pelos membros da comunidade!
+          projetos publicados pelos membros do Wenzer!
         </h2>
 
         <a href="/">

@@ -1,10 +1,15 @@
 import { BrowserRouter } from 'react-router-dom';
+import { useAuth } from '../Services/Authentication/auth';
+
 import AuthRoutes from './auth.routes';
+import AppRoutes from './app.routes';
 
 export default function Router() {
-    return (
-      <BrowserRouter>
-        <AuthRoutes />
-      </BrowserRouter>
-    );
+  const { logged } = useAuth();
+  
+  return (
+    <BrowserRouter>
+      {logged ? <AppRoutes /> : <AuthRoutes />}
+    </BrowserRouter>
+  );
 }

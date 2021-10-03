@@ -15,7 +15,7 @@ export const Container = styled.div`
 
     h1 {
       width: 40rem;
-      font-size: 3rem;
+      font-size: 2.6rem;
       text-align: left;
       line-height: 3.5rem;
       margin-bottom: 3rem;
