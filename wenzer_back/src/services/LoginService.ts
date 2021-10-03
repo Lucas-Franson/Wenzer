@@ -1,10 +1,10 @@
-const { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado, ValideSeuEmail } = require('../erros');
+import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado, ValideSeuEmail } from '../erros';
 const { EmailVerify, EmailResetPassword, EmailMarketingSend } = require('../utils/Email');
-const jwt =  require('jsonwebtoken');
-const User = require('../repositories/user');
-const EmailMarketing = require('../repositories/emailMarketing');
-const e = require('express');
-const bcrypt = require('bcrypt');
+import jwt from 'jsonwebtoken';
+import { User } from '../repositories/user';
+import { EmailMarketing } from '../repositories/emailMarketing';
+import e from 'express';
+import bcrypt from 'bcrypt';
 
 module.exports = class LoginService {
 
@@ -14,28 +14,27 @@ module.exports = class LoginService {
 
     async register({ name, email, password }: any) {
         let user = new User();
-        user.email = email;
-        user.id = null;
-        await user.Buscar();
+        const where = `WHERE Email = '${email}'`;
+        await user.get(where);
 
-        if (user.id) {
+        if (user.ID) {
             throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
         }
 
         const passwordHash = await this.generatePasswordHash(password);
         
         var usuario = new User();
-        usuario.name = name;
-        usuario.email = email;
-        usuario.emailValid = false;
-        usuario.password = passwordHash;
-        usuario.created_at = new Date();
-        usuario.updated_at = new Date();
+        usuario.Name = name;
+        usuario.Email = email;
+        usuario.EmailValid = false;
+        usuario.Password = passwordHash;
+        usuario.Created_at = new Date();
+        usuario.Updated_at = new Date();
         
         try {
-            await usuario.Adiciona();
+            await usuario.insert(usuario);
             
-            const token = this.createTokenJWT(usuario.id, [1, 'h']);
+            const token = this.createTokenJWT(usuario.ID, [1, 'h']);
             const route = '/welcome?token=';
             const address = `${process.env.BASE_URL_WEB}${route}${token}`;
             
@@ -45,7 +44,7 @@ module.exports = class LoginService {
             await emailVerify.prepareHTML(address);
             emailVerify.sendEmail();
 
-            return usuario.id;
+            return usuario.ID;
         } catch(err) {
             console.log("Chegou aqui")
             throw err;
@@ -54,25 +53,24 @@ module.exports = class LoginService {
 
     async verifyUsuario({ email, password }: any) {
         let user = new User();
-        user.id = null;
-        user.email = email;
-        await user.Buscar();
+        const sql = `WHERE Email = '${email}'`;
+        await user.get(sql);
 
-        if (!user.id) {
+        if (!user.ID) {
             throw new NaoEncontrado('Email ou senha não encontrados.');
         }
 
-        const valid = await this.verifyPassword(password, user.password);
+        const valid = await this.verifyPassword(password, user.Password);
 
         if (!valid) {
             throw new NaoAutorizado('Email ou senha não encontrados');
         }
 
-        if (!user.emailValid) {
+        if (!user.EmailValid) {
             throw new ValideSeuEmail("Valide seu email para continuar.");
         }
 
-        const accessToken = this.createTokenJWT(user.id, [1, 'h']);
+        const accessToken = this.createTokenJWT(user.ID, [1, 'h']);
 
         return accessToken;
     }
@@ -91,26 +89,27 @@ module.exports = class LoginService {
         const payload = { 
           id
         };
-        const token = jwt.sign(payload, process.env.CHAVE_JWT, { expiresIn: timeAmount+timeUnit });
+        const chave: string = process.env.CHAVE_JWT ?? '';
+        const token = jwt.sign(payload, chave, { expiresIn: timeAmount+timeUnit });
         return token;
     }
 
     verifyTokenJWT(token: string) {
-        const payload = jwt.verify(token, process.env.CHAVE_JWT);
+        const chave: string = process.env.CHAVE_JWT ?? '';
+        const payload: any = jwt.verify(token, chave);
         return payload.id;
     }
 
     async recoverPassword({ email }: any) {
         let user = new User();
-        user.email = email;
-        user.id = null;
-        await user.Buscar();
+        const sql = `WHERE Email = ${email}`;
+        await user.get(sql);
         
-        if (!user.id) {
+        if (!user.ID) {
             throw new NaoEncontrado('Email não encontrado.');
         }
 
-        const token = this.createTokenJWT(user.id, [1, 'h']);
+        const token = this.createTokenJWT(user.ID, [1, 'h']);
         const route = '/api/alterar-senha/';
         const address = `${process.env.BASE_URL}${route}${token}`;
 
@@ -125,20 +124,19 @@ module.exports = class LoginService {
     async verifyEmail(token: string) {
         const id = this.verifyTokenJWT(token);
         let user = new User();
-        user.id = id;
-        await user.Buscar();
+        await user.getById(id);
         
-        if (!user.id) {
+        if (!user.ID) {
             throw new NaoEncontrado('Usuário não encontrado na plataforma.');
         }
 
-        if (user.emailValid) {
+        if (user.EmailValid) {
             throw new Error('Email já validado.');
         }
 
         try {
-            user.emailValid = true;
-            user.Update();
+            user.EmailValid = true;
+            user.update(user);
         } catch(err) {
             throw err;
         }
@@ -148,27 +146,25 @@ module.exports = class LoginService {
         const id = await this.verifyTokenJWT(token);
 
         let user = new User();
-        user.id = id;
-        await user.Buscar();
+        await user.getById(id);
 
         if (!user) {
             throw new NaoEncontrado('Email ou senha não encontrados.');
         }
 
-        const valid = await this.verifyPassword(password, user.password);
+        const valid = await this.verifyPassword(password, user.Password);
 
         if (valid) {
             throw new Error("Essa senha é a mesma da sua conta atual.");
         }
 
-        user.password = await this.generatePasswordHash(password);
-        user.Update();
+        user.Password = await this.generatePasswordHash(password);
+        user.update(user);
     }
 
     async salvarEmailMarketing(email: string) {
         let save = new EmailMarketing();
         save.email = email;
-        save.id = null;
         await save.Buscar();
 
         if (save.id) {
@@ -191,7 +187,6 @@ module.exports = class LoginService {
         const email = this.verifyTokenJWT(token);
         let emailMarketing = new EmailMarketing();
         emailMarketing.email = email;
-        emailMarketing.id = null;
         await emailMarketing.Buscar();
         
         if (!emailMarketing.id) {
@@ -203,7 +198,7 @@ module.exports = class LoginService {
         }
 
         try {
-            emailMarketing.emailValid = 1;
+            emailMarketing.emailValid = true;
             emailMarketing.Update();
         } catch(err) {
             throw err;

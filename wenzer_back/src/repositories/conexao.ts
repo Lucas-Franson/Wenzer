@@ -9,7 +9,7 @@ const conexao = mysql.createConnection({
 });
 
 const queryPromise = (sql: any) =>{
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) =>{
         conexao.query(sql,  (error: any, results: any)=>{
             if(error){
                 return reject(error);

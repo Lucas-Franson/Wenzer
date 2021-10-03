@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
-const fs = require('fs');
-const { promisify } = require('util');
+import nodemailer from "nodemailer";
+import fs from 'fs';
+import { promisify } from 'util';
 
 const readFile = promisify(fs.readFile);
 
@@ -94,7 +94,7 @@ class EmailMarketingSend extends Email {
     async prepareHTML(link: string) {
         const _self = this;
         const text = await readFile(
-            './src/views/email-marketing-welcome.html', 
+            './src/views/Confirmar_Acesso_Marketing.html', 
             'utf8').then((data: string) => {
             console.log(data);
             _self.html = data.replace('$_TOKEN_$', link);
