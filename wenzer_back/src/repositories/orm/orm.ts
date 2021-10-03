@@ -1,7 +1,7 @@
 import { IOrm } from "./iorm";
 import { conexao, queryPromise } from '../conexao';
 
-export class Orm<T extends { ID: string }> implements IOrm<T> {
+export class Orm<T extends { ID: string, validateObject: Function }> implements IOrm<T> {
     async get(whereClause: string): Promise<T[]> {
         const tableName = this.constructor["name"];
         const sql = `SELECT * FROM ${tableName} ${whereClause}`;
@@ -15,16 +15,16 @@ export class Orm<T extends { ID: string }> implements IOrm<T> {
         return result.length > 0 ? result[0] : null;
     }
     async insert(object: T): Promise<void> {
-        const tableName = this.constructor["name"];
-        if (!this.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
+        const tableName = object.constructor["name"];
+        if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `INSERT INTO ${tableName} SET ?`;
-        await conexao.query(sql, this, (err: any) => {
+        await conexao.query(sql, object, (err: any) => {
             if (err) throw new Error(err);
         });
     }
     async update(object: T): Promise<void> {
-        const tableName = this.constructor["name"];
-        if (!this.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
+        const tableName = object.constructor["name"];
+        if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `UPDATE ${tableName}
                      SET ${this._createSetOfData(object)}
                      WHERE ID = ${object.ID}`;
@@ -54,14 +54,11 @@ export class Orm<T extends { ID: string }> implements IOrm<T> {
             return `'${property}'`;
         }
     }
-    async delete(id: string): Promise<void> {
-        const tableName = this.constructor["name"];
-        const sql = `DELETE FROM ${tableName} WHERE ID = ${id}`;
+    async delete(object: T): Promise<void> {
+        const tableName = object.constructor["name"];
+        const sql = `DELETE FROM ${tableName} WHERE ID = ${object.ID}`;
         conexao.query(sql, (err: any) => {
             if (err) throw new Error(err);
         });
-    }
-    validateObject(): Promise<void> {
-        throw new Error("Method 'Validate Object' not implemented.");
     }
 }

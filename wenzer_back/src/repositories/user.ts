@@ -20,4 +20,7 @@ export class User extends Orm<User> implements IDomainBase {
         }
     }
 
+    validateObject(): boolean {
+        return true;
+    }
 }
