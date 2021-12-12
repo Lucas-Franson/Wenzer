@@ -1,24 +1,26 @@
-import { memo, useState } from "react";
-import { Container } from "./styles";
-import InputPassword from '../../../Components/InputPassword';
-import InputText from "../../../Components/InputText";
+import { FormEvent, memo, useState } from "react";
 import { Link } from 'react-router-dom';
+
+import InputPassword from '../../../../Components/InputPassword';
+import InputText from "../../../../Components/InputText";
+import { toastfyError } from "../../../../Components/Toastfy";
+
+import { Container } from "./styles";
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function onSubmit() {
-    console.log('name: ' + email + ' password: ' + password)
+  function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    console.log('name: ' + email + ' password: ' + password);
+    toastfyError('Não');
   }
 
   return (
     <Container>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
+        onSubmit={onSubmit}
       >
         <InputText
           type="Email"
