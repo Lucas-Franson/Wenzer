@@ -53,6 +53,10 @@ module.exports = class LoginController {
             if (err.name === 'JsonWebTokenError') {
                 err.message = 'Token de verificação de email não identificado.';
             }
+
+            if (err.name === 'TokenExpiredError') {
+                err.message = 'Token de verificação de email expirou.';
+            }
             
             next(err);
         }
