@@ -67,7 +67,7 @@ export class Orm<T extends { id: string, validateObject: Function }> implements 
             if (err) throw new Error(err);
         });
     }
-    validateObject(object: T): boolean {
+    async validateObject(object: T): Promise<boolean> {
         throw Error("Validate Object method not implemented yet.");
     }
     

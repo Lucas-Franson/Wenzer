@@ -3,20 +3,24 @@ import { EmailMarketingSend } from '../utils/Email/EmailMarketingSend';
 import { EmailResetPassword } from '../utils/Email/EmailResetPassword';
 import { EmailVerify } from '../utils/Email/EmailVerify';
 import jwt from 'jsonwebtoken';
-import { User } from '../repositories/user';
-import { EmailMarketing } from '../repositories/emailMarketing';
+import { User } from '../domain/user';
+import { EmailMarketing } from '../domain/emailMarketing';
 import bcrypt from 'bcrypt';
+import { UserRepository } from '../repositories/user/userRepository';
+import { EmailMarketingRepository } from '../repositories/emailMarketing/emailMarketingRepository';
 
 module.exports = class LoginService {
+
+    _userRepository: UserRepository = new UserRepository();
+    _emailMarketingRepository: EmailMarketingRepository = new EmailMarketingRepository();
 
     constructor() {
         
     }
 
     async register({ name, email, password }: any) {
-        let user = new User();
         const where = `WHERE Email = '${email}'`;
-        const userFound = await user.get(where);
+        const userFound = await this._userRepository.get(where);
 
         if (userFound) {
             throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
@@ -27,7 +31,7 @@ module.exports = class LoginService {
         var usuario = new User(name, email, passwordHash);
         
         try {
-            await usuario.insert(usuario);
+            await this._userRepository.insert(usuario);
             
             const token = this.createTokenJWT(usuario.id, [1, 'h']);
             const route = '/welcome?token=';
@@ -47,9 +51,8 @@ module.exports = class LoginService {
     }
 
     async verifyUsuario({ email, password }: any) {
-        let user = new User();
         const sql = `WHERE Email = '${email}'`;
-        const userFound = await user.get(sql);
+        const userFound = await this._userRepository.get(sql);
 
         if (!userFound) {
             throw new NaoEncontrado('Email ou senha não encontrados.');
@@ -96,9 +99,8 @@ module.exports = class LoginService {
     }
 
     async recoverPassword({ email }: any) {
-        let user = new User();
         const sql = `WHERE Email = "${email}"`;
-        const userFound = await user.get(sql);
+        const userFound = await this._userRepository.get(sql);
         
         if (!userFound) {
             throw new NaoEncontrado('Email não encontrado.');
@@ -118,8 +120,7 @@ module.exports = class LoginService {
 
     async verifyEmail(token: string) {
         const id = this.verifyTokenJWT(token);
-        let user = new User();
-        const userFound = await user.getById(id);
+        const userFound = await this._userRepository.getById(id);
         
         if (!userFound) {
             throw new NaoEncontrado('Usuário não encontrado na plataforma.');
@@ -131,7 +132,7 @@ module.exports = class LoginService {
 
         try {
             userFound.emailValid = true;
-            await user.update(userFound);
+            await this._userRepository.update(userFound);
         } catch(err) {
             throw err;
         }
@@ -140,8 +141,7 @@ module.exports = class LoginService {
     async alterPassword(token: string, password: string) {
         const id = await this.verifyTokenJWT(token);
 
-        let user = new User();
-        const userFound = await user.getById(id);
+        const userFound = await this._userRepository.getById(id);
 
         if (!userFound) {
             throw new NaoEncontrado('Email ou senha não encontrados.');
@@ -154,12 +154,12 @@ module.exports = class LoginService {
         }
 
         userFound.password = await this.generatePasswordHash(password);
-        user.update(userFound);
+        this._userRepository.update(userFound);
     }
 
     async salvarEmailMarketing(email: string) {
         const where = `WHERE Email = '${email}'`;
-        const emailFound = await new EmailMarketing().get(where);
+        const emailFound = await this._emailMarketingRepository.get(where);
         
         if(emailFound?.id) throw new NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
         
@@ -170,7 +170,7 @@ module.exports = class LoginService {
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 
         let emailToCreate = new EmailMarketing(email);
-        new EmailMarketing().insert(emailToCreate);
+        this._emailMarketingRepository.insert(emailToCreate);
 
         const sendEmail = new EmailMarketingSend(emailToCreate.email);
         await sendEmail.prepareHTML(address);
@@ -180,7 +180,7 @@ module.exports = class LoginService {
     async confirmarEmailMarketing(token: string) {
         const email = this.verifyTokenJWT(token);
         const where = `WHERE Email = '${email}'`;
-        const emailFound = await new EmailMarketing().get(where);
+        const emailFound = await this._emailMarketingRepository.get(where);
         
         if (!emailFound) {
             throw new NaoEncontrado('Email não encontrado na plataforma.');
@@ -192,7 +192,7 @@ module.exports = class LoginService {
 
         try {
             emailFound.emailValid = true;
-            await new EmailMarketing().update(emailFound);
+            await this._emailMarketingRepository.update(emailFound);
         } catch(err) {
             throw err;
         }

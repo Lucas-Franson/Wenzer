@@ -5,7 +5,8 @@
   "main": "./src/server.ts",
   "scripts": {
     "start": "ts-node ./src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "mocha"
   },
   "author": "Lucas Franson",
   "license": "ISC",
