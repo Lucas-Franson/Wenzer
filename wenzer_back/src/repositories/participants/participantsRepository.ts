@@ -8,11 +8,11 @@ export class ParticipantsRepository extends Orm<Participants> implements IPartic
     async validateObject(object: Participants):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.Active == null) {
+        if (object.active == null) {
             isValid = false;
         }
 

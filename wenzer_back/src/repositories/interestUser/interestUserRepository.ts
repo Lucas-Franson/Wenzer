@@ -8,7 +8,7 @@ export class InterestUserRepository extends Orm<InterestUser> implements IIntere
     async validateObject(object: InterestUser):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 

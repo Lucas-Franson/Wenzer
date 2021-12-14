@@ -8,27 +8,27 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
     async validateObject(object: Project):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.Name == null) {
+        if (object.name == null) {
             isValid = false;
         }
 
-        if (object.Description == null) {
+        if (object.description == null) {
             isValid = false;
         }
 
-        if (object.Photo == null) {
+        if (object.photo == null) {
             isValid = false;
         }
 
-        if (object.Active == null) {
+        if (object.active == null) {
             isValid = false;
         }
 
-        if (object.Public == null) {
+        if (object.public == null) {
             isValid = false;
         }
 

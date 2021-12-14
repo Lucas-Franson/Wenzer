@@ -3,18 +3,22 @@ import { IDomainBase } from '../domain/domainBase';
 
 export class Post implements IDomainBase{
 
-    ID: string = '';
-    QtView: number = 0;
-    Title: string = '';
-    Description: string = '';
-    Photo: string = '';
-    Created_at: Date = new Date();
-    Updated_at: Date = new Date();
+    id: string = '';
+    qtView: number = 0;
+    title: string = '';
+    description: string = '';
+    photo: string = '';
+    created_at: Date = new Date();
+    updated_at: Date = new Date();
 
     constructor() {
-        if (!this.ID) {
-            this.ID = uuid();
+        if (!this.id) {
+            this.id = uuid();
         }
+    }
+
+    async validateObject(post: Post): Promise<boolean> {
+        return true;
     }
 
 }

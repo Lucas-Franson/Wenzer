@@ -8,11 +8,11 @@ export class ReactRepository extends Orm<React> implements IReactRepository, IOr
     async validateObject(object: React):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.Type == null) {
+        if (object.type == null) {
             isValid = false;
         }
 

@@ -11,20 +11,17 @@ export class User implements IDomainBase {
     created_at: Date = new Date();
     updated_at: Date = new Date();
 
-    constructor(name: string = '', email: string = '', passwordHash: string = '') {
-        super();
+    constructor(name: string = "", email: string = "", password: string = "") {
         if (!this.id) {
             this.id = uuid();
         }
         this.name = name;
         this.email = email;
-        this.emailValid = false;
-        this.password = passwordHash;
-        this.created_at = new Date();
-        this.updated_at = new Date();
+        this.password = password;
     }
 
-    validateObject(user: User): boolean {
+    async validateObject(user: User): Promise<boolean> {
         return true;
     }
+    
 }

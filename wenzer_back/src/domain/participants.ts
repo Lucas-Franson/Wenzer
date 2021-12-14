@@ -3,15 +3,19 @@ import { IDomainBase } from '../domain/domainBase';
 
 export class Participants implements IDomainBase {
 
-    ID: string = '';
-    Active: boolean = false;
-    Created_at: Date = new Date();
-    Updated_at: Date = new Date();
+    id: string = '';
+    active: boolean = false;
+    created_at: Date = new Date();
+    updated_at: Date = new Date();
 
     constructor() {
-        if (!this.ID) {
-            this.ID = uuid();
+        if (!this.id) {
+            this.id = uuid();
         }
+    }
+
+    async validateObject(participants: Participants): Promise<boolean> {
+        return true;
     }
 
 }

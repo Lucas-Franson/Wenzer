@@ -1,3 +1,3 @@
-export interface IemailMarketingRepository{
+export interface IEmailMarketingRepository{
     
 }

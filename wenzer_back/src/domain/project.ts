@@ -3,19 +3,23 @@ import { IDomainBase } from '../domain/domainBase';
 
 export class Project implements IDomainBase {
 
-    ID: string = '';
-    Name: string = '';
-    Description: string = '';
-    Photo: string = '';
-    Active: boolean = false;
-    Public: string = '';
-    Created_at: Date = new Date();
-    Updated_at: Date = new Date();
+    id: string = '';
+    name: string = '';
+    description: string = '';
+    photo: string = '';
+    active: boolean = false;
+    public: boolean = false;
+    created_at: Date = new Date();
+    updated_at: Date = new Date();
 
     constructor() {
-        if (!this.ID) {
-            this.ID = uuid();
+        if (!this.id) {
+            this.id = uuid();
         }
+    }
+
+    async validateObject(project: Project): Promise<boolean> {
+        return true;
     }
 
 }

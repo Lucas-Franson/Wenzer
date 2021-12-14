@@ -3,16 +3,21 @@ import { IDomainBase } from '../domain/domainBase';
 
 export class EmailMarketing implements IDomainBase {
 
-    ID: string = '';
-    Email: string = '';
-    EmailValid: boolean = false;
-    Created_at: Date = new Date();
-    Updated_at: Date = new Date();
+    id: string = '';
+    email: string = '';
+    emailValid: boolean = false;
+    created_at: Date = new Date();
+    updated_at: Date = new Date();
 
-    constructor() {
-        if (!this.ID) {
-            this.ID = uuid();
+    constructor(email: string = "") {
+        if (!this.id) {
+            this.id = uuid();
         }
+        this.email = email;
+    }
+
+    async validateObject(emailMarketing: EmailMarketing): Promise<boolean> {
+        return true;
     }
 
 }

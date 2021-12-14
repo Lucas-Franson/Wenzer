@@ -1,3 +1,3 @@
-export interface IconnectionRepository{
+export interface IConnectionRepository{
     
 }

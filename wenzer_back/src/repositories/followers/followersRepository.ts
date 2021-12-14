@@ -8,7 +8,7 @@ export class FollowersRepository extends Orm<Followers> implements IFollowersRep
     async validateObject(object: Followers):Promise<boolean> {
         let isValid = true;
 
-            if (object.ID == null) {
+            if (object.id == null) {
                 isValid = false;
             }
     

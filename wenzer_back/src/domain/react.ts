@@ -3,15 +3,19 @@ import { IDomainBase } from '../domain/domainBase';
 
 export class React implements IDomainBase {
 
-    ID: string = '';
-    Type: string = '';
-    Created_at: Date = new Date();
-    Updated_at: Date = new Date();
+    id: string = '';
+    type: string = '';
+    created_at: Date = new Date();
+    updated_at: Date = new Date();
 
     constructor() {
-        if (!this.ID) {
-            this.ID = uuid();
+        if (!this.id) {
+            this.id = uuid();
         }
+    }
+
+    async validateObject(react: React): Promise<boolean> {
+        return true;
     }
 
 }

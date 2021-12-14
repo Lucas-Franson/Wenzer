@@ -3,14 +3,18 @@ import { IDomainBase } from '../domain/domainBase';
 
 export class Followers implements IDomainBase {
 
-    ID: string = '';
-    Created_at: Date = new Date();
-    Updated_at: Date = new Date();
+    id: string = '';
+    created_at: Date = new Date();
+    updated_at: Date = new Date();
 
     constructor() {
-        if (!this.ID) {
-            this.ID = uuid();
+        if (!this.id) {
+            this.id = uuid();
         }
+    }
+
+    async validateObject(followers: Followers): Promise<boolean> {
+        return true;
     }
 
 }

@@ -8,11 +8,11 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
     async validateObject(object: Interests):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.Name == null) {
+        if (object.name == null) {
             isValid = false;
         }
 

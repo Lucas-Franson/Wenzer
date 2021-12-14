@@ -8,23 +8,23 @@ export class UserRepository extends Orm<User> implements IUserRepository, IOrm<U
     async validateObject(object: User):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.Name == null) {
+        if (object.name == null) {
             isValid = false;
         }
 
-        if (object.Email == null) {
+        if (object.email == null) {
             isValid = false;
         }
 
-        if (object.EmailValid == null) {
+        if (object.emailValid == null) {
             isValid = false;
         }
 
-        if (object.Password == null) {
+        if (object.password == null) {
             isValid = false;
         }
 

@@ -1,22 +1,22 @@
 import { EmailMarketing } from "../../domain/emailMarketing";
 import { IOrm } from "../orm/iorm";
 import { Orm } from "../orm/orm";
-import { IemailMarketingRepository } from "./IemailMarketingRepository";
+import { IEmailMarketingRepository } from "./IemailMarketingRepository";
 
-export class emailMarketingRepository extends Orm<EmailMarketing> implements IemailMarketingRepository, IOrm<EmailMarketing> {
+export class EmailMarketingRepository extends Orm<EmailMarketing> implements IEmailMarketingRepository, IOrm<EmailMarketing> {
     
     async validateObject(object: EmailMarketing):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.Email == null) {
+        if (object.email == null) {
             isValid = false;
         }
 
-        if (object.EmailValid == null) {
+        if (object.emailValid == null) {
             isValid = false;
         }
 

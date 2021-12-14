@@ -8,23 +8,23 @@ export class PostRepository extends Orm<Post> implements IPostRepository, IOrm<P
     async validateObject(object: Post):Promise<boolean> {
         let isValid = true;
 
-        if (object.ID == null) {
+        if (object.id == null) {
             isValid = false;
         }
 
-        if (object.QtView == null) {
+        if (object.qtView == null) {
             isValid = false;
         }
 
-        if (object.Title == null) {
+        if (object.title == null) {
             isValid = false;
         }
 
-        if (object.Description == null) {
+        if (object.description == null) {
             isValid = false;
         }
 
-        if (object.Photo == null) {
+        if (object.photo == null) {
             isValid = false;
         }
 
