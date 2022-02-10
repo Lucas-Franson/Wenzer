@@ -1,7 +1,7 @@
 require('dotenv').config();
 import express from 'express';
 import { router } from './routes/index';
-import { GlobalErrorHandler } from './middlewares';
+import { GlobalErrorHandler, AuthUser } from './middlewares';
 import { conexao } from './repositories/conexao';
 import { Tabelas } from './repositories/tabelas';
 
@@ -26,6 +26,7 @@ conexao.connect((err: any) => {
 
         router(app);
         GlobalErrorHandler(app);
+        AuthUser(app);
         
         app.listen(port, () => console.log(`Server is running on port ${port}`));
     }

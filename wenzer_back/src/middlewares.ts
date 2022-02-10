@@ -1,4 +1,4 @@
-export function GlobalErrorHandler(app: any) {
+function GlobalErrorHandler(app: any) {
     app.use((err: any, req: any, res: any, next: any) => {
         let status = 500;
         
@@ -21,3 +21,11 @@ export function GlobalErrorHandler(app: any) {
         res.status(status).json(corpo);
     });
 }
+
+function AuthUser(app: any) {
+    app.use((req: any, res: any, next: any) => {
+        
+    });
+}
+
+export { AuthUser, GlobalErrorHandler };
