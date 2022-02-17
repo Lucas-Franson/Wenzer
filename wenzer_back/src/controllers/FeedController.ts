@@ -1,20 +1,18 @@
-
+const FeedService = require('../services/FeedService');
 
 module.exports = class FeedController {
 
-    async buscar(req: any, res: any, next: any) {
-        res.status(200).json({ message: req.session.userId });
-
-        // const { email, password } = req.body;
-        // const loginService = new LoginService();
+    async getAllPosts(req: any, res: any, next: any) {
+        const { page, countPerPage } = req.body;
+        const feedService = new FeedService();
         
-        // try {
-        //     const accessToken = await loginService.verifyUsuario({ email, password });
+        try {
+            const posts = await feedService.getAllPosts(req.session.userId, page, countPerPage);
 
-        //     res.status(200).json({ token: accessToken });
-        // } catch(err) {
-        //     next(err);
-        // }
+            res.status(200).json(posts);
+        } catch(err) {
+            next(err);
+        }
     }
 
 }

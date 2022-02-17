@@ -7,7 +7,7 @@ const routes = Router();
 
 const feedController = new FeedController();
 
-routes.get('/api/getallposts', AuthUser, feedController.buscar);
+routes.get('/api/getallposts', AuthUser, feedController.getAllPosts);
 
 routes.options(['api/getallposts'], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', 'GET');

@@ -4,10 +4,12 @@ import { IDomainBase } from '../domain/domainBase';
 export class Post implements IDomainBase{
 
     id: string = '';
-    qtView: number = 0;
+    idUser: string = '';
+    countViews: number = 0;
     title: string = '';
     description: string = '';
     photo: string = '';
+    idProject: string = '';
     created_at: Date = new Date();
     updated_at: Date = new Date();
 
