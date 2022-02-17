@@ -1,3 +1,5 @@
+import { AuthUser } from '../middlewares';
+
 const Router = require('express');
 const LoginController = require('../controllers/LoginController');
 
@@ -11,7 +13,8 @@ routes.post('/api/login', loginController.login)
     .post('/api/alterar-senha/:token', loginController.alterPassword)
     .post('/api/salvar-email-marketing', loginController.emailMarketing)
     .post('/api/confirmar-email-marketing/:token', loginController.confirmarEmailMarketing)
-    .get('/api/verifica-email/:token', loginController.verifyEmail);
+    .get('/api/verifica-email/:token', loginController.verifyEmail)
+    .get('/api/logout', AuthUser, loginController.logout);
 
 routes.options(
     [
@@ -28,7 +31,11 @@ routes.options(
     res.end();
 })
 
-routes.options(['api/verifica-email'], (req: any, res: any) => {
+routes.options(
+    [
+        '/api/verifica-email',
+        '/api/logout'
+    ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', 'GET');
     res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
     res.status(204);

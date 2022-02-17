@@ -15,6 +15,18 @@ module.exports = class LoginController {
         }
     }
 
+    async logout(req: any, res: any, next: any) {
+        const loginService = new LoginService();
+        
+        try {
+            await loginService.logout(req.session);
+
+            res.status(200).json({ message: "Usuário desconectado" });
+        } catch(err) {
+            next(err);
+        }
+    }
+
     async register(req: any, res: any, next: any) {
         const { name, email, password } = req.body;
         const loginService = new LoginService();

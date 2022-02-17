@@ -2,7 +2,7 @@ import { NaoAutorizado, NaoEncontrado, UsuarioJaCadastrado, ValideSeuEmail } fro
 import { EmailMarketingSend } from '../utils/Email/EmailMarketingSend';
 import { EmailResetPassword } from '../utils/Email/EmailResetPassword';
 import { EmailVerify } from '../utils/Email/EmailVerify';
-import jwt from 'jsonwebtoken';
+import { createTokenJWT, verifyTokenJWT } from '../utils/jwt/Token';
 import { User } from '../domain/user';
 import { EmailMarketing } from '../domain/emailMarketing';
 import bcrypt from 'bcrypt';
@@ -33,7 +33,7 @@ module.exports = class LoginService {
         try {
             await this._userRepository.insert(usuario);
             
-            const token = this.createTokenJWT(usuario.id, [1, 'h']);
+            const token = createTokenJWT(usuario.id, [1, 'h']);
             const route = '/welcome?token=';
             const address = `${process.env.BASE_URL_WEB}${route}${token}`;
             
@@ -68,9 +68,15 @@ module.exports = class LoginService {
             throw new ValideSeuEmail("Valide seu email para continuar.");
         }
 
-        const accessToken = this.createTokenJWT(userFound.id, [1, 'h']);
+        const accessToken = createTokenJWT(userFound.id, [1, 'h']);
 
         return accessToken;
+    }
+
+    async logout(session: any) {
+        session.destroy((err: any) => {
+            console.log(err);
+        });
     }
 
     async generatePasswordHash(password: string) {
@@ -83,21 +89,6 @@ module.exports = class LoginService {
         return passwordValid;
     }
 
-    createTokenJWT(id: string, [timeAmount, timeUnit]: any) {
-        const payload = { 
-          id
-        };
-        const chave: string = process.env.CHAVE_JWT ?? '';
-        const token = jwt.sign(payload, chave, { expiresIn: timeAmount+timeUnit });
-        return token;
-    }
-
-    verifyTokenJWT(token: string) {
-        const chave: string = process.env.CHAVE_JWT ?? '';
-        const payload: any = jwt.verify(token, chave);
-        return payload.id;
-    }
-
     async recoverPassword({ email }: any) {
         const sql = `WHERE Email = "${email}"`;
         const userFound = await this._userRepository.get(sql);
@@ -106,7 +97,7 @@ module.exports = class LoginService {
             throw new NaoEncontrado('Email não encontrado.');
         }
 
-        const token = this.createTokenJWT(userFound.id, [1, 'h']);
+        const token = createTokenJWT(userFound.id, [1, 'h']);
         const route = '/api/alterar-senha/';
         const address = `${process.env.BASE_URL}${route}${token}`;
 
@@ -119,7 +110,7 @@ module.exports = class LoginService {
     }
 
     async verifyEmail(token: string) {
-        const id = this.verifyTokenJWT(token);
+        const id = verifyTokenJWT(token);
         const userFound = await this._userRepository.getById(id);
         
         if (!userFound) {
@@ -139,7 +130,7 @@ module.exports = class LoginService {
     }
 
     async alterPassword(token: string, password: string) {
-        const id = await this.verifyTokenJWT(token);
+        const id = await verifyTokenJWT(token);
 
         const userFound = await this._userRepository.getById(id);
 
@@ -163,7 +154,7 @@ module.exports = class LoginService {
         
         if(emailFound?.id) throw new NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
         
-        const token = this.createTokenJWT(email, [1, 'h']);
+        const token = createTokenJWT(email, [1, 'h']);
         const route = '?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
         
@@ -178,7 +169,7 @@ module.exports = class LoginService {
     }
 
     async confirmarEmailMarketing(token: string) {
-        const email = this.verifyTokenJWT(token);
+        const email = verifyTokenJWT(token);
         const where = `WHERE Email = '${email}'`;
         const emailFound = await this._emailMarketingRepository.get(where);
         
