@@ -1,8 +1,7 @@
 import { AuthUser } from '../../middlewares/AuthUser';
+import FeedController from '../controllers/FeedController';
 
 const Router = require('express');
-const FeedController = require('../controllers/FeedController');
-
 const routes = Router();
 
 const feedController = new FeedController();

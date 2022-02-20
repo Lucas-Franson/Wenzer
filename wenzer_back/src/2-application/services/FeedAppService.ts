@@ -1,14 +1,15 @@
 import { Post } from "../../3-domain/entities/post";
-import { PostRepository } from "../../4-infra/repositories/postRepository";
-import UserRepository from "../../4-infra/repositories/userRepository";
+import IPostService from "../../3-domain/Iservices/IPostService";
+import { IUserService } from "../../3-domain/Iservices/IUserService";
 
-module.exports = class FeedAppService {
+export default class FeedAppService {
 
-    _userRepository: UserRepository = new UserRepository();
-    _postRepository: PostRepository = new PostRepository();
+    constructor(private readonly userService: IUserService, private readonly postService: IPostService){
+
+    }
 
     async getAllPosts(userId: string,  page: number, countPerPage: number): Promise<Post[]> {
-        return this._postRepository.getAllPostsOfUser(userId, page, countPerPage);
+        return this.postService.getAllPostsOfUser(userId, page, countPerPage);
     }
 
 }
