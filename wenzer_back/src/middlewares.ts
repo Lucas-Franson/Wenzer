@@ -1,4 +1,4 @@
-import { verifyTokenJWT } from './utils/jwt/Token';
+import { verifyTokenJWT } from './1-presentation/utils/jwt/token';
 
 function GlobalErrorHandler(app: any) {
     app.use((err: any, req: any, res: any, next: any) => {

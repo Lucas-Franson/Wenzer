@@ -1,10 +1,12 @@
 require('dotenv').config();
 import express from 'express';
 import sessions from 'express-session';
-import { router } from './routes/index';
+import { router } from './1-presentation/routes/index';
 import { GlobalErrorHandler } from './middlewares';
-import { conexao } from './repositories/conexao';
-import { Tabelas } from './repositories/tabelas';
+import { conexao } from './4-infra/dbContext/conexao';
+import { Tabelas } from './4-infra/dbContext/tabelas';
+import swaggerUi from 'swagger-ui-express';
+const swaggerFile = require('./swagger_output.json');
 
 const port = 3333;
 
@@ -31,6 +33,9 @@ conexao.connect((err: any) => {
             cookie: { maxAge: oneDay },
             resave: false
         }));
+        app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+        require("./1-presentation/routes/index")
 
         router(app);
         GlobalErrorHandler(app);
