@@ -6,12 +6,7 @@ import { UserRegisterViewModel } from '../../1-presentation/viewmodel/UserRegist
 
 export default class LoginAppService {
 
-    userService: IUserService;
-    emailMarketingService: IEmailMarketingService;
-
-    constructor(_userService: IUserService, _emailMarketingService: IEmailMarketingService) {
-        this.userService = _userService;
-        this.emailMarketingService = _emailMarketingService;
+    constructor(private readonly userService: IUserService, private readonly emailMarketingService: IEmailMarketingService) {
     }
 
     async register(userViewModel: UserRegisterViewModel) {

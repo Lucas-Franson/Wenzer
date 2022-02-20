@@ -6,10 +6,7 @@ import { EmailMarketingSend } from "../utils/email/EmailMarketingSend";
 
 export default class EmailMarketingService implements IEmailMarketingService {
 
-    emailMarketingRepository: IEmailMarketingRepository;
-
-    constructor(_emailMarketingRepository: IEmailMarketingRepository) {
-        this.emailMarketingRepository = _emailMarketingRepository;
+    constructor(private readonly emailMarketingRepository: IEmailMarketingRepository) {
     }
 
     async findEmailMarketing(email: string) {

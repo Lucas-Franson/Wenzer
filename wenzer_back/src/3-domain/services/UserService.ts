@@ -9,10 +9,7 @@ import { EmailResetPassword } from "../utils/email/EmailResetPassword";
 
 export default class UserService implements IUserService {
 
-    userRepository: IUserRepository;
-
-    constructor(_userRepository: IUserRepository) {
-        this.userRepository = _userRepository;
+    constructor(private readonly userRepository: IUserRepository) {
     }
 
     async findUserByEmail(email: string) {

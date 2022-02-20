@@ -1,11 +1,13 @@
-import { AuthUser } from '../../middlewares';
+import { AuthUser } from '../../middlewares/AuthUser';
 import LoginController from '../controllers/LoginController';
 
 const Router = require('express');
 
 const routes = Router();
 
-routes.post('/api/login', new LoginController().login, () =>{ 
+const loginController = new LoginController();
+
+routes.post('/api/login', loginController.login, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para realizar login na plataforma.'
@@ -35,7 +37,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Not found" }
         */
     })
-    .post('/api/cadastrar', new LoginController().register, () =>{ 
+    .post('/api/cadastrar', loginController.register, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para cadastrar um novo usuário.'
@@ -68,7 +70,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Internal server error" }
         */ 
     })
-    .post('/api/recupera-senha', new LoginController().recoverPassword, () =>{ 
+    .post('/api/recupera-senha', loginController.recoverPassword, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para recuperar a senha do usuário.'
@@ -89,7 +91,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Internal server error" }
         */ 
     })
-    .post('/api/alterar-senha/:token', new LoginController().alterPassword, () =>{ 
+    .post('/api/alterar-senha/:token', loginController.alterPassword, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para alterar a senha do usuário enviando o token enviado por email.'
@@ -112,7 +114,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Interna server error" }
         */ 
     })
-    .post('/api/salvar-email-marketing', new LoginController().emailMarketing, () =>{ 
+    .post('/api/salvar-email-marketing', loginController.emailMarketing, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para salvar o email de marketing.'
@@ -132,7 +134,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Internal server error" }
         */ 
     })
-    .post('/api/confirmar-email-marketing/:token', new LoginController().confirmarEmailMarketing, () =>{ 
+    .post('/api/confirmar-email-marketing/:token', loginController.confirmarEmailMarketing, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para confirmar o envio de email de marketing.'
@@ -149,7 +151,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Internal server error" }
         */ 
     })
-    .get('/api/verifica-email/:token', new LoginController().verifyEmail, () =>{ 
+    .get('/api/verifica-email/:token', loginController.verifyEmail, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para verificar email enviado para o usuário na hora do cadastro.'
@@ -166,7 +168,7 @@ routes.post('/api/login', new LoginController().login, () =>{
                 description: "Internal server error" }
         */ 
     })
-    .get('/api/logout', AuthUser, new LoginController().logout, () =>{ 
+    .get('/api/logout', AuthUser, loginController.logout, () =>{ 
         /* 
             #swagger.tags = ["Login"] 
             #swagger.description = 'Endpoint para desconectar o usuário da plataforma.'

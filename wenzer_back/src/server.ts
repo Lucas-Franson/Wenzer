@@ -2,10 +2,11 @@ require('dotenv').config();
 import express from 'express';
 import sessions from 'express-session';
 import { router } from './1-presentation/routes/index';
-import { GlobalErrorHandler } from './middlewares';
 import { conexao } from './4-infra/dbContext/conexao';
 import { Tabelas } from './4-infra/dbContext/tabelas';
 import swaggerUi from 'swagger-ui-express';
+import GlobalErrorHandler from './middlewares/GlobalErrorHandler';
+import ExposeServices from './middlewares/ExposeServices'; './middlewares/ExposeServices';
 const swaggerFile = require('./swagger_output.json');
 
 const port = 3333;
@@ -37,6 +38,7 @@ conexao.connect((err: any) => {
 
         require("./1-presentation/routes/index")
 
+        ExposeServices(app);
         router(app);
         GlobalErrorHandler(app);
         

@@ -1,6 +1,5 @@
-import { verifyTokenJWT } from './1-presentation/utils/jwt/token';
 
-function GlobalErrorHandler(app: any) {
+export default function GlobalErrorHandler(app: any) {
     app.use((err: any, req: any, res: any, next: any) => {
         let status = 500;
         
@@ -23,17 +22,3 @@ function GlobalErrorHandler(app: any) {
         res.status(status).json(corpo);
     });
 }
-
-const AuthUser = (req: any, res: any, next: any) => {
-    const token = req.headers.auth;
-    const userId = verifyTokenJWT(token);
-
-    if (token && userId) {
-        req.session.userId = userId;
-        next();
-    } else {
-        res.status(403).json({ mensagem: "Usuário não está autenticado!" });
-    }
-}
-
-export { AuthUser, GlobalErrorHandler };
