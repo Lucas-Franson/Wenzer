@@ -2,7 +2,12 @@ import jwt from 'jsonwebtoken';
 
 const verifyTokenJWT = (token: string) => {
     const chave: string = process.env.CHAVE_JWT ?? '';
-    const pld: any = jwt.verify(token, chave);
+    let pld: any = "";
+    try {
+      pld = jwt.verify(token, chave);
+    } catch(err) {
+      console.log(err);
+    }
     return pld?.id;
 }
 
