@@ -40,6 +40,8 @@ export abstract class Email {
             subject: this.Subject,
             text: this.Text,
             html: this.Html,
+        }, (err) => {
+            console.log(err);
         });
     }
 
