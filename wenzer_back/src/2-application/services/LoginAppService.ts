@@ -11,7 +11,7 @@ export default class LoginAppService {
 
     async register(userViewModel: UserRegisterViewModel) {
         try {
-            var userFound = await this.userService.findUserByEmail(userViewModel.email);
+            var userFound = await this.userService.findUserByEmail(userViewModel.getEmail());
             if (userFound) {
                 throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
             }
