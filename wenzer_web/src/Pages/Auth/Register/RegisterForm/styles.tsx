@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { MediaQueries } from '../../../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 26rem;
@@ -74,6 +75,19 @@ export const Container = styled.div`
       &:hover {
         color: ${(props) => props.theme.colors.primaryLight};
       }
+    }
+  }
+
+  @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
+    width: 22rem;
+    height: 30rem;
+
+    padding: 1rem 1.2rem;
+
+    strong {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
     }
   }
 

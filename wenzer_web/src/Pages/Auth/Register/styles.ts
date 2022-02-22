@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { MediaQueries } from '../../../Constants/MediaSettings';
 
 export const Container = styled.div`
     display: flex;
@@ -25,7 +26,6 @@ export const Container = styled.div`
     }
 
     h1 {
-      width: 35rem;
       font-size: 2.5rem;
       text-align: left;
       line-height: 2.8rem;
@@ -57,5 +57,33 @@ export const Container = styled.div`
         color: ${props => props.theme.colors.primaryLight}
       }
     }
+  }
+
+  @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
+    width: 100%;
+    flex-direction: column;
+    margin-top: 3rem;
+    justify-content: space-evenly;
+
+    height: 60rem;
+
+    header {
+      align-items: center;
+      justify-content: center;
+
+      h1 {
+        max-width: 35rem;
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      a {
+        margin-bottom: 15px;
+      }
+  }
+
+  @media ${MediaQueries.LAYMODE} {
+    height: 60rem;
   }
 `;

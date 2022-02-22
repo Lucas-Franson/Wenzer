@@ -42,10 +42,10 @@ function Login() {
       .then(() => {
         toastfySuccess("Conta criada com sucesso! Verifique seu e-mail para confirmação.");
         setIsLoading(false);
-        history.push('/welcome');
+        history.push('/login');
       })  
-      .catch(() => {
-        toastfyError("E-mail ja cadastrado, tente usar outro e-mail.");
+      .catch((err) => {
+        toastfyError(err.message);
         setIsLoading(false);
       });
   }

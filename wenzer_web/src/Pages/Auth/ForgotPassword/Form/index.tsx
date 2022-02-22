@@ -43,7 +43,7 @@ function Login() {
           {isLoading ? (
             <CircularProgress size={16} color="inherit" />
           ) : (
-            "Cadastrar"
+            "Enviar"
           )}
         </button>
       </form>

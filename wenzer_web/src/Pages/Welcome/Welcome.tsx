@@ -25,10 +25,13 @@ import {
   ContainerFooter,
   Container
 } from "./styles";
+import { useHistory } from 'react-router-dom';
 
 function Welcome(): ReactElement {
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isTerms, setIsTerms] = useState(false);
+
+  const history = useHistory();
 
   const initialContext = {
     isEmailConfirmed,
@@ -44,11 +47,11 @@ function Welcome(): ReactElement {
       <Container>
         <ContainerLogin id="home">
           <header>
-            <h1>Compartilhe experiência, ideias e projetos!</h1>
+            <h1>Compartilhe experiências, ideias e projetos!</h1>
             <h2>
-              Uma plataforma para publicar suas ideias ou participar de
-              projetos, ganhar experiencias em projetos que poderá agregar no
-              seu portifólio.
+              Uma plataforma para ganhar experiencia, publicar suas idéias ou 
+              participar de projetos que poderá agregar para sua vida
+              pessoal ou profissional!
             </h2>
             <a href="#about">
               <button type="button">Saiba mais</button>
@@ -67,10 +70,10 @@ function Welcome(): ReactElement {
               <p>Wenzer é uma rede social para projetos e ideias</p>
               <span>
                 No Wenzer você pode publicar seu projeto ou ideia (ex: um
-                website e-commerce), seja ele colaborativo para você ganhar
+                website e-commerce ou projeto social), seja ele colaborativo para você ganhar
                 experiência encontrando outras pessoas para desenvolver com
                 você, ou cobrando um valor $$ para que alguem desenvolva sua
-                ideia!
+                ideia! No fim todos evoluem juntos!
               </span>
             </div>
           </header>
@@ -79,7 +82,7 @@ function Welcome(): ReactElement {
               <FaAngleDoubleUp size={50} />
             </div>
             <div className="AboutContent">
-              <p>Tenha sua primeira experiêcia em projetos reais!</p>
+              <p>Tenha uma experiêcia real em projetos!</p>
             </div>
             <div className="AboutNone"></div>
           </main>
@@ -90,10 +93,9 @@ function Welcome(): ReactElement {
             <div className="alignLeft">
               <p>Faça conexões e networking!</p>
               <span>
-                Publique seu projeto com tags do seu interesse ou da
-                universidade para encontrar universitários de areas comum com a
-                suas ideias no seu próprio campus! Encontre pessoas com o mesmo
-                interesse que você e expanda seu projeto para o mundo!
+                Publique seu projeto com tags do seu interesse ou da sua
+                universidade ou empresa para encontrar pessoas de áreas comum com a
+                suas ideias! Se conecte e expanda seu projeto para o mundo!
               </span>
             </div>
             <div>
@@ -145,7 +147,8 @@ function Welcome(): ReactElement {
             </section>
             <section>
               <strong>Plataforma</strong>
-              <a href="#home">Cadastre-se</a>
+              <span  onClick={() => history.push('/register')}>Cadastre-se</span>
+              <span onClick={() => history.push('/login')}>Faça Login</span>
             </section>
             <section>
               <strong>Siga o Wenzer:</strong>
