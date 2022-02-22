@@ -190,7 +190,7 @@ routes.options(
         '/api/confirmar-email-marketing',
         '/api/salvar-email-marketing'
     ], (req: any, res: any) => {
-    res.set('Access-Control-Allow-Methods', 'POST');
+    res.set('Access-Control-Allow-Methods', ['POST', 'GET']);
     res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
     res.status(204);
     res.end();
