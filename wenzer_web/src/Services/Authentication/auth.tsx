@@ -4,55 +4,66 @@ import {
     useContext,
 } from 'react';
 import Cookies from 'js-cookie';
+import { useHistory } from 'react-router-dom';
+import api from "../../Services/api/api";
+import { toastfyError } from '../../Components/Toastfy';
 
 interface IAuthContext {
   logged: boolean;
-  singIn(email: string, password: string): void;
+  singIn(token: string): void;
   singOut(): void;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthProvider = ({ children }: any) => {     
-    const [logged, setLogged] = useState<boolean>(() => {
-        const isLogged = Cookies.get('WenzerLogged');
+  const [logged, setLogged] = useState<boolean>(() => {
+      const isLogged = Cookies.get('WenzerLogged');
 
-        return !!isLogged;
+      return !!isLogged;
+  });
+
+  const history = useHistory();
+
+
+  function singIn(token: string) {
+    Cookies.set('WenzerLogged', 'true');
+    Cookies.set('WenzerToken', token);
+    setLogged(true);      
+  }
+
+  function singOut() {
+    api.get("/api/logout", {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(() => {
+      Cookies.remove('WenzerLogged');
+      Cookies.remove('WenzerToken');
+      setLogged(false);
+      history.push("/welcome");
+    })
+    .catch((err) => {
+      toastfyError(err.message);
     });
 
-    function singIn(email: string, password: string) {
-        if (email === 'dev@wenzer.com' && password === 'dev') {
-            Cookies.set('WenzerLogged', 'true');
-            Cookies.set('WenzerEmail', email);
-            setLogged(true);        
+  }
 
-        } else {
-            alert("senha ou usuario invalidos");
-        }       
-    }    
-
-    function singOut() {
-        Cookies.remove('WenzerLogged');
-        Cookies.remove('WenzerEmail');
-        setLogged(false);
-        window.location.replace("/");
-    }
-
-    return (
-      <AuthContext.Provider
-        value={{
-          logged,
-          singIn,
-          singOut
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider
+      value={{
+        logged,
+        singIn,
+        singOut
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 function useAuth(): IAuthContext {
-    const context = useContext(AuthContext);
-    return context;
+  const context = useContext(AuthContext);
+  return context;
 }
 export { AuthProvider, useAuth };

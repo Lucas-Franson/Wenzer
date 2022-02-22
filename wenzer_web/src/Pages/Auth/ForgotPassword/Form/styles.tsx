@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { MediaQueries } from '../../../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 26rem;
@@ -38,7 +39,13 @@ export const Container = styled.div`
         background-color: ${(props) => props.theme.colors.primaryLight};
       }
     }
+  }
 
+  @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
+    width: 22rem;
+    height: 22rem;
+
+    padding: 1rem 1.2rem;
   }
 
   ::-webkit-input-placeholder {

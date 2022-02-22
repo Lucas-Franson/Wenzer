@@ -1,7 +1,10 @@
 import { ReactElement } from "react";
 
+import { Container } from "./styles";
+
+
 export default function Feed(): ReactElement {
     return (
-        <h1>Feed aqui</h1>
+        <Container>Feed aquiaaaaaaaaaaaaaaa</Container>
     )
 }

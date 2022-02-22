@@ -539,12 +539,14 @@ export const ContainerFooter = styled.footer`
 
       font-weight: 400;
 
-      a {
+      a, span {
         margin: 0.5rem 0;
         text-decoration: none;
         font-weight: 300;
         font-size: 15px;
         color: ${(props) => props.theme.colors.white.light};
+
+        cursor: pointer;
 
         &:hover {
           color: ${(props) => props.theme.colors.primary};
