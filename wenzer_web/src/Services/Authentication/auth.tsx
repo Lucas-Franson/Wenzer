@@ -37,9 +37,10 @@ const AuthProvider = ({ children }: any) => {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
-    }).then(() => {
+    }).then((res) => {
       Cookies.remove('WenzerLogged');
       Cookies.remove('WenzerToken');
+      console.log(res.data);
       setLogged(false);
       history.push("/welcome");
     })
