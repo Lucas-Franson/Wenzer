@@ -9,7 +9,7 @@ const defaultProps = {
 export default function Notify() {
   return (
     <div >
-      <Badge badgeContent={5} max={999} style={{cursor: 'pointer'}} {...defaultProps} />
+      <Badge badgeContent={99} max={999} style={{cursor: 'pointer'}} {...defaultProps} />
     </div>
   );
 }
