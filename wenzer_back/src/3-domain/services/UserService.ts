@@ -1,5 +1,4 @@
 import { IUserRepository } from "../../4-infra/irepositories/IuserRepository";
-import { NaoAutorizado, UsuarioJaCadastrado } from "../../erros";
 import { User } from "../entities/user";
 import { IUserService } from "../Iservices/IUserService";
 import bcrypt from 'bcrypt';
@@ -39,7 +38,7 @@ export default class UserService implements IUserService {
 
     async sendEmailOfVerification(user: User) {
         const token = createTokenJWT(user.id, [1, 'h']);
-        const route = '/welcome?token=';
+        const route = '/login?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
         
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
@@ -52,7 +51,7 @@ export default class UserService implements IUserService {
     async sendEmailOfResetPassword(user: User) {
         const token = createTokenJWT(user.id, [1, 'h']);
         const route = '/recover-password/';
-        const address = `${process.env.BASE_URL}${route}${token}`;
+        const address = `${process.env.BASE_URL_WEB}${route}${token}`;
 
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 
