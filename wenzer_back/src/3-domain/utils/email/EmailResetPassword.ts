@@ -1,4 +1,7 @@
 import { Email } from "./EmailAbstract";
+import { promisify } from 'util';
+import fs from 'fs';
+const readFile = promisify(fs.readFile);
 
 export class EmailResetPassword extends Email {
     constructor(user: any, address: string) {
@@ -12,6 +15,11 @@ export class EmailResetPassword extends Email {
     }
 
     async prepareHTML(link: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        const _self = this;
+        const text = await readFile(
+            './src/1-presentation/views/Alterar_Senha.html', 
+            'utf8').then((data: string) => {
+            _self.Html = data.replace('$_URL_UPDATE_$', link);
+        });
     }
 }

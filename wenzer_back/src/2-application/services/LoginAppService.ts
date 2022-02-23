@@ -12,12 +12,19 @@ export default class LoginAppService {
     async register(userViewModel: UserRegisterViewModel) {
         try {
             var userFound = await this.userService.findUserByEmail(userViewModel.getEmail());
-            if (userFound) {
+            if (userFound && userFound.emailValid) {
                 throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
             }
 
             var user = userViewModel.convertToUserEntity();
-            this.userService.create(user);
+            
+            if (userFound && !userFound.emailValid) {
+                user.id = userFound.id;
+                this.userService.update(user);
+            } else {
+                this.userService.create(user);
+            }
+            
             this.userService.sendEmailOfVerification(user);
             return user.id;
         } catch(err) {

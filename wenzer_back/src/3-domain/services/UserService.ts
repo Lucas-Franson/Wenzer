@@ -27,6 +27,11 @@ export default class UserService implements IUserService {
         await this.userRepository.insert(user);
     }
 
+    async update(user: User) {
+        user.password = await this.generatePasswordHash(user.password);
+        await this.userRepository.update(user);
+    }
+
     async updateUserNewPwd(user: User, pwd: string) {
         user.password = await this.generatePasswordHash(pwd);
         this.userRepository.update(user);
@@ -46,9 +51,13 @@ export default class UserService implements IUserService {
 
     async sendEmailOfResetPassword(user: User) {
         const token = createTokenJWT(user.id, [1, 'h']);
-        const route = '/api/alterar-senha/';
+        const route = '/recover-password/';
         const address = `${process.env.BASE_URL}${route}${token}`;
+
+        if (process.env.ENVIRONMENT === 'desenv') console.log(address);
+
         const emailVerify = new EmailResetPassword(user, address);
+        await emailVerify.prepareHTML(address);
         await emailVerify.sendEmail();
     }
 
