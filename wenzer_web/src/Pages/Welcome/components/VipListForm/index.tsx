@@ -51,7 +51,7 @@ function VipListForm() {
         <InputText
           type="Email"
           placeholder="E-mail"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: any) => setEmail(e.target.value)}
           required={true}
         />
         <button type="submit">

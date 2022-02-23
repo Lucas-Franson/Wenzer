@@ -46,8 +46,8 @@ function Login() {
         toastfySuccess('Senha alterada com sucesso!');
         setIsLoading(false);
       })
-      .catch(() => {
-        toastfyError('Falha ao alterar sua senha, vefique seu e-mail ou tente novamente');
+      .catch((err) => {
+        toastfyError(err.response.data.mensagem);
         setIsLoading(false);
       });
   }
