@@ -116,7 +116,7 @@ export const Container = styled.div`
       padding-left: 1rem;
     }
 
-    div {
+    .buttons {
       display: none;
     }
 
@@ -124,19 +124,6 @@ export const Container = styled.div`
       display: flex;
       align-items: center;
       padding-right: 0.5rem;
-    }
-  }
-
-  @media (max-width: 600px) {
-    header {
-      display: flex;
-      align-items: center;
-
-      padding-left: 1rem;
-    }
-
-    div {
-      display: none;
     }
   }
 `;

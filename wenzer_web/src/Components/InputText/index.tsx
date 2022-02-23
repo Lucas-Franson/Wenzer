@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement, InputHTMLAttributes } from 'react';
+import { ChangeEvent, InputHTMLAttributes } from 'react';
 
 import { Container } from './styles';
 

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { MediaQueries } from '../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 100%;
@@ -12,6 +13,10 @@ export const Container = styled.div`
     color: ${(props) => props.theme.colors.white.light};
     border-radius: 0.5rem;
     background-color: ${(props) => props.theme.colors.background};
+
+    @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
+    display: none;
+  }
   }
 
   .iconInput {
@@ -22,10 +27,8 @@ export const Container = styled.div`
   }
 
   .hasError {
- 
       border: 1px solid ${(props) => props.theme.colors.warning};
       border-radius: 0.5rem;
-    
   }
 
   .hasOkay {

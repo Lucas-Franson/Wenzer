@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement, useState } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import { MdSearch } from "react-icons/md";
 import { Container } from './styles';
 

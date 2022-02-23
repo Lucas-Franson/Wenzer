@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Container } from './styles';
 
-const EmAlta: React.FC = () => {
+const Projetos: React.FC = () => {
   return (
       <Container>
-          Tela em alta aqui
+          Em breve Projetos.
       </Container>
   )
 }
 
-export default EmAlta;
+export default Projetos;

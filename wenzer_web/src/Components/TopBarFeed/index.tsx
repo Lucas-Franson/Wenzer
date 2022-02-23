@@ -1,7 +1,7 @@
 import { memo, ReactElement, useState, useRef } from "react";
 import { Button } from "@material-ui/core";
 import { BsSun, BsMoon } from "react-icons/bs";
-import { MdAddCircle, MdMenu, MdPlusOne } from "react-icons/md";
+import { MdAddCircle, MdMenu } from "react-icons/md";
 import { useTheme } from "../../Styles/Hook/theme";
 import WenzerLogo from "../../Utils/image/wenzer_web.svg";
 import { Container, ContentMenu, ContainerMenu } from "./styles";
@@ -10,6 +10,7 @@ import Avatar from "./components/Avatar";
 import Notify from "./components/Notify";
 import { Link } from 'react-router-dom';
 import InputSearch from "../InputSearch";
+import { useAuth } from "../../Services/Authentication/auth";
 
 function TopBarFeed(): ReactElement {
   const { toggleTheme, theme } = useTheme();
@@ -18,6 +19,7 @@ function TopBarFeed(): ReactElement {
   );
   const [openSideMenu, setOpenSideMenu] = useState(false);
   const openMenuRef = useRef(false);
+  const { singOut } = useAuth();
 
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
@@ -36,23 +38,11 @@ function TopBarFeed(): ReactElement {
     >
       <ContentMenu>
         <div>
-          <Link to="#about">Home</Link>
+          <Link to="/projects">Perfil</Link>
         </div>
 
         <div>
-          <a href="/#networking">Em alta</a>
-        </div>
-
-        <div>
-          <a href="/#project">Meus Projetos</a>
-        </div>
-
-        <div>
-          <a href="/#project">Perfil</a>
-        </div>
-
-        <div>
-          <a href="/#project">Sair</a>
+          <Link to="" onClick={singOut} >Sair</Link>
         </div>
 
 
@@ -80,7 +70,7 @@ function TopBarFeed(): ReactElement {
       </header>
 
       {/* OPÇÕES -------------------------------------------------------------------- */}
-      <div>
+      <div className="opcoes">
         <Link to="/">Home</Link>
         <Link to="/Explore">Explorar</Link>
         <Link to="/Projects">Projetos</Link>

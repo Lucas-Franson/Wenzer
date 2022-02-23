@@ -1,28 +1,29 @@
-import { FormEvent, memo, useState, useEffect} from "react";
+import { FormEvent, memo, useState} from "react";
 
 import { CircularProgress } from "@material-ui/core";
 import InputTextPassword from "../../../../Components/InputPassword";
 import { toastfyError, toastfySuccess, toastfyWarning } from "../../../../Components/Toastfy";
 import { Container } from "./styles";
 import api from "../../../../Services/api/api";
+import { useHistory } from "react-router-dom";
 
 function Login() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [tokenPassword, setTokenPassword] = useState<string | null>('');
 
-  async function loadTokenEmail() {
+  const history = useHistory();
+
+  function loadTokenEmail() {
     let searchForToken = window.location.search;
     let token = new URLSearchParams(searchForToken);
+    let getToken = token.get('token');
 
-    setTokenPassword(token.get("token"));
+    console.log(getToken);
+
+    return getToken;
   }
-
-  useEffect(() => {
-    loadTokenEmail();
-  }, [tokenPassword]);
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -41,13 +42,14 @@ function Login() {
     }
 
     api
-      .post(`api/alterar-senha/:${tokenPassword}`, data)
+      .post(`api/alterar-senha/${loadTokenEmail()}`, data)
       .then(() => {
         toastfySuccess('Senha alterada com sucesso!');
         setIsLoading(false);
+        history.push('/login');
       })
       .catch((err) => {
-        toastfyError(err.response.data.mensagem);
+        toastfyError('erro');
         setIsLoading(false);
       });
   }

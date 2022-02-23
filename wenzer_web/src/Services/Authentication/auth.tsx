@@ -4,7 +4,6 @@ import {
     useContext,
 } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
 import api from "../../Services/api/api";
 import { toastfyError } from '../../Components/Toastfy';
 
@@ -22,9 +21,6 @@ const AuthProvider = ({ children }: any) => {
 
       return !!isLogged;
   });
-
-  const history = useHistory();
-
 
   function singIn(token: string) {
     Cookies.set('WenzerLogged', 'true');
@@ -53,7 +49,6 @@ const AuthProvider = ({ children }: any) => {
       
       toastfyError(err.response.data.mensagem);
     });
-
   }
 
   return (

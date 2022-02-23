@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import { useAuth } from '../../Services/Authentication/auth';
 
 import { Container } from "./styles";
 

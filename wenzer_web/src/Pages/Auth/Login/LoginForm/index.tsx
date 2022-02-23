@@ -6,7 +6,7 @@ import { useAuth } from '../../../../Services/Authentication/auth';
 
 import InputPassword from '../../../../Components/InputPassword';
 import InputText from "../../../../Components/InputText";
-import { toastfyError, toastfySuccess } from "../../../../Components/Toastfy";
+import { toastfyError } from "../../../../Components/Toastfy";
 import { CircularProgress } from "@material-ui/core";
 
 import { Container } from "./styles";
@@ -16,7 +16,6 @@ function Login() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { singIn } = useAuth();
-
 
   const history = useHistory();
 

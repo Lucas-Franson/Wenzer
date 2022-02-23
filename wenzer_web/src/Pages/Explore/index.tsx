@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Container } from './styles';
 
-const Profile: React.FC = () => {
+const Explorar: React.FC = () => {
   return (
       <Container>
-          Em breve Perfil.
+          Em breve Explorar.
       </Container>
   )
 }
 
-export default Profile;
+export default Explorar;
