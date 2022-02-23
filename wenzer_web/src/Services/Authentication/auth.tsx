@@ -40,9 +40,8 @@ const AuthProvider = ({ children }: any) => {
     }).then((res) => {
       Cookies.remove('WenzerLogged');
       Cookies.remove('WenzerToken');
-      console.log(res.data);
+      console.log(res.data.message);
       setLogged(false);
-      history.push("/welcome");
     })
     .catch((err) => {
       toastfyError(err.message);

@@ -22,6 +22,9 @@ function Login() {
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
+
+    setIsLoading(true);
+
     const data = {
       email, password
     }
@@ -35,7 +38,7 @@ function Login() {
       history.push('/');
     })
     .catch((err) => {
-      toastfyError(err.message);
+      toastfyError(err.response.data.mensagem);
       setIsLoading(false);
     });
   }
@@ -61,7 +64,7 @@ function Login() {
           {isLoading ? (
               <CircularProgress size={16} color="inherit" />
             ) : (
-              "Cadastrar"
+              "Login"
             )}
         </button>
       </form>
