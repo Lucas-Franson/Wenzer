@@ -37,14 +37,21 @@ const AuthProvider = ({ children }: any) => {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
-    }).then((res) => {
+    }).then(() => {
       Cookies.remove('WenzerLogged');
       Cookies.remove('WenzerToken');
-      console.log(res.data.message);
       setLogged(false);
     })
     .catch((err) => {
-      toastfyError(err.message);
+
+      if(err.response.data.mensagem === 'Usuário não está autenticado!') {
+        Cookies.remove('WenzerLogged');
+        Cookies.remove('WenzerToken');
+        setLogged(false);
+        return;
+      }
+      
+      toastfyError(err.response.data.mensagem);
     });
 
   }

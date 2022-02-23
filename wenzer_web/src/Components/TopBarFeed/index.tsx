@@ -1,13 +1,15 @@
 import { memo, ReactElement, useState, useRef } from "react";
 import { Button } from "@material-ui/core";
 import { BsSun, BsMoon } from "react-icons/bs";
-import { MdMenu } from "react-icons/md";
+import { MdAddCircle, MdMenu, MdPlusOne } from "react-icons/md";
 import { useTheme } from "../../Styles/Hook/theme";
 import WenzerLogo from "../../Utils/image/wenzer_web.svg";
-import { Container, ContentMenu, ContainerMenu, HeaderAvatar } from "./styles";
+import { Container, ContentMenu, ContainerMenu } from "./styles";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Avatar from "./components/Avatar";
 import Notify from "./components/Notify";
+import { Link } from 'react-router-dom';
+import InputSearch from "../InputSearch";
 
 function TopBarFeed(): ReactElement {
   const { toggleTheme, theme } = useTheme();
@@ -34,7 +36,7 @@ function TopBarFeed(): ReactElement {
     >
       <ContentMenu>
         <div>
-          <a href="#about">Home</a>
+          <Link to="#about">Home</Link>
         </div>
 
         <div>
@@ -69,33 +71,38 @@ function TopBarFeed(): ReactElement {
 
   return (
     <Container>
+      {/* LOGO WENZER -------------------------------------------------------------------- */}
       <header>
-        <a href="/welcome">
+        <Link to="/">
           <img src={WenzerLogo} alt="Wenzer" />
-        </a>
-        <h1>Wenzer</h1>
+        </Link>
+        <InputSearch placeholder="Pesquisar" onChange={() => {}}/>
       </header>
 
+      {/* OPÇÕES -------------------------------------------------------------------- */}
       <div>
-        <a href="/welcome/#about">Home</a>
-        <a href="/welcome/#networking">Em Alta</a>
-        <a href="/welcome/#project">Meus Projetos</a>
+        <Link to="/">Home</Link>
+        <Link to="/Explore">Explorar</Link>
+        <Link to="/Projects">Projetos</Link>
       </div>
 
-      <div>
+      {/* BUTTONS -------------------------------------------------------------------- */}
+      <div className="buttons">
         <Avatar />
-        
-        <Notify />
 
-        <Button onClick={handleChangeTheme}>
-          {darkTheme ? (
-            <BsSun size={25} className="iconTheme" />
-          ) : (
-            <BsMoon size={25} className="iconTheme" />
-          )}
-        </Button>
+        <Notify />
+        
+        <MdAddCircle size={25} style={{cursor: 'pointer'}} />
+  
+        {darkTheme ? (
+          <BsSun size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
+        ) : (
+          <BsMoon size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
+        )}
+    
       </div>
 
+      {/* MOBILE -------------------------------------------------------------------- */}
       <div className="IconMenuMobile">
         <Button>
           <MdMenu size={25} className="iconTheme" onClick={handleOpenMenu} />

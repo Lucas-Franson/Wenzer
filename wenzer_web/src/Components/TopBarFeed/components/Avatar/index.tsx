@@ -38,8 +38,8 @@ export default function FadeMenu() {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem style={{marginRight: '15px', gap: '10px'}} onClick={MoveToPerfil}> <MdPerson size={22} />  Perfil</MenuItem>
-          <MenuItem style={{marginRight: '15px', gap: '10px'}} onClick={singOut}> <MdExitToApp/> Logout</MenuItem>
+          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={MoveToPerfil}> <MdPerson size={22} />  Perfil</MenuItem>
+          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={singOut}> <MdExitToApp/> Logout</MenuItem>
         </Menu>
       </div>
     );

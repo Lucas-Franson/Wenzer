@@ -37,7 +37,7 @@ function Login() {
           type="Email"
           placeholder="E-mail"
           required={true}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: any) => setEmail(e.target.value)}
         />
         <button type="submit">
           {isLoading ? (

@@ -6,7 +6,7 @@ import { Container } from "./styles";
 export default function Feed(): ReactElement {
     return (
         <Container>
-            Feed aqui haha
+            Em breve!
         </Container>
     )
 }

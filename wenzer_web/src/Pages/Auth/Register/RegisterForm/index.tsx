@@ -62,13 +62,13 @@ function Login() {
           type="text"
           placeholder="Nome"
           required={true}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: any) => setName(e.target.value)}
         />
         <InputText
           type="Email"
           placeholder="E-mail"
           required={true}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: any) => setEmail(e.target.value)}
         />
         <InputPassword
           placeholder="Senha"

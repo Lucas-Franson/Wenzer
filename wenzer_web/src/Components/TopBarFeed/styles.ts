@@ -19,6 +19,7 @@ export const Container = styled.div`
   header {
     display: flex;
     align-items: center;
+    justify-content: center;
 
     padding-left: 3rem;
 
@@ -94,6 +95,13 @@ export const Container = styled.div`
         background: ${(props) => props.theme.colors.primaryLight};
       }
     }
+  }
+
+  .buttons {
+    margin-right: 3rem;
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
   }
 
   .IconMenuMobile {
