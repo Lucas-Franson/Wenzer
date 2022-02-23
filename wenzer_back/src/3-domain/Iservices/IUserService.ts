@@ -5,6 +5,7 @@ export interface IUserService {
     findUserByEmail(email: string): Promise<User>;
     findUserByToken(token: string): Promise<User>;
     create(user: User): void;
+    update(user: User): void;
     updateUserNewPwd(user: User, pwd: string): void;
     sendEmailOfVerification(user: User): void;
     sendEmailOfResetPassword(user: User): void;
