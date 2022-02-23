@@ -50,7 +50,7 @@ export default class UserService implements IUserService {
 
     async sendEmailOfResetPassword(user: User) {
         const token = createTokenJWT(user.id, [1, 'h']);
-        const route = '/recover-password/';
+        const route = '/recover-password?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
 
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
