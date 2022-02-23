@@ -15,6 +15,7 @@ const queryPromise = (sql: any) =>{
                 return reject(error);
             }
             return resolve(results);
+            conexao.release();
         });
     });
 };

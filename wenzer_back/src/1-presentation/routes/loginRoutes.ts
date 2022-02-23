@@ -186,23 +186,23 @@ routes.options(
         '/api/cadastrar', 
         '/api/login', 
         '/api/recupera-senha', 
-        '/api/alterar-senha',
-        '/api/confirmar-email-marketing',
+        '/api/alterar-senha/:token',
+        '/api/confirmar-email-marketing/:token',
         '/api/salvar-email-marketing'
     ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['POST', 'GET']);
-    res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'Authorization' ]);
+    res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);
     res.status(204);
     res.end();
 })
 
 routes.options(
     [
-        '/api/verifica-email',
+        '/api/verifica-email/:token',
         '/api/logout'
     ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', 'GET');
-    res.set('Access-Control-Allow-Headers', [ 'Content-Type', 'auth' ]);
+    res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);
     res.status(204);
     res.end();
 })
