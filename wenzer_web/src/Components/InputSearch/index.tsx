@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement } from 'react';
+import { ChangeEvent, ReactElement, InputHTMLAttributes } from 'react';
 import { MdSearch } from "react-icons/md";
 import { Container } from './styles';
 
@@ -9,7 +9,7 @@ interface IInputText {
     hasError?: boolean;
 }
 
-function InputSearch(props: IInputText): ReactElement {
+function InputSearch(props: IInputText & InputHTMLAttributes<HTMLInputElement> ): ReactElement {
   const { placeholder = '', onChange, required = false, hasError = false} = props;
 
   return (
@@ -20,12 +20,10 @@ function InputSearch(props: IInputText): ReactElement {
         required={required}
         onChange={onChange}
       />
-     
         <MdSearch
           size={35}
           className="iconInput"
         />
-  
     </Container>
   );
 }

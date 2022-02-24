@@ -1,16 +1,19 @@
 import { memo, ReactElement, useState, useRef } from "react";
-import { Button } from "@material-ui/core";
-import { BsSun, BsMoon } from "react-icons/bs";
-import { MdAddCircle, MdMenu } from "react-icons/md";
-import { useTheme } from "../../Styles/Hook/theme";
-import WenzerLogo from "../../Utils/image/wenzer_web.svg";
-import { Container, ContentMenu, ContainerMenu } from "./styles";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Avatar from "./components/Avatar";
 import Notify from "./components/Notify";
-import { Link } from 'react-router-dom';
 import InputSearch from "../InputSearch";
 import { useAuth } from "../../Services/Authentication/auth";
+import { Link } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import { BsSun, BsMoon } from "react-icons/bs";
+import { AiFillFire, AiFillHome, AiFillProject} from "react-icons/ai";
+import { MdAddCircle, MdMenu } from "react-icons/md";
+import { Button } from "@material-ui/core";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import WenzerLogo from "../../Utils/image/wenzer_web.svg";
+import { Container, ContentMenu, ContainerMenu } from "./styles";
+import { useTheme } from "../../Styles/Hook/theme";
 
 function TopBarFeed(): ReactElement {
   const { toggleTheme, theme } = useTheme();
@@ -71,25 +74,51 @@ function TopBarFeed(): ReactElement {
 
       {/* OPÇÕES -------------------------------------------------------------------- */}
       <div className="opcoes">
-        <Link to="/">Home</Link>
-        <Link to="/Explore">Explorar</Link>
-        <Link to="/Projects">Projetos</Link>
+        <Tooltip title="Página Inicial" placement="bottom" >
+          <Link to="/">
+            <AiFillHome size={30}/> 
+          </Link>
+        </Tooltip>
+
+        <Tooltip title="Em Alta" placement="bottom" >
+          <Link to="/Explore">
+            <AiFillFire size={30}/> 
+          </Link>
+        </Tooltip>
+
+        <Tooltip title="Meus Projetos" placement="bottom" >
+          <Link to="/Projects">
+            <AiFillProject size={30} />
+          </Link>
+        </Tooltip>
       </div>
 
       {/* BUTTONS -------------------------------------------------------------------- */}
       <div className="buttons">
-        <Avatar />
+        <Tooltip title="Novo Projeto" placement="bottom" >
+          <Link to="" >
+            <MdAddCircle size={25} style={{cursor: 'pointer'}} />
+          </Link>
+        </Tooltip>
 
-        <Notify />
-        
-        <MdAddCircle size={25} style={{cursor: 'pointer'}} />
-  
-        {darkTheme ? (
-          <BsSun size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
-        ) : (
-          <BsMoon size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
-        )}
-    
+        <Tooltip title="Notificação" placement="bottom" >
+          <Link to="">         
+            <Notify />
+          </Link>
+        </Tooltip>
+
+        <Tooltip title="Tema" placement="bottom">
+          <Link to="" >
+            {darkTheme ? (
+            <BsSun size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
+            ) : (
+              <BsMoon size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
+              )
+            }
+          </Link>
+        </Tooltip>
+
+        <Avatar />
       </div>
 
       {/* MOBILE -------------------------------------------------------------------- */}

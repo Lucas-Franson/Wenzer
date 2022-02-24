@@ -13,10 +13,6 @@ export const Container = styled.div`
     color: ${(props) => props.theme.colors.white.light};
     border-radius: 0.5rem;
     background-color: ${(props) => props.theme.colors.background};
-
-    @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
-    display: none;
-  }
   }
 
   .iconInput {

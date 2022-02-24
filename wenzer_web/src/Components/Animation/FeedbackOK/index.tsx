@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import Lottie from 'react-lottie';
 import { Container } from './styles';
 import animationData from './feedbackOk.json';

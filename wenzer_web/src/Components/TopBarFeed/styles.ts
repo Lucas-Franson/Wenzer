@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Avatar } from '@material-ui/core';
+import { MediaQueries } from '../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 100%;
@@ -8,6 +9,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
 
   background-color: ${(props) => props.theme.colors.secondary};
   box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.15);
@@ -110,10 +112,11 @@ export const Container = styled.div`
 
   @media (max-width: 1100px) {
     header {
-      display: flex;
-      align-items: center;
-
       padding-left: 1rem;
+
+      input, svg {
+        display: none;
+      }
     }
 
     .buttons {
@@ -123,7 +126,24 @@ export const Container = styled.div`
     .IconMenuMobile {
       display: flex;
       align-items: center;
-      padding-right: 0.5rem;
+    }
+  }
+
+  .opcoes {
+    gap: 60px;
+
+    > a {
+      display: flex;
+      flex-direction: column;
+      font-size: 1rem;
+    }
+
+    @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
+      gap: 0;
+
+      > a > span {
+        display: none;
+      }
     }
   }
 `;
