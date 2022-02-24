@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { MediaQueries } from '../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 100%;

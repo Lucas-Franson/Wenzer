@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import Lottie from 'react-lottie';
 import { Container } from './styles';
-import animationData from './noPostHere.json';
 import loadingData from './loading-data.json';
 
 export default function NoPostHere(): ReactElement {

@@ -8,7 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import { BsSun, BsMoon } from "react-icons/bs";
 import { AiFillFire, AiFillHome, AiFillProject} from "react-icons/ai";
-import { MdAddCircle, MdMenu } from "react-icons/md";
+import { MdAddCircle, MdMenu, MdExitToApp, MdPerson } from "react-icons/md";
 import { Button } from "@material-ui/core";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import WenzerLogo from "../../Utils/image/wenzer_web.svg";
@@ -21,8 +21,9 @@ function TopBarFeed(): ReactElement {
     theme.title === "dark" ? true : false
   );
   const [openSideMenu, setOpenSideMenu] = useState(false);
+
   const openMenuRef = useRef(false);
-  const { singOut } = useAuth();
+  const { singOut, handleOpenModalPost } = useAuth();
 
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
@@ -41,22 +42,29 @@ function TopBarFeed(): ReactElement {
     >
       <ContentMenu>
         <div>
-          <Link to="/projects">Perfil</Link>
+          <Link to="/projects"> <MdPerson size={25} /> <p>Perfil</p></Link>
         </div>
 
         <div>
-          <Link to="" onClick={singOut} >Sair</Link>
+          <Link to="" onClick={handleOpenModalPost} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
         </div>
 
-
         <div>
-          <Button onClick={handleChangeTheme}>
-            {darkTheme ? (
-              <BsSun size={25} className="iconTheme" />
-            ) : (
+          {darkTheme ? (
+            <Link to="" onClick={handleChangeTheme}>
+              <BsSun size={25} className="iconTheme" /> 
+              <p>Tema</p>
+            </Link>
+          ) : (
+            <Link to="" onClick={handleChangeTheme}>
               <BsMoon size={25} className="iconTheme" />
-            )}
-          </Button>
+              <p>Tema</p>
+            </Link>
+          )}
+        </div>
+
+        <div>
+          <Link to="" onClick={singOut}> <MdExitToApp size={25} /> <p>Sair</p></Link>
         </div>
       </ContentMenu>
     </ContainerMenu>
@@ -86,9 +94,15 @@ function TopBarFeed(): ReactElement {
           </Link>
         </Tooltip>
 
-        <Tooltip title="Meus Projetos" placement="bottom" >
+        <Tooltip title="Meus Projetos" placement="bottom" className="mobileProject" >
           <Link to="/Projects">
             <AiFillProject size={30} />
+          </Link>
+        </Tooltip>
+
+        <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
+          <Link to="">         
+            <Notify />
           </Link>
         </Tooltip>
       </div>
@@ -96,7 +110,7 @@ function TopBarFeed(): ReactElement {
       {/* BUTTONS -------------------------------------------------------------------- */}
       <div className="buttons">
         <Tooltip title="Novo Projeto" placement="bottom" >
-          <Link to="" >
+          <Link to="" onClick={handleOpenModalPost}>
             <MdAddCircle size={25} style={{cursor: 'pointer'}} />
           </Link>
         </Tooltip>
@@ -138,6 +152,7 @@ function TopBarFeed(): ReactElement {
           </SwipeableDrawer>
         </div>
       </div>
+
     </Container>
   );
 }

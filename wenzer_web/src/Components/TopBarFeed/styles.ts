@@ -5,6 +5,7 @@ import { MediaQueries } from '../../Constants/MediaSettings';
 export const Container = styled.div`
   width: 100%;
   height: 4.5rem;
+  z-index: 99;
 
   display: flex;
   justify-content: space-between;
@@ -138,8 +139,20 @@ export const Container = styled.div`
       font-size: 1rem;
     }
 
+    .mobileNotify {
+      display: none;
+    }
+
     @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
       gap: 0;
+
+      .mobileNotify {
+        display: block;
+      }
+
+      .mobileProject {
+        display: none;
+      }
 
       > a > span {
         display: none;
@@ -155,8 +168,6 @@ export const ContentMenu = styled.div`
   align-items: flex-start;
   height: 100vh;
 
-  margin-right: 25px;
-
   background-color: ${(props) => props.theme.colors.background};
   gap: 10px;
 
@@ -164,18 +175,26 @@ export const ContentMenu = styled.div`
     margin-top: 80px;
   }
 
-  div {
-    width: 100px;
+  > div {
+    width: 200px;
     height: 50px;
-    border-radius: 8px;
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    justify-content: flex-start;
+
     margin-left: 15px;
+    border-bottom: 1px solid ${props => props.theme.colors.tertiary};
 
     a {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      font-weight: 400;
+
       text-decoration: none;
       color: ${(props) => props.theme.colors.white.light};
+      gap: 15px;
 
       &:hover {
         color: ${(props) => props.theme.colors.primary};
@@ -218,8 +237,9 @@ export const ContentMenu = styled.div`
 `;
 
 export const ContainerMenu = styled.div`
-  width: 280px;
+  width: 250px;
   background-color: ${(props) => props.theme.colors.background};
+  height: auto;
 `;
 
 export const HeaderAvatar = styled(Avatar)`

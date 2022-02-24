@@ -11,6 +11,9 @@ interface IAuthContext {
   logged: boolean;
   singIn(token: string): void;
   singOut(): void;
+  openModalPost: boolean;
+  setOpenModalPost(state: boolean): void;
+  handleOpenModalPost(): void;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
@@ -21,6 +24,12 @@ const AuthProvider = ({ children }: any) => {
 
       return !!isLogged;
   });
+
+  const [openModalPost, setOpenModalPost] = useState(false);
+
+  const handleOpenModalPost = () => {
+    setOpenModalPost(prev => !prev);
+  };
 
   function singIn(token: string) {
     Cookies.set('WenzerLogged', 'true');
@@ -56,7 +65,10 @@ const AuthProvider = ({ children }: any) => {
       value={{
         logged,
         singIn,
-        singOut
+        singOut,
+        openModalPost,
+        setOpenModalPost,
+        handleOpenModalPost
       }}
     >
       {children}
