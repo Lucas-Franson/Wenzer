@@ -82,6 +82,14 @@ export const ContainerModal = styled.div`
                         opacity: 0.9;
                     }  
                 }
+
+                > .imagePost {
+                    > img {
+                        height: 50px;
+                        object-fit: contain;
+                        border-radius: 8px;
+                    }
+                }
             }
         }
     }

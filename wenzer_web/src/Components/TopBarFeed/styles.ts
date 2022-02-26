@@ -25,10 +25,10 @@ export const Container = styled.div`
     justify-content: center;
 
     padding-left: 3rem;
+    font-size: 1rem;
 
     h1 {
       font-weight: 400;
-      font-size: 1.5rem;
       color: ${(props) => props.theme.colors.white.light};
     }
 
@@ -239,7 +239,6 @@ export const ContentMenu = styled.div`
 export const ContainerMenu = styled.div`
   width: 250px;
   background-color: ${(props) => props.theme.colors.background};
-  height: auto;
 `;
 
 export const HeaderAvatar = styled(Avatar)`

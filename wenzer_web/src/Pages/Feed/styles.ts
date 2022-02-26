@@ -2,13 +2,20 @@ import styled from 'styled-components';
 import { Avatar } from '@material-ui/core';
 
 export const Container = styled.div`
-  width: min(92vw, 650px);
+  width: min(92vw, 600px);
   display: flex;
   flex-direction: column;
   color: ${(props) => props.theme.colors.white.light};
   justify-content: center;
   align-items: center;
   margin: auto;
+
+  font-size: 1rem;
+  font-weight: 400;
+  
+  @media (max-width: 1490px){
+    width: min(92vw, 450px);
+  }
 `;
 
 export const ContainerNewPost = styled.div`

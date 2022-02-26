@@ -34,6 +34,7 @@ function TopBarFeed(): ReactElement {
     setOpenSideMenu(!openSideMenu);
   }
 
+  /* MENU SIDEBAR MOBILE RESPONSIVE -------------------------------------------------------------------- */
   const sideBarMobile = () => (
     <ContainerMenu
       role="presentation"
@@ -77,7 +78,7 @@ function TopBarFeed(): ReactElement {
         <Link to="/">
           <img src={WenzerLogo} alt="Wenzer" />
         </Link>
-        <InputSearch placeholder="Pesquisar" onChange={() => {}}/>
+        <InputSearch placeholder="Pesquisar no Wenzer" onChange={() => {}}/>
       </header>
 
       {/* OPÇÕES -------------------------------------------------------------------- */}
@@ -89,25 +90,25 @@ function TopBarFeed(): ReactElement {
         </Tooltip>
 
         <Tooltip title="Em Alta" placement="bottom" >
-          <Link to="/Explore">
+          <Link to="/explore">
             <AiFillFire size={30}/> 
           </Link>
         </Tooltip>
 
         <Tooltip title="Meus Projetos" placement="bottom" className="mobileProject" >
-          <Link to="/Projects">
+          <Link to="/projects">
             <AiFillProject size={30} />
           </Link>
         </Tooltip>
 
         <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
-          <Link to="">         
+          <Link to="/notify">         
             <Notify />
           </Link>
         </Tooltip>
       </div>
 
-      {/* BUTTONS -------------------------------------------------------------------- */}
+      {/* BUTTONS ACTION-------------------------------------------------------------------- */}
       <div className="buttons">
         <Tooltip title="Novo Projeto" placement="bottom" >
           <Link to="" onClick={handleOpenModalPost}>
@@ -116,7 +117,7 @@ function TopBarFeed(): ReactElement {
         </Tooltip>
 
         <Tooltip title="Notificação" placement="bottom" >
-          <Link to="">         
+          <Link to="/notify">         
             <Notify />
           </Link>
         </Tooltip>

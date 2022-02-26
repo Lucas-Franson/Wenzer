@@ -116,20 +116,20 @@ function Welcome(): ReactElement {
           <main>
             <CardProject
               title="Projeto Gratuito"
-              description="Publique sua ideia de modo colaborativo para ganhar experiencia e network."
+              description="Publique sua ideia em modo colaborativo para ganhar experiência e fazer network."
             >
               <FaLightbulb size={80} />
             </CardProject>
 
             <CardProject
               title="Projeto Pago"
-              description="Você pode pagar para alguem ou uma equipe desenvolver suas ideias direto pelo Wenzer."
+              description="Você pode pagar para alguém ou uma equipe desenvolver suas idéias direto pelo Wenzer."
             >
               <FaHandHoldingUsd size={80} />
             </CardProject>
             <CardProject
               title="Projeto Privado"
-              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas selecionadas."
+              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas que você segue."
             >
               <FaLock size={80} />
             </CardProject>
