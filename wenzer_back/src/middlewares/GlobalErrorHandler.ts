@@ -15,7 +15,11 @@ export default function GlobalErrorHandler(app: any) {
             status = 403;
         }
 
-        if (err.name === 'JsonWebTokenError' || err.name === 'ValideSeuEmail' || err.name === 'UsuarioJaCadastrado') {
+        if (err.name === 'JsonWebTokenError' || 
+            err.name === 'ValideSeuEmail' || 
+            err.name === 'UsuarioJaCadastrado' ||
+            err.name === 'ErroParametro'
+        ) {
             status = 400;
         }
         

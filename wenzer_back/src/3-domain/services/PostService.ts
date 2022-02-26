@@ -1,4 +1,5 @@
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
+import { Post } from "../entities/post";
 import IPostService from "../Iservices/IPostService";
 
 

@@ -26,11 +26,11 @@ export default class EmailMarketingService implements IEmailMarketingService {
     }
 
     async validateEmailMarketing(emailMarketing: EmailMarketing) {
-        if (emailMarketing.emailValid) {
+        if (emailMarketing.emailIsValid()) {
             throw new Error('Email já validado.');
         }
 
-        emailMarketing.emailValid = true; 
+        emailMarketing.validateEmail();
         await this.emailMarketingRepository.update(emailMarketing);
     }
 

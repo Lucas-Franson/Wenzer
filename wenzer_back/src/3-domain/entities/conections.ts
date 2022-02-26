@@ -1,17 +1,21 @@
-import { IDomainBase } from './IdomainBase';
-import { v4 as uuid } from 'uuid';
-const util = require('util');
+import DomainBase from './domainBase';
 
-export class Connections implements IDomainBase {
+export class Connections extends DomainBase {
 
-    id: string = '';
-    created_at: Date = new Date();
-    updated_at: Date = new Date();
+    constructor(
+        public idUser: string,
+        public idFollower: string,
+        public accepted: boolean,
+        public id: string = '',
+        public created_at: Date = new Date(),
+        public updated_at: Date = new Date()
+    ) {
+            
+        super(id, created_at, updated_at);
+    }
 
-    constructor() {
-        if (!this.id) {
-            this.id = uuid();
-        }
+    validateObject = () => {
+        return true;
     }
 
 }

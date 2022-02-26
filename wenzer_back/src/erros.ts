@@ -27,9 +27,17 @@ class ValideSeuEmail extends Error {
     }
 }
 
+class ErroParametro extends Error {
+    constructor(mensagem: string) {
+        super(mensagem);
+        this.name = 'ErroParametro';
+    }
+}
+
 export {
     UsuarioJaCadastrado,
     NaoEncontrado,
     NaoAutorizado,
-    ValideSeuEmail
+    ValideSeuEmail,
+    ErroParametro
 }
