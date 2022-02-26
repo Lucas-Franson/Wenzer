@@ -1,17 +1,19 @@
-import { v4 as uuid } from 'uuid';
-import { IDomainBase } from './IdomainBase';
+import DomainBase from './domainBase';
 
-export class Participants implements IDomainBase {
+export class Participants extends DomainBase {
 
-    id: string = '';
-    active: boolean = false;
-    created_at: Date = new Date();
-    updated_at: Date = new Date();
+    constructor(
+        public active: boolean,
+        public id: string = '',
+        public created_at: Date = new Date(),
+        public updated_at: Date = new Date()
+    ) {
 
-    constructor() {
-        if (!this.id) {
-            this.id = uuid();
-        }
+        super(id, created_at, updated_at);
     }
 
+    validateObject = () => {
+        return true;
+    }
+    
 }

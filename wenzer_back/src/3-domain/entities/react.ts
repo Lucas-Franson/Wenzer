@@ -1,17 +1,19 @@
-import { v4 as uuid } from 'uuid';
-import { IDomainBase } from './IdomainBase';
+import DomainBase from './domainBase';
 
-export class React implements IDomainBase {
+export class React extends DomainBase {
 
-    id: string = '';
-    type: string = '';
-    created_at: Date = new Date();
-    updated_at: Date = new Date();
+    constructor(
+        public type: string,
+        public id: string = '',
+        public created_at: Date = new Date(),
+        public updated_at: Date = new Date()
+    ) {
+        
+        super(id, created_at, updated_at);
+    }
 
-    constructor() {
-        if (!this.id) {
-            this.id = uuid();
-        }
+    validateObject = () => {
+        return true;
     }
 
 }

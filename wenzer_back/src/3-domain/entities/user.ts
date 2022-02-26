@@ -1,23 +1,39 @@
-import { v4 as uuid } from 'uuid';
-import { IDomainBase } from './IdomainBase';
+import DomainBase from './domainBase';
 
-export class User implements IDomainBase {
+export class User extends DomainBase {
 
-    id: string = '';
-    name: string = '';
-    email: string = '';
-    emailValid: boolean = false;
-    password: string = '';
-    created_at: Date = new Date();
-    updated_at: Date = new Date();
+    constructor(
+        public name: string,
+        public email: string, 
+        public password: string,
+        public title: string = '',
+        public photo: Blob = new Blob(),
+        public bio: string = '',
+        public emailValid: boolean = false,
+        public id: string = '',
+        public created_at: Date = new Date(),
+        public updated_at: Date = new Date()
+    ) {
+        
+        super(id, created_at, updated_at);
+    }
 
-    constructor(name: string = "", email: string = "", password: string = "") {
-        if (!this.id) {
-            this.id = uuid();
-        }
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    emailIsValid = () => { return this.emailValid; }
+
+    getName = () => { return this.name }
+
+    getEmail = () => { return this.email }
+
+    getPassword = () => { return this.password }
+
+    setPassword = (pwd: string) => { this.password = pwd }
+
+    validateEmail = () => { this.emailValid = true }
+
+    invalidateEmail = () => { this.emailValid = false }
+
+    validateObject = () => {
+        return true;
     }
     
 }

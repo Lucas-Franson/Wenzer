@@ -3,6 +3,7 @@ import { createTokenJWT } from '../../1-presentation/utils/jwt/token';
 import { IUserService } from '../../3-domain/Iservices/IUserService';
 import { IEmailMarketingService } from '../../3-domain/Iservices/IEmailMarketingService';
 import { UserRegisterViewModel } from '../../1-presentation/viewmodel/UserRegisterViewModel';
+import { User } from '../../3-domain/entities/user';
 
 export default class LoginAppService {
 
@@ -12,21 +13,32 @@ export default class LoginAppService {
     async register(userViewModel: UserRegisterViewModel) {
         try {
             var userFound = await this.userService.findUserByEmail(userViewModel.getEmail());
-            if (userFound && userFound.emailValid) {
+
+            if (userFound && userFound.emailIsValid()) {
                 throw new UsuarioJaCadastrado("Usuário já cadastrado na plataforma.");
             }
 
-            var user = userViewModel.convertToUserEntity();
-            
-            if (userFound && !userFound.emailValid) {
-                user.id = userFound.id;
-                this.userService.update(user);
+            let user = userViewModel.convertToUserEntity();
+
+            if (userFound && !userFound.emailIsValid()) {
+                user = new User(userViewModel.getName(),
+                                userViewModel.getEmail(),
+                                userViewModel.getPassword(),
+                                userFound.title,
+                                userFound.photo,
+                                userFound.bio,
+                                false,
+                                userFound.getId(),
+                                userFound.getCreatedAt(),
+                                new Date()
+                                );
+                this.userService.updateUserNewPwd(user, userViewModel.getPassword());
             } else {
                 this.userService.create(user);
             }
             
             this.userService.sendEmailOfVerification(user);
-            return user.id;
+            return user.getId();
         } catch(err) {
             // LOG
             throw err;
@@ -34,21 +46,22 @@ export default class LoginAppService {
     }
 
     async verifyUser({ email, password }: any) {
-        const userFound = await this.userService.findUserByEmail(email);
-        if (!userFound) {
+        let found = await this.userService.findUserByEmail(email);
+
+        if (!found) {
             throw new NaoEncontrado('Email ou senha não encontrados.');
         }
 
-        var valid = await this.userService.validPasswordOfUser(password, userFound.password);
+        var valid = await this.userService.validPasswordOfUser(password, found.getPassword());
         if (!valid) {
             throw new NaoAutorizado('Email ou senha não encontrados.');
         }
 
-        if (!userFound.emailValid) {
+        if (!found.emailIsValid()) {
             throw new ValideSeuEmail("Valide seu email para continuar.");
         }
 
-        const accessToken = createTokenJWT(userFound.id, [1, 'h']);
+        const accessToken = createTokenJWT(found.getId(), [1, 'h']);
 
         return accessToken;
     }
@@ -91,7 +104,7 @@ export default class LoginAppService {
             throw new NaoEncontrado('Email ou senha não encontrados.');
         }
 
-        const valid = await this.userService.validPasswordOfUser(password, user.password);
+        const valid = await this.userService.validPasswordOfUser(password, user.getPassword());
         if (valid) {
             throw new Error("Essa senha é a mesma da sua conta atual.");
         }
@@ -101,7 +114,7 @@ export default class LoginAppService {
 
     async salvarEmailMarketing(email: string) {
         var emailMarketing = await this.emailMarketingService.findEmailMarketing(email);
-        if(emailMarketing?.id) throw new NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
+        if(emailMarketing?.getId()) throw new NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
         
         this.emailMarketingService.create(email);
     }

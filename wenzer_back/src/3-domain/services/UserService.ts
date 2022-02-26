@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { createTokenJWT, verifyTokenJWT } from "../../1-presentation/utils/jwt/token";
 import { EmailVerify } from "../utils/email/EmailVerify";
 import { EmailResetPassword } from "../utils/email/EmailResetPassword";
+import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
 
 export default class UserService implements IUserService {
 
@@ -18,38 +19,52 @@ export default class UserService implements IUserService {
 
     async findUserByToken(token: string) {
         const id = verifyTokenJWT(token);
-        return await this.userRepository.getById(id);
+        return await this.findUserById(id);
+    }
+
+    async findUserById(userId: string) {
+        return await this.userRepository.getById(userId);
     }
 
     async create(user: User) {
-        user.password = await this.generatePasswordHash(user.password);
+        const newPassword = await this.generatePasswordHash(user.getPassword());
+        user.setPassword(newPassword);
         await this.userRepository.insert(user);
     }
 
-    async update(user: User) {
-        user.password = await this.generatePasswordHash(user.password);
+    async updateUserByProfile(user: User, profile: ProfileViewModel) {
+        user.name = profile.getName();
+        user.bio = profile.getBio();
+        user.title = profile.getTitle();
+        user.photo = profile.getPhoto();
+
+        await this.updateUser(user);
+    }
+
+    async updateUser(user: User) {
         await this.userRepository.update(user);
     }
 
     async updateUserNewPwd(user: User, pwd: string) {
-        user.password = await this.generatePasswordHash(pwd);
+        const newPassword = await this.generatePasswordHash(pwd);
+        user.setPassword(newPassword);
         this.userRepository.update(user);
     }
 
     async sendEmailOfVerification(user: User) {
-        const token = createTokenJWT(user.id, [1, 'h']);
+        const token = createTokenJWT(user.getId(), [1, 'h']);
         const route = '/login?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
         
         if (process.env.ENVIRONMENT === 'desenv') console.log(address);
 
-        const emailVerify = new EmailVerify(user.email);
+        const emailVerify = new EmailVerify(user.getEmail());
         await emailVerify.prepareHTML(address);
         emailVerify.sendEmail();
     }
 
     async sendEmailOfResetPassword(user: User) {
-        const token = createTokenJWT(user.id, [1, 'h']);
+        const token = createTokenJWT(user.getId(), [1, 'h']);
         const route = '/recover-password?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
 
@@ -67,11 +82,11 @@ export default class UserService implements IUserService {
     }
 
     async validateUserEmail(user: User) {
-        if (user.emailValid) {
+        if (user.emailIsValid()) {
             throw new Error('Email já validado.');
         }
 
-        user.emailValid = true;
+        user.validateEmail();
         await this.userRepository.update(user);
     }
 

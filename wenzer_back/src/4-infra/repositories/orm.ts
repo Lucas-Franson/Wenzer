@@ -1,8 +1,9 @@
 import { IOrm } from "../irepositories/Iorm";
 import { conexao, queryPromise } from '../dbContext/conexao';
+import DomainBase from "../../3-domain/entities/domainBase";
 
-export class Orm<T extends { id: string }> implements IOrm<T> {
-    async get(whereClause: string): Promise<T> {
+export class Orm<T extends DomainBase> implements IOrm<T> {
+    async get(whereClause: string): Promise<T | null> {
         const tableName = this.constructor["name"].replace("Repository", "");
         const sql = `SELECT * FROM ${tableName} ${whereClause}`;
         let result: any = await queryPromise(sql);
@@ -14,7 +15,7 @@ export class Orm<T extends { id: string }> implements IOrm<T> {
         let result: any = await queryPromise(sql);
         return result;
     }
-    async getById(id: string): Promise<T> {
+    async getById(id: string): Promise<T | null> {
         const tableName = this.constructor["name"].replace("Repository", "");
         const sql = `SELECT * FROM ${tableName} WHERE ID = '${id}' LIMIT 1`;
         let result: any = await queryPromise(sql);
@@ -22,7 +23,7 @@ export class Orm<T extends { id: string }> implements IOrm<T> {
     }
     async insert(object: T): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");
-        if (!this.validateObject(object)) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
+        if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `INSERT INTO ${tableName} SET ?`;
         await conexao.query(sql, object, (err: any) => {
             if (err) throw new Error(err);
@@ -30,10 +31,10 @@ export class Orm<T extends { id: string }> implements IOrm<T> {
     }
     async update(object: T): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");
-        if (!this.validateObject(object)) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
+        if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `UPDATE ${tableName}
                      SET ${this._createSetOfData(object)}
-                     WHERE ID = "${object.id}"`;
+                     WHERE ID = "${object.getId()}"`;
         conexao.query(sql, (err: any) => {
             if (err) throw new Error(err);
         });
@@ -62,13 +63,9 @@ export class Orm<T extends { id: string }> implements IOrm<T> {
     }
     async delete(object: T): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");
-        const sql = `DELETE FROM ${tableName} WHERE ID = ${object.id}`;
+        const sql = `DELETE FROM ${tableName} WHERE ID = ${object.getId()}`;
         conexao.query(sql, (err: any) => {
             if (err) throw new Error(err);
         });
     }
-    async validateObject(object: T): Promise<boolean> {
-        throw Error("Validate Object method not implemented yet.");
-    }
-    
 }

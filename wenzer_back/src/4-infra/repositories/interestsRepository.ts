@@ -1,21 +1,62 @@
 import { Interests } from "../../3-domain/entities/interests";
-import { IOrm } from "../irepositories/Iorm";
 import { Orm } from "./orm";
 import { IInterestsRepository } from "../irepositories/IinterestsRepository";
+import { InterestUser } from "../../3-domain/entities/interestUser";
+import { queryPromise } from "../dbContext/conexao";
 
-export class InterestsRepository extends Orm<Interests> implements IInterestsRepository, IOrm<Interests> {
+export class InterestsRepository extends Orm<Interests> implements IInterestsRepository {
     
-    async validateObject(object: Interests):Promise<boolean> {
-        let isValid = true;
+    private TABLENAME: string = 'Interests';
 
-        if (object.id == null) {
-            isValid = false;
+    async createLinkToUser(userInterests: InterestUser[]): Promise<void> {
+        
+        let sqlInsertInto = "INSERT INTO InterestUser (id, idInterests, idUser, created_at, updated_at) VALUES ";
+        let sqlValues = "";
+
+        userInterests.forEach((interest: InterestUser) => {
+            sqlValues += sqlValues !== "" ? "," : "";
+            sqlValues += `(
+                ${interest.id.toSql()}, 
+                ${interest.idInterests.toSql()},
+                ${interest.idUser.toSql()},
+                ${interest.created_at.toSql()},
+                ${interest.updated_at.toSql()}
+            )`;
+        });
+
+        if (sqlValues) {
+            sqlInsertInto += sqlValues + ";";
+            await queryPromise(sqlInsertInto);
         }
-
-        if (object.name == null) {
-            isValid = false;
-        }
-
-        return isValid;
     }
+
+    async findLinkUserToInterests(userId: string): Promise<InterestUser[]> {
+        
+        const sql = `SELECT * FROM InterestUser WHERE idUser = ${userId}`;
+        let result: any = await queryPromise(sql);
+        let arrInterestUser: InterestUser[] = [];
+        if (result) {
+            result.array.forEach((interestUser: InterestUser) => {
+                const obj = this.convertToObjectUser(interestUser);
+                if (obj) {
+                    arrInterestUser.push(obj);
+                }
+            });
+        }
+        return arrInterestUser;
+    }
+
+    convertToObjectUser(interest: InterestUser): InterestUser | null {
+        
+        if (!interest) return null;
+
+        return new InterestUser(
+            interest?.idInterests,
+            interest?.idUser,
+            interest?.id,
+            interest?.created_at,
+            interest?.updated_at
+        );
+    }
+    
 }

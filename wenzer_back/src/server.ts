@@ -7,6 +7,8 @@ import { Tabelas } from './4-infra/dbContext/tabelas';
 import swaggerUi from 'swagger-ui-express';
 import GlobalErrorHandler from './middlewares/GlobalErrorHandler';
 import ExposeServices from './middlewares/ExposeServices'; './middlewares/ExposeServices';
+import './extension-method/string';
+import './extension-method/date';
 const swaggerFile = require('./swagger_output.json');
 
 const port = 3333;
@@ -24,8 +26,7 @@ conexao.connect((err: any) => {
             proximo();
         });
 
-        let tabela = new Tabelas();
-        tabela.init(conexao);
+        new Tabelas(conexao);
 
         app.use(express.json());
         app.use(sessions({
@@ -45,3 +46,4 @@ conexao.connect((err: any) => {
         app.listen(port, () => console.log(`Server is running on port ${port}`));
     }
 });
+

@@ -1,19 +1,26 @@
-import { v4 as uuid } from 'uuid';
-import { IDomainBase } from './IdomainBase';
+import DomainBase from './domainBase';
 
-export class EmailMarketing implements IDomainBase {
+export class EmailMarketing extends DomainBase {
 
-    id: string = '';
-    email: string = '';
-    emailValid: boolean = false;
-    created_at: Date = new Date();
-    updated_at: Date = new Date();
+    constructor(
+        public email: string,
+        public emailValid: Boolean = false,
+        public id: string = '',
+        public created_at: Date = new Date(),
+        public updated_at: Date = new Date()
+    ) {
 
-    constructor(email: string = "") {
-        if (!this.id) {
-            this.id = uuid();
-        }
-        this.email = email;
+        super(id, created_at, updated_at);
+    }
+
+    emailIsValid = () => { return this.emailValid }
+
+    validateEmail = () => { this.emailValid = true }
+
+    invalidateEmail = () => { this.emailValid = false }
+
+    validateObject = () => {
+        return true;
     }
 
 }

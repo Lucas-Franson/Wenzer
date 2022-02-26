@@ -28,6 +28,7 @@ export default class LoginController {
         const user = new UserRegisterViewModel(req.body.name, req.body.email, req.body.password);
 
         try {
+            user.validateModel();
             const id = await req.service.loginService.register(user);
 
             return res.status(201).json({ id });
