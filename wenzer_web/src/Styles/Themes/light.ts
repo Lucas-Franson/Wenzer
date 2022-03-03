@@ -14,7 +14,7 @@ export default {
       dark: "#151515",
     },
     black: "#fff",
-    grey: "#F3F2EF",
+    grey: "#979696",
 
     succes: "#07d34f",
     info: "#f7931b",
