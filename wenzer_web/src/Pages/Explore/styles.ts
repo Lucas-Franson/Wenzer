@@ -8,4 +8,6 @@ export const Container = styled.div`
   align-items: center;
   width: 100%;
   height: 80vh;
+
+  padding: 0 10px;
 `;

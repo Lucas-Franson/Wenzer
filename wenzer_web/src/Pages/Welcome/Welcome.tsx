@@ -151,7 +151,7 @@ function Welcome(): ReactElement {
               <span onClick={() => history.push('/login')}>Faça Login</span>
             </section>
             <section>
-              <strong>Siga o Wenzer:</strong>
+              <strong>Segue a gente:</strong>
               <div className="social-media">
                 <a
                   href="https://twitter.com/wenzeroficial"
@@ -185,13 +185,18 @@ function Welcome(): ReactElement {
 
           <footer>
             <span>
-              <a href="##" target="" onClick={handleShowTerms}>
+              <span onClick={handleShowTerms}>
                 Termos e Condições |
-              </a>{" "}
-              <a href="##" target="" onClick={handleShowTerms}>
+              </span>{" "}
+              <span onClick={handleShowTerms}>
                 Politica de Privacidade |
-              </a>{" "}
-              Wenzer 2021 ©
+              </span>{" "}
+              <span>
+               wenzer.help@gmail.com |
+              </span>{" "}
+              <span>
+                Wenzer 2022 ©
+              </span>
             </span>
           </footer>
         </ContainerFooter>

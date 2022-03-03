@@ -33,7 +33,6 @@ function Login() {
     .then((res) => {
       singIn(res.data.token);
       setIsLoading(false);
-      console.log(res.data.token);
       history.push('/');
     })
     .catch((err) => {

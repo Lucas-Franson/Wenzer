@@ -11,6 +11,7 @@ export default class LoginController {
             res.status(200).json({ token: accessToken });
         } catch(err) {
             next(err);
+            console.log(err)
         } 
     }
 

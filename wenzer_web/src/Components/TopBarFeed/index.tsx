@@ -123,7 +123,7 @@ function TopBarFeed(): ReactElement {
         </Tooltip>
 
         <Tooltip title="Tema" placement="bottom">
-          <Link to="" >
+          <Link to="##" >
             {darkTheme ? (
             <BsSun size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
             ) : (

@@ -1,4 +1,5 @@
 import DomainBase from './domainBase';
+import {Blob} from 'node:buffer';
 
 export class User extends DomainBase {
 
@@ -7,7 +8,7 @@ export class User extends DomainBase {
         public email: string, 
         public password: string,
         public title: string = '',
-        public photo: Blob = new Blob(),
+        public photo: Blob = new Blob([]),
         public bio: string = '',
         public emailValid: boolean = false,
         public id: string = '',
