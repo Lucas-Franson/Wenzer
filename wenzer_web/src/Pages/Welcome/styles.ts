@@ -352,6 +352,14 @@ export const ContainerAbout = styled.div`
       height: 100%;
       background-color: ${(props) => props.theme.colors.succes};
     }
+
+    .AboutContent {
+      p {
+        padding: 0 5px;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+    }
   }
 
   @media (max-width: 1100px) {
@@ -531,12 +539,14 @@ export const ContainerFooter = styled.footer`
 
       font-weight: 400;
 
-      a {
+      a, span {
         margin: 0.5rem 0;
         text-decoration: none;
         font-weight: 300;
         font-size: 15px;
         color: ${(props) => props.theme.colors.white.light};
+
+        cursor: pointer;
 
         &:hover {
           color: ${(props) => props.theme.colors.primary};
@@ -553,11 +563,12 @@ export const ContainerFooter = styled.footer`
     font-weight: 300;
     font-size: 0.9rem;
 
-    a {
+    a, span {
       margin: 0.6rem 0;
       text-decoration: none;
       font-weight: 300;
       color: ${(props) => props.theme.colors.white.light};
+      cursor: pointer;
 
       &:hover {
         color: ${(props) => props.theme.colors.primary};

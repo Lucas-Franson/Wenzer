@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect, useRef } from 'react';
+import { ReactElement, useState } from 'react';
 import {
   FaInstagram,
   FaLinkedin,
@@ -10,17 +10,12 @@ import {
   FaArrowUp
 } from "react-icons/fa";
 import WelcomeContext from './context';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-import VipListForm from './components/VipListForm';
-import EmailConfirmed from './components/EmailConfirmed';
 import DialogTermsAndPolicy from '../../Components/DialogTermsPolicy';
 import CardProject from './components/CardProject';
-
 import bg_university from "../../Utils/image/bg_university.svg";
 import bg_about from "../../Utils/image/bg_about.svg";
+import Login from '../Auth/Login/LoginForm';
 
 import {
   ContainerLogin,
@@ -30,71 +25,18 @@ import {
   ContainerFooter,
   Container
 } from "./styles";
-import api from '../../Services/api/api';
-
-type TokenParams = {
-  token: string;
-}
+import { useHistory } from 'react-router-dom';
 
 function Welcome(): ReactElement {
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isTerms, setIsTerms] = useState(false);
-  const params = useParams<TokenParams>();
-  const mountedRef = useRef(true);
-  const token = params.token;
+
+  const history = useHistory();
 
   const initialContext = {
     isEmailConfirmed,
     setIsEmailConfirmed,
   };
- 
-  function toastfySuccess() {
-    return toast.success("E-mail confirmado!", {
-      position: "top-right",
-      autoClose: 3500,
-      closeOnClick: true,
-      pauseOnFocusLoss: true,
-      progress: undefined,
-    });
-  }
-
-   function toastfyWarning() {
-     return toast.warning("Falha ao autenticar seu e-mail, verifique sua caixa de entrada!", {
-       position: "top-right",
-       autoClose: 3500,
-       closeOnClick: true,
-       pauseOnFocusLoss: true,
-       progress: undefined,
-     });
-   }
-
-  useEffect(() => {
-    async function loadTokenEmailMarketing() {
-      let a = window.location.search;
-      let b = new URLSearchParams(a);
-      let c = b.get("token");
-      if (c) {
-        console.log("token: ", token);
-        await api
-          .post(`/api/confirmar-email-marketing/${c}`)
-          .then(() => {
-            setIsEmailConfirmed(true);
-            toastfySuccess();
-            if (!mountedRef.current) return null;
-          })
-          .catch(() => {
-            toastfyWarning();
-          });
-      }
-      setIsEmailConfirmed(false);
-    }
-
-    loadTokenEmailMarketing();
-
-    return () => {
-       mountedRef.current = false;
-    }
-  }, [token]);
 
   function handleShowTerms() {
     setIsTerms(!isTerms);
@@ -105,18 +47,18 @@ function Welcome(): ReactElement {
       <Container>
         <ContainerLogin id="home">
           <header>
-            <h1>Compartilhe experiência, ideias e projetos!</h1>
+            <h1>Compartilhe experiências, ideias e projetos!</h1>
             <h2>
-              Uma plataforma para publicar suas ideias ou participar de
-              projetos, ganhar experiencias em projetos que poderá agregar no
-              seu portifólio.
+              Uma plataforma para ganhar experiencia, publicar suas idéias ou 
+              participar de projetos que poderá agregar para sua vida
+              pessoal ou profissional!
             </h2>
             <a href="#about">
               <button type="button">Saiba mais</button>
             </a>
           </header>
 
-          <main>{!isEmailConfirmed ? <VipListForm /> : <EmailConfirmed />}</main>
+          <main><Login/></main>
         </ContainerLogin>
 
         <ContainerAbout id="about">
@@ -128,10 +70,10 @@ function Welcome(): ReactElement {
               <p>Wenzer é uma rede social para projetos e ideias</p>
               <span>
                 No Wenzer você pode publicar seu projeto ou ideia (ex: um
-                website e-commerce), seja ele colaborativo para você ganhar
+                website e-commerce ou projeto social), seja ele colaborativo para você ganhar
                 experiência encontrando outras pessoas para desenvolver com
                 você, ou cobrando um valor $$ para que alguem desenvolva sua
-                ideia!
+                ideia! No fim todos evoluem juntos!
               </span>
             </div>
           </header>
@@ -140,7 +82,7 @@ function Welcome(): ReactElement {
               <FaAngleDoubleUp size={50} />
             </div>
             <div className="AboutContent">
-              <p>Tenha sua primeira experiêcia em projetos reais!</p>
+              <p>Tenha uma experiêcia real em projetos!</p>
             </div>
             <div className="AboutNone"></div>
           </main>
@@ -151,10 +93,9 @@ function Welcome(): ReactElement {
             <div className="alignLeft">
               <p>Faça conexões e networking!</p>
               <span>
-                Publique seu projeto com tags do seu interesse ou da
-                universidade para encontrar universitários de areas comum com a
-                suas ideias no seu próprio campus! Encontre pessoas com o mesmo
-                interesse que você e expanda seu projeto para o mundo!
+                Publique seu projeto com tags do seu interesse ou da sua
+                universidade ou empresa para encontrar pessoas de áreas comum com a
+                suas ideias! Se conecte e expanda seu projeto para o mundo!
               </span>
             </div>
             <div>
@@ -174,21 +115,21 @@ function Welcome(): ReactElement {
           </header>
           <main>
             <CardProject
-              title="Projeto Gratuito!"
-              description="Publique sua ideia de modo colaborativo para ganhar experiencia!"
+              title="Projeto Gratuito"
+              description="Publique sua ideia em modo colaborativo para ganhar experiência e fazer network."
             >
               <FaLightbulb size={80} />
             </CardProject>
 
             <CardProject
               title="Projeto Pago"
-              description="Você pode pagar para uma alguem ou uma equipe desenvolver suas ideias direto pelo Wenzer!"
+              description="Você pode pagar para alguém ou uma equipe desenvolver suas idéias direto pelo Wenzer."
             >
               <FaHandHoldingUsd size={80} />
             </CardProject>
             <CardProject
               title="Projeto Privado"
-              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas selecionadas"
+              description="Limite quem pode ver ou participar! Compartilhe apenas com pessoas que você segue."
             >
               <FaLock size={80} />
             </CardProject>
@@ -206,10 +147,11 @@ function Welcome(): ReactElement {
             </section>
             <section>
               <strong>Plataforma</strong>
-              <a href="#home">Cadastre-se</a>
+              <span  onClick={() => history.push('/register')}>Cadastre-se</span>
+              <span onClick={() => history.push('/login')}>Faça Login</span>
             </section>
             <section>
-              <strong>Siga o Wenzer:</strong>
+              <strong>Segue a gente:</strong>
               <div className="social-media">
                 <a
                   href="https://twitter.com/wenzeroficial"
@@ -243,19 +185,23 @@ function Welcome(): ReactElement {
 
           <footer>
             <span>
-              <a href="##" target="" onClick={handleShowTerms}>
+              <span onClick={handleShowTerms}>
                 Termos e Condições |
-              </a>{" "}
-              <a href="##" target="" onClick={handleShowTerms}>
+              </span>{" "}
+              <span onClick={handleShowTerms}>
                 Politica de Privacidade |
-              </a>{" "}
-              Wenzer 2021 ©
+              </span>{" "}
+              <span>
+               wenzer.help@gmail.com |
+              </span>{" "}
+              <span>
+                Wenzer 2022 ©
+              </span>
             </span>
           </footer>
         </ContainerFooter>
 
         <DialogTermsAndPolicy state={isTerms} handleChange={handleShowTerms} />
-        <ToastContainer />
       </Container>
     </WelcomeContext.Provider>
   );

@@ -17,6 +17,7 @@ export default createGlobalStyle`
       width: 100%;
       background-color: ${(props) => props.theme.colors.background};
       color: ${(props) => props.theme.colors.white.light};
+      box-sizing: border-box;
   }
 
   *,

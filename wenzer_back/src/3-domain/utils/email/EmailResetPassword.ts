@@ -1,0 +1,25 @@
+import { Email } from "./EmailAbstract";
+import { promisify } from 'util';
+import fs from 'fs';
+const readFile = promisify(fs.readFile);
+
+export class EmailResetPassword extends Email {
+    constructor(user: any, address: string) {
+        super(
+            '"Wenzer" <noreply@wenzer.com.br>',
+            user.email,
+            'Redefinicação de senha',
+            `Olá! Segue o link de redefinição de senha: ${address}`,
+            ''
+            );
+    }
+
+    async prepareHTML(link: string): Promise<void> {
+        const _self = this;
+        const text = await readFile(
+            './src/1-presentation/views/Alterar_Senha.html', 
+            'utf8').then((data: string) => {
+            _self.Html = data.replace('$_URL_UPDATE_$', link);
+        });
+    }
+}

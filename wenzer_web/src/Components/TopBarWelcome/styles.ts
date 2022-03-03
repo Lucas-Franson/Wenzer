@@ -15,11 +15,15 @@ export const Container = styled.div`
   background-color: ${(props) => props.theme.colors.secondary};
   box-shadow: 0px 2px 2px 1px rgba(0, 0, 0, 0.15);
 
+  &:last-child {
+    padding-right: 3rem;
+  }
+
   header {
     display: flex;
     align-items: center;
 
-    padding-left: 5rem;
+    padding-left: 3rem;
 
     h1 {
       font-weight: 400;
@@ -33,10 +37,13 @@ export const Container = styled.div`
     }
   }
 
+  &:last-child{
+    padding-right: 3rem ;
+  }
+
   div {
     display: flex;
     align-items: center;
-    padding-right: 5rem;
 
     a {
       display: flex;
@@ -125,12 +132,6 @@ export const Container = styled.div`
 
     div {
       display: none;
-    }
-
-    .IconMenuMobile {
-      display: flex;
-      align-items: center;
-      padding-right: 0.5rem;
     }
   }
 `;

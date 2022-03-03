@@ -6,10 +6,11 @@ interface IInputText {
     placeholder?: string;
     onChange(e: ChangeEvent<HTMLInputElement>): void;
     required?: boolean;
+    hasError?: boolean;
 }
 
 function InputPassoword(props: IInputText): ReactElement {
-  const { placeholder = '', onChange, required = false  } = props;
+  const { placeholder = '', onChange, required = false, hasError = false} = props;
   const [showPassword, setShowPassword] = useState(false);
 
   function changeVisibilityInput() {
@@ -20,6 +21,7 @@ function InputPassoword(props: IInputText): ReactElement {
     <Container>
       <input
         type={showPassword ? "text" : "password"}
+        className={hasError ? 'hasError' : 'hasOkay'}
         placeholder={placeholder}
         required={required}
         onChange={onChange}

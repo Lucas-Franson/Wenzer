@@ -9,6 +9,7 @@ export const Container = styled.div`
     padding: 0.8rem 3rem 0.8rem 1rem;
     margin-bottom: 1rem;
     font-weight: 400;
+    text-overflow: Ellipsis;
 
     color: ${(props) => props.theme.colors.white.light};
     border-radius: 0.5rem;
@@ -25,6 +26,10 @@ export const Container = styled.div`
     right: 0;
     top: 7px;
     padding-right: 10px 
+  }
+
+  .noMargin {
+    margin-bottom: 0 ;
   }
 `;
 
