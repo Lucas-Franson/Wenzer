@@ -1,7 +1,7 @@
 import React from 'react';
 import { HeaderAvatar } from '../Feed/styles';
 
-import { CardInfo, CardProfile, Container, ContainerProfile, ContainerProjects } from './styles';
+import { CardInfo, CardMyProject, CardProfile, Container, ContainerProfile, ContainerProjects } from './styles';
 
 const Profile: React.FC = () => {
   return (
@@ -28,20 +28,55 @@ const Profile: React.FC = () => {
             </CardProfile>
             <CardInfo>
               <h3>Conexões</h3>
+              <span>Você ainda não tem nenhuma conexão</span>
             </CardInfo>
             
             <CardInfo>
               <h3>Interesses</h3>
+              <span>Você ainda não tem nenhum interesse</span>
             </CardInfo>
 
             <CardInfo>
               <h3>Atividades</h3>
+              <span>Você ainda não tem nenhuma atividade</span>
             </CardInfo>
 
           </ContainerProfile>
 
           <ContainerProjects>
-            <CardInfo className='mt-0'>
+            <div className="wraper">
+              <CardMyProject>
+
+              </CardMyProject>
+
+              <CardMyProject>
+
+              </CardMyProject>
+
+              <CardMyProject>
+
+              </CardMyProject>
+
+              <CardMyProject>
+
+              </CardMyProject>
+              <CardMyProject>
+
+              </CardMyProject>
+              <CardMyProject>
+
+              </CardMyProject>
+              <CardMyProject>
+
+              </CardMyProject>
+              <CardMyProject>
+
+              </CardMyProject>
+              <CardMyProject>
+
+              </CardMyProject>              
+            </div>
+            <CardInfo className='mt-10'>
               <h3>Projetos que estou parcipando</h3>
             </CardInfo>
           </ContainerProjects>

@@ -23,6 +23,12 @@ export default function FadeMenu() {
 
     function MoveToPerfil() {
         history.push('/profile');
+        handleClose()
+    }
+
+    function MoveOut() {
+      singOut();
+      handleClose();
     }
   
     return (
@@ -38,7 +44,7 @@ export default function FadeMenu() {
           TransitionComponent={Fade}
         >
           <MenuItem style={{margin: '5px', gap: '10px'}} onClick={MoveToPerfil}> <MdPerson size={22} />  Perfil</MenuItem>
-          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={singOut}> <MdExitToApp/> Logout</MenuItem>
+          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={MoveOut}> <MdExitToApp/> Logout</MenuItem>
         </Menu>
       </div>
     );

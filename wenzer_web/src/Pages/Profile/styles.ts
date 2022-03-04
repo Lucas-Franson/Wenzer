@@ -30,7 +30,7 @@ export const Container = styled.div`
 `;
 
 export const ContainerProfile = styled.header`
-  width: 380px;
+  width: 320px;
   border-radius: 8px;
 
   div {
@@ -42,21 +42,9 @@ export const ContainerProfile = styled.header`
   }
 `;
 
-export const ContainerProjects = styled.main`
-  width: min(92vw, 800px);
-  border-radius: 8px;
-  height: 500px;
-
-  margin-bottom: 15px;
-
-  @media (max-width: 1490px){
-    width:  min(92vw, 600px);
-  }
-`;
-
 export const CardProfile = styled.div`
   width: 100%;
-  height: 360px;
+  height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -73,8 +61,8 @@ export const CardProfile = styled.div`
     height: 100%;
 
     .avatarProfile{
-      width: 180px;
-      height: 180px;
+      width: 150px;
+      height: 150px;
     }
 
     > span {
@@ -102,7 +90,7 @@ export const CardProfile = styled.div`
 
 export const CardInfo = styled.div`
   width: 100%;
-  height: 130px;
+  height: 100px;
   background: ${(props) => props.theme.colors.secondary};
   border-bottom: 3px solid ${props => props.theme.colors.succes};
   border-radius: 8px;
@@ -115,4 +103,64 @@ export const CardInfo = styled.div`
     padding-bottom: 10px;
     border-bottom: 1px solid ${props => props.theme.colors.tertiary}
   }
+
+  > span {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: ${props => props.theme.colors.grey}
+  }
+
+  &.mt-10 {
+    margin-top: 10px;
+  }
+
+  @media (max-width: 1490px){
+    > h3 {
+      font-size: 0.9rem;
+    }
+
+    > span {
+      font-size: 0.8rem;
+    }
+  }
+`;
+
+export const ContainerProjects = styled.main`
+  width: min(92vw, 800px);
+  border-radius: 8px;
+  height: 900px;
+
+  margin-bottom: 15px;
+
+  .wraper {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+  }
+
+  @media (max-width: 1490px){
+    width:  min(92vw, 650px);
+  }
+`;
+
+export const CardMyProject = styled.div`
+  width: 30%;
+  height: 300px;
+  background: ${(props) => props.theme.colors.secondary};
+  border-bottom: 3px solid ${props => props.theme.colors.primary};
+  border-radius: 8px;
+
+  padding: 10px;
+  margin: 0px 15px 15px 0px;
+  
+  > h3 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    padding-bottom: 10px;
+    border-bottom: 1px solid ${props => props.theme.colors.tertiary}
+  }
+
 `;

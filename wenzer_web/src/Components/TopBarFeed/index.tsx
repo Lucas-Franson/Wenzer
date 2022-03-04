@@ -43,11 +43,15 @@ function TopBarFeed(): ReactElement {
     >
       <ContentMenu>
         <div>
-          <Link to="/projects"> <MdPerson size={25} /> <p>Perfil</p></Link>
+          <Link to="/profile"> <MdPerson size={25} /> <p>Perfil</p></Link>
         </div>
 
         <div>
-          <Link to="" onClick={handleOpenModalPost} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
+          <Link to="##" onClick={handleOpenModalPost} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
+        </div>
+
+        <div>
+          <Link to="notify" onClick={handleOpenModalPost} > <Notify/> <p>Notificações</p></Link>
         </div>
 
         <div>
