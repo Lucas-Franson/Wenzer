@@ -36,6 +36,7 @@ function Login() {
       history.push('/');
     })
     .catch((err) => {
+      debugger;
       toastfyError(err.response.data.mensagem);
       setIsLoading(false);
     });

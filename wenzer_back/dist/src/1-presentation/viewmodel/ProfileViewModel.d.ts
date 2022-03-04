@@ -5,10 +5,10 @@ export declare class ProfileViewModel {
     private photo;
     private title;
     private interests;
-    constructor(name: string, bio: string, photo: Blob, title: string, interests: Interests[]);
+    constructor(name: string, bio: string, photo: any, title: string, interests: Interests[]);
     getName: () => string;
     getBio: () => string;
-    getPhoto: () => Blob;
+    getPhoto: () => any;
     getTitle: () => string;
     getInterests: () => Interests[];
     validateModel(): void;

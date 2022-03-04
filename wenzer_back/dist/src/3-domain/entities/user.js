@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const domainBase_1 = __importDefault(require("./domainBase"));
 class User extends domainBase_1.default {
-    constructor(name, email, password, title = '', photo = new Blob([]), bio = '', emailValid = false, id = '', created_at = new Date(), updated_at = new Date()) {
+    constructor(name, email, password, title = '', photo = null, bio = '', emailValid = false, id = '', created_at = new Date(), updated_at = new Date()) {
         super(id, created_at, updated_at);
         this.name = name;
         this.email = email;

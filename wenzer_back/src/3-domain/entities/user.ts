@@ -7,7 +7,7 @@ export class User extends DomainBase {
         public email: string, 
         public password: string,
         public title: string = '',
-        public photo: any = new Blob([]),
+        public photo: any = null,
         public bio: string = '',
         public emailValid: boolean = false,
         public id: string = '',

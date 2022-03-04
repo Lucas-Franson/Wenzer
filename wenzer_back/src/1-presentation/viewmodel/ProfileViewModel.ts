@@ -6,7 +6,7 @@ export class ProfileViewModel {
     constructor(
         private name: string,
         private bio: string,
-        private photo: Blob,
+        private photo: any,
         private title: string,
         private interests: Interests[]
     ) {
