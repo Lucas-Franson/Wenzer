@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { MediaQueries } from '../../Constants/MediaSettings';
 
 export const Container = styled.div`
-  width: min(92vw, 1300px);
+  width: min(92vw, 1350px);
   display: flex;
   justify-content: space-between;
   color: ${(props) => props.theme.colors.white.light};
@@ -13,7 +13,7 @@ export const Container = styled.div`
   margin-top: 5rem;
   
   @media (max-width: 1490px){
-    width: min(92vw, 1100px);
+    width: min(92vw, 1200px);
     font-size: 1rem;
   }
 
@@ -126,7 +126,7 @@ export const CardInfo = styled.div`
 `;
 
 export const ContainerProjects = styled.main`
-  width: min(92vw, 800px);
+  width: min(92vw, 900px);
   border-radius: 8px;
   height: 900px;
 
@@ -142,13 +142,18 @@ export const ContainerProjects = styled.main`
   }
 
   @media (max-width: 1490px){
-    width:  min(92vw, 650px);
+    width:  min(92vw, 750px);
+    margin-left: 20px;
   }
 `;
 
 export const CardMyProject = styled.div`
   width: 30%;
   height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   background: ${(props) => props.theme.colors.secondary};
   border-bottom: 3px solid ${props => props.theme.colors.primary};
   border-radius: 8px;
@@ -156,11 +161,21 @@ export const CardMyProject = styled.div`
   padding: 10px;
   margin: 0px 15px 15px 0px;
   
+  
+  > img {
+    width: 100%;
+    object-fit: contain;
+  }
+  
   > h3 {
-    font-size: 1.1rem;
-    font-weight: 400;
+    width: 100%;
+    font-weight: 500;
+    font-size: 0.8rem;
     padding-bottom: 10px;
-    border-bottom: 1px solid ${props => props.theme.colors.tertiary}
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 `;

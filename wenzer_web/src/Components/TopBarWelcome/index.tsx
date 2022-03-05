@@ -75,16 +75,16 @@ function TopBarWelcome(): ReactElement {
   return (
     <Container>
       <header>
-        <a href="/welcome">
+        <a href="/">
           <img src={WenzerLogo} alt="Wenzer" />
         </a>
         <h1>Wenzer</h1>
       </header>
 
       <div>
-        <a href="/welcome/#about">O que é</a>
-        <a href="/welcome/#networking">Networking</a>
-        <a href="/welcome/#project">Projetos</a>
+        <a href="/#about">O que é</a>
+        <a href="/#networking">Networking</a>
+        <a href="/#project">Projetos</a>
       </div>
 
       <div>

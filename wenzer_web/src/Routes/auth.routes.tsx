@@ -10,12 +10,12 @@ function AuthRoutes() {
     return (
       <LayoutWelcome>
         <Switch>
-          <Route path="/welcome" exact component={Welcome} />
+          <Route path="/" exact component={Welcome} />
           <Route path="/login/:token?" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/recover-password" component={RecoverPassword} />
-          <Redirect to="/welcome" />
+          <Redirect to="/" />
         </Switch>
       </LayoutWelcome>
     );

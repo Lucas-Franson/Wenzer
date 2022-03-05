@@ -2,6 +2,7 @@ import React from 'react';
 import { HeaderAvatar } from '../Feed/styles';
 
 import { CardInfo, CardMyProject, CardProfile, Container, ContainerProfile, ContainerProjects } from './styles';
+import imageTeste from '../../Utils/image/bgFgtsDescktop.jpg';
 
 const Profile: React.FC = () => {
   return (
@@ -46,7 +47,8 @@ const Profile: React.FC = () => {
           <ContainerProjects>
             <div className="wraper">
               <CardMyProject>
-
+                <img src={imageTeste} alt="project"/>
+                <h3>Titulo que devera ser maior que a telasdasdasasdasdasdasdasdasddasasdasddasasdasddasasdasddasasdasddasasdasddasasdasddasdasdasdasda</h3>
               </CardMyProject>
 
               <CardMyProject>
