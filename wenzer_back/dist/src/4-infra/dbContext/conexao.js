@@ -16,7 +16,7 @@ const queryPromise = (sql) => {
             if (error) {
                 return reject(error);
             }
-            conexao.end();
+            // conexao.end();
             return resolve(results);
         });
     });
