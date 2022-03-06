@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Connections = void 0;
 const domainBase_1 = __importDefault(require("./domainBase"));
+const uuid_1 = require("uuid");
 class Connections extends domainBase_1.default {
-    constructor(idUser, idFollower, accepted, id = '', created_at = new Date(), updated_at = new Date()) {
+    constructor(idUser, idFollower, accepted, id = (0, uuid_1.v4)(), created_at = new Date(), updated_at = new Date()) {
         super(id, created_at, updated_at);
         this.idUser = idUser;
         this.idFollower = idFollower;

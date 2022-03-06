@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const domainBase_1 = __importDefault(require("./domainBase"));
+const uuid_1 = require("uuid");
 class User extends domainBase_1.default {
-    constructor(name, email, password, title = '', photo = null, bio = '', emailValid = false, id = '', created_at = new Date(), updated_at = new Date()) {
+    constructor(name, email, password, title = '', photo = null, bio = '', emailValid = false, id = (0, uuid_1.v4)(), created_at = new Date(), updated_at = new Date()) {
         super(id, created_at, updated_at);
         this.name = name;
         this.email = email;
