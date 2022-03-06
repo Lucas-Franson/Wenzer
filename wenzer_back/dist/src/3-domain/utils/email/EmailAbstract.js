@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Email = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const configEmailProduction = {
+    service: 'gmail',
     host: process.env.EMAIL_HOST,
+    port: 465,
     auth: {
         user: process.env.EMAIL_USUARIO,
         pass: process.env.EMAIL_SENHA

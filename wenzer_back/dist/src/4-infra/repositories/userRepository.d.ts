@@ -6,5 +6,5 @@ export default class UserRepository extends Orm<User> implements IUserRepository
     get(whereClause: string): Promise<User | null>;
     getAll(whereClause: string): Promise<User[]>;
     getById(id: string): Promise<User | null>;
-    convertToObjectUser(user: User): User | null;
+    convertToObjectUser(user: any): User | null;
 }
