@@ -1,4 +1,5 @@
 import DomainBase from './domainBase';
+import { v4 as uuid } from 'uuid';
 
 export class Connections extends DomainBase {
 
@@ -6,7 +7,7 @@ export class Connections extends DomainBase {
         public idUser: string,
         public idFollower: string,
         public accepted: boolean,
-        public id: string = '',
+        public id: string = uuid(),
         public created_at: Date = new Date(),
         public updated_at: Date = new Date()
     ) {
