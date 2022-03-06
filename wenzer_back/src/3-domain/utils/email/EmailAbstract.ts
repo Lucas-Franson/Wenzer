@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 
 const configEmailProduction = {
+    service: 'gmail',
     host: process.env.EMAIL_HOST,
+    port: 465,
     auth: {
         user: process.env.EMAIL_USUARIO,
         pass: process.env.EMAIL_SENHA

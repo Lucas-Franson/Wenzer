@@ -34,20 +34,20 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         return result.length > 0 ? result[0] : null;
     }
 
-    convertToObjectUser(user: User): User | null {
+    convertToObjectUser(user: any): User | null {
         if (!user) return null;
 
         return new User(
-            user?._name,
-            user?._email,
-            user?._password,
-            user?._title,
-            user?._photo,
-            user?._bio,
-            user?._emailValid,
-            user?._id,
-            user?._created_at,
-            user?._updated_at
+            user?.name,
+            user?.email,
+            user?.password,
+            user?.title,
+            user?.photo,
+            user?.bio,
+            user?.emailValid,
+            user?.id,
+            user?.created_at,
+            user?.updated_at
         );
     }
 
