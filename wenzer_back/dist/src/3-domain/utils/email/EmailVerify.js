@@ -19,7 +19,7 @@ const EmailAbstract_1 = require("./EmailAbstract");
 const readFile = (0, util_1.promisify)(fs_1.default.readFile);
 class EmailVerify extends EmailAbstract_1.Email {
     constructor(email) {
-        super('"Wenzer" <noreply@wenzer.com.br>', email, 'Verificação de e-mail', '', '');
+        super('"Wenzer" <wenzer.marketing@gmail.com>', email, 'Verificação de e-mail', '', '');
     }
     prepareHTML(link) {
         return __awaiter(this, void 0, void 0, function* () {

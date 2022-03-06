@@ -7,7 +7,7 @@ const readFile = promisify(fs.readFile);
 export class EmailResetPassword extends Email {
     constructor(user: User, address: string) {
         super(
-            '"Wenzer" <noreply@wenzer.com.br>',
+            '"Wenzer" <wenzer.marketing@gmail.com>',
             user._email,
             'Redefinicação de senha',
             `Olá! Segue o link de redefinição de senha: ${address}`,

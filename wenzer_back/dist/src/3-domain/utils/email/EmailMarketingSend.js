@@ -19,7 +19,7 @@ const util_1 = require("util");
 const readFile = (0, util_1.promisify)(fs_1.default.readFile);
 class EmailMarketingSend extends EmailAbstract_1.Email {
     constructor(email) {
-        super('"Wenzer" <noreply@wenzer.com.br>', email, 'Bem-vindo ao Wenzer', ``, '');
+        super('"Wenzer" <wenzer.marketing@gmail.com>', email, 'Bem-vindo ao Wenzer', ``, '');
     }
     prepareHTML(link) {
         return __awaiter(this, void 0, void 0, function* () {

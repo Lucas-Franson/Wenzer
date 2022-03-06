@@ -13,20 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Email = void 0;
-const nodemailer_1 = __importDefault(require("nodemailer"));
-const configEmailProduction = {
-    service: 'gmail',
-    host: process.env.EMAIL_HOST,
-    port: 465,
-    auth: {
-        user: process.env.EMAIL_USUARIO,
-        pass: process.env.EMAIL_SENHA
-    },
-    secure: true,
-    tls: {
-        rejectUnauthorized: false
-    }
-};
+const aws_sdk_1 = __importDefault(require("aws-sdk"));
 class Email {
     constructor(_from, _to, _subject, _text, _html) {
         this.From = '';
@@ -45,15 +32,32 @@ class Email {
      */
     sendEmail() {
         return __awaiter(this, void 0, void 0, function* () {
-            const transporter = nodemailer_1.default.createTransport(configEmailProduction);
-            const info = yield transporter.sendMail({
-                from: this.From,
-                to: this.To,
-                subject: this.Subject,
-                text: this.Text,
-                html: this.Html,
-            }, (err) => {
-                console.log(err);
+            aws_sdk_1.default.config.update({ region: 'us-east-1' });
+            const params = {
+                Destination: {
+                    ToAddresses: [
+                        this.To
+                    ]
+                },
+                Message: {
+                    Body: {
+                        Html: {
+                            Charset: "UTF-8",
+                            Data: this.Html
+                        }
+                    },
+                    Subject: {
+                        Charset: 'UTF-8',
+                        Data: this.Subject
+                    }
+                },
+                Source: this.From
+            };
+            var sendPromise = new aws_sdk_1.default.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
+            sendPromise.then(function (data) {
+                console.log(data.MessageId);
+            }).catch(function (err) {
+                console.error(err, err.stack);
             });
         });
     }

@@ -19,7 +19,7 @@ const fs_1 = __importDefault(require("fs"));
 const readFile = (0, util_1.promisify)(fs_1.default.readFile);
 class EmailResetPassword extends EmailAbstract_1.Email {
     constructor(user, address) {
-        super('"Wenzer" <noreply@wenzer.com.br>', user._email, 'Redefinicação de senha', `Olá! Segue o link de redefinição de senha: ${address}`, '');
+        super('"Wenzer" <wenzer.marketing@gmail.com>', user._email, 'Redefinicação de senha', `Olá! Segue o link de redefinição de senha: ${address}`, '');
     }
     prepareHTML(link) {
         return __awaiter(this, void 0, void 0, function* () {

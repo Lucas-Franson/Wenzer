@@ -12,6 +12,7 @@
   "author": "Lucas Franson",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1087.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",

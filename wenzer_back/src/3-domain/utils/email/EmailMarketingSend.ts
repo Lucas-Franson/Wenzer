@@ -6,7 +6,7 @@ const readFile = promisify(fs.readFile);
 export class EmailMarketingSend extends Email {
     constructor(email: string) {
         super(
-            '"Wenzer" <noreply@wenzer.com.br>',
+            '"Wenzer" <wenzer.marketing@gmail.com>',
             email,
             'Bem-vindo ao Wenzer',
             ``,

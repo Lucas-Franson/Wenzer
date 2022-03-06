@@ -1,18 +1,4 @@
-import nodemailer from "nodemailer";
-
-const configEmailProduction = {
-    service: 'gmail',
-    host: process.env.EMAIL_HOST,
-    port: 465,
-    auth: {
-        user: process.env.EMAIL_USUARIO,
-        pass: process.env.EMAIL_SENHA
-    },
-    secure: true,
-    tls: {
-        rejectUnauthorized: false
-    }
-}
+import AWS from 'aws-sdk';
 
 export abstract class Email {
 
@@ -34,17 +20,38 @@ export abstract class Email {
      * @description Cria o transportador e realiza o envio do email
      */
     async sendEmail() {
-        const transporter = nodemailer.createTransport(configEmailProduction);
-        
-        const info = await transporter.sendMail({
-            from: this.From,
-            to: this.To,
-            subject: this.Subject,
-            text: this.Text,
-            html: this.Html,
-        }, (err) => {
-            console.log(err);
-        });
+        AWS.config.update({region: 'us-east-1'});
+
+        const params = {
+            Destination: { 
+              ToAddresses: [
+                this.To
+              ]
+            },
+            Message: {
+              Body: { 
+                Html: {
+                 Charset: "UTF-8",
+                 Data: this.Html
+                }
+               },
+               Subject: {
+                Charset: 'UTF-8',
+                Data: this.Subject
+               }
+              },
+            Source: this.From
+        };
+
+        var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
+
+        sendPromise.then(
+            function(data) {
+              console.log(data.MessageId);
+            }).catch(
+              function(err) {
+              console.error(err, err.stack);
+            });
     }
 
     /**
