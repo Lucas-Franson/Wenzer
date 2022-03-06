@@ -38,16 +38,16 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         if (!user) return null;
 
         return new User(
-            user?.name,
-            user?.email,
-            user?.password,
-            user?.title,
-            user?.photo,
-            user?.bio,
-            user?.emailValid,
-            user?.id,
-            user?.created_at,
-            user?.updated_at
+            user?._name,
+            user?._email,
+            user?._password,
+            user?._title,
+            user?._photo,
+            user?._bio,
+            user?._emailValid,
+            user?._id,
+            user?._created_at,
+            user?._updated_at
         );
     }
 

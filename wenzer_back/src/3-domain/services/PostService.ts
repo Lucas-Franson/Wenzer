@@ -9,8 +9,8 @@ export default class PostService implements IPostService {
         
     }
 
-    getAllPostsOfUser(userId: string, page: number, countPerPage: number) {
-        return this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
+    async getAllPostsOfUser(userId: string, page: number, countPerPage: number) {
+        return await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
     }
 
 }

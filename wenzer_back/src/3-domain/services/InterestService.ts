@@ -17,16 +17,16 @@ export default class PostService implements IInterestService {
     async linkUserToInterests(user: User, interests: Interests[]): Promise<void> {
         var userInterests: InterestUser[] = [];
 
-        let interestUserAlreadyExist = await this.interestsRepository.findLinkUserToInterests(user.id);
+        let interestUserAlreadyExist = await this.interestsRepository.findLinkUserToInterests(user._id);
         
         interests
             .filter(n => interestUserAlreadyExist
-                .filter(i => i.idInterests === n.id).length === 0)
+                .filter(i => i._idInterests === n._id).length === 0)
             .forEach((interest: Interests) => 
         {
             var obj = new InterestUser(
-                interest.id,
-                user.id,
+                interest._id,
+                user._id,
             );
             userInterests.push(obj);
         });

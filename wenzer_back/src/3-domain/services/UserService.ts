@@ -33,10 +33,10 @@ export default class UserService implements IUserService {
     }
 
     async updateUserByProfile(user: User, profile: ProfileViewModel) {
-        user.name = profile.getName();
-        user.bio = profile.getBio();
-        user.title = profile.getTitle();
-        user.photo = profile.getPhoto();
+        user._name = profile.getName();
+        user._bio = profile.getBio();
+        user._title = profile.getTitle();
+        user._photo = profile.getPhoto();
 
         await this.updateUser(user);
     }

@@ -16,11 +16,11 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
         userInterests.forEach((interest: InterestUser) => {
             sqlValues += sqlValues !== "" ? "," : "";
             sqlValues += `(
-                ${interest.id.toSql()}, 
-                ${interest.idInterests.toSql()},
-                ${interest.idUser.toSql()},
-                ${interest.created_at.toSql()},
-                ${interest.updated_at.toSql()}
+                ${interest._id.toSql()}, 
+                ${interest._idInterests.toSql()},
+                ${interest._idUser.toSql()},
+                ${interest._created_at.toSql()},
+                ${interest._updated_at.toSql()}
             )`;
         });
 
@@ -51,11 +51,11 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
         if (!interest) return null;
 
         return new InterestUser(
-            interest?.idInterests,
-            interest?.idUser,
-            interest?.id,
-            interest?.created_at,
-            interest?.updated_at
+            interest?._idInterests,
+            interest?._idUser,
+            interest?._id,
+            interest?._created_at,
+            interest?._updated_at
         );
     }
     

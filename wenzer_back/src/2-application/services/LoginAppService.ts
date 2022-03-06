@@ -24,20 +24,20 @@ export default class LoginAppService {
                 user = new User(userViewModel.getName(),
                                 userViewModel.getEmail(),
                                 userViewModel.getPassword(),
-                                userFound.title,
-                                userFound.photo,
-                                userFound.bio,
+                                userFound._title,
+                                userFound._photo,
+                                userFound._bio,
                                 false,
                                 userFound.getId(),
                                 userFound.getCreatedAt(),
                                 new Date()
                                 );
-                this.userService.updateUserNewPwd(user, userViewModel.getPassword());
+                await this.userService.updateUserNewPwd(user, userViewModel.getPassword());
             } else {
-                this.userService.create(user);
+                await this.userService.create(user);
             }
             
-            this.userService.sendEmailOfVerification(user);
+            await this.userService.sendEmailOfVerification(user);
             return user.getId();
         } catch(err) {
             // LOG
@@ -79,7 +79,7 @@ export default class LoginAppService {
         }
 
         try {
-            this.userService.sendEmailOfResetPassword(userFound);
+            await this.userService.sendEmailOfResetPassword(userFound);
         } catch(err) {
             throw err;
         }
@@ -92,7 +92,7 @@ export default class LoginAppService {
                 throw new NaoEncontrado('Usuário não encontrado na plataforma.');
             }
 
-            this.userService.validateUserEmail(user);
+            await this.userService.validateUserEmail(user);
         } catch(err) {
             throw err;
         }
@@ -109,14 +109,14 @@ export default class LoginAppService {
             throw new Error("Essa senha é a mesma da sua conta atual.");
         }
 
-        this.userService.updateUserNewPwd(user, password);
+        await this.userService.updateUserNewPwd(user, password);
     }
 
     async salvarEmailMarketing(email: string) {
         var emailMarketing = await this.emailMarketingService.findEmailMarketing(email);
         if(emailMarketing?.getId()) throw new NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
         
-        this.emailMarketingService.create(email);
+        await this.emailMarketingService.create(email);
     }
 
     async confirmarEmailMarketing(token: string) {
@@ -126,7 +126,7 @@ export default class LoginAppService {
                 throw new NaoEncontrado('Email não encontrado na plataforma.');
             }
             
-            this.emailMarketingService.validateEmailMarketing(emailMarketing);
+            await this.emailMarketingService.validateEmailMarketing(emailMarketing);
         } catch(err) {
             throw err;
         }
