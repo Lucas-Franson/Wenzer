@@ -15,7 +15,7 @@ class ConnectionRepository extends orm_1.Orm {
     validateObject(object) {
         return __awaiter(this, void 0, void 0, function* () {
             let isValid = true;
-            if (object.id == null) {
+            if (object._id == null) {
                 isValid = false;
             }
             return isValid;

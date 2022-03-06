@@ -1,8 +1,8 @@
 export default abstract class DomainBase {
-    id: string;
-    created_at: Date;
-    updated_at: Date;
-    constructor(id: string, created_at: Date, updated_at: Date);
+    _id: string;
+    _created_at: Date;
+    _updated_at: Date;
+    constructor(_id: string, _created_at: Date, _updated_at: Date);
     getId: () => string;
     getCreatedAt: () => Date;
     getUpdatedAt: () => Date;

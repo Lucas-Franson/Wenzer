@@ -25,11 +25,11 @@ class InterestsRepository extends orm_1.Orm {
             userInterests.forEach((interest) => {
                 sqlValues += sqlValues !== "" ? "," : "";
                 sqlValues += `(
-                ${interest.id.toSql()}, 
-                ${interest.idInterests.toSql()},
-                ${interest.idUser.toSql()},
-                ${interest.created_at.toSql()},
-                ${interest.updated_at.toSql()}
+                ${interest._id.toSql()}, 
+                ${interest._idInterests.toSql()},
+                ${interest._idUser.toSql()},
+                ${interest._created_at.toSql()},
+                ${interest._updated_at.toSql()}
             )`;
             });
             if (sqlValues) {
@@ -57,7 +57,7 @@ class InterestsRepository extends orm_1.Orm {
     convertToObjectUser(interest) {
         if (!interest)
             return null;
-        return new interestUser_1.InterestUser(interest === null || interest === void 0 ? void 0 : interest.idInterests, interest === null || interest === void 0 ? void 0 : interest.idUser, interest === null || interest === void 0 ? void 0 : interest.id, interest === null || interest === void 0 ? void 0 : interest.created_at, interest === null || interest === void 0 ? void 0 : interest.updated_at);
+        return new interestUser_1.InterestUser(interest === null || interest === void 0 ? void 0 : interest._idInterests, interest === null || interest === void 0 ? void 0 : interest._idUser, interest === null || interest === void 0 ? void 0 : interest._id, interest === null || interest === void 0 ? void 0 : interest._created_at, interest === null || interest === void 0 ? void 0 : interest._updated_at);
     }
 }
 exports.InterestsRepository = InterestsRepository;

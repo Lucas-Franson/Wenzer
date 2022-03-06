@@ -69,12 +69,14 @@ class Orm {
         const arrPropertiesName = Object.getOwnPropertyNames(object);
         const arrNamesToIgnore = ['id', 'created_at'];
         let setClause = '';
-        for (let name of arrPropertiesName.filter((el) => !arrNamesToIgnore.includes(el))) {
+        for (let name of arrPropertiesName.filter((el) => el != "" &&
+            el.charAt(0) === "_" &&
+            !arrNamesToIgnore.includes(el))) {
             if (!name)
                 continue;
             setClause += setClause !== '' ? ', ' : '';
             const propertieValue = object[name];
-            setClause += `${name} = ${this._formatPropertyValueToSQL(propertieValue)}`;
+            setClause += `${name.replace('_', '')} = ${this._formatPropertyValueToSQL(propertieValue)}`;
         }
         return setClause;
     }

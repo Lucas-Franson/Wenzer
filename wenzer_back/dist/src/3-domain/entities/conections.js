@@ -7,14 +7,14 @@ exports.Connections = void 0;
 const domainBase_1 = __importDefault(require("./domainBase"));
 const uuid_1 = require("uuid");
 class Connections extends domainBase_1.default {
-    constructor(idUser, idFollower, accepted, id = (0, uuid_1.v4)(), created_at = new Date(), updated_at = new Date()) {
-        super(id, created_at, updated_at);
-        this.idUser = idUser;
-        this.idFollower = idFollower;
-        this.accepted = accepted;
-        this.id = id;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+    constructor(_idUser, _idFollower, _accepted, _id = (0, uuid_1.v4)(), _created_at = new Date(), _updated_at = new Date()) {
+        super(_id, _created_at, _updated_at);
+        this._idUser = _idUser;
+        this._idFollower = _idFollower;
+        this._accepted = _accepted;
+        this._id = _id;
+        this._created_at = _created_at;
+        this._updated_at = _updated_at;
         this.validateObject = () => {
             return true;
         };

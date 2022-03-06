@@ -26,13 +26,13 @@ class LoginAppService {
                 }
                 let user = userViewModel.convertToUserEntity();
                 if (userFound && !userFound.emailIsValid()) {
-                    user = new user_1.User(userViewModel.getName(), userViewModel.getEmail(), userViewModel.getPassword(), userFound.title, userFound.photo, userFound.bio, false, userFound.getId(), userFound.getCreatedAt(), new Date());
-                    this.userService.updateUserNewPwd(user, userViewModel.getPassword());
+                    user = new user_1.User(userViewModel.getName(), userViewModel.getEmail(), userViewModel.getPassword(), userFound._title, userFound._photo, userFound._bio, false, userFound.getId(), userFound.getCreatedAt(), new Date());
+                    yield this.userService.updateUserNewPwd(user, userViewModel.getPassword());
                 }
                 else {
-                    this.userService.create(user);
+                    yield this.userService.create(user);
                 }
-                this.userService.sendEmailOfVerification(user);
+                yield this.userService.sendEmailOfVerification(user);
                 return user.getId();
             }
             catch (err) {
@@ -72,7 +72,7 @@ class LoginAppService {
                 throw new erros_1.NaoEncontrado('Email não encontrado.');
             }
             try {
-                this.userService.sendEmailOfResetPassword(userFound);
+                yield this.userService.sendEmailOfResetPassword(userFound);
             }
             catch (err) {
                 throw err;
@@ -86,7 +86,7 @@ class LoginAppService {
                 if (!user) {
                     throw new erros_1.NaoEncontrado('Usuário não encontrado na plataforma.');
                 }
-                this.userService.validateUserEmail(user);
+                yield this.userService.validateUserEmail(user);
             }
             catch (err) {
                 throw err;
@@ -103,7 +103,7 @@ class LoginAppService {
             if (valid) {
                 throw new Error("Essa senha é a mesma da sua conta atual.");
             }
-            this.userService.updateUserNewPwd(user, password);
+            yield this.userService.updateUserNewPwd(user, password);
         });
     }
     salvarEmailMarketing(email) {
@@ -111,7 +111,7 @@ class LoginAppService {
             var emailMarketing = yield this.emailMarketingService.findEmailMarketing(email);
             if (emailMarketing === null || emailMarketing === void 0 ? void 0 : emailMarketing.getId())
                 throw new erros_1.NaoEncontrado('E-mail já cadastrado, verifique sua caixa de entrada.');
-            this.emailMarketingService.create(email);
+            yield this.emailMarketingService.create(email);
         });
     }
     confirmarEmailMarketing(token) {
@@ -121,7 +121,7 @@ class LoginAppService {
                 if (!emailMarketing) {
                     throw new erros_1.NaoEncontrado('Email não encontrado na plataforma.');
                 }
-                this.emailMarketingService.validateEmailMarketing(emailMarketing);
+                yield this.emailMarketingService.validateEmailMarketing(emailMarketing);
             }
             catch (err) {
                 throw err;

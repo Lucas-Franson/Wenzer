@@ -46,10 +46,10 @@ class UserService {
     }
     updateUserByProfile(user, profile) {
         return __awaiter(this, void 0, void 0, function* () {
-            user.name = profile.getName();
-            user.bio = profile.getBio();
-            user.title = profile.getTitle();
-            user.photo = profile.getPhoto();
+            user._name = profile.getName();
+            user._bio = profile.getBio();
+            user._title = profile.getTitle();
+            user._photo = profile.getPhoto();
             yield this.updateUser(user);
         });
     }

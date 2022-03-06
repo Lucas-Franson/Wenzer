@@ -50,7 +50,7 @@ class UserRepository extends orm_1.Orm {
     convertToObjectUser(user) {
         if (!user)
             return null;
-        return new user_1.User(user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.email, user === null || user === void 0 ? void 0 : user.password, user === null || user === void 0 ? void 0 : user.title, user === null || user === void 0 ? void 0 : user.photo, user === null || user === void 0 ? void 0 : user.bio, user === null || user === void 0 ? void 0 : user.emailValid, user === null || user === void 0 ? void 0 : user.id, user === null || user === void 0 ? void 0 : user.created_at, user === null || user === void 0 ? void 0 : user.updated_at);
+        return new user_1.User(user === null || user === void 0 ? void 0 : user._name, user === null || user === void 0 ? void 0 : user._email, user === null || user === void 0 ? void 0 : user._password, user === null || user === void 0 ? void 0 : user._title, user === null || user === void 0 ? void 0 : user._photo, user === null || user === void 0 ? void 0 : user._bio, user === null || user === void 0 ? void 0 : user._emailValid, user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user._created_at, user === null || user === void 0 ? void 0 : user._updated_at);
     }
 }
 exports.default = UserRepository;

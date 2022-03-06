@@ -8,7 +8,7 @@ export class ConnectionRepository extends Orm<Connections> implements IConnectio
     async validateObject(object: Connections):Promise<boolean> {
         let isValid = true;
 
-        if (object.id == null) {
+        if (object._id == null) {
             isValid = false;
         }
 

@@ -22,12 +22,12 @@ class PostService {
     linkUserToInterests(user, interests) {
         return __awaiter(this, void 0, void 0, function* () {
             var userInterests = [];
-            let interestUserAlreadyExist = yield this.interestsRepository.findLinkUserToInterests(user.id);
+            let interestUserAlreadyExist = yield this.interestsRepository.findLinkUserToInterests(user._id);
             interests
                 .filter(n => interestUserAlreadyExist
-                .filter(i => i.idInterests === n.id).length === 0)
+                .filter(i => i._idInterests === n._id).length === 0)
                 .forEach((interest) => {
-                var obj = new interestUser_1.InterestUser(interest.id, user.id);
+                var obj = new interestUser_1.InterestUser(interest._id, user._id);
                 userInterests.push(obj);
             });
             this.interestsRepository.createLinkToUser(userInterests);

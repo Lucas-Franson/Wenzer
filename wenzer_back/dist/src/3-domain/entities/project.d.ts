@@ -1,13 +1,13 @@
 import DomainBase from './domainBase';
 export declare class Project extends DomainBase {
-    name: string;
-    description: string;
-    photo: Blob;
-    active: boolean;
-    publicProject: boolean;
-    id: string;
-    created_at: Date;
-    updated_at: Date;
-    constructor(name: string, description: string, photo: Blob, active: boolean, publicProject: boolean, id?: string, created_at?: Date, updated_at?: Date);
+    _name: string;
+    _description: string;
+    _photo: Blob;
+    _active: boolean;
+    _publicProject: boolean;
+    _id: string;
+    _created_at: Date;
+    _updated_at: Date;
+    constructor(_name: string, _description: string, _photo: Blob, _active: boolean, _publicProject: boolean, _id?: string, _created_at?: Date, _updated_at?: Date);
     validateObject: () => boolean;
 }
