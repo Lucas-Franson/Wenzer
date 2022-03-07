@@ -6,5 +6,5 @@ export declare class InterestsRepository extends Orm<Interests> implements IInte
     private TABLENAME;
     createLinkToUser(userInterests: InterestUser[]): Promise<void>;
     findLinkUserToInterests(userId: string): Promise<InterestUser[]>;
-    convertToObjectUser(interest: InterestUser): InterestUser | null;
+    convertToObjectUser(interest: any): InterestUser | null;
 }

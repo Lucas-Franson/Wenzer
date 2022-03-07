@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import Logger from '../../../4-infra/utils/logger';
 
 export abstract class Email {
 
@@ -25,7 +26,7 @@ export abstract class Email {
         const params = {
             Destination: { 
               ToAddresses: [
-                this.To
+                ''
               ]
             },
             Message: {
@@ -47,10 +48,10 @@ export abstract class Email {
 
         sendPromise.then(
             function(data) {
-              console.log(data.MessageId);
+              new Logger('Sent Email', data.MessageId).log();
             }).catch(
               function(err) {
-              console.error(err, err.stack);
+                new Logger('Send Email Error', err).log();
             });
     }
 

@@ -46,16 +46,16 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
         return arrInterestUser;
     }
 
-    convertToObjectUser(interest: InterestUser): InterestUser | null {
+    convertToObjectUser(interest: any): InterestUser | null {
         
         if (!interest) return null;
 
         return new InterestUser(
-            interest?._idInterests,
-            interest?._idUser,
-            interest?._id,
-            interest?._created_at,
-            interest?._updated_at
+            interest?.idInterests,
+            interest?.idUser,
+            interest?.id,
+            interest?.created_at,
+            interest?.updated_at
         );
     }
     

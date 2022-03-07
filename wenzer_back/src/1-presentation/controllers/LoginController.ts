@@ -1,3 +1,4 @@
+import Logger from "../../4-infra/utils/logger";
 import { UserRegisterViewModel } from "../viewmodel/UserRegisterViewModel";
 
 export default class LoginController {
@@ -9,9 +10,9 @@ export default class LoginController {
             const accessToken = await req.service.loginService.verifyUser({ email, password });
 
             res.status(200).json({ token: accessToken });
-        } catch(err) {
+        } catch(err: any) {
             next(err);
-            console.log(err)
+            new Logger('Login', err).log();
         } 
     }
 
@@ -92,8 +93,8 @@ export default class LoginController {
         try {
             await req.service.loginService.salvarEmailMarketing(email);
             return res.status(200).end()
-        } catch(err) {
-            console.log(err);
+        } catch(err: any) {
+            new Logger('Email Marketing', err).log();
             next(err);
         }
     }

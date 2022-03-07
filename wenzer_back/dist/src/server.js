@@ -15,11 +15,12 @@ const ExposeServices_1 = __importDefault(require("./middlewares/ExposeServices")
 './middlewares/ExposeServices';
 require("./extension-method/string");
 require("./extension-method/date");
+const logger_1 = __importDefault(require("./4-infra/utils/logger"));
 const swaggerFile = require('./swagger_output.json');
 const port = 3333;
 conexao_1.conexao.connect((err) => {
     if (err) {
-        console.log(err);
+        new logger_1.default('Iniciar Servidor', err).log();
     }
     else {
         const oneDay = 1000 * 60 * 60 * 24;

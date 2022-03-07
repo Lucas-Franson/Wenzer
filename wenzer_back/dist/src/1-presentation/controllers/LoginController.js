@@ -8,7 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("../../4-infra/utils/logger"));
 const UserRegisterViewModel_1 = require("../viewmodel/UserRegisterViewModel");
 class LoginController {
     login(req, res, next) {
@@ -20,7 +24,7 @@ class LoginController {
             }
             catch (err) {
                 next(err);
-                console.log(err);
+                new logger_1.default('Login', err).log();
             }
         });
     }
@@ -103,7 +107,7 @@ class LoginController {
                 return res.status(200).end();
             }
             catch (err) {
-                console.log(err);
+                new logger_1.default('Email Marketing', err).log();
                 next(err);
             }
         });

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTokenJWT = exports.verifyTokenJWT = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const logger_1 = __importDefault(require("../../../4-infra/utils/logger"));
 const verifyTokenJWT = (token) => {
     var _a;
     const chave = (_a = process.env.CHAVE_JWT) !== null && _a !== void 0 ? _a : '';
@@ -13,7 +14,7 @@ const verifyTokenJWT = (token) => {
         pld = jsonwebtoken_1.default.verify(token, chave);
     }
     catch (err) {
-        console.log(err);
+        new logger_1.default('Verificar Token', err).log();
     }
     return pld === null || pld === void 0 ? void 0 : pld.id;
 };

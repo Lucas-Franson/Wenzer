@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Email = void 0;
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
+const logger_1 = __importDefault(require("../../../4-infra/utils/logger"));
 class Email {
     constructor(_from, _to, _subject, _text, _html) {
         this.From = '';
@@ -36,7 +37,7 @@ class Email {
             const params = {
                 Destination: {
                     ToAddresses: [
-                        this.To
+                        ''
                     ]
                 },
                 Message: {
@@ -55,9 +56,9 @@ class Email {
             };
             var sendPromise = new aws_sdk_1.default.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
             sendPromise.then(function (data) {
-                console.log(data.MessageId);
+                new logger_1.default('Sent Email', data.MessageId).log();
             }).catch(function (err) {
-                console.error(err, err.stack);
+                new logger_1.default('Send Email Error', err).log();
             });
         });
     }
