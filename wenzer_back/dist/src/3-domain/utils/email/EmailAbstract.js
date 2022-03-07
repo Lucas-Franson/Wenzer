@@ -54,7 +54,7 @@ class Email {
                 },
                 Source: this.From
             };
-            var sendPromise = new aws_sdk_1.default.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
+            var sendPromise = new aws_sdk_1.default.SES({ apiVersion: "2012-10-17" }).sendEmail(params).promise();
             sendPromise.then(function (data) {
                 new logger_1.default('Sent Email', data.MessageId).log();
             }).catch(function (err) {

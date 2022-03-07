@@ -44,7 +44,7 @@ export abstract class Email {
             Source: this.From
         };
 
-        var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
+        var sendPromise = new AWS.SES({apiVersion: "2012-10-17"}).sendEmail(params).promise();
 
         sendPromise.then(
             function(data) {
