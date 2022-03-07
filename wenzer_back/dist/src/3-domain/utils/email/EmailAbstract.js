@@ -37,7 +37,7 @@ class Email {
             const params = {
                 Destination: {
                     ToAddresses: [
-                        ''
+                        this.To
                     ]
                 },
                 Message: {
