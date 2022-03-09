@@ -3,6 +3,7 @@ import { HeaderAvatar } from '../Feed/styles';
 
 import { CardInfo, CardMyProject, CardProfile, Container, ContainerProfile, ContainerProjects } from './styles';
 import imageTeste from '../../Utils/image/bgFgtsDescktop.jpg';
+import { AiFillHeart, AiOutlineBulb } from 'react-icons/ai';
 
 const Profile: React.FC = () => {
   return (
@@ -48,7 +49,20 @@ const Profile: React.FC = () => {
             <div className="wraper">
               <CardMyProject>
                 <img src={imageTeste} alt="project"/>
-                <h3>Titulo que devera ser maior que a telasdasdasasdasdasdasdasdasddasasdasddasasdasddasasdasddasasdasddasasdasddasasdasddasdasdasdasda</h3>
+                <div className="containerContent">
+                  <h3>Titulo que devera ser maior que a telasdasdasasdasdasdasdasdasddasasdasddasasdasddasasdasddasasdasddasasdasddasasdasddasdasdasdasda</h3>
+                  <div className='ContainerAction'>
+                    <div className="action">
+                      <AiFillHeart size={20}  className="heart"/>
+                      <span>15</span>
+                    </div>
+
+                    <div className="action">
+                      <AiOutlineBulb size={20} className="idea"/>  
+                      <span>15</span>
+                    </div>
+                  </div>
+                </div>
               </CardMyProject>
 
               <CardMyProject>
@@ -58,25 +72,7 @@ const Profile: React.FC = () => {
               <CardMyProject>
 
               </CardMyProject>
-
-              <CardMyProject>
-
-              </CardMyProject>
-              <CardMyProject>
-
-              </CardMyProject>
-              <CardMyProject>
-
-              </CardMyProject>
-              <CardMyProject>
-
-              </CardMyProject>
-              <CardMyProject>
-
-              </CardMyProject>
-              <CardMyProject>
-
-              </CardMyProject>              
+            
             </div>
             <CardInfo className='mt-10'>
               <h3>Projetos que estou parcipando</h3>

@@ -4,7 +4,7 @@ import { MediaQueries } from '../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 100%;
-  height: 4.5rem;
+  height: 3.8rem;
   z-index: 99;
 
   display: flex;

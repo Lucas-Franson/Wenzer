@@ -167,15 +167,38 @@ export const CardMyProject = styled.div`
     object-fit: contain;
   }
   
-  > h3 {
-    width: 100%;
-    font-weight: 500;
-    font-size: 0.8rem;
-    padding-bottom: 10px;
-    
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .containerContent {
+    > h3 {
+      width: 100%;
+      font-weight: 500;
+      font-size: 0.8rem;
+      padding-bottom: 10px;
+      
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    > .ContainerAction {
+      display: flex;
+      justify-content: space-around;
+
+      > .action {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 0;
+
+        > .heart {
+          color: red;
+        }
+
+        > .idea {
+          color: yellow;
+        }
+      }
+    }
   }
 
 `;
