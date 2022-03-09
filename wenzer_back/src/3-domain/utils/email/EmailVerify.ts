@@ -9,7 +9,7 @@ export class EmailVerify extends Email implements IEmail {
     constructor(email: string) {
         
         super(
-            '"Wenzer" <noreply@wenzer.com.br>',
+            '"Wenzer" <wenzer.marketing@gmail.com>',
             email,
             'Verificação de e-mail',
             '',

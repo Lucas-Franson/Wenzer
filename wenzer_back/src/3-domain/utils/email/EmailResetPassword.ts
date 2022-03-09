@@ -1,13 +1,14 @@
 import { Email } from "./EmailAbstract";
 import { promisify } from 'util';
 import fs from 'fs';
+import { User } from "../../entities/user";
 const readFile = promisify(fs.readFile);
 
 export class EmailResetPassword extends Email {
-    constructor(user: any, address: string) {
+    constructor(user: User, address: string) {
         super(
-            '"Wenzer" <noreply@wenzer.com.br>',
-            user.email,
+            '"Wenzer" <wenzer.marketing@gmail.com>',
+            user._email,
             'Redefinicação de senha',
             `Olá! Segue o link de redefinição de senha: ${address}`,
             ''

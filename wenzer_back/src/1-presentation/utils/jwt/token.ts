@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
+import Logger from '../../../4-infra/utils/logger';
 
 const verifyTokenJWT = (token: string) => {
     const chave: string = process.env.CHAVE_JWT ?? '';
     let pld: any = "";
     try {
       pld = jwt.verify(token, chave);
-    } catch(err) {
-      console.log(err);
+    } catch(err: any) {
+      new Logger('Verificar Token', err).log();
     }
     return pld?.id;
 }

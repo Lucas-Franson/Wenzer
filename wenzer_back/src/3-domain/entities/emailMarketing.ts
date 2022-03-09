@@ -1,23 +1,24 @@
 import DomainBase from './domainBase';
+import { v4 as uuid } from 'uuid';
 
 export class EmailMarketing extends DomainBase {
 
     constructor(
-        public email: string,
-        public emailValid: Boolean = false,
-        public id: string = '',
-        public created_at: Date = new Date(),
-        public updated_at: Date = new Date()
+        public _email: string,
+        public _emailValid: Boolean = false,
+        public _id: string = uuid(),
+        public _created_at: Date = new Date(),
+        public _updated_at: Date = new Date()
     ) {
 
-        super(id, created_at, updated_at);
+        super(_id, _created_at, _updated_at);
     }
 
-    emailIsValid = () => { return this.emailValid }
+    emailIsValid = () => { return this._emailValid }
 
-    validateEmail = () => { this.emailValid = true }
+    validateEmail = () => { this._emailValid = true }
 
-    invalidateEmail = () => { this.emailValid = false }
+    invalidateEmail = () => { this._emailValid = false }
 
     validateObject = () => {
         return true;

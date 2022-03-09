@@ -1,37 +1,37 @@
 import DomainBase from './domainBase';
-import {Blob} from 'node:buffer';
+import { v4 as uuid } from 'uuid';
 
 export class User extends DomainBase {
 
     constructor(
-        public name: string,
-        public email: string, 
-        public password: string,
-        public title: string = '',
-        public photo: Blob = new Blob([]),
-        public bio: string = '',
-        public emailValid: boolean = false,
-        public id: string = '',
-        public created_at: Date = new Date(),
-        public updated_at: Date = new Date()
+        public _name: string,
+        public _email: string, 
+        public _password: string,
+        public _title: string = '',
+        public _photo: any = null,
+        public _bio: string = '',
+        public _emailValid: boolean = false,
+        public _id: string = uuid(),
+        public _created_at: Date = new Date(),
+        public _updated_at: Date = new Date()
     ) {
         
-        super(id, created_at, updated_at);
+        super(_id, _created_at, _updated_at);
     }
 
-    emailIsValid = () => { return this.emailValid; }
+    emailIsValid = () => { return this._emailValid; }
 
-    getName = () => { return this.name }
+    getName = () => { return this._name }
 
-    getEmail = () => { return this.email }
+    getEmail = () => { return this._email }
 
-    getPassword = () => { return this.password }
+    getPassword = () => { return this._password }
 
-    setPassword = (pwd: string) => { this.password = pwd }
+    setPassword = (pwd: string) => { this._password = pwd }
 
-    validateEmail = () => { this.emailValid = true }
+    validateEmail = () => { this._emailValid = true }
 
-    invalidateEmail = () => { this.emailValid = false }
+    invalidateEmail = () => { this._emailValid = false }
 
     validateObject = () => {
         return true;

@@ -9,13 +9,14 @@ import GlobalErrorHandler from './middlewares/GlobalErrorHandler';
 import ExposeServices from './middlewares/ExposeServices'; './middlewares/ExposeServices';
 import './extension-method/string';
 import './extension-method/date';
+import Logger from './4-infra/utils/logger';
 const swaggerFile = require('./swagger_output.json');
 
 const port = 3333;
 
 conexao.connect((err: any) => {
     if (err) {
-        console.log(err);
+        new Logger('Iniciar Servidor', err).log();
     } else {
         const oneDay = 1000 * 60 * 60 * 24;
         const app = express(); 

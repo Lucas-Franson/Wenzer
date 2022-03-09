@@ -1,19 +1,20 @@
 import DomainBase from './domainBase';
+import { v4 as uuid } from 'uuid';
 
 export class Project extends DomainBase {
 
     constructor(
-        public name: string,
-        public description: string,
-        public photo: Blob,
-        public active: boolean,
-        public publicProject: boolean,
-        public id: string = '',
-        public created_at: Date = new Date(),
-        public updated_at: Date = new Date()
+        public _name: string,
+        public _description: string,
+        public _photo: Blob,
+        public _active: boolean,
+        public _publicProject: boolean,
+        public _id: string = uuid(),
+        public _created_at: Date = new Date(),
+        public _updated_at: Date = new Date()
     ) {
 
-        super(id, created_at, updated_at);
+        super(_id, _created_at, _updated_at);
     }
 
     validateObject = () => {
