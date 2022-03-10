@@ -17,6 +17,7 @@ export default class PostService implements IInterestService {
 
     async linkUserToInterests(user: User, interests: InterestsViewModel[]): Promise<void> {
         var userInterests: InterestUser[] = [];
+        var deleteUserInterests: InterestUser[] = [];
 
         let interestUserAlreadyExist = await this.interestsRepository.findLinkUserToInterests(user._id);
         
@@ -32,7 +33,17 @@ export default class PostService implements IInterestService {
             userInterests.push(obj);
         });
 
-        await this.interestsRepository.createLinkToUser(userInterests);
+        interestUserAlreadyExist
+            .filter(i => interests
+                .filter(n => n.id === i._idInterests).length === 0)
+            .forEach((interest: InterestUser) => 
+        {
+            deleteUserInterests.push(interest);
+        });
+
+        if (userInterests.length > 0) await this.interestsRepository.createLinkToUser(userInterests);
+
+        if (deleteUserInterests.length > 0) await this.interestsRepository.deleteLinkToUser(deleteUserInterests);
     }
 
 }

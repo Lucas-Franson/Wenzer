@@ -35,7 +35,7 @@ export class ProfileViewModel {
 
         if (this.interests != null && typeof this.interests !== 'object') throw new ErroParametro('Interesses: deve ser um array de objeto.');
 
-        if (this.name != '') throw new ErroParametro('Nome: não deve ser vazio.');
+        if (this.name == '') throw new ErroParametro('Nome: não deve ser vazio.');
     }
 
 }

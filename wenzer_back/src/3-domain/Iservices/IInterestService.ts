@@ -5,5 +5,5 @@ import { User } from "../entities/user";
 
 export default interface IInterestService {
     getAllInterests(): Promise<Interests[]>;
-    linkUserToInterests(user: User, interests: InterestsViewModel[]): void;
+    linkUserToInterests(user: any, interests: InterestsViewModel[]): void;
 }
