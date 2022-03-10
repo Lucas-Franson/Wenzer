@@ -1,5 +1,6 @@
 require('dotenv').config();
 import express from 'express';
+import cors from 'cors';
 import sessions from 'express-session';
 import { router } from './1-presentation/routes/index';
 import { conexao } from './4-infra/dbContext/conexao';
@@ -37,6 +38,7 @@ conexao.connect((err: any) => {
             resave: false
         }));
         app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+        app.use(cors());
 
         require("./1-presentation/routes/index")
 
