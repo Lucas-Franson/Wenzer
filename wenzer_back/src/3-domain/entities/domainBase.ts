@@ -18,4 +18,14 @@ export default abstract class DomainBase {
 
     abstract validateObject(): boolean;
 
+    toSql() {
+        let newObj: any = {};
+        let _self: any = this;
+        Object.keys(_self).forEach((key: any) => {
+            const newKey = key.replace('_', '');
+            newObj[newKey] = _self[key];
+        });
+        return newObj;
+    }
+
 }
