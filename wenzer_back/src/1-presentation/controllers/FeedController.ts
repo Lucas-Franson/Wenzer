@@ -3,7 +3,7 @@ import { ErroParametro } from "../../erros";
 export default class FeedController {
 
     async getAllPosts(req: any, res: any, next: any) {
-        const { page, countPerPage } = req.body;
+        const { page, countPerPage } = req.params;
         
         try {
             if (!page || !countPerPage) {
