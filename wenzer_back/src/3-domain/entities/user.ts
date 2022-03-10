@@ -25,6 +25,8 @@ export class User extends DomainBase {
 
     getEmail = () => { return this._email }
 
+    getPhoto = () => { return this._photo }
+
     getPassword = () => { return this._password }
 
     setPassword = (pwd: string) => { this._password = pwd }

@@ -4,5 +4,6 @@ import { IOrm } from "./Iorm";
 
 export interface IInterestsRepository extends IOrm<Interests> {
     createLinkToUser(userInterests: InterestUser[]): Promise<void>;
+    deleteLinkToUser(userInterests: InterestUser[]): Promise<void>;
     findLinkUserToInterests(userId: string): Promise<InterestUser[]>;
 }

@@ -1,3 +1,4 @@
+import { InterestsViewModel } from "../../1-presentation/viewmodel/InterestsViewModel";
 import { IInterestsRepository } from "../../4-infra/irepositories/IinterestsRepository";
 import { Interests } from "../entities/interests";
 import { InterestUser } from "../entities/interestUser";
@@ -14,24 +15,35 @@ export default class PostService implements IInterestService {
         return await this.interestsRepository.getAll('');
     }
 
-    async linkUserToInterests(user: User, interests: Interests[]): Promise<void> {
+    async linkUserToInterests(user: User, interests: InterestsViewModel[]): Promise<void> {
         var userInterests: InterestUser[] = [];
+        var deleteUserInterests: InterestUser[] = [];
 
         let interestUserAlreadyExist = await this.interestsRepository.findLinkUserToInterests(user._id);
         
         interests
             .filter(n => interestUserAlreadyExist
-                .filter(i => i._idInterests === n._id).length === 0)
-            .forEach((interest: Interests) => 
+                .filter(i => i._idInterests === n.id).length === 0)
+            .forEach((interest: InterestsViewModel) => 
         {
             var obj = new InterestUser(
-                interest._id,
+                interest.id,
                 user._id,
             );
             userInterests.push(obj);
         });
 
-        this.interestsRepository.createLinkToUser(userInterests);
+        interestUserAlreadyExist
+            .filter(i => interests
+                .filter(n => n.id === i._idInterests).length === 0)
+            .forEach((interest: InterestUser) => 
+        {
+            deleteUserInterests.push(interest);
+        });
+
+        if (userInterests.length > 0) await this.interestsRepository.createLinkToUser(userInterests);
+
+        if (deleteUserInterests.length > 0) await this.interestsRepository.deleteLinkToUser(deleteUserInterests);
     }
 
 }
