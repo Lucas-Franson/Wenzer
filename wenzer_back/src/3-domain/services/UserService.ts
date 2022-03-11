@@ -48,7 +48,7 @@ export default class UserService implements IUserService {
     async updateUserNewPwd(user: User, pwd: string) {
         const newPassword = await this.generatePasswordHash(pwd);
         user.setPassword(newPassword);
-        this.userRepository.update(user);
+        this.updateUser(user);
     }
 
     async sendEmailOfVerification(user: User) {

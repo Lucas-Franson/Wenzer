@@ -25,7 +25,7 @@ export class Orm<T extends DomainBase> implements IOrm<T> {
         const tableName = this.constructor["name"].replace("Repository", "");
         if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `INSERT INTO ${tableName} SET ?`;
-        await conexao.query(sql, object, (err: any) => {
+        await conexao.query(sql, object.toSql(), (err: any) => {
             if (err) throw new Error(err);
         });
     }

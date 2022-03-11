@@ -31,7 +31,10 @@ export default class UserRepository extends Orm<User> implements IUserRepository
     async getById(id: string): Promise<User | null> {
         const sql = `SELECT * FROM ${this.TABLENAME} WHERE ID = '${id}' LIMIT 1`;
         let result: any = await queryPromise(sql);
-        return result.length > 0 ? result[0] : null;
+        if (result) {
+            return this.convertToObjectUser(result[0]);
+        }
+        return null;
     }
 
     convertToObjectUser(user: any): User | null {

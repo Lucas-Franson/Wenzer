@@ -9,6 +9,7 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
     private TABLENAME: string = 'Interests';
 
     async createLinkToUser(userInterests: InterestUser[]): Promise<void> {
+        if (userInterests.length <= 0) throw new Error("Não possui interesse para criar relacionamento com usuário.");
         
         let sqlInsertInto = "INSERT INTO InterestUser (id, idInterests, idUser, created_at, updated_at) VALUES ";
         let sqlValues = "";
@@ -30,13 +31,28 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
         }
     }
 
+    async deleteLinkToUser(userInterests: InterestUser[]): Promise<void> {
+        if (userInterests.length <= 0) throw new Error("Não possui interesses para deletar.");
+        
+        let sql = "DELETE FROM InterestUser WHERE ";
+        let whereClause = "";
+
+        userInterests.forEach((interest) => {
+            whereClause += whereClause == "" ? "" : " OR ";
+            whereClause += ` id = ${interest._id.toSql()} `;
+        });
+
+        sql += whereClause;
+        await queryPromise(sql);
+    }
+
     async findLinkUserToInterests(userId: string): Promise<InterestUser[]> {
         
-        const sql = `SELECT * FROM InterestUser WHERE idUser = ${userId}`;
+        const sql = `SELECT * FROM InterestUser WHERE idUser = ${userId.toSql()}`;
         let result: any = await queryPromise(sql);
         let arrInterestUser: InterestUser[] = [];
-        if (result) {
-            result.array.forEach((interestUser: InterestUser) => {
+        if (result.length > 0) {
+            result.forEach((interestUser: InterestUser) => {
                 const obj = this.convertToObjectUser(interestUser);
                 if (obj) {
                     arrInterestUser.push(obj);

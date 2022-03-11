@@ -61,9 +61,16 @@ export default class LoginAppService {
             throw new ValideSeuEmail("Valide seu email para continuar.");
         }
 
-        const accessToken = createTokenJWT(found.getId(), [1, 'h']);
+        return this.createLoginReturnJson(found);
+    }
 
-        return accessToken;
+    createLoginReturnJson(found: User) {
+        const accessToken = createTokenJWT(found.getId(), [1, 'h']);
+        const name = found.getName();
+        const email = found.getEmail();
+        const photo = found.getPhoto();
+
+        return { name, email, photo, accessToken };
     }
 
     async logout(session: any) {

@@ -68,7 +68,10 @@ routes.put('/api/editProfile', AuthUser, profileController.editProfile, () => {
         */
     });
 
-routes.options(['api/editProfile'], (req: any, res: any) => {
+routes.options([
+    '/api/editProfile',
+    '/api/getAllInterests'
+], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);
     res.status(204);

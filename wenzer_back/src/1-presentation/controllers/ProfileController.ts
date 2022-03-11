@@ -4,7 +4,7 @@ export default class ProfileController {
 
     async getAllInterests(req: any, res: any, next: any) {
         try {
-            const interests = req.service.profileService.getAllInterests();
+            const interests = await req.service.profileService.getAllInterests();
 
             res.status(200).json(interests);
         } catch(err) {
@@ -18,7 +18,7 @@ export default class ProfileController {
         
         try {
             profile.validateModel();
-            req.service.profileService.editProfile(req.session.userId, profile);
+            await req.service.profileService.editProfile(req.session.userId, profile);
 
             res.status(200).json();
         } catch(err) {
