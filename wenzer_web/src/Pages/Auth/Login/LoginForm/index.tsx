@@ -1,6 +1,6 @@
 import { FormEvent, memo, useState } from "react";
 import { Link } from 'react-router-dom';
-import api from "../../../../Services/api/api";
+import api from "../../../../Services/api/apiService";
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../../../Services/Authentication/auth';
 
@@ -36,7 +36,7 @@ function Login() {
       history.push('/');
     })
     .catch((err) => {
-      debugger;
+
       toastfyError(err.response.data.mensagem);
       setIsLoading(false);
     });

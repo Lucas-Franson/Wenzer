@@ -4,7 +4,7 @@ import { CircularProgress } from "@material-ui/core";
 import InputTextPassword from "../../../../Components/InputPassword";
 import { toastfyError, toastfySuccess, toastfyWarning } from "../../../../Components/Toastfy";
 import { Container } from "./styles";
-import api from "../../../../Services/api/api";
+import api from "../../../../Services/api/apiService";
 import { useHistory } from "react-router-dom";
 
 function Login() {

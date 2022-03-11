@@ -4,7 +4,7 @@ import {
     useContext,
 } from 'react';
 import Cookies from 'js-cookie';
-import api from "../../Services/api/api";
+import api from "../api/apiService";
 import { toastfyError } from '../../Components/Toastfy';
 
 interface IAuthContext {

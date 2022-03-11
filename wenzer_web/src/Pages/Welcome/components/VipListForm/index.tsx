@@ -1,6 +1,6 @@
 import { useState, useContext, FormEvent, memo } from "react";
 import WelcomeContext from '../../context';
-import api from '../../../../Services/api/api';
+import api from '../../../../Services/api/apiService';
 import { toast } from 'react-toastify';
 
 import { CircularProgress } from '@material-ui/core';

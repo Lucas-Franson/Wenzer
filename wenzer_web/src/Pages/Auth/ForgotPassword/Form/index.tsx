@@ -3,7 +3,7 @@ import { FormEvent, memo, useState } from "react";
 import InputText from "../../../../Components/InputText";
 import { CircularProgress } from "@material-ui/core";
 import { Container } from "./styles";
-import api from "../../../../Services/api/api";
+import api from "../../../../Services/api/apiService";
 import { toastfyError, toastfySuccess } from "../../../../Components/Toastfy";
 
 function Login() {
