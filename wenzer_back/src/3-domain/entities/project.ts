@@ -9,6 +9,8 @@ export class Project extends DomainBase {
         public _photo: Blob,
         public _active: boolean,
         public _publicProject: boolean,
+        public _marketing: boolean,
+        public _userId: string,
         public _id: string = uuid(),
         public _created_at: Date = new Date(),
         public _updated_at: Date = new Date()
@@ -16,6 +18,8 @@ export class Project extends DomainBase {
 
         super(_id, _created_at, _updated_at);
     }
+
+    getId = () => { return this._id }
 
     validateObject = () => {
         return true;

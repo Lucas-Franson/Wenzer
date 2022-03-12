@@ -1,5 +1,5 @@
 import { IOrm } from "../irepositories/Iorm";
-import { conexao, queryPromise } from '../dbContext/conexao';
+import { queryPromise, connection } from '../dbContext/conexao';
 import DomainBase from "../../3-domain/entities/domainBase";
 
 export class Orm<T extends DomainBase> implements IOrm<T> {
@@ -25,9 +25,7 @@ export class Orm<T extends DomainBase> implements IOrm<T> {
         const tableName = this.constructor["name"].replace("Repository", "");
         if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `INSERT INTO ${tableName} SET ?`;
-        await conexao.query(sql, object.toSql(), (err: any) => {
-            if (err) throw new Error(err);
-        });
+        await connection.query(sql, object.toSql());
     }
     async update(object: T): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");
@@ -35,9 +33,7 @@ export class Orm<T extends DomainBase> implements IOrm<T> {
         const sql = `UPDATE ${tableName}
                      SET ${this._createSetOfData(object)}
                      WHERE ID = '${object.getId()}'`;
-        conexao.query(sql, (err: any) => {
-            if (err) throw new Error(err);
-        });
+        await queryPromise(sql);
     }
     private _capitalizeFirstLetter(word: string): string {
         return word.charAt(0).toUpperCase() + word.slice(1);
@@ -60,15 +56,15 @@ export class Orm<T extends DomainBase> implements IOrm<T> {
     private _formatPropertyValueToSQL(property: any): string {
         if(typeof property === 'boolean') {
             return property ? '1' : '0';
+        } else if(typeof property === 'string' || typeof property === 'object') {
+            return `${property.toSql()}`;
         } else {
             return `'${property}'`;
         }
     }
-    async delete(object: T): Promise<void> {
+    async delete(id: string): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");
-        const sql = `DELETE FROM ${tableName} WHERE ID = ${object.getId()}`;
-        conexao.query(sql, (err: any) => {
-            if (err) throw new Error(err);
-        });
+        const sql = `DELETE FROM ${tableName} WHERE ID = ${id.toSql()}`;
+        await queryPromise(sql);
     }
 }
