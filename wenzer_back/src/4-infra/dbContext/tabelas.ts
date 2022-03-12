@@ -10,6 +10,8 @@ export class Tabelas {
         this.createEmailMarketing();
         this.createInterests();
         this.createInterestUser();
+        this.createUserPostGoodIdea();
+        this.createPostComments();
     }
 
     executeQuery(sql: string) {
@@ -88,6 +90,26 @@ export class Tabelas {
     createEmailMarketing() {
         const sql = `CREATE TABLE IF NOT EXISTS EmailMarketing (id varchar(255) NOT NULL, 
             email varchar(255) NOT NULL, created_at timestamp, PRIMARY KEY(id))`
+        this.executeQuery(sql);
+    }
+
+    createUserPostGoodIdea() {
+        const sql = `CREATE TABLE IF NOT EXISTS UserPostGoodIdea (id varchar(255) NOT NULL, 
+        idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, 
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idUser, idPost), 
+        FOREIGN KEY (idUser) REFERENCES User(id),
+        FOREIGN KEY (idPost) REFERENCES Post(id))`
+        this.executeQuery(sql);
+    }
+
+    createPostComments() {
+        const sql = `CREATE TABLE IF NOT EXISTS PostComments (id varchar(255) NOT NULL, 
+        idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, Text varchar(400) NOT NULL,
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idUser, idPost), 
+        FOREIGN KEY (idUser) REFERENCES User(id),
+        FOREIGN KEY (idPost) REFERENCES Post(id))`
         this.executeQuery(sql);
     }
 }

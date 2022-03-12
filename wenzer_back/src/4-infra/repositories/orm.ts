@@ -34,7 +34,7 @@ export class Orm<T extends DomainBase> implements IOrm<T> {
         if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `UPDATE ${tableName}
                      SET ${this._createSetOfData(object)}
-                     WHERE ID = "${object.getId()}"`;
+                     WHERE ID = '${object.getId()}'`;
         conexao.query(sql, (err: any) => {
             if (err) throw new Error(err);
         });

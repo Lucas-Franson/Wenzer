@@ -100,4 +100,16 @@ export default class UserService implements IUserService {
         return bcrypt.hash(password, custoHash);
     }
 
+    async setPostAsGoodIdea(idUser: string, idPost: string, userPostExist: boolean) {
+        if (userPostExist) {
+            await this.userRepository.removePostAsGoodIdea(idUser, idPost);
+        } else {
+            await this.userRepository.setPostAsGoodIdea(idUser, idPost);
+        }
+    }
+
+    async getAllUsersByArrOfIds(idUserArr: string[]) {
+        return await this.userRepository.getAllUsersByArrOfIds(idUserArr);
+    }
+
 }
