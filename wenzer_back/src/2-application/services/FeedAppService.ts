@@ -1,12 +1,20 @@
 import { PostCommentsViewModel } from "../../1-presentation/viewmodel/PostCommentsViewModel";
 import { UserPostCommentViewModel } from "../../1-presentation/viewmodel/UserPostCommentViewModel";
 import { Post } from "../../3-domain/entities/post";
+import { Project } from "../../3-domain/entities/project";
+import IInterestService from "../../3-domain/Iservices/IInterestService";
 import IPostService from "../../3-domain/Iservices/IPostService";
+import IProjectService from "../../3-domain/Iservices/IProjectService";
 import { IUserService } from "../../3-domain/Iservices/IUserService";
 
 export default class FeedAppService {
 
-    constructor(private readonly userService: IUserService, private readonly postService: IPostService){
+    constructor(
+        private readonly userService: IUserService, 
+        private readonly postService: IPostService,
+        private readonly projectService: IProjectService,
+        private readonly interestsService: IInterestService
+    ){
 
     }
 
@@ -53,6 +61,24 @@ export default class FeedAppService {
                 }
             });
             return commentsViewModel;
+        }
+        return [];
+    }
+
+    async getProjectsByInterests(userId: string): Promise<Project[]> {
+        const interests = await this.interestsService.getInterestsByUser(userId);
+        if (interests.length > 0) {
+            const projects = await this.projectService.getProjectsByInterests(interests);
+            return projects;
+        }
+        return [];
+    }
+
+    async getProjectsMarketing(userId: string): Promise<Project[]> {
+        const interests = await this.interestsService.getInterestsByUser(userId);
+        if (interests.length > 0) {
+            const projects = await this.projectService.getProjectsMarketing(interests);
+            return projects;
         }
         return [];
     }

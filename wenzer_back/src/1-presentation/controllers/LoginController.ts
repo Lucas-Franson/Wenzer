@@ -7,7 +7,7 @@ export default class LoginController {
         const { email, password } = req.body;
         
         try {
-            const accessToken = await req.service.loginService.verifyUser({ email, password });
+            const accessToken = await req.service.loginAppService.verifyUser({ email, password });
 
             res.status(200).json({ token: accessToken });
         } catch(err: any) {
@@ -18,7 +18,7 @@ export default class LoginController {
 
     async logout(req: any, res: any, next: any) {
         try {
-            await req.service.loginService.logout(req.session);
+            await req.service.loginAppService.logout(req.session);
 
             res.status(200).json({ message: "Usuário desconectado" });
         } catch(err) {
@@ -31,7 +31,7 @@ export default class LoginController {
 
         try {
             user.validateModel();
-            const id = await req.service.loginService.register(user);
+            const id = await req.service.loginAppService.register(user);
 
             return res.status(201).json({ id });
         } catch(err) {
@@ -44,7 +44,7 @@ export default class LoginController {
 
         try {
             const { email } = req.body;
-            await req.service.loginService.recoverPassword({ email });
+            await req.service.loginAppService.recoverPassword({ email });
 
             res.status(200).json(response);
         } catch(err) {
@@ -56,7 +56,7 @@ export default class LoginController {
         const {token} = req.params;
 
         try {
-            await req.service.loginService.verifyEmail(token);
+            await req.service.loginAppService.verifyEmail(token);
             return res.status(200).end();
         } catch(err: any) {
             if (err.name === 'JsonWebTokenError') {
@@ -76,7 +76,7 @@ export default class LoginController {
         const { password } = req.body;
 
         try {
-            await req.service.loginService.alterPassword(token, password);
+            await req.service.loginAppService.alterPassword(token, password);
             return res.status(200).end();
         } catch(err: any) {
             if (err.name === 'JsonWebTokenError') {
@@ -91,7 +91,7 @@ export default class LoginController {
         const { email } = req.body;
 
         try {
-            await req.service.loginService.salvarEmailMarketing(email);
+            await req.service.loginAppService.salvarEmailMarketing(email);
             return res.status(200).end()
         } catch(err: any) {
             new Logger('Email Marketing', err).log();
@@ -103,7 +103,7 @@ export default class LoginController {
         const { token } = req.params;
 
         try {
-            await req.service.loginService.confirmarEmailMarketing(token);
+            await req.service.loginAppService.confirmarEmailMarketing(token);
             return res.status(200).end();
         } catch(err: any) {
             if (err.name === 'JsonWebTokenError') {

@@ -23,4 +23,21 @@ export default class ProfileAppService {
         await this.interestsService.linkUserToInterests(user, profile.getInterests());
     }
 
+    async followUser(userId: string, idUserToFollow: string) {
+        const connection = await this.userService.getConnectionFromUsers(userId, idUserToFollow);
+        if (!connection) {
+            await this.userService.createConnection(userId, idUserToFollow);
+        } else {
+            await this.userService.deleteConnection(connection._id);
+        }
+    }
+
+    async getConnections(idUser: string) {
+        return await this.userService.getConnections(idUser);
+    }
+
+    async getInterests(idUser: string) {
+        return await this.interestsService.getInterestsByUser(idUser);
+    }
+
 }

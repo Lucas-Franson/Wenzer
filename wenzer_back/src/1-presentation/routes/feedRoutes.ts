@@ -91,13 +91,39 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
                 schema: { mensagem: "<mensagem do erro>" },
                 description: "Internal server error" }
         */
+    })
+    .get('/api/feed/projectsByInterests', AuthUser, feedController.projectsByInterests, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint projetos por interesse do usuário.'
+            #swagger.responses[200] = { 
+                schema: [{$ref: "#/definitions/Project"}]
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
+    .get('/api/feed/projectsMarketing', AuthUser, feedController.getProjectsMarketing, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint projetos impulsionados.'
+            #swagger.responses[200] = { 
+                schema: [{$ref: "#/definitions/Project"}]
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
     });
 
 routes.options([
         'api/getallposts',
         '/api/setPostAsGoodIdea',
         '/api/setComments',
-        '/api/getAllComments'
+        '/api/getAllComments',
+        '/api/feed/projectsByInterests',
+        '/api/feed/projectsMarketing'
     ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['GET', 'POST']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

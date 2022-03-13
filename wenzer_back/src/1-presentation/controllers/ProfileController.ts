@@ -4,7 +4,7 @@ export default class ProfileController {
 
     async getAllInterests(req: any, res: any, next: any) {
         try {
-            const interests = await req.service.profileService.getAllInterests();
+            const interests = await req.service.profileAppService.getAllInterests();
 
             res.status(200).json(interests);
         } catch(err) {
@@ -18,9 +18,42 @@ export default class ProfileController {
         
         try {
             profile.validateModel();
-            await req.service.profileService.editProfile(req.session.userId, profile);
+            await req.service.profileAppService.editProfile(req.session.userId, profile);
 
-            res.status(200).json();
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async followUser(req: any, res: any, next: any) {
+        const { idUserToFollow } = req.body;
+        try {
+            await req.service.profileAppService.followUser(req.session.userId, idUserToFollow);
+
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async connections(req: any, res: any, next: any) {
+        const { idUser } = req.params;
+        try {
+            const connections = await req.service.profileAppService.getConnections(idUser);
+
+            res.status(200).json(connections);
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async interests(req: any, res: any, next: any) {
+        const { idUser } = req.params;
+        try {
+            const interests = await req.service.profileAppService.getInterests(idUser);
+
+            res.status(200).json(interests);
         } catch(err) {
             next(err);
         }

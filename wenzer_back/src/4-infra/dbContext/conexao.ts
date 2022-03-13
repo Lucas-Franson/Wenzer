@@ -67,6 +67,10 @@ connection.on('error', function(err: any) {
 
 const queryPromise = (sql: any) =>{
     return new Promise((resolve, reject) =>{
+        if (connection == null) {
+            connection = reconnect(connection);
+        }
+        
         connection.query(sql,  (error: any, results: any)=>{
             if(error){
                 return reject(error);

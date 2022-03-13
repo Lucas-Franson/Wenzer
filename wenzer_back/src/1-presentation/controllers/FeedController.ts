@@ -10,7 +10,7 @@ export default class FeedController {
                 throw new ErroParametro('Falta parâmetro para recuperar os registros de feed.');
             }
 
-            const posts = await req.service.feedService.getAllPosts(req.session.userId, page, countPerPage);
+            const posts = await req.service.feedAppService.getAllPosts(req.session.userId, page, countPerPage);
 
             res.status(200).json(posts);
         } catch(err) {
@@ -26,7 +26,7 @@ export default class FeedController {
                 throw new ErroParametro('Falta parâmetro para dar boa ideia no post.');
             }
 
-            await req.service.feedService.setGoodIdea(req.session.userId, postId);
+            await req.service.feedAppService.setGoodIdea(req.session.userId, postId);
 
             res.status(200).json();
         } catch(err) {
@@ -42,7 +42,7 @@ export default class FeedController {
                 throw new ErroParametro('Falta parâmetro para buscar comentários do post.');
             }
 
-            const comments = await req.service.feedService.getAllComments(req.session.userId, postId);
+            const comments = await req.service.feedAppService.getAllComments(req.session.userId, postId);
 
             res.status(200).json(comments);
         } catch(err) {
@@ -58,7 +58,7 @@ export default class FeedController {
                 throw new ErroParametro('Falta parâmetro para buscar comentários do post.');
             }
 
-            await req.service.feedService.setComments(req.session.userId, postId, text);
+            await req.service.feedAppService.setComments(req.session.userId, postId, text);
 
             res.status(200).json();
         } catch(err) {
@@ -66,4 +66,23 @@ export default class FeedController {
         }
     }
 
+    async projectsByInterests(req: any, res: any, next: any) {
+        try {
+            const projects = await req.service.feedAppService.getProjectsByInterests(req.session.userId);
+
+            res.status(200).json(projects);
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async getProjectsMarketing(req: any, res: any, next: any) {
+        try {
+            const projects = await req.service.feedAppService.getProjectsMarketing(req.session.userId);
+
+            res.status(200).json(projects);
+        } catch(err) {
+            next(err);
+        }
+    }
 }

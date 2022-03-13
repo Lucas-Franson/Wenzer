@@ -12,6 +12,7 @@ export class Tabelas {
         this.createInterestUser();
         this.createUserPostGoodIdea();
         this.createPostComments();
+        this.createProjectInterests();
     }
 
     executeQuery(sql: string) {
@@ -114,4 +115,15 @@ export class Tabelas {
         FOREIGN KEY (idPost) REFERENCES Post(id))`
         this.executeQuery(sql);
     }
+
+    createProjectInterests() {
+        const sql = `CREATE TABLE IF NOT EXISTS ProjectInterests (id varchar(255) NOT NULL, 
+        idProject varchar(255) NOT NULL, idInterests varchar(255) NOT NULL,
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idProject, idInterests), 
+        FOREIGN KEY (idProject) REFERENCES Project (id),
+        FOREIGN KEY (idInterests) REFERENCES Interests (id))`
+        this.executeQuery(sql);
+    }
+
 }

@@ -6,10 +6,15 @@ import { createTokenJWT, verifyTokenJWT } from "../../1-presentation/utils/jwt/t
 import { EmailVerify } from "../utils/email/EmailVerify";
 import { EmailResetPassword } from "../utils/email/EmailResetPassword";
 import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
+import { IConnectionRepository } from "../../4-infra/irepositories/IconnectionsRepository";
+import { Connections } from "../entities/conections";
 
 export default class UserService implements IUserService {
 
-    constructor(private readonly userRepository: IUserRepository) {
+    constructor(
+        private readonly userRepository: IUserRepository,
+        private readonly connectionRepository: IConnectionRepository
+    ) {
     }
 
     async findUserByEmail(email: string) {
@@ -110,6 +115,28 @@ export default class UserService implements IUserService {
 
     async getAllUsersByArrOfIds(idUserArr: string[]) {
         return await this.userRepository.getAllUsersByArrOfIds(idUserArr);
+    }
+
+    async getConnectionFromUsers(userId: string, idUserToFollow: string) {
+        const connection = await this.connectionRepository.get(`WHERE idUser = ${idUserToFollow.toSql()} and idFollower = ${userId.toSql()}`);
+        return this.connectionRepository.convertToConnectionObject(connection);
+    }
+
+    async createConnection(userId: string, idUserToFollow: string) {
+        const connection = new Connections(
+            idUserToFollow,
+            userId,
+            true
+        );
+        this.connectionRepository.insert(connection);
+    }
+
+    async deleteConnection(idConnection: string) {
+        await this.connectionRepository.delete(idConnection);
+    }
+
+    async getConnections(idUser: string) {
+        return await this.connectionRepository.getConnectionOfUser(idUser);
     }
 
 }
