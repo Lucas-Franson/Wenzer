@@ -4,5 +4,5 @@ export interface IOrm<T> {
     getById(id: string): Promise<T | null>;
     insert(object: T): Promise<void>; 
     update(object: T): Promise<void>;
-    delete(object: T): Promise<void>;
+    delete(id: string): Promise<void>;
 }

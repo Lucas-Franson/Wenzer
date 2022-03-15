@@ -8,5 +8,5 @@ declare global {
 }
 
 Date.prototype.toSql = function() {
-    return `'${this}'`;
+    return `'${this.getFullYear()}-${this.getMonth()}-${this.getDay()} ${this.getHours()}:${this.getMinutes()}:${this.getSeconds()}'`;
 }

@@ -14,4 +14,6 @@ export interface IUserService {
     sendEmailOfResetPassword(user: User): void;
     validPasswordOfUser(pwdSent: string, pwdSaved: string): Promise<boolean>;
     validateUserEmail(user: User): void;
+    setPostAsGoodIdea(idUser: string, idPost: string, userPostExist: boolean): Promise<void>;
+    getAllUsersByArrOfIds(idUserArr: string[]): Promise<User[]>;
 }

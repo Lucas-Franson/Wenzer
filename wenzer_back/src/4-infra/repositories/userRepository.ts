@@ -16,16 +16,7 @@ export default class UserRepository extends Orm<User> implements IUserRepository
     async getAll(whereClause: string): Promise<User[]> {
         const sql = `SELECT * FROM ${this.TABLENAME} ${whereClause}`;
         let result: any = await queryPromise(sql);
-        let users: User[] = [];
-        if (result) {
-            result.array.forEach((user: User) => {
-                const obj = this.convertToObjectUser(user);
-                if (obj) {
-                    users.push(obj);
-                }
-            });
-        }
-        return users;
+        return this.convertArrayToUserObject(result);
     }
 
     async getById(id: string): Promise<User | null> {
@@ -35,6 +26,41 @@ export default class UserRepository extends Orm<User> implements IUserRepository
             return this.convertToObjectUser(result[0]);
         }
         return null;
+    }
+
+    async setPostAsGoodIdea(idUser: string, idPost: string) {
+        const sql = `INSERT INTO UserPostGoodIdea (id, idUser, idPost, created_at, updated_at) VALUES (uuid(), ${idUser.toSql()}, ${idPost.toSql()}, ${new Date().toSql()}, ${new Date().toSql()});`;
+        await queryPromise(sql);
+    }
+
+    async removePostAsGoodIdea(idUser: string, idPost: string) {
+        const sql = `DELETE FROM UserPostGoodIdea WHERE idUser = ${idUser.toSql()} and idPost = ${idPost.toSql()}`;
+        await queryPromise(sql);
+    }
+
+    async getAllUsersByArrOfIds(idUserArr: string[]) {
+        let sql = `SELECT * FROM ${this.TABLENAME} WHERE id in (`;
+        let where = '';
+        idUserArr.forEach((id) => {
+            where += where == '' ? '' : ', ';
+            where += id.toSql();
+        });
+        let finalQuery = sql + where + ')';
+        let result: any = await queryPromise(finalQuery);
+        return this.convertArrayToUserObject(result);
+    }
+
+    convertArrayToUserObject(userArr: any) {
+        let users: User[] = [];
+        if (userArr) {
+            userArr.forEach((user: User) => {
+                const obj = this.convertToObjectUser(user);
+                if (obj) {
+                    users.push(obj);
+                }
+            });
+        }
+        return users;
     }
 
     convertToObjectUser(user: any): User | null {

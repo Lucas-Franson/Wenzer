@@ -1,3 +1,5 @@
+import { UserPostCommentViewModel } from "./1-presentation/viewmodel/UserPostCommentViewModel"
+
 const swaggerAutogen = require('swagger-autogen')()
 
 const outputFile = './src/swagger_output.json'
@@ -95,6 +97,18 @@ const doc = {
             password: "*******",
             created_at: new Date().toString(),
             updated_at: new Date().toString()
+        },
+        PostCommentsViewModel: {
+            id: "GUID",
+            idUser: "GUID",
+            idPost: "GUID",
+            usuario: UserPostCommentViewModel,
+            created_at: new Date().toString()
+        },
+        UserPostCommentViewModel: {
+            id: "GUID",
+            name: "João",
+            photo: "File"
         }
     }
 }

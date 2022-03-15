@@ -10,6 +10,8 @@ export class Tabelas {
         this.createEmailMarketing();
         this.createInterests();
         this.createInterestUser();
+        this.createUserPostGoodIdea();
+        this.createPostComments();
     }
 
     executeQuery(sql: string) {
@@ -49,8 +51,10 @@ export class Tabelas {
     createProject() {
         const sql = `CREATE TABLE IF NOT EXISTS Project (id varchar(255) NOT NULL,
             name varchar(255) NOT NULL, description varchar(1000), photo Blob, 
-            active tinyint(1), publicProject tinyint(1),
-            updated_at timestamp, created_at timestamp, PRIMARY KEY(id))`;
+            active tinyint(1) DEFAULT 0 NOT NULL, publicProject tinyint(1) DEFAULT 0 NOT NULL, 
+            marketing tinyint(1) DEFAULT 0 NOT NULL, userId varchar(255) NOT NULL,
+            updated_at timestamp, created_at timestamp, PRIMARY KEY(id),
+            FOREIGN KEY (userId) REFERENCES User (id))`;
         this.executeQuery(sql);
     }
 
@@ -88,6 +92,26 @@ export class Tabelas {
     createEmailMarketing() {
         const sql = `CREATE TABLE IF NOT EXISTS EmailMarketing (id varchar(255) NOT NULL, 
             email varchar(255) NOT NULL, created_at timestamp, PRIMARY KEY(id))`
+        this.executeQuery(sql);
+    }
+
+    createUserPostGoodIdea() {
+        const sql = `CREATE TABLE IF NOT EXISTS UserPostGoodIdea (id varchar(255) NOT NULL, 
+        idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, 
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idUser, idPost), 
+        FOREIGN KEY (idUser) REFERENCES User(id),
+        FOREIGN KEY (idPost) REFERENCES Post(id))`
+        this.executeQuery(sql);
+    }
+
+    createPostComments() {
+        const sql = `CREATE TABLE IF NOT EXISTS PostComments (id varchar(255) NOT NULL, 
+        idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, Text varchar(400) NOT NULL,
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idUser, idPost), 
+        FOREIGN KEY (idUser) REFERENCES User(id),
+        FOREIGN KEY (idPost) REFERENCES Post(id))`
         this.executeQuery(sql);
     }
 }

@@ -33,10 +33,73 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
                 schema: { mensagem: "<mensagem do erro>" },
                 description: "Internal server error" }
         */
+    })
+    .post('/api/setPostAsGoodIdea', AuthUser, feedController.setPostAsGoodIdea, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint para setar boa ideia no post.'
+            #swagger.parameters['postId'] = {
+                in: 'body',
+                description: 'Id do post que receberá o boa idéia.',
+                required: true,
+                schema: "GUID"
+            }
+            #swagger.responses[200] = { 
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
+    .post('/api/setComments', AuthUser, feedController.setComments, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint para setar novo comentário ao post.'
+            #swagger.parameters['postId'] = {
+                in: 'body',
+                description: 'Id do post que receberá o boa idéia.',
+                required: true,
+                schema: "GUID"
+            }
+            #swagger.parameters['text'] = {
+                in: 'body',
+                description: 'Texto do usuário para o comentário.',
+                required: true,
+                schema: "Isso aqui ta uma porra..."
+            }
+            #swagger.responses[200] = { 
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
+    .get('/api/getAllComments', AuthUser, feedController.getAllComments, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint obter todos os comentários de um post.'
+            #swagger.parameters['postId'] = {
+                in: 'body',
+                description: 'Id do post que será buscado os comentários.',
+                required: true,
+                schema: "GUID"
+            }
+            #swagger.responses[200] = { 
+                schema: [{$ref: "#/definitions/PostCommentsViewModel"}]
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
     });
 
-routes.options(['api/getallposts'], (req: any, res: any) => {
-    res.set('Access-Control-Allow-Methods', 'GET');
+routes.options([
+        'api/getallposts',
+        '/api/setPostAsGoodIdea',
+        '/api/setComments',
+        '/api/getAllComments'
+    ], (req: any, res: any) => {
+    res.set('Access-Control-Allow-Methods', ['GET', 'POST']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);
     res.status(204);
     res.end();
