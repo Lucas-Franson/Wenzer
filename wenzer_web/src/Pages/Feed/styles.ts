@@ -62,7 +62,6 @@ export const ContainerNewPost = styled.div`
           background-color: ${(props) => props.theme.colors.tertiary};
           opacity: 0.9;
         }  
-      }
     }
   }
 `;

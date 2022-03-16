@@ -31,7 +31,7 @@ function Login() {
     api
     .post("/api/login", data)
     .then((res) => {
-      singIn(res.data.token);
+      singIn(res.data.token.accessToken);
       setIsLoading(false);
       history.push('/');
     })

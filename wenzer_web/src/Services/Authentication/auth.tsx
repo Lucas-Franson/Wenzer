@@ -34,7 +34,7 @@ const AuthProvider = ({ children }: any) => {
   function singIn(token: string) {
     Cookies.set('WenzerLogged', 'true');
     Cookies.set('WenzerToken', token);
-    setLogged(true);      
+    setLogged(true);    
   }
 
   function singOut() {

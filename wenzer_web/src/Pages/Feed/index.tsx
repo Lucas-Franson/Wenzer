@@ -11,7 +11,10 @@ import APIServiceAuthenticated from "../../Services/api/apiService";
 import { Container, ContainerNewPost, HeaderAvatar, InputNewPost } from "./styles";
 import { toastfyError } from "../../Components/Toastfy";
 import Cookies from 'js-cookie';
-import NoContent from "../../Components/Animation/NoContent";
+import Post from "../../Components/Post";
+import { IPostProps } from "../../Components/Post/interface";
+
+import { postMock } from "../../mock/post";
 
 export default function Feed(): ReactElement {
   const { handleOpenModalPost, openModalPost, setOpenModalPost } = useAuth();
@@ -36,7 +39,7 @@ export default function Feed(): ReactElement {
   }
 
   useEffect(() => {
-    if(post.length === 0) {
+    if(post === []) {
       getAllPost();
     }
     console.log(post);
@@ -72,12 +75,31 @@ export default function Feed(): ReactElement {
         </main>
 
       </ContainerNewPost>
-      <NoPostHere />
-      <button onClick={() => dispatch(incrementCounterNotify())}>notificação +</button>
-      Feed em breve...
-      {post.map((item: any) => (
-        <h3 key={item.id}>{item.title}</h3>
-      ))}
+      {/* <button onClick={() => dispatch(incrementCounterNotify())}>notificação +</button> */}
+      
+      {postMock.length !== 0 ? (
+          postMock.map(({ 
+            created_at, description, id, idProject, idUser, photo, title, update_at 
+          }: IPostProps) => (
+            <Post
+              key={id}
+              created_at={created_at}
+              description={description}
+              id={id}
+              idProject={idProject}
+              idUser={idUser}
+              photo={photo}
+              title={title}
+              update_at={update_at}
+            />
+          ))
+        ) : (
+          <div>
+            <NoPostHere/>
+            Procurando publicações...
+          </div>
+        )
+      }
       <Modal open={openModalPost} setOpen={setOpenModalPost} />
     </Container>
   )
