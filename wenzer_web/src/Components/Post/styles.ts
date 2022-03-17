@@ -22,6 +22,7 @@ export const ContainerPost = styled.div`
     display: flex;
     justify-content: flex-start;
     width: 100%;
+    height: 60px;
     gap: 15px;
 
     > .userInfo {
@@ -34,22 +35,47 @@ export const ContainerPost = styled.div`
   > main {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: space-between;
     width: 100%;
+    height: 440px;
     text-align: left;
 
-    > img {
-        max-width: 80%;
+    > .text {
+      gap: 10px;
+      overflow-y: scroll;
+
+      > p {
+        font-size: 0.9rem;
+        font-weight: 400;
+      }
+
+      > span {
+        font-size: 0.8rem;
+        font-weight: 400;
+      }
+    }
+
+    > .image {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+
+      > img {
+        width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
+      }
     }
   }
 
   > footer {
     width: 100%;
+    height: 60px;
     display: flex;
     justify-content: space-around;
+    border-top: 1px solid ${(props) => props.theme.colors.tertiary};
 
     > div {
       display: flex;
@@ -57,6 +83,17 @@ export const ContainerPost = styled.div`
       gap: 5px;
       padding: 10px;
       border-radius: 8px;
+      margin-top: 10px;;
+
+      > span {
+        font-size: 0.8rem;
+      }
+
+     > svg {
+      &.active {
+        color: yellow;
+      }
+     }
 
       &:hover {
           background-color: ${(props) => props.theme.colors.tertiary};

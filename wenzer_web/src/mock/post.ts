@@ -1,6 +1,6 @@
 import { IPostProps } from '../Components/Post/interface';
-import image1 from '../Utils/image/bg_about.svg';
-import image2 from '../Utils/image/bg_business.svg';
+import image1 from '../Utils/image/bgFgtsDescktop.jpg';
+import image2 from '../Utils/image/got.png';
 import image3 from '../Utils/image/bg_home2.svg';
 
 
@@ -17,7 +17,7 @@ export const postMock: IPostProps[] = [
     },
     {
         created_at: new Date(),
-        description: 'Um projeto teste mockado 2',
+        description: 'Um projeto teste mockado 2 lorem ipsum teste lorem lorem loremm nasjdas ilalisdla aishdalisd ilahsdishd sdufhsduhf usdhfushdfu usdhfushdfu usdhfusdhuf uhdf ushdfu usdhfushdfu usdhfusdhuf uhdf hdfu usdhfushdfu usdhfusdhuf uhdf hdfu usdhfushdfu usdhfusdhuf uhdf hdfu usdhfushdfu usdhfusdhuf uhdf hdfu usdhfushdfu usdhfusdhuf uhdf hdfu usdhfushdfu usdhfusdhuf uhdf hd',
         id: 2, 
         idProject: 22,
         idUser: 23,
