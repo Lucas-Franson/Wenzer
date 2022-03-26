@@ -6,15 +6,7 @@ import {
 import Cookies from 'js-cookie';
 import api from "../api/apiService";
 import { toastfyError } from '../../Components/Toastfy';
-
-interface IAuthContext {
-  logged: boolean;
-  singIn(token: string): void;
-  singOut(): void;
-  openModalPost: boolean;
-  setOpenModalPost(state: boolean): void;
-  handleOpenModalPost(): void;
-}
+import { IAuthContext, IUserInfo } from './types';
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
@@ -25,15 +17,27 @@ const AuthProvider = ({ children }: any) => {
       return !!isLogged;
   });
 
+  const [userInfo, setUserInfo] = useState<IUserInfo | null>(() => {
+    const userInfoSaved = localStorage.getItem('WenzerInfo');
+
+    if(userInfoSaved) {
+      return JSON.parse(userInfoSaved);
+    } else {
+      return null
+    }
+  });
+
   const [openModalPost, setOpenModalPost] = useState(false);
 
   const handleOpenModalPost = () => {
     setOpenModalPost(prev => !prev);
   };
 
-  function singIn(token: string) {
+  function singIn(user: IUserInfo) {
     Cookies.set('WenzerLogged', 'true');
-    Cookies.set('WenzerToken', token);
+    Cookies.set('WenzerToken', user.accessToken);
+    localStorage.setItem('WenzerInfo', JSON.stringify(user));
+    setUserInfo(user);
     setLogged(true);    
   }
 
@@ -45,6 +49,8 @@ const AuthProvider = ({ children }: any) => {
     }).then(() => {
       Cookies.remove('WenzerLogged');
       Cookies.remove('WenzerToken');
+      localStorage.removeItem('WenzerInfo');
+      setUserInfo(null)
       setLogged(false);
     })
     .catch((err) => {
@@ -68,7 +74,8 @@ const AuthProvider = ({ children }: any) => {
         singOut,
         openModalPost,
         setOpenModalPost,
-        handleOpenModalPost
+        handleOpenModalPost,
+        userInfo
       }}
     >
       {children}

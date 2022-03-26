@@ -45,7 +45,7 @@ function Login() {
         history.push('/login');
       })  
       .catch((err) => {
-        toastfyError(err.message);
+        toastfyError(err.response.data.mensagem);
         setIsLoading(false);
       });
   }

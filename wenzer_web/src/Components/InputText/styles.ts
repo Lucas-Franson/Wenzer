@@ -9,6 +9,7 @@ export const Container = styled.div`
     padding: 0.8rem 3rem 0.8rem 1rem;
     margin-bottom: 1rem;
     font-weight: 400;
+    font-size: 1rem;
     text-overflow: Ellipsis;
 
     color: ${(props) => props.theme.colors.white.light};
@@ -30,6 +31,10 @@ export const Container = styled.div`
 
   .noMargin {
     margin-bottom: 0 ;
+  }
+
+  .noCopy {
+    user-select: none;
   }
 `;
 

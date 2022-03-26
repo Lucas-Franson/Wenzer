@@ -40,9 +40,9 @@ export const ContainerPost = styled.div`
     height: 440px;
     text-align: left;
 
-    > .text {
-      gap: 10px;
-      overflow-y: scroll;
+    .text {
+      padding-bottom: 10px;
+      height: auto;
 
       > p {
         font-size: 0.9rem;
@@ -52,6 +52,10 @@ export const ContainerPost = styled.div`
       > span {
         font-size: 0.8rem;
         font-weight: 400;
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
       }
     }
 

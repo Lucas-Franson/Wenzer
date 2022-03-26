@@ -10,7 +10,7 @@ interface IInputText {
 }
 
 function InputText(props: IInputText & InputHTMLAttributes<HTMLInputElement> & any) {
-  const { type, placeholder = '', onChange, required = false  } = props;
+  const { type, placeholder = '', onChange, required = false } = props;
 
   return (
     <Container>

@@ -3,8 +3,8 @@ import { MdImage, MdTextFormat, MdVideoCall } from "react-icons/md";
 import NoPostHere from "../../Components/Animation/NoPostHere";
 import Modal from '../../Components/Modal/ModalPost';
 import { useAuth } from "../../Services/Authentication/auth";
-import { useDispatch } from 'react-redux';
-import { incrementCounterNotify } from '../../Store/Slices/notifySlice';
+// import { useDispatch } from 'react-redux';
+// import { incrementCounterNotify } from '../../Store/Slices/notifySlice';
 
 import APIServiceAuthenticated from "../../Services/api/apiService";
 
@@ -18,7 +18,7 @@ import { postMock } from "../../mock/post";
 
 export default function Feed(): ReactElement {
   const { handleOpenModalPost, openModalPost, setOpenModalPost } = useAuth();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [post, setPost] = useState([]);
 
    function getAllPost() {

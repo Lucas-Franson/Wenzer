@@ -21,7 +21,7 @@ function InputSearch(props: IInputText & InputHTMLAttributes<HTMLInputElement> )
         onChange={onChange}
       />
         <MdSearch
-          size={35}
+          size={30}
           className="iconInput"
         />
     </Container>

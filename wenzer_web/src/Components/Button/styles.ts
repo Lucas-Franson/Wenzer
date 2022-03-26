@@ -10,7 +10,15 @@ export const ContainerButton = styled.button`
 
     transition: ease all 0.2s;
 
+    &.onlyBorder {
+      border: 1px solid ${(props) => props.theme.colors.primary};
+      background-color: transparent;
+      color: ${(props) => props.theme.colors.primary};
+    }
+
     &:hover {
       background-color: ${(props) => props.theme.colors.primaryLight};
+      color: white;
     }  
+
 `
