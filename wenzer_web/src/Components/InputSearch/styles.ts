@@ -6,8 +6,9 @@ export const Container = styled.div`
 
   input {
     width: 100%;
-    padding: 0.3rem 1rem 0.8rem 3rem;
+    padding: 0.4rem 1rem 0.8rem 2.5rem;
     font-weight: 400;
+    font-size: 1rem;
 
     color: ${(props) => props.theme.colors.white.light};
     border-radius: 0.5rem;
@@ -17,7 +18,7 @@ export const Container = styled.div`
   .iconInput {
     position: absolute;
     left: 0;
-    top: 2px;
+    top: 3px;
     padding-left: 10px;
   }
 

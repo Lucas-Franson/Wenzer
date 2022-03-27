@@ -9,7 +9,8 @@ export const Container = styled.div`
     padding: 0.8rem 3rem 0.8rem 1rem;
     margin-bottom: 1rem;
     font-weight: 400;
-
+    font-size: 1rem;
+    
     color: ${(props) => props.theme.colors.white.light};
     border-radius: 0.5rem;
     background-color: ${(props) => props.theme.colors.background};

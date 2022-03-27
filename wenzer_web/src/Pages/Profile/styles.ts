@@ -59,10 +59,24 @@ export const CardProfile = styled.div`
     justify-content: center;
     align-items: center;
     height: 100%;
+    position: relative;
 
     .avatarProfile{
       width: 150px;
       height: 150px;
+    }
+
+    .option {
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        cursor: pointer;
+
+        &:hover {
+          background-color: ${props => props.theme.colors.tertiary};
+          border-radius: 50%;
+        }
     }
 
     > span {
@@ -90,7 +104,7 @@ export const CardProfile = styled.div`
 
 export const CardInfo = styled.div`
   width: 100%;
-  height: 100px;
+  height: auto;
   background: ${(props) => props.theme.colors.secondary};
   border-bottom: 3px solid ${props => props.theme.colors.succes};
   border-radius: 8px;
@@ -112,6 +126,16 @@ export const CardInfo = styled.div`
 
   &.mt-10 {
     margin-top: 10px;
+  }
+
+  > .editProfile {
+      gap: 10px;
+      margin-top: 10px;
+
+      > div {
+        display: flex;
+        gap: 10px
+      }
   }
 
   @media (max-width: 1490px){
@@ -145,60 +169,4 @@ export const ContainerProjects = styled.main`
     width:  min(92vw, 750px);
     margin-left: 20px;
   }
-`;
-
-export const CardMyProject = styled.div`
-  width: 30%;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  background: ${(props) => props.theme.colors.secondary};
-  border-bottom: 3px solid ${props => props.theme.colors.primary};
-  border-radius: 8px;
-
-  padding: 10px;
-  margin: 0px 15px 15px 0px;
-  
-  
-  > img {
-    width: 100%;
-    object-fit: contain;
-  }
-  
-  .containerContent {
-    > h3 {
-      width: 100%;
-      font-weight: 500;
-      font-size: 0.8rem;
-      padding-bottom: 10px;
-      
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    > .ContainerAction {
-      display: flex;
-      justify-content: space-around;
-
-      > .action {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 0;
-
-        > .heart {
-          color: red;
-        }
-
-        > .idea {
-          color: yellow;
-        }
-      }
-    }
-  }
-
 `;

@@ -11,6 +11,7 @@ export const Container = styled.div`
     min-height: 150px;
     padding: 0.8rem 1rem 0.8rem 1rem;
     margin-bottom: 1rem;
+    font-size: 1rem;
     font-weight: 400;
     text-overflow: Ellipsis;
 

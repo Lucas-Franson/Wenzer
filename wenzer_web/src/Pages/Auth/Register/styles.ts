@@ -59,7 +59,7 @@ export const Container = styled.div`
     }
   }
 
-  @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
+  @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}  {
     width: 100%;
     flex-direction: column;
     margin-top: 3rem;
@@ -81,9 +81,10 @@ export const Container = styled.div`
       a {
         margin-bottom: 15px;
       }
-  }
+    }
 
-  @media ${MediaQueries.LAYMODE} {
-    height: 60rem;
+    @media ${MediaQueries.LAYMODE} {
+      height: 60rem;
+    }
   }
 `;

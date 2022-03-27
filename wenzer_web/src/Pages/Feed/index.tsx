@@ -1,16 +1,49 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { MdImage, MdTextFormat, MdVideoCall } from "react-icons/md";
 import NoPostHere from "../../Components/Animation/NoPostHere";
 import Modal from '../../Components/Modal/ModalPost';
 import { useAuth } from "../../Services/Authentication/auth";
-import { useDispatch } from 'react-redux';
-import { incrementCounterNotify } from '../../Store/Slices/notifySlice';
+// import { useDispatch } from 'react-redux';
+// import { incrementCounterNotify } from '../../Store/Slices/notifySlice';
+
+import APIServiceAuthenticated from "../../Services/api/apiService";
 
 import { Container, ContainerNewPost, HeaderAvatar, InputNewPost } from "./styles";
+import { toastfyError } from "../../Components/Toastfy";
+import Cookies from 'js-cookie';
+import Post from "../../Components/Post";
+import { IPostProps } from "../../Components/Post/interface";
+
+import { postMock } from "../../mock/post";
 
 export default function Feed(): ReactElement {
   const { handleOpenModalPost, openModalPost, setOpenModalPost } = useAuth();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const [post, setPost] = useState([]);
+
+   function getAllPost() {
+     APIServiceAuthenticated.get('/api/getallposts', {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      },
+      params: {
+        page: 1,
+        countPerPage: 5
+      }
+    }).then(res => {
+      setPost(res.data);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  useEffect(() => {
+    if(post === []) {
+      getAllPost();
+    }
+    console.log(post);
+  });
 
   return (
     <Container>
@@ -42,9 +75,31 @@ export default function Feed(): ReactElement {
         </main>
 
       </ContainerNewPost>
-      <NoPostHere />
-      <button onClick={() => dispatch(incrementCounterNotify())}>notificação +</button>
-      Feed em breve...
+      {/* <button onClick={() => dispatch(incrementCounterNotify())}>notificação +</button> */}
+      
+      {postMock.length !== 0 ? (
+          postMock.map(({ 
+            created_at, description, id, idProject, idUser, photo, title, update_at 
+          }: IPostProps) => (
+            <Post
+              key={id}
+              created_at={created_at}
+              description={description}
+              id={id}
+              idProject={idProject}
+              idUser={idUser}
+              photo={photo}
+              title={title}
+              update_at={update_at}
+            />
+          ))
+        ) : (
+          <div>
+            <NoPostHere/>
+            Procurando publicações...
+          </div>
+        )
+      }
       <Modal open={openModalPost} setOpen={setOpenModalPost} />
     </Container>
   )

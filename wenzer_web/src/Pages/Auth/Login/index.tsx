@@ -1,6 +1,6 @@
 import { ReactElement, useEffect } from "react";
 import { MdArrowBack } from "react-icons/md";
-import api from "../../../Services/api/api";
+import api from "../../../Services/api/apiService";
 
 import { toastfySuccess, toastfyWarning } from "../../../Components/Toastfy";
 
