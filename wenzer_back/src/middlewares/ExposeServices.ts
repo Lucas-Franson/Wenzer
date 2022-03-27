@@ -24,7 +24,7 @@ const interestService = new InterestService(new InterestsRepository());
 
 const loginAppService = new LoginAppService(userService, emailMarketingService);
 const feedAppService = new FeedAppService(userService, postService, projectService, interestService);
-const profileAppService = new ProfileAppService(userService, interestService);
+const profileAppService = new ProfileAppService(userService, interestService, projectService);
 const projectAppService = new ProjectAppService(projectService, interestService, postService);
 
 const service = () => {

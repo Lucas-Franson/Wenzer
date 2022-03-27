@@ -24,6 +24,12 @@ export default class PostService implements IPostService {
         return await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
     }
 
+    async getAllGoodIdeaFromUser(userId: string) {
+        const where = `idUser = ${userId.toSql()}`;
+        let userPost = await this.postRepository.getListUserPostGoodIdea(where);
+        return userPost;
+    }
+
     async sumCountOfGoodIdeia(postId: string, userPostExist: boolean) {
         const post: any = await this.postRepository.getById(postId);
         if (!post) throw new Error("Post não encontrado.");

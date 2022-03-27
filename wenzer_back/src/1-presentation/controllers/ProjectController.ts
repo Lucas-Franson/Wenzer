@@ -37,8 +37,9 @@ export default class ProjectController {
     }
 
     async getByUser(req: any, res: any, next: any) {
+        const { idUser } = req.params;
         try {
-            const projects = await req.service.projectAppService.getByUser(req.session.userId);
+            const projects = await req.service.projectAppService.getByUser(idUser);
 
             res.status(200).json(projects);
         } catch(err) {

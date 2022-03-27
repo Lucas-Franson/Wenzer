@@ -10,6 +10,7 @@ export interface IAuthContext {
 
 export interface IUserInfo {
     accessToken: string;
+    id: string;
     email: string;
     name: string;
     photo: string;

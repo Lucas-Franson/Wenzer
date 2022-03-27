@@ -61,6 +61,14 @@ export default class ProjectService implements IProjectService {
         return await this.projectRepository.getProjectsMarketing(interests);
     }
 
+    async getCountOfProjectsByUser(idUser: string): Promise<{count: number}> {
+        return await this.projectRepository.getCountProjectsByUser(idUser);
+    }
+
+    async getCountOfParticipatingByUser(idUser: string): Promise<{count: number}> {
+        return await this.projectRepository.getCountParticipatingByUser(idUser);
+    }
+
     convertToProjectObject(project: any) {
         if (!project) throw new Error("Projeto está em formato inválido.");
         return  this.projectRepository.convertToProjectObject(project)!;

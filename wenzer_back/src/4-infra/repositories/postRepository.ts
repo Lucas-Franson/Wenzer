@@ -25,7 +25,15 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         LIMIT ${(page-1)*countPerPage}, ${countPerPage}
         `;
         let result: any = await queryPromise(sql);
-        return result;
+        let postObj: Post[] = [];
+        if (result.length > 0) {
+            result.forEach((post: any) => {
+                let newUserPost = this.convertToPostObject(post);
+                if (newUserPost != null)
+                    postObj.push(newUserPost);
+            });
+        }
+        return postObj;
     }
 
     async getUserPostGoodIdea(where: string): Promise<UserPostGoodIdea | null> {
@@ -41,15 +49,15 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
     async getListUserPostGoodIdea(where: string): Promise<UserPostGoodIdea[]> {
         const sql = `SELECT * FROM UserPostGoodIdea WHERE ${where}`;
         let result: any = await queryPromise(sql);
-        let userPost: UserPostGoodIdea[] = [];
+        let userPostObj: UserPostGoodIdea[] = [];
         if (result.length > 0) {
             result.forEach((userPost: any) => {
                 let newUserPost = this.convertToUserPostGoodIdeaObject(userPost);
                 if (newUserPost != null)
-                    userPost.push(newUserPost!);
+                    userPostObj.push(newUserPost!);
             });
         }
-        return userPost;
+        return userPostObj;
     }
 
     async setComment(userId: string, postId: string, text: string): Promise<void> {

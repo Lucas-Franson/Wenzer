@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { HeaderAvatar } from '../Feed/styles';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useAuth } from '../../Services/Authentication/auth';
@@ -11,12 +11,25 @@ import PostProfile from '../../Components/PostProfile';
 import { MdImage, MdSettings } from 'react-icons/md';
 import InputText from '../../Components/InputText';
 import Button from '../../Components/Button';
+import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
+import Cookies from 'js-cookie';
+import { toastfyError } from '../../Components/Toastfy';
+import { IProfileProps } from './interface';
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [hasEditProfile, setHasEditProfile] = useState(false);
+  const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
+  const [interests, setInterests] = useState<{ id: string, name: string }[]>([]);
+  const [userProfileInfo, setuserProfileInfo] = useState<IProfileProps>();
+  const [projects, setProjects] = useState([]);
   const open = Boolean(anchorEl);
   const { userInfo } = useAuth();
+  
+  const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
+  const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
+  const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
+  const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -32,6 +45,78 @@ function Profile(): ReactElement {
   };
 
   const arrMock = [1, 2, 3, 4, 5, 6];
+
+  function getConnections(userId: string) {
+    APIServiceAuthenticated.get(`/api/profile/connections/${userId}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setConnections(res.data);
+      setAlreadyGetConnections(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+ }
+
+  function getInterests(userId: string) {
+    APIServiceAuthenticated.get(`/api/profile/interests/${userId}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setInterests(res.data);
+      setAlreadyGetInterests(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function getUserProfile(userId: string) {
+    APIServiceAuthenticated.get(`/api/profile/info/${userId}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setuserProfileInfo(res.data);
+      setAlreadyGetUserInfo(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function getProjectsByUser(userId: string) {
+    APIServiceAuthenticated.get(`/api/project/${userId}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setProjects(res.data);
+      setAlreadyGetProjects(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+ useEffect(() => {
+    if(!alreadyGetConnections) {
+      getConnections(userInfo?.id!);
+    }
+    if(!alreadyGetInterests) {
+      getInterests(userInfo?.id!);
+    }
+    if(!alreadyGetUserInfo) {
+      getUserProfile(userInfo?.id!);
+    }
+    if(!alreadyGetProjects) {
+      getProjectsByUser(userInfo?.id!);
+    }
+    console.log(connections);
+ });
   
   return (
     <Container>
@@ -41,31 +126,43 @@ function Profile(): ReactElement {
               <div onClick={handleOpenMenuSettings}>
               <AiOutlineEllipsis size={28} className='option' />
               </div>
-              <HeaderAvatar className='avatarProfile' src={userInfo?.photo} />
-              <p>{userInfo?.name}</p>
-              <span>Descrição do perfil aqui</span>
+              <HeaderAvatar className='avatarProfile' src={userProfileInfo?.photo} />
+              <p>{userProfileInfo?.name}</p>
+              <span>{userProfileInfo?.title}</span>
             </div>
 
             <div className="counterProject">
               <div className="counter">
                 <span>Projetos</span>
-                <span>5</span>
+                <span>{userProfileInfo?.countProjects}</span>
               </div>
               <div className="counter">
                 <span>Participando</span>
-                <span>26</span>
+                <span>{userProfileInfo?.countParticipating}</span>
                 </div>
             </div>
 
         </CardProfile>
         <CardInfo>
           <h3>Conexões</h3>
-          <span>Você ainda não tem nenhuma conexão</span>
+          {connections.length > 0 ? (
+            connections.map((value) => (
+              <span>{value?.name}</span>
+            ))
+          ): (
+            <span>Você ainda não tem nenhuma conexão</span>
+          )}
         </CardInfo>
         
         <CardInfo>
           <h3>Interesses</h3>
-          <span>Você ainda não tem nenhum interesse</span>
+          {interests.length > 0 ? (
+            interests.map((value) => (
+              <span>{value?.name}</span>
+            ))
+          ):(
+            <span>Você ainda não tem nenhum interesse</span>
+          )}
         </CardInfo>
 
         <CardInfo>
@@ -78,7 +175,7 @@ function Profile(): ReactElement {
       <ContainerProjects>
         {!hasEditProfile ? (
           <div className="wraper">
-            {arrMock.map(item => (
+            {projects.map(item => (
               <PostProfile key={item}/>
             ))} 
           </div>

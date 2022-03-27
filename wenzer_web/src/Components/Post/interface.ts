@@ -4,7 +4,9 @@ export interface IPostProps {
     id: number;
     idProject: number;
     idUser: number;
-    photo: string;
+    photo: any;
     title: string;
-    update_at?: Date;
+    updated_at?: Date;
+    goodIdea: boolean;
+    user: { name: string, photo: any }
 }

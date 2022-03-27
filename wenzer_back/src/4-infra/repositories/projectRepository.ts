@@ -84,6 +84,23 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
 
         return [];
     }
+
+    async getCountProjectsByUser(idUser: string) {
+        const sql = `SELECT COUNT(id) as count FROM Project WHERE userId = ${idUser.toSql()}`;
+        const result:any = await queryPromise(sql);
+        return result[0];
+    }
+
+    async getCountParticipatingByUser(idUser: string) {
+        const sql = `
+            SELECT COUNT(pj.id) as count FROM Project pj
+            INNER JOIN Participants pt ON pj.id = pt.idProject
+            WHERE
+                idUser = ${idUser.toSql()}
+        `;
+        const result:any = await queryPromise(sql);
+        return result[0];
+    }
     
     convertToProjectObject(project: any): Project | null {
         if (!project) return null;

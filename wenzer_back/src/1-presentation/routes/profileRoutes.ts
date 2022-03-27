@@ -113,6 +113,17 @@ routes.put('/api/editProfile', AuthUser, profileController.editProfile, () => {
                 schema: { mensagem: "<mensagem do erro>" },
                 description: "Internal server error" }
         */
+    })
+    .get('/api/profile/info/:idUser', AuthUser, profileController.getInfoUserProfile, () => {
+        /* 
+            #swagger.tags = ["Profile"] 
+            #swagger.description = 'Endpoint obter informações do usuário.'
+            #swagger.responses[200] = {
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
     });
 
 routes.options([
@@ -120,7 +131,8 @@ routes.options([
     '/api/getAllInterests',
     '/api/profile/follow',
     '/api/profile/connections',
-    '/api/profile/interests/:idUser'
+    '/api/profile/interests/:idUser',
+    '/api/profile/info/:idUser'
 ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

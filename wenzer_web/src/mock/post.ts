@@ -11,9 +11,11 @@ export const postMock: IPostProps[] = [
         id: 1, 
         idProject: 12,
         idUser: 13,
-        photo: image1,
+        photo: new Buffer(''),
         title: 'Um projeto teste',
-        update_at: new Date()
+        updated_at: new Date(),
+        goodIdea: false,
+        user: { name: '', photo: null }
     },
     {
         created_at: new Date(),
@@ -21,9 +23,11 @@ export const postMock: IPostProps[] = [
         id: 2, 
         idProject: 22,
         idUser: 23,
-        photo: image2,
+        photo: new Buffer(''),
         title: 'Um projeto teste 2',
-        update_at: new Date()
+        updated_at: new Date(),
+        goodIdea: false,
+        user: { name: '', photo: null }
     },
     {
         created_at: new Date(),
@@ -31,8 +35,10 @@ export const postMock: IPostProps[] = [
         id: 3, 
         idProject: 32,
         idUser: 33,
-        photo: image3,
+        photo: new Buffer(''),
         title: 'Um projeto teste 3',
-        update_at: new Date()
+        updated_at: new Date(),
+        goodIdea: false,
+        user: { name: '', photo: null }
     },
 ]

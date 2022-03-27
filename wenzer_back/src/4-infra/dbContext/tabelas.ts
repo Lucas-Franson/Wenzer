@@ -13,6 +13,7 @@ export class Tabelas {
         this.createUserPostGoodIdea();
         this.createPostComments();
         this.createProjectInterests();
+        this.createParticipants();
     }
 
     executeQuery(sql: string) {
@@ -130,7 +131,6 @@ export class Tabelas {
         const sql = `CREATE TABLE IF NOT EXISTS Participants (id varchar(255) NOT NULL, 
         idProject varchar(255) NOT NULL, idUser varchar(255) NOT NULL, 
         accepted tinyint(1) NOT NULL DEFAULT 0, role varchar(400), 
-        creator tinyint(1) NOT NULL DEFAULT 0, 
         updated_at timestamp, created_at timestamp, 
         PRIMARY KEY (id, idProject, idUser), 
         FOREIGN KEY (idProject) REFERENCES Project (id) on DELETE CASCADE,

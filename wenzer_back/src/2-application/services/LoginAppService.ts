@@ -66,11 +66,12 @@ export default class LoginAppService {
 
     createLoginReturnJson(found: User) {
         const accessToken = createTokenJWT(found.getId(), [1, 'h']);
+        const id = found.getId();
         const name = found.getName();
         const email = found.getEmail();
         const photo = found.getPhoto();
 
-        return { name, email, photo, accessToken };
+        return { id, name, email, photo, accessToken };
     }
 
     async logout(session: any) {

@@ -1,5 +1,7 @@
 import { PostCommentsViewModel } from "../../1-presentation/viewmodel/PostCommentsViewModel";
+import PostViewModel from "../../1-presentation/viewmodel/PostViewModel";
 import { UserPostCommentViewModel } from "../../1-presentation/viewmodel/UserPostCommentViewModel";
+import UserViewModel from "../../1-presentation/viewmodel/UserViewModel";
 import { Post } from "../../3-domain/entities/post";
 import { Project } from "../../3-domain/entities/project";
 import IInterestService from "../../3-domain/Iservices/IInterestService";
@@ -18,8 +20,41 @@ export default class FeedAppService {
 
     }
 
-    async getAllPosts(userId: string,  page: number, countPerPage: number): Promise<Post[]> {
-        return this.postService.getAllPostsOfUser(userId, page, countPerPage);
+    async getAllPosts(userId: string,  page: number, countPerPage: number): Promise<PostViewModel[]> {
+        let post = await this.postService.getAllPostsOfUser(userId, page, countPerPage);
+        let goodIdea = await this.postService.getAllGoodIdeaFromUser(userId);
+        let postViewModel: PostViewModel[] = [];
+        let user = await this.userService.findUserById(userId);
+        let userViewModel = new UserViewModel(
+            user?._id!,
+            user?._name!,
+            user?._email!,
+            user?._password!,
+            user?._title!,
+            user?._photo!,
+            user?._bio!,
+            user?._emailValid!,
+            user?._created_at!
+        );
+
+        post.map((value) => {
+            const postAsGoodIdea = goodIdea.find(x => x._idPost === value._id);
+            const _postViewModel = new PostViewModel(
+                value._id,
+                value._idUser,
+                value._countViews,
+                value._title,
+                value._description,
+                value._photo,
+                value._idProject,
+                value._created_at,
+                postAsGoodIdea != null,
+                userViewModel
+            );
+            postViewModel.push(_postViewModel);
+        });
+
+        return postViewModel;
     }
 
     async setGoodIdea(userId: string, postId: string): Promise<void> {

@@ -8,7 +8,6 @@ export class Participants extends DomainBase {
         public _idUser: string,
         public _accepted: boolean,
         public _role: string,
-        public _creator: boolean, 
         public _id: string = uuid(),
         public _created_at: Date = new Date(),
         public _updated_at: Date = new Date()

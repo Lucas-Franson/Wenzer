@@ -99,7 +99,7 @@ routes.post('/api/project', AuthUser, projectController.create, () => {
             description: "Internal server error" }
     */
 })
-.get('/api/project', AuthUser, projectController.getByUser, () => {
+.get('/api/project/:idUser', AuthUser, projectController.getByUser, () => {
     /* 
         #swagger.tags = ["Project"] 
         #swagger.description = 'Endpoint para buscar projetos por usuário.'

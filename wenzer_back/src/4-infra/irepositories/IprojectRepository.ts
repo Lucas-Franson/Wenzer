@@ -7,4 +7,6 @@ export interface IProjectRepository extends IOrm<Project> {
     getAllProjectsInHigh(): Promise<Project[]>;
     getProjectsByInterests(interests: { id: string, name: string }[]): Promise<Project[]>;
     getProjectsMarketing(interests: { id: string, name: string }[]): Promise<Project[]>;
+    getCountProjectsByUser(idUser: string): Promise<{count: number}>;
+    getCountParticipatingByUser(idUser: string): Promise<{count: number}>;
 }

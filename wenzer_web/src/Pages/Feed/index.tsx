@@ -20,9 +20,10 @@ export default function Feed(): ReactElement {
   const { handleOpenModalPost, openModalPost, setOpenModalPost } = useAuth();
   // const dispatch = useDispatch();
   const [post, setPost] = useState([]);
+  const [alreadyGetPost, setAlreadyGetPost] = useState(false);
 
-   function getAllPost() {
-     APIServiceAuthenticated.get('/api/getallposts', {
+  function getAllPost() {
+    APIServiceAuthenticated.get('/api/getallposts', {
       headers: {
         auth: Cookies.get('WenzerToken')
       },
@@ -32,6 +33,7 @@ export default function Feed(): ReactElement {
       }
     }).then(res => {
       setPost(res.data);
+      setAlreadyGetPost(true);
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -39,7 +41,7 @@ export default function Feed(): ReactElement {
   }
 
   useEffect(() => {
-    if(post === []) {
+    if(alreadyGetPost) {
       getAllPost();
     }
     console.log(post);
@@ -77,9 +79,9 @@ export default function Feed(): ReactElement {
       </ContainerNewPost>
       {/* <button onClick={() => dispatch(incrementCounterNotify())}>notificação +</button> */}
       
-      {postMock.length !== 0 ? (
-          postMock.map(({ 
-            created_at, description, id, idProject, idUser, photo, title, update_at 
+      {post.length !== 0 ? (
+          post.map(({ 
+            created_at, description, id, idProject, idUser, photo, title, goodIdea, user
           }: IPostProps) => (
             <Post
               key={id}
@@ -90,7 +92,8 @@ export default function Feed(): ReactElement {
               idUser={idUser}
               photo={photo}
               title={title}
-              update_at={update_at}
+              goodIdea={goodIdea}
+              user={user}
             />
           ))
         ) : (

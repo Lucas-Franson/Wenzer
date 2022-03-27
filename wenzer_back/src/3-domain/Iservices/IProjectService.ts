@@ -13,4 +13,6 @@ export default interface IProjectService {
     followerByIdExist(userId: string, idProject: string): Promise<Followers | null>;
     getProjectsByInterests(interests: { id: string, name: string }[]): Promise<Project[]>;
     getProjectsMarketing(interests: { id: string, name: string }[]): Promise<Project[]>;
+    getCountOfProjectsByUser(idUser: string): Promise<{count: number}>;
+    getCountOfParticipatingByUser(idUser: string): Promise<{count: number}>;
 }

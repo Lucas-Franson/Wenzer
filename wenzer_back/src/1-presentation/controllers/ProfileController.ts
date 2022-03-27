@@ -12,9 +12,21 @@ export default class ProfileController {
         }
     }
 
+    async getInfoUserProfile(req: any, res: any, next: any) {
+        const { idUser } = req.params;
+        
+        try {
+            const user = await req.service.profileAppService.getInfoUser(idUser);
+
+            res.status(200).json(user);
+        } catch(err) {
+            next(err);
+        }
+    }
+
     async editProfile(req: any, res: any, next: any) {
         const { name, bio, photo, title, interests } = req.body;
-        const profile = new ProfileViewModel(name, bio, photo, title, interests);
+        const profile = new ProfileViewModel('', name, bio, photo, title, interests, 0, 0);
         
         try {
             profile.validateModel();
