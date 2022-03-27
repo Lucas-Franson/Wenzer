@@ -5,6 +5,7 @@ import { IPostRepository } from "../irepositories/IpostRepository";
 import { queryPromise } from '../dbContext/conexao';
 import { UserPostGoodIdea } from "../../3-domain/entities/userPostGoodIdea";
 import { PostComments } from "../../3-domain/entities/postComments";
+import { v4 as uuid } from 'uuid';
 
 export class PostRepository extends Orm<Post> implements IPostRepository {
     
@@ -52,8 +53,11 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
     }
 
     async setComment(userId: string, postId: string, text: string): Promise<void> {
-        let sql = `INSERT INTO PostComments (id, idUser, idPost, Text, updated_at, created_at) `;
-        sql += ` VALUES (uuid(), ${userId.toSql()}, ${postId.toSql()}, ${text.toSql()}, ${new Date().toSql()}, ${new Date().toSql()})`;
+        let sql = `
+            INSERT INTO PostComments (id, idUser, idPost, Text, updated_at, created_at) 
+                VALUES 
+            (${uuid().toSql()}, ${userId.toSql()}, ${postId.toSql()}, ${text.toSql()}, now(), now());
+        `;
         await queryPromise(sql);
     }
 

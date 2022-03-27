@@ -7,11 +7,11 @@ export class UserPostGoodIdea extends DomainBase {
         public _idUser: string,
         public _idPost: string,
         public _id: string = uuid(),
-        public _createdAt: Date = new Date(),
-        public _updatedAt: Date = new Date()
+        public _created_at: Date = new Date(),
+        public _updated_at: Date = new Date()
     ) {
 
-        super(_id, _createdAt, _updatedAt);
+        super(_id, _created_at, _updated_at);
     }
 
     validateObject(): boolean {

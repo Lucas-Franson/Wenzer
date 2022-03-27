@@ -2,6 +2,8 @@ import { User } from "../../3-domain/entities/user";
 import { Orm } from "./orm";
 import { IUserRepository } from "../irepositories/IuserRepository";
 import { queryPromise } from '../dbContext/conexao';
+import { UserPostGoodIdea } from "../../3-domain/entities/userPostGoodIdea";
+import { v4 as uuid } from 'uuid';
 
 export default class UserRepository extends Orm<User> implements IUserRepository {
 
@@ -29,7 +31,10 @@ export default class UserRepository extends Orm<User> implements IUserRepository
     }
 
     async setPostAsGoodIdea(idUser: string, idPost: string) {
-        const sql = `INSERT INTO UserPostGoodIdea (id, idUser, idPost, created_at, updated_at) VALUES (uuid(), ${idUser.toSql()}, ${idPost.toSql()}, ${new Date().toSql()}, ${new Date().toSql()});`;
+        const sql = `
+            INSERT INTO UserPostGoodIdea (id, idUser, idPost, created_at, updated_at) 
+            VALUES 
+            (${uuid().toSql()}, ${idUser.toSql()}, ${idPost.toSql()}, now(), now())`;
         await queryPromise(sql);
     }
 

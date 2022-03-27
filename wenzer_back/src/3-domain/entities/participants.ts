@@ -4,7 +4,11 @@ import { v4 as uuid } from 'uuid';
 export class Participants extends DomainBase {
 
     constructor(
-        public _active: boolean,
+        public _idProject: string,
+        public _idUser: string,
+        public _accepted: boolean,
+        public _role: string,
+        public _creator: boolean, 
         public _id: string = uuid(),
         public _created_at: Date = new Date(),
         public _updated_at: Date = new Date()

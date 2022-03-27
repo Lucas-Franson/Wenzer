@@ -1,3 +1,4 @@
+import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
 import { PostComments } from "../entities/postComments";
 import IPostService from "../Iservices/IPostService";
@@ -7,6 +8,16 @@ export default class PostService implements IPostService {
 
     constructor(private readonly postRepository: IPostRepository) {
         
+    }
+
+    async create(userId: string, post: PostCreateViewModel) {
+        const postObj = this.postRepository.convertToPostObject(post);
+        
+        if (postObj != null) {
+            postObj._idUser = userId;
+            postObj._countViews = 0;
+            await this.postRepository.insert(postObj);
+        }
     }
 
     async getAllPostsOfUser(userId: string, page: number, countPerPage: number) {

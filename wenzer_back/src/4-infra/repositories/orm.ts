@@ -25,42 +25,37 @@ export class Orm<T extends DomainBase> implements IOrm<T> {
         const tableName = this.constructor["name"].replace("Repository", "");
         if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `INSERT INTO ${tableName} SET ?`;
-        await connection.query(sql, object.toSql());
+        const fixedObj = object.toSql();
+        fixedObj.updated_at = new Date();
+        fixedObj.created_at = new Date();
+        await queryPromise(sql, fixedObj);
     }
     async update(object: T): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");
         if (!object.validateObject()) throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
         const sql = `UPDATE ${tableName}
-                     SET ${this._createSetOfData(object)}
+                     SET ?
                      WHERE ID = '${object.getId()}'`;
-        await queryPromise(sql);
+        const fixedObj = this._createSetOfData(object);
+        fixedObj.updated_at = new Date();
+        await queryPromise(sql, fixedObj);
     }
     private _capitalizeFirstLetter(word: string): string {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
-    private _createSetOfData(object: any): string {
+    private _createSetOfData(object: any): any {
         const arrPropertiesName = Object.getOwnPropertyNames(object);
         const arrNamesToIgnore = ['id', 'created_at'];
-        let setClause = '';
+        let newObj: any = {};
         for (let name of arrPropertiesName.filter((el) =>  
                                                     el != "" && 
                                                     el.charAt(0) === "_" &&
                                                     !arrNamesToIgnore.includes(el))) {
             if (!name) continue;
-            setClause += setClause !== '' ? ', ' : '';
             const propertieValue = object[name];
-            setClause += `${name.replace('_', '')} = ${this._formatPropertyValueToSQL(propertieValue)}`;
+            newObj[name.replace('_', '')] = propertieValue;
         }
-        return setClause;
-    }
-    private _formatPropertyValueToSQL(property: any): string {
-        if(typeof property === 'boolean') {
-            return property ? '1' : '0';
-        } else if(typeof property === 'string' || typeof property === 'object') {
-            return `${property.toSql()}`;
-        } else {
-            return `'${property}'`;
-        }
+        return newObj;
     }
     async delete(id: string): Promise<void> {
         const tableName = this.constructor["name"].replace("Repository", "");

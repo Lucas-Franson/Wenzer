@@ -28,8 +28,8 @@ export class Tabelas {
             idInterests varchar(255) NOT NULL, idUser varchar(255) NOT NULL, 
             updated_at timestamp, created_at timestamp, 
             PRIMARY KEY (id, idInterests, idUser),
-            FOREIGN KEY (idInterests) REFERENCES Interests (id),
-            FOREIGN KEY (idUser) REFERENCES User (id)
+            FOREIGN KEY (idInterests) REFERENCES Interests (id) on DELETE CASCADE,
+            FOREIGN KEY (idUser) REFERENCES User (id) on DELETE CASCADE 
         )`;
         this.executeQuery(sql);
     }
@@ -55,7 +55,7 @@ export class Tabelas {
             active tinyint(1) DEFAULT 0 NOT NULL, publicProject tinyint(1) DEFAULT 0 NOT NULL, 
             marketing tinyint(1) DEFAULT 0 NOT NULL, userId varchar(255) NOT NULL,
             updated_at timestamp, created_at timestamp, PRIMARY KEY(id),
-            FOREIGN KEY (userId) REFERENCES User (id))`;
+            FOREIGN KEY (userId) REFERENCES User (id) on DELETE CASCADE)`;
         this.executeQuery(sql);
     }
 
@@ -65,8 +65,8 @@ export class Tabelas {
             description varchar(1000), photo MEDIUMBLOB, idProject varchar(255), 
             updated_at timestamp, created_at timestamp, 
             PRIMARY KEY (id), 
-            FOREIGN KEY (idUser) REFERENCES User(id),
-            FOREIGN KEY (idProject) REFERENCES Project(id))`;
+            FOREIGN KEY (idUser) REFERENCES User(id) on DELETE CASCADE,
+            FOREIGN KEY (idProject) REFERENCES Project(id) on DELETE CASCADE)`;
         this.executeQuery(sql);
     }
 
@@ -75,8 +75,8 @@ export class Tabelas {
             idUser varchar(255) NOT NULL, idFollower varchar(255) NOT NULL, 
             accepted tinyint(1) NOT NULL, updated_at timestamp, created_at timestamp, 
             PRIMARY KEY (id, idUser, idFollower),
-            FOREIGN KEY (idUser) REFERENCES User(id),
-            FOREIGN KEY (idFollower) REFERENCES User(id))`;
+            FOREIGN KEY (idUser) REFERENCES User(id) on DELETE CASCADE,
+            FOREIGN KEY (idFollower) REFERENCES User(id) on DELETE CASCADE)`;
         this.executeQuery(sql);
     }
 
@@ -85,8 +85,8 @@ export class Tabelas {
             idProject varchar(255) NOT NULL, idUser varchar(255) NOT NULL,
             updated_at timestamp, created_at timestamp, 
             PRIMARY KEY (id, idUser, idProject),
-            FOREIGN KEY (idUser) REFERENCES User(id),
-            FOREIGN KEY (idProject) REFERENCES Project(id))`;
+            FOREIGN KEY (idUser) REFERENCES User(id) on DELETE CASCADE,
+            FOREIGN KEY (idProject) REFERENCES Project(id) on DELETE CASCADE)`;
         this.executeQuery(sql);
     }
 
@@ -101,18 +101,18 @@ export class Tabelas {
         idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, 
         updated_at timestamp, created_at timestamp, 
         PRIMARY KEY (id, idUser, idPost), 
-        FOREIGN KEY (idUser) REFERENCES User(id),
-        FOREIGN KEY (idPost) REFERENCES Post(id))`
+        FOREIGN KEY (idUser) REFERENCES User (id) on DELETE CASCADE,
+        FOREIGN KEY (idPost) REFERENCES Post (id) on DELETE CASCADE)`
         this.executeQuery(sql);
     }
 
     createPostComments() {
         const sql = `CREATE TABLE IF NOT EXISTS PostComments (id varchar(255) NOT NULL, 
-        idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, Text varchar(400) NOT NULL,
+        idUser varchar(255) NOT NULL, idPost varchar(255) NOT NULL, text varchar(400) NOT NULL,
         updated_at timestamp, created_at timestamp, 
         PRIMARY KEY (id, idUser, idPost), 
-        FOREIGN KEY (idUser) REFERENCES User(id),
-        FOREIGN KEY (idPost) REFERENCES Post(id))`
+        FOREIGN KEY (idUser) REFERENCES User(id) on DELETE CASCADE,
+        FOREIGN KEY (idPost) REFERENCES Post(id) on DELETE CASCADE)`
         this.executeQuery(sql);
     }
 
@@ -121,8 +121,20 @@ export class Tabelas {
         idProject varchar(255) NOT NULL, idInterests varchar(255) NOT NULL,
         updated_at timestamp, created_at timestamp, 
         PRIMARY KEY (id, idProject, idInterests), 
-        FOREIGN KEY (idProject) REFERENCES Project (id),
-        FOREIGN KEY (idInterests) REFERENCES Interests (id))`
+        FOREIGN KEY (idProject) REFERENCES Project (id) on DELETE CASCADE,
+        FOREIGN KEY (idInterests) REFERENCES Interests (id) on DELETE CASCADE)`
+        this.executeQuery(sql);
+    }
+
+    createParticipants() {
+        const sql = `CREATE TABLE IF NOT EXISTS Participants (id varchar(255) NOT NULL, 
+        idProject varchar(255) NOT NULL, idUser varchar(255) NOT NULL, 
+        accepted tinyint(1) NOT NULL DEFAULT 0, role varchar(400), 
+        creator tinyint(1) NOT NULL DEFAULT 0, 
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idProject, idUser), 
+        FOREIGN KEY (idProject) REFERENCES Project (id) on DELETE CASCADE,
+        FOREIGN KEY (idUser) REFERENCES User (id) on DELETE CASCADE)`
         this.executeQuery(sql);
     }
 

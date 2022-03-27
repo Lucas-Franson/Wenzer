@@ -13,6 +13,10 @@ export default class ProjectService implements IProjectService {
 
     }
 
+    async getProjectsByUser(userId: string) {
+        return await this.projectRepository.getProjectsByUser(userId);
+    }
+
     async create(project: Project) {
         project._updated_at = new Date();
         project._created_at = new Date();

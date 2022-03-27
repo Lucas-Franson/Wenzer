@@ -8,7 +8,7 @@ export class Post extends DomainBase {
         public _countViews: number,
         public _title: string,
         public _description: string,
-        public _photo: Blob,
+        public _photo: any,
         public _idProject: string,
         public _id: string = uuid(),
         public _created_at: Date = new Date(),

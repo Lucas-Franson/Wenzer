@@ -1,3 +1,4 @@
+import PostCreateViewModel from '../viewmodel/PostCreateViewModel';
 import { ProjectCreateViewModel } from '../viewmodel/ProjectCreateViewModel';
 
 export default class ProjectController {
@@ -35,6 +36,16 @@ export default class ProjectController {
         }
     }
 
+    async getByUser(req: any, res: any, next: any) {
+        try {
+            const projects = await req.service.projectAppService.getByUser(req.session.userId);
+
+            res.status(200).json(projects);
+        } catch(err) {
+            next(err);
+        }
+    }
+
     async highProjects(req: any, res: any, next: any) {
         try {
             const projects = await req.service.projectAppService.highProjects();
@@ -51,6 +62,17 @@ export default class ProjectController {
             await req.service.projectAppService.follow(req.session.userId, idProject);
 
             res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async createPost(req: any, res: any, next: any) {
+        const post: PostCreateViewModel = req.body;
+        try {
+            await req.service.projectAppService.createPost(req.session.userId, post);
+
+            res.status(201).json();
         } catch(err) {
             next(err);
         }

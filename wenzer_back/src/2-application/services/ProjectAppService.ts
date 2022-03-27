@@ -1,14 +1,21 @@
+import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { ProjectCreateViewModel } from "../../1-presentation/viewmodel/ProjectCreateViewModel";
 import IInterestService from "../../3-domain/Iservices/IInterestService";
+import IPostService from "../../3-domain/Iservices/IPostService";
 import IProjectService from "../../3-domain/Iservices/IProjectService";
 
 export default class ProjectAppService {
 
     constructor(
         private readonly projectService: IProjectService,
-        private readonly interestsService: IInterestService
+        private readonly interestsService: IInterestService,
+        private readonly postService: IPostService
     ){
 
+    }
+
+    async getByUser(userId: string) {
+        return await this.projectService.getProjectsByUser(userId);
     }
 
     async create(userId: string, project: ProjectCreateViewModel) {
@@ -40,6 +47,10 @@ export default class ProjectAppService {
         } else {
             await this.projectService.unfollow(follower._id);
         }
+    }
+
+    async createPost(userId: string, post: PostCreateViewModel) {
+        await this.postService.create(userId, post);
     }
 
 }

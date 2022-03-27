@@ -2,6 +2,7 @@ import { Followers } from "../entities/followers";
 import { Project } from "../entities/project";
 
 export default interface IProjectService {
+    getProjectsByUser(userId: string): Promise<Project[]>
     create(project: Project): Promise<void>;
     update(project: Project): Promise<void>;
     delete(projectId: string): Promise<void>;

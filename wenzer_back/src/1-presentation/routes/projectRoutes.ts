@@ -81,12 +81,44 @@ routes.post('/api/project', AuthUser, projectController.create, () => {
             schema: { mensagem: "<mensagem do erro>" },
             description: "Internal server error" }
     */
+})
+.post('/api/project/post', AuthUser, projectController.createPost, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para criar post.'
+        #swagger.parameters['Post'] = {
+            in: 'body',
+            description: 'Post',
+            required: true,
+            schema: { $ref: "#/definitions/Post" }
+        }
+        #swagger.responses[201] = {
+            description: "Created" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
+})
+.get('/api/project', AuthUser, projectController.getByUser, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para buscar projetos por usuário.'
+        #swagger.responses[200] = {
+            schema: [{
+                $ref: "#/definitions/Project"
+            }],
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
 });
 
 routes.options([
     '/api/project',
     '/api/project/onhigh',
-    '/api/project/follower'
+    '/api/project/follower',
+    '/api/project/post'
 ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

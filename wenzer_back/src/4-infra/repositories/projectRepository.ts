@@ -5,6 +5,15 @@ import { queryPromise } from "../dbContext/conexao";
 
 export class ProjectRepository extends Orm<Project> implements IProjectRepository {
 
+    async getProjectsByUser(userId: string) {
+        const sql = `
+            SELECT * FROM Project
+            WHERE userId = ${userId.toSql()}
+        `;
+        const result:any = await queryPromise(sql);
+        return result;
+    }
+
     async getAllProjectsInHigh() {
         const sql = `
             SELECT pj.*, COUNT(fl.id) as CountOfActions FROM Project pj

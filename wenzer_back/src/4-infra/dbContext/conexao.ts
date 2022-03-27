@@ -65,13 +65,13 @@ connection.on('error', function(err: any) {
     }
 });
 
-const queryPromise = (sql: any) =>{
+const queryPromise = (sql: any, object: any = null) =>{
     return new Promise((resolve, reject) =>{
         if (connection == null) {
             connection = reconnect(connection);
         }
         
-        connection.query(sql,  (error: any, results: any)=>{
+        connection.query(sql, object, (error: any, results: any)=>{
             if(error){
                 return reject(error);
             }
