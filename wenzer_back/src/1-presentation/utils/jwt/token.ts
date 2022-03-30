@@ -12,12 +12,12 @@ const verifyTokenJWT = (token: string) => {
     return pld?.id;
 }
 
-const createTokenJWT = (id: string, [timeAmount, timeUnit]: any) => {
+const createTokenJWT = (id: string) => {
     const payload = { 
       id
     };
     const chave: string = process.env.CHAVE_JWT ?? '';
-    const token = jwt.sign(payload, chave, { expiresIn: timeAmount+timeUnit });
+    const token = jwt.sign(payload, chave);
     return token;
 }
 

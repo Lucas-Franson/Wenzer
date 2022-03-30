@@ -35,7 +35,7 @@ export default class EmailMarketingService implements IEmailMarketingService {
     }
 
     async sendEmailMarketingVerification(email: string) {
-        const token = createTokenJWT(email, [1, 'h']);
+        const token = createTokenJWT(email);
         const route = '?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
 

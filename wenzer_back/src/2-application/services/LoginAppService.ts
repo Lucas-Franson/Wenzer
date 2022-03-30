@@ -65,7 +65,7 @@ export default class LoginAppService {
     }
 
     createLoginReturnJson(found: User) {
-        const accessToken = createTokenJWT(found.getId(), [1, 'h']);
+        const accessToken = createTokenJWT(found.getId());
         const id = found.getId();
         const name = found.getName();
         const email = found.getEmail();

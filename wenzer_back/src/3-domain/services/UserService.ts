@@ -57,7 +57,7 @@ export default class UserService implements IUserService {
     }
 
     async sendEmailOfVerification(user: User) {
-        const token = createTokenJWT(user.getId(), [1, 'h']);
+        const token = createTokenJWT(user.getId());
         const route = '/login?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
         
@@ -69,7 +69,7 @@ export default class UserService implements IUserService {
     }
 
     async sendEmailOfResetPassword(user: User) {
-        const token = createTokenJWT(user.getId(), [1, 'h']);
+        const token = createTokenJWT(user.getId());
         const route = '/recover-password?token=';
         const address = `${process.env.BASE_URL_WEB}${route}${token}`;
 
