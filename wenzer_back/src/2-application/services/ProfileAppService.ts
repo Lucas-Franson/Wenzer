@@ -27,8 +27,6 @@ export default class ProfileAppService {
             user?._id!,
             user?._name!,
             user?._bio!,
-            user?._photo!,
-            user?._title!,
             [],
             countProjects?.count,
             countParticipating?.count
@@ -43,6 +41,14 @@ export default class ProfileAppService {
         await this.userService.updateUserByProfile(user, profile);
 
         await this.interestsService.linkUserToInterests(user, profile.getInterests());
+    }
+
+    async editPhoto(userId: string, photo: any) {
+        var user: any = await this.userService.findUserById(userId);
+
+        if (!user) throw new Error('Usuário não encontrado.');
+
+        await this.userService.updateUserPhoto(user, photo);
     }
 
     async followUser(userId: string, idUserToFollow: string) {

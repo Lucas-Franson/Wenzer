@@ -22,14 +22,12 @@ function Profile(): ReactElement {
   const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
   const [interests, setInterests] = useState<{ id: string, name: string }[]>([]);
   const [userProfileInfo, setuserProfileInfo] = useState<IProfileProps>();
-  const [projects, setProjects] = useState([]);
   const open = Boolean(anchorEl);
   const { userInfo } = useAuth();
   
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
-  const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -88,19 +86,7 @@ function Profile(): ReactElement {
     })
   }
 
-  function getProjectsByUser(userId: string) {
-    APIServiceAuthenticated.get(`/api/project/${userId}`, {
-      headers: {
-        auth: Cookies.get('WenzerToken')
-      }
-    }).then(res => {
-      setProjects(res.data);
-      setAlreadyGetProjects(true);
-
-    }).catch(err => {
-      toastfyError(err?.response?.data?.mensagem);
-    })
-  }
+  
 
  useEffect(() => {
     if(!alreadyGetConnections) {
@@ -111,9 +97,6 @@ function Profile(): ReactElement {
     }
     if(!alreadyGetUserInfo) {
       getUserProfile(userInfo?.id!);
-    }
-    if(!alreadyGetProjects) {
-      getProjectsByUser(userInfo?.id!);
     }
     console.log(connections);
  });
@@ -175,9 +158,7 @@ function Profile(): ReactElement {
       <ContainerProjects>
         {!hasEditProfile ? (
           <div className="wraper">
-            {projects.map(item => (
-              <PostProfile key={item}/>
-            ))} 
+            <span>projects</span>
           </div>
         ) : (
           <CardInfo>
@@ -216,6 +197,7 @@ function Profile(): ReactElement {
           <h3>Projetos que estou parcipando</h3>
         </CardInfo>
       </ContainerProjects>
+
       <Menu
         id="fade-menu"
         anchorEl={anchorEl}

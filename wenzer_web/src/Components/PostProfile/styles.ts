@@ -14,6 +14,9 @@ export const ContainerPostProject = styled.div`
   padding: 10px;
   margin: 0px 15px 15px 0px;
   
+  > span {
+    text-align: center;
+  }
   
   > img {
     width: 100%;

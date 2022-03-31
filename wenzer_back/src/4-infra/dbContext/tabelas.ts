@@ -14,6 +14,7 @@ export class Tabelas {
         this.createPostComments();
         this.createProjectInterests();
         this.createParticipants();
+        this.createUserProjectGoodIdea();
     }
 
     executeQuery(sql: string) {
@@ -104,6 +105,16 @@ export class Tabelas {
         PRIMARY KEY (id, idUser, idPost), 
         FOREIGN KEY (idUser) REFERENCES User (id) on DELETE CASCADE,
         FOREIGN KEY (idPost) REFERENCES Post (id) on DELETE CASCADE)`
+        this.executeQuery(sql);
+    }
+
+    createUserProjectGoodIdea() {
+        const sql = `CREATE TABLE IF NOT EXISTS UserProjectGoodIdea (id varchar(255) NOT NULL, 
+        idUser varchar(255) NOT NULL, idProject varchar(255) NOT NULL, 
+        updated_at timestamp, created_at timestamp, 
+        PRIMARY KEY (id, idUser, idProject), 
+        FOREIGN KEY (idUser) REFERENCES User (id) on DELETE CASCADE,
+        FOREIGN KEY (idProject) REFERENCES Project (id) on DELETE CASCADE)`
         this.executeQuery(sql);
     }
 

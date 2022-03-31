@@ -25,12 +25,24 @@ export default class ProfileController {
     }
 
     async editProfile(req: any, res: any, next: any) {
-        const { name, bio, photo, title, interests } = req.body;
-        const profile = new ProfileViewModel('', name, bio, photo, title, interests, 0, 0);
+        const { name, bio, interests } = req.body;
+        const profile = new ProfileViewModel('', name, bio, interests, 0, 0);
         
         try {
             profile.validateModel();
             await req.service.profileAppService.editProfile(req.session.userId, profile);
+
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async editPhoto(req: any, res: any, next: any) {
+        const { photo } = req.body;
+        
+        try {
+            await req.service.profileAppService.editPhoto(req.session.userId, photo);
 
             res.status(204).json();
         } catch(err) {

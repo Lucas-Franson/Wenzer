@@ -22,23 +22,31 @@ routes.put('/api/editProfile', AuthUser, profileController.editProfile, () => {
                 required: false,
                 schema: "Eu curto fazer umas miçangas na praia..."
             }
-            #swagger.parameters['photo'] = {
-                in: 'body',
-                description: 'Foto do usuário.',
-                required: false,
-                schema: new Blob()
-            }
-            #swagger.parameters['title'] = {
-                in: 'body',
-                description: 'Título do usuário.',
-                required: false,
-                schema: 'Software Engineer'
-            }
             #swagger.parameters['interests'] = {
                 in: 'body',
                 description: 'Interesses do usuário.',
                 required: false,
                 schema: [{ id: "3212312", name: "Tecnologia" }]
+            }
+            #swagger.responses[200] = { 
+                description: "Ok" }
+            #swagger.responses[400] = { 
+                schema: { mensagem: "Erro de parâmetro" },
+                description: "Bad Request" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
+    .put('/api/editPhoto', AuthUser, profileController.editPhoto, () => {
+        /* 
+            #swagger.tags = ["Profile"] 
+            #swagger.description = 'Endpoint editar a foto do usuário.'
+            #swagger.parameters['photo'] = {
+                in: 'body',
+                description: 'Foto do usuário.',
+                required: false,
+                schema: new Blob()
             }
             #swagger.responses[200] = { 
                 description: "Ok" }

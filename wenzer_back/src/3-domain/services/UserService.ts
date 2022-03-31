@@ -40,8 +40,6 @@ export default class UserService implements IUserService {
     async updateUserByProfile(user: User, profile: ProfileViewModel) {
         user._name = profile.getName();
         user._bio = profile.getBio();
-        user._title = profile.getTitle();
-        user._photo = profile.getPhoto();
 
         await this.updateUser(user);
     }
@@ -54,6 +52,12 @@ export default class UserService implements IUserService {
         const newPassword = await this.generatePasswordHash(pwd);
         user.setPassword(newPassword);
         this.updateUser(user);
+    }
+
+    async updateUserPhoto(user: User, photo: any) {
+        user._photo = photo;
+
+        await this.updateUser(user);
     }
 
     async sendEmailOfVerification(user: User) {
