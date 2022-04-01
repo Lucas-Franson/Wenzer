@@ -1,51 +1,76 @@
 import Modal from '@material-ui/core/Modal';
+import Cookies from 'js-cookie';
 import { useState, useRef, ChangeEvent, FormEvent} from 'react';
 import { MdClose, MdImage } from 'react-icons/md';
+import APIServiceAuthenticated from '../../../Services/api/apiServiceAuthenticated';
 import Button from '../../Button';
+import { toastfyError, toastfySuccess } from '../../Toastfy';
 import { ContainerModal, Container } from '../styles';
+import { useAuth } from '../../../Services/Authentication/auth';
+import { useEffect } from 'react';
+import { CircularProgress } from '@material-ui/core';
 
 export default function ModalProfilePic({open, setOpen}: any) {
-  const [imageProfile, setImageProfile] = useState<File>();
+  const [file, setFile] = useState<File>();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setPhoto, userInfo } = useAuth();
   const [previewImagePost, setPreviewImagePost] = useState('');
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
   const handleClose = () => {
     setOpen(false);
-    setImageProfile(undefined);
+    setFile(undefined);
   };
 
-  const typesProjects = [
-    {
-      value: 1,
-      label: 'Público'
-    },
-    {
-      value: 2,
-      label: 'Privado'
-    },
-  ]
+  useEffect(() => {
+    if (previewImagePost == '') setPreviewImagePost(userInfo?.photo!);
+  });
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {
     if(!event.target.files){
       return;
     }
+    
+    const fileMB = event.target.files[0].size / 1024 / 1024;
+    if (fileMB > 1) {
+      toastfyError("Tamanho da foto deve ser menor que 1MB.");
+      return;
+    }
 
-    setImageProfile(event.target.files[0]);
     const selectedImagesPreview = URL.createObjectURL(event.target.files[0]);
     setPreviewImagePost(selectedImagesPreview);
-    console.log(event.target.files[0]);
+    
+    setFile(event.target.files[0]);
   }
 
   const removeImage = () => {
-    setImageProfile(undefined);
+    setFile(undefined);
   }
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
+    if(!file) return;
+    
+    if (isLoading) return;
+    setIsLoading(true);
 
-
-    console.log(body);
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    APIServiceAuthenticated.put(`/api/editPhoto`, formData, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setPhoto(res.data.photo);
+      toastfySuccess("Foto alterada!");
+      setIsLoading(false);
+      setOpen(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    });
   }
 
   const body = (
@@ -63,7 +88,7 @@ export default function ModalProfilePic({open, setOpen}: any) {
               <div onClick={() => filepickerRef.current.click()}>
                 <MdImage size={25} />
                 <span>
-                  {!imageProfile ? 'Carregar foto' : 'Carregar outra foto'}
+                  {!file ? 'Carregar foto' : 'Carregar outra foto'}
                 </span>
                 <input
                   type='file'
@@ -73,14 +98,20 @@ export default function ModalProfilePic({open, setOpen}: any) {
                 />
               </div>
 
-              {imageProfile && (
+              {previewImagePost && (
                 <div className='imagePostProfile' onClick={removeImage}>
                   <img src={previewImagePost} alt="postagem" />
                 </div>
               )}
               
             </div>
-            <Button>Salvar</Button>
+            <Button>
+            {isLoading ? (
+              <CircularProgress size={16} color="inherit" />
+            ) : (
+              "Salvar"
+            )}
+            </Button>
           </div>
         </form>
       </main>

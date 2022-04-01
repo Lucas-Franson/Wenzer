@@ -8,6 +8,7 @@ import { EmailResetPassword } from "../utils/email/EmailResetPassword";
 import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
 import { IConnectionRepository } from "../../4-infra/irepositories/IconnectionsRepository";
 import { Connections } from "../entities/conections";
+import { readFile } from 'fs';
 
 export default class UserService implements IUserService {
 

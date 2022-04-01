@@ -11,6 +11,7 @@ import ExposeServices from './middlewares/ExposeServices'; './middlewares/Expose
 import './extension-method/string';
 import './extension-method/date';
 const swaggerFile = require('./swagger_output.json');
+const fileupload = require("express-fileupload");
 
 const port = 3333;
 
@@ -34,6 +35,8 @@ app.use(sessions({
 }));
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(cors());
+app.use(fileupload());
+app.use(express.static("files"));
 
 require("./1-presentation/routes/index")
 

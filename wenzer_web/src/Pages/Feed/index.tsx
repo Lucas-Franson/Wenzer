@@ -20,6 +20,7 @@ export default function Feed(): ReactElement {
   const [post, setPost] = useState([]);
   const [alreadyGetPost, setAlreadyGetPost] = useState(false);
   const [openModalPost, setOpenModalPost] = useState(false);
+  const { userInfo } = useAuth();
 
   function getAllPost() {
     APIServiceAuthenticated.get('/api/getallposts', {
@@ -54,7 +55,7 @@ export default function Feed(): ReactElement {
     <Container>
       <ContainerNewPost>
         <header>
-          <HeaderAvatar />
+          <HeaderAvatar src={userInfo?.photo} />
           <InputNewPost         
               onClick={handleOpenModalPost}
           >

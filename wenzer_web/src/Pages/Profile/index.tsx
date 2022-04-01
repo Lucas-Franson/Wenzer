@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { FormEvent, ReactElement, useEffect, useState } from 'react';
 import { HeaderAvatar } from '../Feed/styles';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useAuth } from '../../Services/Authentication/auth';
@@ -7,7 +7,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Fade from '@material-ui/core/Fade';
 
 import { CardInfo, CardProfile, Container, ContainerProfile, ContainerProjects } from './styles';
-import PostProfile from '../../Components/PostProfile';
 import { MdImage, MdSettings } from 'react-icons/md';
 import InputText from '../../Components/InputText';
 import Button from '../../Components/Button';
@@ -18,17 +17,20 @@ import { IProfileProps } from './interface';
 import InputAutoComplete from '../../Components/InputAutoComplete';
 import InputTextArea from '../../Components/InputTextArea';
 import ModalProfilePic from '../../Components/Modal/ModalProfilePic';
+import { CircularProgress } from '@material-ui/core';
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [hasEditProfile, setHasEditProfile] = useState(false);
   const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
   const [interests, setInterests] = useState<{ id: string, name: string }[]>([]);
-  const [userProfileInfo, setuserProfileInfo] = useState<IProfileProps>();
+  const [userProfileInfo, setUserProfileInfo] = useState<IProfileProps>();
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
+  
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   const open = Boolean(anchorEl);
   const { userInfo } = useAuth();
@@ -44,8 +46,6 @@ function Profile(): ReactElement {
   const handleOpenMenuSettings = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const arrMock = [1, 2, 3, 4, 5, 6];
 
   function getConnections(userId: string) {
     APIServiceAuthenticated.get(`/api/profile/connections/${userId}`, {
@@ -81,7 +81,7 @@ function Profile(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setuserProfileInfo(res.data);
+      setUserProfileInfo(res.data);
       setAlreadyGetUserInfo(true);
 
     }).catch(err => {
@@ -89,14 +89,17 @@ function Profile(): ReactElement {
     })
   }
 
-  
-
   function handleOpenModalProfilePic() {
     setOpenModalProfilePic(true);
     setAnchorEl(null);
   }
 
- useEffect(() => {
+  function save(event: FormEvent) {
+    event.preventDefault();
+
+  }
+
+  useEffect(() => {
     if(!alreadyGetConnections) {
       getConnections(userInfo?.id!);
     }
@@ -107,7 +110,7 @@ function Profile(): ReactElement {
       getUserProfile(userInfo?.id!);
     }
     console.log(connections);
- });
+  });
   
   return (
     <Container>
@@ -187,7 +190,13 @@ function Profile(): ReactElement {
               <InputAutoComplete />
               <div>
                 <Button className="onlyBorder" onClick={handleChangeEditProfile}>Cancelar</Button>
-                <Button>Salvar</Button>
+                <Button onClick={save}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : (
+                    "Salvar"
+                  )}
+                </Button>
               </div>
             </div>
           </CardInfo>

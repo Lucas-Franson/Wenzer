@@ -35,6 +35,17 @@ const AuthProvider = ({ children }: any) => {
     setLogged(true);    
   }
 
+  function setPhoto(photo: string) {
+    const userInfoSaved = localStorage.getItem('WenzerInfo');
+
+    if (userInfoSaved) {
+      const objUserInfo = JSON.parse(userInfoSaved);
+      objUserInfo.photo = photo;
+      localStorage.setItem('WenzerInfo', JSON.stringify(objUserInfo));
+      setUserInfo(objUserInfo);  
+    }
+  }
+
   function singOut() {
     api.get("/api/logout", {
       headers: {
@@ -66,7 +77,8 @@ const AuthProvider = ({ children }: any) => {
         logged,
         singIn,
         singOut,
-        userInfo
+        userInfo,
+        setPhoto
       }}
     >
       {children}

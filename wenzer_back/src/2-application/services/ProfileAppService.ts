@@ -28,6 +28,7 @@ export default class ProfileAppService {
             user?._name!,
             user?._bio!,
             [],
+            user?._photo,
             countProjects?.count,
             countParticipating?.count
         )
@@ -48,7 +49,11 @@ export default class ProfileAppService {
 
         if (!user) throw new Error('Usuário não encontrado.');
 
-        await this.userService.updateUserPhoto(user, photo);
+        const reader = Buffer.from(new Uint8Array(photo.data));
+        const file = `data:${photo.mimetype};base64, ${reader.toString("base64")}`;
+
+        await this.userService.updateUserPhoto(user, file);
+        return file;
     }
 
     async followUser(userId: string, idUserToFollow: string) {

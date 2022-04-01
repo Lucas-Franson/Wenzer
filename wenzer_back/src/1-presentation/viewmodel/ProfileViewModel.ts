@@ -9,6 +9,7 @@ export class ProfileViewModel {
         private name: string,
         private bio: string,
         private interests: InterestsViewModel[],
+        private photo: any,
         private countProjects: number,
         private countParticipating: number
     ) {

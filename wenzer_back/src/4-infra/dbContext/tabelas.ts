@@ -46,7 +46,7 @@ export class Tabelas {
         const sql = `CREATE TABLE IF NOT EXISTS User (id varchar(255) NOT NULL,
             email varchar(255) NOT NULL, name varchar(255) NOT NULL, emailValid 
             tinyint(1), password varchar(255) NOT NULL, bio varchar(400), 
-            title varchar(255), photo Blob, updated_at timestamp, 
+            title varchar(255), photo longtext, updated_at timestamp, 
             created_at timestamp, PRIMARY KEY(id))`;
         this.executeQuery(sql);
     }

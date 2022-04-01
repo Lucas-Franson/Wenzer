@@ -8,7 +8,7 @@ export class User extends DomainBase {
         public _email: string, 
         public _password: string,
         public _title: string = '',
-        public _photo: any = null,
+        public _photo: any = '',
         public _bio: string = '',
         public _emailValid: boolean = false,
         public _id: string = uuid(),

@@ -3,6 +3,7 @@ export interface IAuthContext {
     singIn(userInfo: IUserInfo): void;
     singOut(): void;
     userInfo: IUserInfo | null;
+    setPhoto(photo: string): void;
 };
 
 export interface IUserInfo {
