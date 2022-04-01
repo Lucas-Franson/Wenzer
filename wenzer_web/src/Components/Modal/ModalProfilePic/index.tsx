@@ -1,24 +1,18 @@
 import Modal from '@material-ui/core/Modal';
 import { useState, useRef, ChangeEvent, FormEvent} from 'react';
 import { MdClose, MdImage } from 'react-icons/md';
-import { HeaderAvatar } from '../../../Pages/Feed/styles';
 import Button from '../../Button';
-import InputText from '../../InputText';
-import InputTextArea from '../../InputTextArea';
 import { ContainerModal, Container } from '../styles';
 
-export default function ModalPost({open, setOpen}: any) {
-  const [imageToPost, setImageToPost] = useState<File>();
+export default function ModalProfilePic({open, setOpen}: any) {
+  const [imageProfile, setImageProfile] = useState<File>();
   const [previewImagePost, setPreviewImagePost] = useState('');
-  const [titlePost, setTitlePost] = useState('');
-  const [descriptionPost, setDescriptionPost] = useState('');
-  const [typePost, setTypePost] = useState('1');
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
   const handleClose = () => {
     setOpen(false);
-    setImageToPost(undefined);
+    setImageProfile(undefined);
   };
 
   const typesProjects = [
@@ -30,45 +24,26 @@ export default function ModalPost({open, setOpen}: any) {
       value: 2,
       label: 'Privado'
     },
-  ];
-
-  const allProject = [
-    {
-      value: 1,
-      label: 'Selecione o Projeto'
-    },
-    {
-      value: 2,
-      label: 'projeto 1'
-    },
-    {
-      value: 3,
-      label: 'projeto 2'
-    },
-  ];
+  ]
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {
     if(!event.target.files){
       return;
     }
 
-    setImageToPost(event.target.files[0]);
+    setImageProfile(event.target.files[0]);
     const selectedImagesPreview = URL.createObjectURL(event.target.files[0]);
     setPreviewImagePost(selectedImagesPreview);
+    console.log(event.target.files[0]);
   }
 
   const removeImage = () => {
-    setImageToPost(undefined);
+    setImageProfile(undefined);
   }
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const body = {
-      title: titlePost,
-      description: descriptionPost,
-      type: typePost,
-      image: imageToPost
-    }
+
 
     console.log(body);
   }
@@ -76,34 +51,20 @@ export default function ModalPost({open, setOpen}: any) {
   const body = (
     <ContainerModal >
       <header>
-        <h2>Nova Publicação</h2>
+        <h2>Editar Foto de Perfil</h2>
         <MdClose onClick={handleClose} size={25} />
       </header>
       
       <main>
         <form onSubmit={onSubmit}>
-          <div className="profile">
-            <HeaderAvatar />
-            <select required onChange={(e) => setTypePost(e.target.value)}>
-              {typesProjects.map(item => (
-                <option value={item.value} key={item.value}>{item.label}</option>
-              ))}
-            </select>
-            <select required onChange={(e) => setTypePost(e.target.value)}>
-              {allProject.map(item => (
-                <option value={item.value} key={item.value}>{item.label}</option>
-              ))}
-            </select>
-          </div>
 
           <div className="content">
-            <InputText required placeholder="Titulo" onChange={(e: any) => setTitlePost(e.target.value)} />
-            <InputTextArea required placeholder="Qual a sua idéia?" onChange={(e: any) => setDescriptionPost(e.target.value)}/>
-
             <div className="image">
               <div onClick={() => filepickerRef.current.click()}>
                 <MdImage size={25} />
-                <span>Foto/Vídeo</span>
+                <span>
+                  {!imageProfile ? 'Carregar foto' : 'Carregar outra foto'}
+                </span>
                 <input
                   type='file'
                   onChange={addImageToPost}
@@ -112,14 +73,14 @@ export default function ModalPost({open, setOpen}: any) {
                 />
               </div>
 
-              {imageToPost && (
-                <div className='imagePost' onClick={removeImage}>
+              {imageProfile && (
+                <div className='imagePostProfile' onClick={removeImage}>
                   <img src={previewImagePost} alt="postagem" />
                 </div>
               )}
               
             </div>
-            <Button>Publicar</Button>
+            <Button>Salvar</Button>
           </div>
         </form>
       </main>

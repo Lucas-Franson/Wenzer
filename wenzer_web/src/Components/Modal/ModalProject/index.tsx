@@ -1,13 +1,14 @@
 import Modal from '@material-ui/core/Modal';
 import { useState, useRef, ChangeEvent, FormEvent} from 'react';
-import { MdClose, MdImage } from 'react-icons/md';
+import { MdClose, MdImage, MdPayment } from 'react-icons/md';
 import { HeaderAvatar } from '../../../Pages/Feed/styles';
 import Button from '../../Button';
+import InputAutoComplete from '../../InputAutoComplete';
 import InputText from '../../InputText';
 import InputTextArea from '../../InputTextArea';
 import { ContainerModal, Container } from '../styles';
 
-export default function ModalPost({open, setOpen}: any) {
+export default function ModalProject({open, setOpen}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
   const [previewImagePost, setPreviewImagePost] = useState('');
   const [titlePost, setTitlePost] = useState('');
@@ -32,18 +33,19 @@ export default function ModalPost({open, setOpen}: any) {
     },
   ];
 
-  const allProject = [
+  
+  const stepsProject = [
     {
       value: 1,
-      label: 'Selecione o Projeto'
+      label: 'Novo'
     },
     {
       value: 2,
-      label: 'projeto 1'
+      label: 'Em desenvolvimento'
     },
     {
       value: 3,
-      label: 'projeto 2'
+      label: 'Concluído'
     },
   ];
 
@@ -76,7 +78,7 @@ export default function ModalPost({open, setOpen}: any) {
   const body = (
     <ContainerModal >
       <header>
-        <h2>Nova Publicação</h2>
+        <h2>Novo Projeto</h2>
         <MdClose onClick={handleClose} size={25} />
       </header>
       
@@ -90,7 +92,7 @@ export default function ModalPost({open, setOpen}: any) {
               ))}
             </select>
             <select required onChange={(e) => setTypePost(e.target.value)}>
-              {allProject.map(item => (
+              {stepsProject.map(item => (
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
             </select>
@@ -99,7 +101,7 @@ export default function ModalPost({open, setOpen}: any) {
           <div className="content">
             <InputText required placeholder="Titulo" onChange={(e: any) => setTitlePost(e.target.value)} />
             <InputTextArea required placeholder="Qual a sua idéia?" onChange={(e: any) => setDescriptionPost(e.target.value)}/>
-
+            <InputAutoComplete />
             <div className="image">
               <div onClick={() => filepickerRef.current.click()}>
                 <MdImage size={25} />
@@ -117,6 +119,11 @@ export default function ModalPost({open, setOpen}: any) {
                   <img src={previewImagePost} alt="postagem" />
                 </div>
               )}
+
+              <div>
+                <MdPayment size={22}/>
+                <span>Impulsionar</span>
+              </div>
               
             </div>
             <Button>Publicar</Button>

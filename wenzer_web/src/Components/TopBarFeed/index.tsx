@@ -14,6 +14,7 @@ import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import WenzerLogo from "../../Utils/image/wenzer_web.svg";
 import { Container, ContentMenu, ContainerMenu } from "./styles";
 import { useTheme } from "../../Styles/Hook/theme";
+import ModalProject from "../Modal/ModalProject";
 
 function TopBarFeed(): ReactElement {
   const { toggleTheme, theme } = useTheme();
@@ -21,9 +22,10 @@ function TopBarFeed(): ReactElement {
     theme.title === "dark" ? true : false
   );
   const [openSideMenu, setOpenSideMenu] = useState(false);
+  const [openModalProject, setOpenModalProject] = useState(false)
 
   const openMenuRef = useRef(false);
-  const { singOut, handleOpenModalPost } = useAuth();
+  const { singOut } = useAuth();
 
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
@@ -32,6 +34,10 @@ function TopBarFeed(): ReactElement {
 
   function handleOpenMenu() {
     setOpenSideMenu(!openSideMenu);
+  }
+
+  function handleOpenModalProject() {
+    setOpenModalProject(true);
   }
 
   /* MENU SIDEBAR MOBILE RESPONSIVE -------------------------------------------------------------------- */
@@ -47,11 +53,11 @@ function TopBarFeed(): ReactElement {
         </div>
 
         <div>
-          <Link to="##" onClick={handleOpenModalPost} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
+          <Link to="##" onClick={handleOpenModalProject} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
         </div>
 
         <div>
-          <Link to="notify" onClick={handleOpenModalPost} > <Notify/> <p>Notificações</p></Link>
+          <Link to="notify" onClick={handleOpenModalProject} > <Notify/> <p>Notificações</p></Link>
         </div>
 
         <div>
@@ -115,7 +121,7 @@ function TopBarFeed(): ReactElement {
       {/* BUTTONS ACTION-------------------------------------------------------------------- */}
       <div className="buttons">
         <Tooltip title="Novo Projeto" placement="bottom" >
-          <Link to="" onClick={handleOpenModalPost}>
+          <Link to="" onClick={handleOpenModalProject}>
             <MdAddCircle size={25} style={{cursor: 'pointer'}} />
           </Link>
         </Tooltip>
@@ -157,6 +163,7 @@ function TopBarFeed(): ReactElement {
           </SwipeableDrawer>
         </div>
       </div>
+      <ModalProject open={openModalProject} setOpen={setOpenModalProject} />
 
     </Container>
   );

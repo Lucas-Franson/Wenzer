@@ -17,10 +17,9 @@ import { IPostProps } from "../../Components/Post/interface";
 import { postMock } from "../../mock/post";
 
 export default function Feed(): ReactElement {
-  const { handleOpenModalPost, openModalPost, setOpenModalPost } = useAuth();
-  // const dispatch = useDispatch();
   const [post, setPost] = useState([]);
   const [alreadyGetPost, setAlreadyGetPost] = useState(false);
+  const [openModalPost, setOpenModalPost] = useState(false);
 
   function getAllPost() {
     APIServiceAuthenticated.get('/api/getallposts', {
@@ -40,6 +39,10 @@ export default function Feed(): ReactElement {
     })
   }
 
+  function handleOpenModalPost() {
+    setOpenModalPost(true)
+  }
+
   useEffect(() => {
     if(alreadyGetPost) {
       getAllPost();
@@ -55,7 +58,7 @@ export default function Feed(): ReactElement {
           <InputNewPost         
               onClick={handleOpenModalPost}
           >
-              Qual a sua idéia?
+              Fale sobre sua ideia!
           </InputNewPost>
         </header>
 

@@ -15,6 +15,9 @@ import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated'
 import Cookies from 'js-cookie';
 import { toastfyError } from '../../Components/Toastfy';
 import { IProfileProps } from './interface';
+import InputAutoComplete from '../../Components/InputAutoComplete';
+import InputTextArea from '../../Components/InputTextArea';
+import ModalProfilePic from '../../Components/Modal/ModalProfilePic';
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -22,13 +25,13 @@ function Profile(): ReactElement {
   const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
   const [interests, setInterests] = useState<{ id: string, name: string }[]>([]);
   const [userProfileInfo, setuserProfileInfo] = useState<IProfileProps>();
-  const open = Boolean(anchorEl);
-  const { userInfo } = useAuth();
-  
+  const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
-
+  
+  const open = Boolean(anchorEl);
+  const { userInfo } = useAuth();
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -87,6 +90,11 @@ function Profile(): ReactElement {
   }
 
   
+
+  function handleOpenModalProfilePic() {
+    setOpenModalProfilePic(true);
+    setAnchorEl(null);
+  }
 
  useEffect(() => {
     if(!alreadyGetConnections) {
@@ -148,11 +156,6 @@ function Profile(): ReactElement {
           )}
         </CardInfo>
 
-        <CardInfo>
-          <h3>Atividades</h3>
-          <span>Você ainda não tem nenhuma atividade</span>
-        </CardInfo>
-
       </ContainerProfile>
 
       <ContainerProjects>
@@ -176,15 +179,12 @@ function Profile(): ReactElement {
                 disabled={true}
                 className='noCopy'
               />
-              <InputText 
+              <InputTextArea
                 type="text"
-                placeholder="Descrição" 
-                maxLenght={150}
+                placeholder="Bio" 
+                maxLenght={400}
               />
-              <InputText 
-                type="text"
-                placeholder="Universidade" 
-              />
+              <InputAutoComplete />
               <div>
                 <Button className="onlyBorder" onClick={handleChangeEditProfile}>Cancelar</Button>
                 <Button>Salvar</Button>
@@ -207,8 +207,9 @@ function Profile(): ReactElement {
         TransitionComponent={Fade}
       >
         <MenuItem style={{margin: '5px', gap: '10px'}} onClick={handleChangeEditProfile} > <MdSettings size={22}/>  Editar Perfil</MenuItem>
-        <MenuItem style={{margin: '5px', gap: '10px'}}> <MdImage size={22} /> Editar foto</MenuItem>
+        <MenuItem style={{margin: '5px', gap: '10px'}} onClick={handleOpenModalProfilePic}> <MdImage size={22} /> Editar foto</MenuItem>
       </Menu>
+      <ModalProfilePic open={openModalProfilePic} setOpen={setOpenModalProfilePic}/>
     </Container>
   )
 }
