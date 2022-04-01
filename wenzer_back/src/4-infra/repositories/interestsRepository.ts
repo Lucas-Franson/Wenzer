@@ -9,6 +9,18 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
     
     private TABLENAME: string = 'Interests';
 
+    async getAll(whereClause: string): Promise<Interests[]> {
+        const sql = `SELECT * FROM ${this.TABLENAME} ${whereClause}`;
+        let result: any = await queryPromise(sql);
+        let newObj: Interests[] = [];
+        if (result) {
+            result.forEach((interests: Interests) => {
+                newObj.push(this.convertToObjectInterests(interests)!);
+            });
+        }
+        return newObj;
+    }
+
     async createLinkToUser(userInterests: InterestUser[]): Promise<void> {
         if (userInterests.length <= 0) throw new Error("Não possui interesse para criar relacionamento com usuário.");
         
@@ -149,6 +161,17 @@ export class InterestsRepository extends Orm<Interests> implements IInterestsRep
             interest?.id,
             interest?.created_at,
             interest?.updated_at
+        );
+    }
+
+    convertToObjectInterests(interests: any): Interests | null {
+        if (!interests) return null;
+
+        return new Interests(
+            interests?.name,
+            interests?.id,
+            interests?.created_at,
+            interests?.updated_at
         );
     }
     

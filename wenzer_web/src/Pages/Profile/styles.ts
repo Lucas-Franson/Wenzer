@@ -147,6 +147,7 @@ export const CardInfo = styled.div`
       font-size: 0.8rem;
     }
   }
+
 `;
 
 export const ContainerProjects = styled.main`

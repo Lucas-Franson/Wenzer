@@ -1,3 +1,4 @@
+import { InterestsFormViewModel } from "../../1-presentation/viewmodel/InterestsFormViewModel";
 import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
 import { User } from "../../3-domain/entities/user";
 import IInterestService from "../../3-domain/Iservices/IInterestService";
@@ -15,7 +16,13 @@ export default class ProfileAppService {
     }
 
     async getAllInterests() {
-        return await this.interestsService.getAllInterests();
+        const interests = await this.interestsService.getAllInterests();
+        let newInterests: InterestsFormViewModel[] = [];
+        interests.map((value) => {
+            let obj = new InterestsFormViewModel(value._name, value._id);
+            newInterests.push(obj);
+        });
+        return newInterests;
     }
 
     async getInfoUser(idUser: string) {
@@ -70,7 +77,13 @@ export default class ProfileAppService {
     }
 
     async getInterests(idUser: string) {
-        return await this.interestsService.getInterestsByUser(idUser);
+        let interests = await this.interestsService.getInterestsByUser(idUser);
+        let obj: InterestsFormViewModel[] = [];
+        interests.map((value) => {
+            const interest = new InterestsFormViewModel(value.name, value.id);
+            obj.push(interest);
+        });
+        return obj;
     }
 
 }

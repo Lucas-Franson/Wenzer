@@ -1,6 +1,6 @@
 import { Interests } from "../../3-domain/entities/interests";
 import { ErroParametro } from "../../erros";
-import { InterestsViewModel } from "./InterestsViewModel";
+import { InterestsFormViewModel } from "./InterestsFormViewModel";
 
 export class ProfileViewModel {
     
@@ -8,7 +8,7 @@ export class ProfileViewModel {
         private id: string,
         private name: string,
         private bio: string,
-        private interests: InterestsViewModel[],
+        private interests: InterestsFormViewModel[],
         private photo: any,
         private countProjects: number,
         private countParticipating: number

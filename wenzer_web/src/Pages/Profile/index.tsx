@@ -12,25 +12,36 @@ import InputText from '../../Components/InputText';
 import Button from '../../Components/Button';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
-import { toastfyError } from '../../Components/Toastfy';
+import { toastfyError, toastfySuccess, toastfyWarning } from '../../Components/Toastfy';
 import { IProfileProps } from './interface';
 import InputAutoComplete from '../../Components/InputAutoComplete';
 import InputTextArea from '../../Components/InputTextArea';
 import ModalProfilePic from '../../Components/Modal/ModalProfilePic';
 import { CircularProgress } from '@material-ui/core';
+import Select from 'react-select';
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [hasEditProfile, setHasEditProfile] = useState(false);
   const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
-  const [interests, setInterests] = useState<{ id: string, name: string }[]>([]);
+  const [interestsOfUser, setInterestsOfUser] = useState<{ label: string, value: string }[]>([]);
   const [userProfileInfo, setUserProfileInfo] = useState<IProfileProps>();
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
   
+  // CONTROL REQUESTS
+
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [alreadyGetAllInterests, setAlreadyGetAllInterests] = useState(false);
+
+  // FORM UPDATE PROFILE
+
+  const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
+  const [name, setName] = useState(''); 
+  const [bio, setBio] = useState('');
+  const [interestsSelected, setInterestsSelected] = useState([]);  
   
   const open = Boolean(anchorEl);
   const { userInfo } = useAuth();
@@ -61,14 +72,28 @@ function Profile(): ReactElement {
     })
  }
 
-  function getInterests(userId: string) {
+  function getInterestsOfUser(userId: string) {
     APIServiceAuthenticated.get(`/api/profile/interests/${userId}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setInterests(res.data);
+      setInterestsOfUser(res.data);
       setAlreadyGetInterests(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function getAllInterests() {
+    APIServiceAuthenticated.get(`/api/getAllInterests`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setInterests(res.data);
+      setAlreadyGetAllInterests(true);
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -97,20 +122,75 @@ function Profile(): ReactElement {
   function save(event: FormEvent) {
     event.preventDefault();
 
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const data = { name, bio, interests: interestsSelected };
+  
+    APIServiceAuthenticated.put(`/api/editProfile`, data, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      let obj = userProfileInfo!;
+      obj.name = name;
+      obj.bio = bio;
+      setUserProfileInfo(obj);
+      setInterestsOfUser(interestsSelected);
+
+      toastfySuccess("Perfil editado!");
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    })
+
   }
 
   useEffect(() => {
     if(!alreadyGetConnections) {
       getConnections(userInfo?.id!);
     }
+  }, []);
+
+  useEffect(() => {
     if(!alreadyGetInterests) {
-      getInterests(userInfo?.id!);
+      getInterestsOfUser(userInfo?.id!);
     }
+  }, []);
+
+  useEffect(() => {
     if(!alreadyGetUserInfo) {
       getUserProfile(userInfo?.id!);
     }
-    console.log(connections);
-  });
+  }, []);
+
+  useEffect(() => {
+    if (!alreadyGetAllInterests) {
+      getAllInterests();
+    }
+  }, []);
+
+  function handleName(e: any) {
+    e.preventDefault();
+    let name = capitalize(e.target.value.trim());
+    let qtdNumber = name.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Nome não pode possuir número");
+      return;
+    }
+    setName(name);
+  }
+
+  function capitalize(str: string) {
+    const arr = str.split(" ");
+    
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+    }
+
+    return arr.join(" ");
+  }
   
   return (
     <Container>
@@ -122,7 +202,7 @@ function Profile(): ReactElement {
               </div>
               <HeaderAvatar className='avatarProfile' src={userProfileInfo?.photo} />
               <p>{userProfileInfo?.name}</p>
-              <span>{userProfileInfo?.title}</span>
+              <span>{userProfileInfo?.bio}</span>
             </div>
 
             <div className="counterProject">
@@ -150,9 +230,9 @@ function Profile(): ReactElement {
         
         <CardInfo>
           <h3>Interesses</h3>
-          {interests.length > 0 ? (
-            interests.map((value) => (
-              <span>{value?.name}</span>
+          {interestsOfUser.length > 0 ? (
+            interestsOfUser.map((value) => (
+              <span> {value?.label} </span>
             ))
           ):(
             <span>Você ainda não tem nenhum interesse</span>
@@ -173,7 +253,9 @@ function Profile(): ReactElement {
               <InputText 
                 type="text"
                 placeholder="Nome de usuario" 
-                defaultValue={userInfo?.name}
+                onChange={handleName}
+                min={3}
+                defaultValue={userProfileInfo?.name}
               />
               <InputText 
                 type="text"
@@ -185,9 +267,11 @@ function Profile(): ReactElement {
               <InputTextArea
                 type="text"
                 placeholder="Bio" 
+                defaultValue={userProfileInfo?.bio}
+                onChange={(e: any) => setBio(e.target.value)}
                 maxLenght={400}
               />
-              <InputAutoComplete />
+              <InputAutoComplete options={interests} defaultValues={interestsOfUser} onchange={(e: any) => setInterestsSelected(e)} />
               <div>
                 <Button className="onlyBorder" onClick={handleChangeEditProfile}>Cancelar</Button>
                 <Button onClick={save}>
