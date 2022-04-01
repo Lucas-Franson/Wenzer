@@ -27,12 +27,6 @@ const AuthProvider = ({ children }: any) => {
     }
   });
 
-  const [openModalPost, setOpenModalPost] = useState(false);
-
-  const handleOpenModalPost = () => {
-    setOpenModalPost(prev => !prev);
-  };
-
   function singIn(user: IUserInfo) {
     Cookies.set('WenzerLogged', 'true');
     Cookies.set('WenzerToken', user.accessToken);
@@ -72,9 +66,6 @@ const AuthProvider = ({ children }: any) => {
         logged,
         singIn,
         singOut,
-        openModalPost,
-        setOpenModalPost,
-        handleOpenModalPost,
         userInfo
       }}
     >

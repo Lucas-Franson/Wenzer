@@ -3,7 +3,7 @@ import { ChangeEvent, InputHTMLAttributes } from 'react';
 import { Container } from './styles';
 
 interface IInputText {
-    type: "text" | "Email";
+    type: "text" | "Email" | "select";
     placeholder?: string;
     onChange(e: ChangeEvent<HTMLInputElement>): void;
     required?: boolean;

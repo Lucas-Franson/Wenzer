@@ -90,9 +90,15 @@ export const ContainerModal = styled.div`
                         border-radius: 8px;
                     }
                 }
+
+                > .imagePostProfile {
+                    > img {
+                        height: 250px;
+                        object-fit: contain;
+                        border-radius: 8px;
+                    }
+                }
             }
         }
     }
-
-    <Button
 `;
