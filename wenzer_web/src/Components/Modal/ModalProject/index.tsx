@@ -6,6 +6,7 @@ import Button from '../../Button';
 import InputAutoComplete from '../../InputAutoComplete';
 import InputText from '../../InputText';
 import InputTextArea from '../../InputTextArea';
+import ModalPayment from '../ModalPayment';
 import { ContainerModal, Container } from '../styles';
 
 export default function ModalProject({open, setOpen}: any) {
@@ -14,6 +15,8 @@ export default function ModalProject({open, setOpen}: any) {
   const [titlePost, setTitlePost] = useState('');
   const [descriptionPost, setDescriptionPost] = useState('');
   const [typePost, setTypePost] = useState('1');
+
+  const [openModalPayment, setOpenModalPayment] = useState(false);
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
@@ -48,6 +51,10 @@ export default function ModalProject({open, setOpen}: any) {
       label: 'Concluído'
     },
   ];
+  
+  function handleOpenModalPayment() {
+    setOpenModalPayment(true);
+  }
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {
     if(!event.target.files){
@@ -120,7 +127,7 @@ export default function ModalProject({open, setOpen}: any) {
                 </div>
               )}
 
-              <div>
+              <div onClick={handleOpenModalPayment}>
                 <MdPayment size={22}/>
                 <span>Impulsionar</span>
               </div>
@@ -143,6 +150,7 @@ export default function ModalProject({open, setOpen}: any) {
       >
        {body}
       </Modal>
+      <ModalPayment open={openModalPayment} setOpen={setOpenModalPayment}/>
     </Container>
   );
 }

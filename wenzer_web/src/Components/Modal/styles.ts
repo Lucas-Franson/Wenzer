@@ -5,12 +5,13 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
     height: 100vh;
-`;
+
+    `;
 
 export const ContainerModal = styled.div`
     width: min(90vw, 600px);
     height: auto;
-
+    
     border-radius: 8px;
     background: ${props => props.theme.colors.secondary};
     box-sizing: border-box;
@@ -57,6 +58,10 @@ export const ContainerModal = styled.div`
                 border-radius: 0.5rem;
                 background-color: ${(props) => props.theme.colors.background};
             }
+
+            > img {
+                width: 100px;
+            }
         }
 
         .content {
@@ -99,6 +104,15 @@ export const ContainerModal = styled.div`
                     }
                 }
             }
+
+            > .buttons {
+                display: flex;
+                gap: 5px;
+            }
         }
+    }
+
+    &.payment {
+        border-bottom: 3px solid  ${props => props.theme.colors.succes};
     }
 `;
