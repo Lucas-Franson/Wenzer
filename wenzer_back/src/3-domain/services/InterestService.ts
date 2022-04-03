@@ -7,7 +7,7 @@ import { ProjectInterests } from "../entities/projectInterests";
 import { User } from "../entities/user";
 import IInterestService from "../Iservices/IInterestService";
 
-export default class PostService implements IInterestService {
+export default class InterestService implements IInterestService {
 
     constructor(private readonly interestsRepository: IInterestsRepository) {
         

@@ -182,6 +182,14 @@ function Profile(): ReactElement {
     setName(name);
   }
 
+  function handleBio(e: any) {
+    e.preventDefault();
+    if (e.target.value == '') setBio('');
+
+    let bio = e.target.value.trim();
+    setBio(bio);
+  }
+
   function capitalize(str: string) {
     const arr = str.split(" ");
     
@@ -268,7 +276,7 @@ function Profile(): ReactElement {
                 type="text"
                 placeholder="Bio" 
                 defaultValue={userProfileInfo?.bio}
-                onChange={(e: any) => setBio(e.target.value)}
+                onChange={handleBio}
                 maxLenght={400}
               />
               <InputAutoComplete options={interests} defaultValues={interestsOfUser} onchange={(e: any) => setInterestsSelected(e)} />

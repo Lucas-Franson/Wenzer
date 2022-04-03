@@ -1,88 +1,104 @@
 import { User } from "../../3-domain/entities/user";
-import { Orm } from "./orm";
 import { IUserRepository } from "../irepositories/IuserRepository";
-import { queryPromise } from '../dbContext/conexao';
-import { UserPostGoodIdea } from "../../3-domain/entities/userPostGoodIdea";
 import { v4 as uuid } from 'uuid';
+import { MongoClient } from "mongodb";
 
-export default class UserRepository extends Orm<User> implements IUserRepository {
+const url: string = process.env.BASE_URL_DATABASE!;
+const collection = "User";
+const database = "WenzerDB";
 
-    private TABLENAME: string = 'User';
- 
-    async get(whereClause: string): Promise<User | null> {
-        const sql = `SELECT * FROM ${this.TABLENAME} ${whereClause}`;
-        let result: any = await queryPromise(sql);
-        return this.convertToObjectUser(result[0]);
-    }
+export default class UserRepository implements IUserRepository {
 
-    async getAll(whereClause: string): Promise<User[]> {
-        const sql = `SELECT * FROM ${this.TABLENAME} ${whereClause}`;
-        let result: any = await queryPromise(sql);
-        return this.convertArrayToUserObject(result);
+    async getByWhereClause(where: any): Promise<User[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).findOne(where, {}).then(function(results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
     }
 
     async getById(id: string): Promise<User | null> {
-        const sql = `SELECT * FROM ${this.TABLENAME} WHERE ID = '${id}' LIMIT 1`;
-        let result: any = await queryPromise(sql);
-        if (result) {
-            return this.convertToObjectUser(result[0]);
-        }
-        return null;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).findOne({ id }, {}).then(function(results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async insert(user: any) {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection(collection).insertOne(user, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
+    async update(user: any) {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection(collection).updateOne({ id: user.id }, user, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
+    async delete(user: any) {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection(collection).deleteOne({ id: user.id }, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
     }
 
     async setPostAsGoodIdea(idUser: string, idPost: string) {
-        const sql = `
-            INSERT INTO UserPostGoodIdea (id, idUser, idPost, created_at, updated_at) 
-            VALUES 
-            (${uuid().toSql()}, ${idUser.toSql()}, ${idPost.toSql()}, now(), now())`;
-        await queryPromise(sql);
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            let data = { id: uuid(), idUser, idPost, created_at: new Date(), updated_at: new Date() };
+            dbo?.collection("UserPostGoodIdea").insertOne(data, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
     }
 
     async removePostAsGoodIdea(idUser: string, idPost: string) {
-        const sql = `DELETE FROM UserPostGoodIdea WHERE idUser = ${idUser.toSql()} and idPost = ${idPost.toSql()}`;
-        await queryPromise(sql);
-    }
-
-    async getAllUsersByArrOfIds(idUserArr: string[]) {
-        let sql = `SELECT * FROM ${this.TABLENAME} WHERE id in (`;
-        let where = '';
-        idUserArr.forEach((id) => {
-            where += where == '' ? '' : ', ';
-            where += id.toSql();
-        });
-        let finalQuery = sql + where + ')';
-        let result: any = await queryPromise(finalQuery);
-        return this.convertArrayToUserObject(result);
-    }
-
-    convertArrayToUserObject(userArr: any) {
-        let users: User[] = [];
-        if (userArr) {
-            userArr.forEach((user: User) => {
-                const obj = this.convertToObjectUser(user);
-                if (obj) {
-                    users.push(obj);
-                }
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection("UserPostGoodIdea").deleteOne({ idUser, idPost }, function(err, res) {
+                if (err) throw err;
+                db?.close();
             });
-        }
-        return users;
+        });
     }
 
-    convertToObjectUser(user: any): User | null {
-        if (!user) return null;
-
-        return new User(
-            user?.name,
-            user?.email,
-            user?.password,
-            user?.title,
-            user?.photo,
-            user?.bio,
-            user?.emailValid,
-            user?.id,
-            user?.created_at,
-            user?.updated_at
-        );
+    async getAllUsersByArrOfIds(idUserArr: { id: string }[]): Promise<User[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).findOne(idUserArr, {}).then(function(results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
     }
 
 }

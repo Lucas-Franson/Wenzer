@@ -24,6 +24,10 @@ export default class PostService implements IPostService {
         return await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
     }
 
+    async getNewPostToWebService(id: string, date: Date) {
+        return await this.postRepository.getNewPostToWebService(id, date);
+    }
+
     async getAllGoodIdeaFromUser(userId: string) {
         const where = `idUser = ${userId.toSql()}`;
         let userPost = await this.postRepository.getListUserPostGoodIdea(where);

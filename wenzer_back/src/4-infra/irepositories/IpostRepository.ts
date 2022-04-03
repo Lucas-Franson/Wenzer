@@ -5,6 +5,7 @@ import { IOrm } from "./Iorm";
 
 export interface IPostRepository extends IOrm<Post> {
     getAllPostsOfUser(idUser: string, page: number, countPerPage: number): Promise<Post[]>;
+    getNewPostToWebService(id: string, date: Date): Promise<Post[]>;
     getUserPostGoodIdea(where: string): Promise<UserPostGoodIdea | null>;
     getListUserPostGoodIdea(where: string): Promise<UserPostGoodIdea[]>;
     setComment(userId: string, postId: string, text: string): Promise<void>;

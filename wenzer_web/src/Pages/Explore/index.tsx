@@ -46,8 +46,8 @@ const Explorar: React.FC = () => {
                 id={item.id}
                 name={item.name}
                 photo={item.photo}
-                countBulb={item.countBulb}
-                countComments={item.countComments}
+                countOfGoodIdea={item.CountOfGoodIdea}
+                countOfActions={item.CountOfActions}
                 key={item}/>
             ))} 
           </div>

@@ -36,6 +36,33 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         return postObj;
     }
 
+    async getNewPostToWebService(id: string, date: Date) {
+        const sql = `
+        SELECT Post.* 
+        FROM Post 
+        LEFT JOIN Project ON Post.idProject = Project.id
+        LEFT JOIN Followers ON Project.id = Followers.idProject
+        LEFT JOIN Connections AS UserOne ON Post.idUser = UserOne.idUser
+        LEFT JOIN Connections AS UserTwo ON Post.idUser = UserTwo.id
+        WHERE (Followers.idUser = ${id.toSql()} 
+            OR Post.idUser = ${id.toSql()}
+            OR UserOne.idFollower = ${id.toSql()}
+            OR UserTwo.idUser = ${id.toSql()})
+            AND Post.created_at > ${date.toSql()}
+        ORDER BY created_at DESC
+        `;
+        let result: any = await queryPromise(sql);
+        let postObj: Post[] = [];
+        if (result.length > 0) {
+            result.forEach((post: any) => {
+                let newUserPost = this.convertToPostObject(post);
+                if (newUserPost != null)
+                    postObj.push(newUserPost);
+            });
+        }
+        return postObj;
+    }
+
     async getUserPostGoodIdea(where: string): Promise<UserPostGoodIdea | null> {
         const sql = `SELECT * FROM UserPostGoodIdea WHERE ${where}`;
         let result: any = await queryPromise(sql);
