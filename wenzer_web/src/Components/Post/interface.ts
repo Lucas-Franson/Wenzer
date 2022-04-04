@@ -1,7 +1,7 @@
 export interface IPostProps {
     created_at?: Date;
     description: string;
-    id: number;
+    _id: string;
     idProject: number;
     idUser: number;
     photo: any;

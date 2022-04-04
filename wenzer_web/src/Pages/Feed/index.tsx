@@ -37,6 +37,7 @@ export default function Feed(): ReactElement {
       } else {
         setDateOfLastPost(new Date());
       }
+      
       setPost(res.data);
 
     }).catch(err => {
@@ -118,13 +119,13 @@ export default function Feed(): ReactElement {
 
       {post.length !== 0 ? (
           post.map(({ 
-            created_at, description, id, idProject, idUser, photo, title, goodIdea, user
+            created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
           }: IPostProps) => (
             <Post
-              key={id}
+              key={_id}
               created_at={created_at}
               description={description}
-              id={id}
+              _id={_id}
               idProject={idProject}
               idUser={idUser}
               photo={photo}

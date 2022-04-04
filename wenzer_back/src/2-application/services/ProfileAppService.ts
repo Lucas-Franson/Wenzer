@@ -19,7 +19,7 @@ export default class ProfileAppService {
         const interests = await this.interestsService.getAllInterests();
         let newInterests: InterestsFormViewModel[] = [];
         interests.map((value) => {
-            let obj = new InterestsFormViewModel(value._name, value._id);
+            let obj = new InterestsFormViewModel(value.name, value._id);
             newInterests.push(obj);
         });
         return newInterests;
@@ -32,10 +32,10 @@ export default class ProfileAppService {
 
         return new ProfileViewModel(
             user?._id!,
-            user?._name!,
-            user?._bio!,
+            user?.name!,
+            user?.bio!,
             [],
-            user?._photo,
+            user?.photo,
             countProjects?.count,
             countParticipating?.count
         )
@@ -65,10 +65,11 @@ export default class ProfileAppService {
 
     async followUser(userId: string, idUserToFollow: string) {
         const connection = await this.userService.getConnectionFromUsers(userId, idUserToFollow);
-        if (!connection) {
+        if (connection.length > 0) {
+            await this.userService.deleteConnection(connection[0]._id);
+        } 
+        else {
             await this.userService.createConnection(userId, idUserToFollow);
-        } else {
-            await this.userService.deleteConnection(connection._id);
         }
     }
 
@@ -80,7 +81,7 @@ export default class ProfileAppService {
         let interests = await this.interestsService.getInterestsByUser(idUser);
         let obj: InterestsFormViewModel[] = [];
         interests.map((value) => {
-            const interest = new InterestsFormViewModel(value.name, value.id);
+            const interest = new InterestsFormViewModel(value.name, value._id);
             obj.push(interest);
         });
         return obj;

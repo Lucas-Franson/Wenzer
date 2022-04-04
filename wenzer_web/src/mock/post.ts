@@ -8,7 +8,7 @@ export const postMock: IPostProps[] = [
     {
         created_at: new Date(),
         description: 'Um projeto teste mockado',
-        id: 1, 
+        _id: "", 
         idProject: 12,
         idUser: 13,
         photo: new Buffer(''),
@@ -20,7 +20,7 @@ export const postMock: IPostProps[] = [
     {
         created_at: new Date(),
         description: 'Um projeto teste mockado 2 lorem ipsum asd asd sd asd asdsd sda sdsadasdas asds dadsdasd sdsd adasdasda asd sdsd as sdads asd asd asds dads dasdsd asdasd asd  as sdads asd asd asds dads dasdsd asdasd asd  as sdads asd asd asds dads dasdsd asdasd asd  as sdads asd asd asds dads dasdsd asdasd asd  as sdads asd asd asds dads dasdsd asdasd asd  as sdads asd asd asds dads dasdsd asdasd asd asdasds dasd asdasd asdsd ',
-        id: 2, 
+        _id: "", 
         idProject: 22,
         idUser: 23,
         photo: new Buffer(''),
@@ -32,7 +32,7 @@ export const postMock: IPostProps[] = [
     {
         created_at: new Date(),
         description: 'Um projeto teste mockado 3',
-        id: 3, 
+        _id: "", 
         idProject: 32,
         idUser: 33,
         photo: new Buffer(''),

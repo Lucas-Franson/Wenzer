@@ -1,6 +1,8 @@
-import { IFollowersRepository } from "../../4-infra/irepositories/IfollowersRepository";
+import { IFollowerRepository } from "../../4-infra/irepositories/IfollowerRepository";
+import { IInterestRepository } from "../../4-infra/irepositories/IinterestRepository";
 import { IProjectRepository } from "../../4-infra/irepositories/IprojectRepository";
 import { Followers } from "../entities/followers";
+import { Interests } from "../entities/interests";
 import { Project } from "../entities/project";
 import IProjectService from "../Iservices/IProjectService";
 
@@ -8,7 +10,8 @@ export default class ProjectService implements IProjectService {
     
     constructor(
         private readonly projectRepository: IProjectRepository, 
-        private readonly followerRepository: IFollowersRepository
+        private readonly followerRepository: IFollowerRepository,
+        private readonly interestRepository: IInterestRepository
     ) {
 
     }
@@ -18,17 +21,23 @@ export default class ProjectService implements IProjectService {
     }
 
     async create(project: Project) {
-        project._updated_at = new Date();
-        project._created_at = new Date();
         await this.projectRepository.insert(project);
     }
 
     async update(project: Project) {
-        project._updated_at = new Date();
         await this.projectRepository.update(project);
     }
     
     async delete(projectId: string) {
+        const interests = await this.interestRepository.findLinkProjectToInterests(projectId);
+        const idLinkInterestToProject: string[] = [];
+
+        interests.map((data) => {
+            idLinkInterestToProject.push(data._id);
+        });
+
+        if (idLinkInterestToProject.length > 0)
+            await this.interestRepository.deleteLinkToProject(idLinkInterestToProject);
         await this.projectRepository.delete(projectId);
     }
 
@@ -48,16 +57,20 @@ export default class ProjectService implements IProjectService {
         await this.followerRepository.delete(idFollower);
     }
 
-    async followerByIdExist(userId: string, idProject: string) {
-        const follower = await this.followerRepository.get(`WHERE idUser = ${userId.toSql()} and idProject = ${idProject.toSql()}`);
-        return this.followerRepository.convertToFollowerObject(follower);
+    async followerByIdExist(userId: string, idProject: string): Promise<Followers | null> {
+        const where = { idUser: userId, idProject };
+        const follower = await this.followerRepository.getByWhereClause(where);
+        if (follower && follower.length > 0) {
+            return this.followerRepository.handleResult(follower[0]);
+        }
+        return null;
     }
 
-    async getProjectsByInterests(interests: { id: string, name: string }[]) {
+    async getProjectsByInterests(interests: string[]) {
         return await this.projectRepository.getProjectsByInterests(interests);
     }
 
-    async getProjectsMarketing(interests: { id: string, name: string }[]) {
+    async getProjectsMarketing(interests: string[]) {
         return await this.projectRepository.getProjectsMarketing(interests);
     }
 
@@ -67,11 +80,6 @@ export default class ProjectService implements IProjectService {
 
     async getCountOfParticipatingByUser(idUser: string): Promise<{count: number}> {
         return await this.projectRepository.getCountParticipatingByUser(idUser);
-    }
-
-    convertToProjectObject(project: any) {
-        if (!project) throw new Error("Projeto está em formato inválido.");
-        return  this.projectRepository.convertToProjectObject(project)!;
     }
 
 }

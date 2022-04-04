@@ -1,154 +1,352 @@
 import { Post } from "../../3-domain/entities/post";
-import { IOrm } from "../irepositories/Iorm";
-import { Orm } from "./orm";
 import { IPostRepository } from "../irepositories/IpostRepository";
-import { queryPromise } from '../dbContext/conexao';
 import { UserPostGoodIdea } from "../../3-domain/entities/userPostGoodIdea";
 import { PostComments } from "../../3-domain/entities/postComments";
 import { v4 as uuid } from 'uuid';
+import { MongoClient } from "mongodb";
+import { Orm } from "./orm";
+
+const url: string = process.env.BASE_URL_DATABASE!;
+const collection = "Post";
+const database = "WenzerDB";
 
 export class PostRepository extends Orm<Post> implements IPostRepository {
     
     async getAllPostsOfUser(idUser: string, page: number, countPerPage: number): Promise<Post[]> {
-        const sql = `
-        SELECT Post.* 
-        FROM Post 
-        LEFT JOIN Project ON Post.idProject = Project.id
-        LEFT JOIN Followers ON Project.id = Followers.idProject
-        LEFT JOIN Connections AS UserOne ON Post.idUser = UserOne.idUser
-        LEFT JOIN Connections AS UserTwo ON Post.idUser = UserTwo.id
-        WHERE (Followers.idUser = ${idUser.toSql()} 
-            OR Post.idUser = ${idUser.toSql()}
-            OR UserOne.idFollower = ${idUser.toSql()}
-            OR UserTwo.idUser = ${idUser.toSql()})
-        ORDER BY created_at DESC
-        LIMIT ${(page-1)*countPerPage}, ${countPerPage}
-        `;
-        let result: any = await queryPromise(sql);
-        let postObj: Post[] = [];
-        if (result.length > 0) {
-            result.forEach((post: any) => {
-                let newUserPost = this.convertToPostObject(post);
-                if (newUserPost != null)
-                    postObj.push(newUserPost);
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'Project',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            pipeline: [
+                                {
+                                    $lookup: {
+                                        from: 'Follower',
+                                        localField: '_id',
+                                        foreignField: 'idProject',
+                                        as: 'follower'
+                                    }
+                                }
+                            ],
+                            as: 'project'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Connections',
+                            localField: 'idUser',
+                            foreignField: 'idUser',
+                            as: 'userOne'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Connections',
+                            localField: 'idUser',
+                            foreignField: 'idFollower',
+                            as: 'userTwo'
+                        }
+                    },
+                    {
+                        $match: {
+                            $or: [
+                                {
+                                    project: {
+                                        $elemMatch: {
+                                            follower: {
+                                                $elemMatch: {
+                                                    follower: {
+                                                        idUser
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    idUser
+                                },
+                                {
+                                    userOne: {
+                                        $elemMatch: {
+                                            idFollower: idUser
+                                        }
+                                    }
+                                },
+                                {
+                                    userTwo: {
+                                        $elemMatch: {
+                                            idUser
+                                        }
+                                    }
+                                }
+                            ]
+
+                        }
+                    },
+                    {
+                        $skip: ((page-1)*countPerPage)
+                    }
+                ]).sort({ created_at: -1 }).limit(countPerPage).toArray(function(err: any, results: any) {
+                    const result = _self.handleArrayResult(results);
+                    resolve(result!);
+                    db.close();
+                });
             });
-        }
-        return postObj;
+        });
     }
 
-    async getNewPostToWebService(id: string, date: Date) {
-        const sql = `
-        SELECT Post.* 
-        FROM Post 
-        LEFT JOIN Project ON Post.idProject = Project.id
-        LEFT JOIN Followers ON Project.id = Followers.idProject
-        LEFT JOIN Connections AS UserOne ON Post.idUser = UserOne.idUser
-        LEFT JOIN Connections AS UserTwo ON Post.idUser = UserTwo.id
-        WHERE (Followers.idUser = ${id.toSql()} 
-            OR Post.idUser = ${id.toSql()}
-            OR UserOne.idFollower = ${id.toSql()}
-            OR UserTwo.idUser = ${id.toSql()})
-            AND Post.created_at > ${date.toSql()}
-        ORDER BY created_at DESC
-        `;
-        let result: any = await queryPromise(sql);
-        let postObj: Post[] = [];
-        if (result.length > 0) {
-            result.forEach((post: any) => {
-                let newUserPost = this.convertToPostObject(post);
-                if (newUserPost != null)
-                    postObj.push(newUserPost);
+    async getNewPostToWebService(id: string, date: Date): Promise<Post[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'Project',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            pipeline: [
+                                {
+                                    $lookup: {
+                                        from: 'Follower',
+                                        localField: '_id',
+                                        foreignField: 'idProject',
+                                        as: 'follower'
+                                    }
+                                }
+                            ],
+                            as: 'project'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Connections',
+                            localField: 'idUser',
+                            foreignField: 'idUser',
+                            as: 'userOne'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Connections',
+                            localField: 'idUser',
+                            foreignField: 'idFollower',
+                            as: 'userTwo'
+                        }
+                    },
+                    {
+                        $match: {
+                            $or: [
+                                {
+                                    project: {
+                                        $elemMatch: {
+                                            follower: {
+                                                $elemMatch: {
+                                                    follower: {
+                                                        idUser: id
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    idUser: id
+                                },
+                                {
+                                    userOne: {
+                                        $elemMatch: {
+                                            idFollower: id
+                                        }
+                                    }
+                                },
+                                {
+                                    userTwo: {
+                                        $elemMatch: {
+                                            idUser: id
+                                        }
+                                    }
+                                }
+                            ],
+                            $and: [
+                                {
+                                    created_at: {
+                                        $gt: new Date(date)
+                                    }
+                                }
+                            ]
+
+                        }
+                    }
+                ]).sort({ created_at: -1 }).toArray(function(err: any, results: any) {
+                    const result = _self.handleArrayResult(results);
+                    resolve(result!);
+                    db.close();
+                });
             });
-        }
-        return postObj;
+        });
     }
 
-    async getUserPostGoodIdea(where: string): Promise<UserPostGoodIdea | null> {
-        const sql = `SELECT * FROM UserPostGoodIdea WHERE ${where}`;
-        let result: any = await queryPromise(sql);
-        let userPost = null;
-        if (result.length > 0) {
-            userPost = this.convertToUserPostGoodIdeaObject(result[0]);
-        }
-        return userPost;
-    }
-
-    async getListUserPostGoodIdea(where: string): Promise<UserPostGoodIdea[]> {
-        const sql = `SELECT * FROM UserPostGoodIdea WHERE ${where}`;
-        let result: any = await queryPromise(sql);
-        let userPostObj: UserPostGoodIdea[] = [];
-        if (result.length > 0) {
-            result.forEach((userPost: any) => {
-                let newUserPost = this.convertToUserPostGoodIdeaObject(userPost);
-                if (newUserPost != null)
-                    userPostObj.push(newUserPost!);
+    async getUserPostGoodIdea(where: any): Promise<UserPostGoodIdea | null> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('UserPostGoodIdea').findOne(where, {}).then(function(results: any) {
+                    const result = _self.handleUserPostGoodIdeaResult(results);
+                    resolve(result);
+                    db.close();
+                });
             });
-        }
-        return userPostObj;
+        });
     }
 
-    async setComment(userId: string, postId: string, text: string): Promise<void> {
-        let sql = `
-            INSERT INTO PostComments (id, idUser, idPost, Text, updated_at, created_at) 
-                VALUES 
-            (${uuid().toSql()}, ${userId.toSql()}, ${postId.toSql()}, ${text.toSql()}, now(), now());
-        `;
-        await queryPromise(sql);
+    async getListUserPostGoodIdea(whereClause: any): Promise<UserPostGoodIdea[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('UserPostGoodIdea').find(whereClause).toArray(function(err: any, results: any) {
+                    const result = _self.handleUserPostGoodIdeaArrayResult(results);
+                    resolve(result!);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async setComment(postComments: any): Promise<void> {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            postComments._id = uuid();
+            postComments.created_at = new Date();
+            postComments.updated_at = new Date();
+            dbo?.collection('PostComment').insertOne(postComments, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
     }
 
     async getCommentsByPostId(postId: string): Promise<PostComments[]> {
-        let sql = `SELECT * FROM PostComments WHERE idPost = ${postId.toSql()}`;
-        let result: any = await queryPromise(sql);
-        let postComments: PostComments[] = [];
-        if (result.length > 0) {
-            result.forEach((comment: any) => {
-                let newPostComment = this.convertToPostCommentObject(comment);
-                if (newPostComment != null) 
-                    postComments.push(newPostComment!);
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('PostComment').find({ idPost: postId }).toArray(function(err: any, results: any) {
+                    const result = _self.handlePostCommentsArrayResult(results);
+                    resolve(result!);
+                    db.close();
+                });
             });
+        });
+    }
+
+    handlePostCommentsArrayResult(result: PostComments[]) {
+        if (result && result instanceof Array && result.length > 0) {
+            let postComments: any[] = [];
+            result.forEach((value: PostComments) => {
+                let postComment = new PostComments(
+                    value.idUser,
+                    value.idPost,
+                    value.text,
+                    value._id,
+                    value.created_at,
+                    value.updated_at
+                );
+                postComments.push(postComment);
+            });
+            return postComments;
+        } 
+        else {
+            return [];
         }
-        return postComments;
     }
 
-    convertToPostObject(post: any): Post | null {
-        if (!post) return null;
-
-        return new Post(
-            post.idUser,
-            post.countViews,
-            post.title,
-            post.description,
-            post.photo,
-            post.idProject,
-            post.id,
-            post.created_at,
-            post.updated_at
-        );
+    handleArrayResult(result: Post[]) {
+        if (result && result instanceof Array && result.length > 0) {
+            let posts: any[] = [];
+            result.forEach((value: Post) => {
+                let post = new Post(
+                    value.idUser,
+                    value.countViews,
+                    value.title,
+                    value.description,
+                    value.photo,
+                    value.idProject,
+                    value._id,
+                    value.created_at,
+                    value.updated_at
+                );
+                posts.push(post);
+            });
+            return posts;
+        } 
+        else {
+            return [];
+        }
     }
 
-    convertToUserPostGoodIdeaObject(userPost: any): UserPostGoodIdea | null {
-        if (!userPost) return null;
-
-        return new UserPostGoodIdea(
-            userPost.idUser,
-            userPost.idPost,
-            userPost.id,
-            userPost.created_at,
-            userPost.updated_at
-        );
+    handleResult(results: Post) {
+        if(results && !(results instanceof Array)) {
+            return new Post(
+                results.idUser,
+                results.countViews,
+                results.title,
+                results.description,
+                results.photo,
+                results.idProject,
+                results._id,
+                results.created_at,
+                results.updated_at
+            );
+        }
+        else {
+            return null;
+        }
     }
 
-    convertToPostCommentObject(postComment: any): PostComments | null {
-        if (!postComment) return null;
+    handleUserPostGoodIdeaArrayResult(result: UserPostGoodIdea[]) {
+        if (result && result instanceof Array && result.length > 0) {
+            let userPostGoodIdeas: any[] = [];
+            result.forEach((value: UserPostGoodIdea) => {
+                let userPostGoodIdea = new UserPostGoodIdea(
+                    value.idUser,
+                    value.idPost,
+                    value._id,
+                    value.created_at,
+                    value.updated_at
+                );
+                userPostGoodIdeas.push(userPostGoodIdea);
+            });
+            return userPostGoodIdeas;
+        } 
+        else {
+            return [];
+        }
+    }
 
-        return new PostComments(
-            postComment.idUser,
-            postComment.idPost,
-            postComment.text,
-            postComment.id,
-            postComment.created_at,
-            postComment.updated_at
-        );
+    handleUserPostGoodIdeaResult(results: UserPostGoodIdea) {
+        if(results && !(results instanceof Array)) {
+            return new UserPostGoodIdea(
+                results.idUser,
+                results.idPost,
+                results._id,
+                results.created_at,
+                results.updated_at
+            );
+        }
+        else {
+            return null;
+        }
     }
     
 }

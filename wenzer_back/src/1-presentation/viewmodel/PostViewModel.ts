@@ -5,7 +5,7 @@ import UserViewModel from "./UserViewModel";
 export default class PostViewModel {
 
     constructor(
-        public id: string,
+        public _id: string,
         public idUser: string,
         public countViews: number,
         public title: string,

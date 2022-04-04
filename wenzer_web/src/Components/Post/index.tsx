@@ -10,7 +10,7 @@ import { toastfyError } from "../../Components/Toastfy";
 function Post({ 
   created_at,
   description,
-  id, idProject,
+  _id, idProject,
   idUser,
   photo,
   title,
@@ -21,7 +21,7 @@ function Post({
 
   function setGoodIdea() {
     setHasLiked(!hasLiked);
-    APIServiceAuthenticated.post('/api/setPostAsGoodIdea', { postId: id }, {
+    APIServiceAuthenticated.post('/api/setPostAsGoodIdea', { postId: _id }, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
@@ -47,7 +47,7 @@ function Post({
               <p>{title}</p>
               <span>{description}</span>
             </div>
-            {photo != null && photo.data.length !== 0 ? (
+            {photo && photo.data.length !== 0 ? (
               <div className="image">
                 <img src={photo} alt="publicação projeto" />
               </div>

@@ -1,41 +1,23 @@
 import { Project } from "../../3-domain/entities/project";
-import { Orm } from "./orm";
 import { IProjectRepository } from "../irepositories/IprojectRepository";
-import { queryPromise } from "../dbContext/conexao";
 import { MongoClient } from "mongodb";
+import { Orm } from "./orm";
+import { Interests } from "../../3-domain/entities/interests";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Project";
 const database = "WenzerDB";
 
-export class ProjectRepository implements IProjectRepository {
-    
-    async getByWhereClause(whereClause: string): Promise<Project[]> {
-        throw new Error("Method not implemented.");
-    }
-
-    async getById(id: string): Promise<Project | null> {
-        throw new Error("Method not implemented.");
-    }
-    
-    async insert(object: Project): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    async update(object: Project): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    
-    async delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
+export class ProjectRepository extends Orm<Project> implements IProjectRepository {
 
     async getProjectsByUser(userId: string): Promise<Project[]> {
+        var _self = this;
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
-                dbo.collection(collection).findOne({ userId }, {}).then(function(results: any) {
-                    resolve(results);
+                dbo.collection(collection).find({ userId }).toArray(function(err: any, results: any) {
+                    const projects = _self.handleArrayResult(results);
+                    resolve(projects);
                     db.close();
                 });
             });
@@ -43,43 +25,82 @@ export class ProjectRepository implements IProjectRepository {
     }
 
     async getAllProjectsInHigh(): Promise<Project[]> {
-
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
                 dbo.collection(collection).aggregate([
                     {
-                        $group: {
-                            id: "$id",
-                            name: "$name",
-                            photo: "$photo",
-                            countOfGoodIdea: {
-                                $count: {
-                                    from: 'UserProjectGoodIdea',
-                                    localField: 'idProject',
-                                    foreignField: 'id',
-                                    as: 'countOfGoodIdea'
-                                },
-                            },
-                            countOfActions: {
-                                $count: {
-                                    from: 'Follower',
-                                    localField: 'idProject',
-                                    foreignField: 'id',
-                                    as: 'countOfActions'
+                        $lookup: {
+                            from: 'UserProjectGoodIdea',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'userProjectGoodIdea'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Follower',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'follower'
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            name: 1,
+                            photo: 1,
+                            description: 1,
+                            countGoodIdea: { $size: "$userProjectGoodIdea" },
+                            countFollowers: { $size: "$follower" }
+                        }
+                    }
+                ])
+                .sort({ userProjectGoodIdea: -1, follower: -1 })
+                .limit(9).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async getProjectsByInterests(interests: string[]): Promise<Project[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'ProjectInterest',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'projectInterest'
+                        }
+                    },
+                    {
+                        $match: {
+                            projectInterest: {
+                                $elemMatch: {
+                                    idInterests: {
+                                        $in: interests
+                                    }
                                 }
                             }
-                        } 
+                        }
                     }
-                ]).sort({ countOfGoodIdea: -1, countOfActions: -1 }).limit(9).toArray(function(results: any) {
-                    resolve(results);
+                ]).limit(5).toArray(function(err: any, results: any) {
+                    const projects = _self.handleArrayResult(results);
+                    resolve(projects);
                     db.close();
                 });
             });
         });
     }
 
-    async getProjectsByInterests(interests: { id: string; name: string; }[]): Promise<Project[]> {
+    async getProjectsMarketing(interests: string[]): Promise<Project[]> {
+        var _self = this;
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
@@ -87,49 +108,26 @@ export class ProjectRepository implements IProjectRepository {
                     {
                         $lookup: {
                             from: 'ProjectInterest',
-                            localField: 'idProject',
-                            foreignField: 'id',
+                            localField: '_id',
+                            foreignField: 'idProject',
                             as: 'projectInterest'
                         }
                     },
                     {
                         $match: {
                             projectInterest: {
-                                id: interests
-                            }
-                        }
-                    }
-                ]).limit(5).toArray(function(results: any) {
-                    resolve(results);
-                    db.close();
-                });
-            });
-        });
-    }
-
-    async getProjectsMarketing(interests: { id: string; name: string; }[]): Promise<Project[]> {
-        return new Promise(function(resolve, reject){ 
-            MongoClient.connect(url).then(function(db){
-                var dbo = db.db(database);
-                dbo.collection(collection).aggregate([
-                    {
-                        $lookup: {
-                            from: 'ProjectInterest',
-                            localField: 'idProject',
-                            foreignField: 'id',
-                            as: 'projectInterest'
-                        }
-                    },
-                    {
-                        $match: {
-                            projectInterest: {
-                                id: interests
+                                $elemMatch: {
+                                    idInterests: {
+                                        $in: interests
+                                    }
+                                }
                             },
-                            marketing: 1
+                            marketing: true
                         }
                     }
-                ]).limit(5).toArray(function(results: any) {
-                    resolve(results);
+                ]).limit(5).toArray(function(err: any, results: any) {
+                    const projects = _self.handleArrayResult(results);
+                    resolve(projects);
                     db.close();
                 });
             });
@@ -149,8 +147,12 @@ export class ProjectRepository implements IProjectRepository {
                     {
                         $count: "count"
                     }
-                ]).toArray(function(results: any) {
-                    resolve(results);
+                ]).toArray(function(err: any, results: any) {
+                    if (results && results.length > 0) {
+                        resolve(results[0]);
+                    } else {
+                        resolve({ count: 0 });
+                    }
                     db.close();
                 });
             });
@@ -165,27 +167,78 @@ export class ProjectRepository implements IProjectRepository {
                     {
                         $lookup: {
                             from: 'Participant',
-                            localField: 'idProject',
-                            foreignField: 'id',
+                            localField: '_id',
+                            foreignField: 'idProject',
                             as: 'participant'
                         }
                     },
                     {
                         $match: {
                             participant: {
-                                userId: idUser
+                                $elemMatch: {
+                                    idUser
+                                }
                             }
                         }
                     },
                     {
                         $count: "count"
                     }
-                ]).toArray(function(results: any) {
-                    resolve(results);
+                ]).toArray(function(err: any, results: any) {
+                    if (results && results.length > 0) {
+                        resolve(results[0]);
+                    } else {
+                        resolve({ count: 0 });
+                    }
                     db.close();
                 });
             });
         });
+    }
+
+    handleArrayResult(result: Project[]) {
+        if (result && result instanceof Array && result.length > 0) {
+            let projects: any[] = [];
+            result.forEach((value: Project) => {
+                let project = new Project(
+                    value.name,
+                    value.description,
+                    value.photo,
+                    value.active,
+                    value.publicProject,
+                    value.marketing,
+                    value.userId,
+                    value._id,
+                    value.created_at,
+                    value.updated_at
+                );
+                projects.push(project);
+            });
+            return projects;
+        } 
+        else {
+            return [];
+        }
+    }
+
+    handleResult(results: Project) {
+        if(results && !(results instanceof Array)) {
+            return new Project(
+                results.name,
+                results.description,
+                results.photo,
+                results.active,
+                results.publicProject,
+                results.marketing,
+                results.userId,
+                results._id,
+                results.created_at,
+                results.updated_at
+            );
+        }
+        else {
+            return null;
+        }
     }
 
 }

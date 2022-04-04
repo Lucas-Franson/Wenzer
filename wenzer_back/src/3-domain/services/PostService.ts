@@ -1,5 +1,6 @@
 import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
+import { Post } from "../entities/post";
 import { PostComments } from "../entities/postComments";
 import IPostService from "../Iservices/IPostService";
 
@@ -11,12 +12,16 @@ export default class PostService implements IPostService {
     }
 
     async create(userId: string, post: PostCreateViewModel) {
-        const postObj = this.postRepository.convertToPostObject(post);
-        
-        if (postObj != null) {
-            postObj._idUser = userId;
-            postObj._countViews = 0;
-            await this.postRepository.insert(postObj);
+        if (post != null) {
+            const objPost = new Post(
+                userId,
+                0,
+                post.title,
+                post.description,
+                post.photo,
+                post.idProject,
+            );
+            await this.postRepository.insert(objPost);
         }
     }
 
@@ -29,7 +34,7 @@ export default class PostService implements IPostService {
     }
 
     async getAllGoodIdeaFromUser(userId: string) {
-        const where = `idUser = ${userId.toSql()}`;
+        const where = { idUser: userId };
         let userPost = await this.postRepository.getListUserPostGoodIdea(where);
         return userPost;
     }
@@ -37,23 +42,28 @@ export default class PostService implements IPostService {
     async sumCountOfGoodIdeia(postId: string, userPostExist: boolean) {
         const post: any = await this.postRepository.getById(postId);
         if (!post) throw new Error("Post não encontrado.");
-        let postObj = this.postRepository.convertToPostObject(post);
+
         if (userPostExist) {
-            postObj!._countViews--;
+            post!.countViews--;
         } else {
-            postObj!._countViews++;
+            post!.countViews++;
         }
-        await this.postRepository.update(postObj!);
+        await this.postRepository.update(post!);
     }
 
     async userPostGoodIdeaAlreadyExist(userId: string, postId: string): Promise<boolean> {
-        const where = `idUser = ${userId.toSql()} and idPost = ${postId.toSql()}`;
+        const where = { idUser: userId, idPost: postId };
         let userPost = await this.postRepository.getUserPostGoodIdea(where);
         return userPost != null;
     }
 
     async setComment(userId: string, postId: string, text: string): Promise<void> {
-        await this.postRepository.setComment(userId, postId, text);
+        const postComment = new PostComments(
+            userId,
+            postId,
+            text
+        );
+        await this.postRepository.setComment(postComment);
     }
 
     async getAllComments(postId: string): Promise<PostComments[]> {

@@ -9,15 +9,23 @@ export default class EmailMarketingService implements IEmailMarketingService {
     constructor(private readonly emailMarketingRepository: IEmailMarketingRepository) {
     }
 
-    async findEmailMarketing(email: string) {
-        const where = `WHERE Email = '${email}'`;
-        return await this.emailMarketingRepository.get(where);
+    async findEmailMarketing(email: string): Promise<EmailMarketing | null> {
+        const where = { email };
+        const emailMarketing = await this.emailMarketingRepository.getByWhereClause(where);
+        if (emailMarketing.length > 0) {
+            return emailMarketing[0];
+        }
+        return null;
     }
 
-    async findEmailMarketingByToken(token: string) {
+    async findEmailMarketingByToken(token: string): Promise<EmailMarketing | null> {
         const email = verifyTokenJWT(token);
-        const where = `WHERE Email = '${email}'`;
-        return await this.emailMarketingRepository.get(where);
+        const where = { email };
+        const emailMarketing = await this.emailMarketingRepository.getByWhereClause(where);
+        if (emailMarketing.length > 0) {
+            return emailMarketing[0];
+        }
+        return null;
     }
 
     async create(email: string) {

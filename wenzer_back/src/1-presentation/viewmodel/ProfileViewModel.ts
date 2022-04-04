@@ -5,13 +5,13 @@ import { InterestsFormViewModel } from "./InterestsFormViewModel";
 export class ProfileViewModel {
     
     constructor(
-        private id: string,
-        private name: string,
-        private bio: string,
-        private interests: InterestsFormViewModel[],
-        private photo: any,
-        private countProjects: number,
-        private countParticipating: number
+        public _id: string,
+        public name: string,
+        public bio: string,
+        public interests: InterestsFormViewModel[],
+        public photo: any,
+        public countProjects: number,
+        public countParticipating: number
     ) {
 
     }

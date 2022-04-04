@@ -3,7 +3,7 @@
 export default class UserViewModel {
 
     constructor(
-        public id: string,
+        public _id: string,
         public name: string,
         public email: string, 
         public password: string,

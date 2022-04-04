@@ -24,12 +24,12 @@ export default class LoginAppService {
                 user = new User(userViewModel.getName(),
                                 userViewModel.getEmail(),
                                 userViewModel.getPassword(),
-                                userFound._title,
-                                userFound._photo,
-                                userFound._bio,
+                                userFound.title,
+                                userFound.photo,
+                                userFound.bio,
                                 false,
-                                userFound.getId(),
-                                userFound.getCreatedAt(),
+                                userFound._id,
+                                userFound.created_at,
                                 new Date()
                                 );
                 await this.userService.updateUserNewPwd(user, userViewModel.getPassword());

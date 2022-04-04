@@ -1,18 +1,11 @@
 import PostViewModel from "./1-presentation/viewmodel/PostViewModel";
 import UserViewModel from "./1-presentation/viewmodel/UserViewModel";
-import FeedAppService from "./2-application/services/FeedAppService";
 import { Post } from "./3-domain/entities/post";
 import { UserPostGoodIdea } from "./3-domain/entities/userPostGoodIdea";
-import InterestsService from "./3-domain/services/InterestService";
-import InterestService from "./3-domain/services/InterestService";
 import PostService from "./3-domain/services/PostService";
-import ProjectService from "./3-domain/services/ProjectService";
 import UserService from "./3-domain/services/UserService";
-import { ConnectionsRepository } from "./4-infra/repositories/connectionsRepository";
-import { FollowersRepository } from "./4-infra/repositories/followersRepository";
-import { InterestsRepository } from "./4-infra/repositories/interestsRepository";
+import { ConnectionRepository } from "./4-infra/repositories/connectionRepository";
 import { PostRepository } from "./4-infra/repositories/postRepository";
-import { ProjectRepository } from "./4-infra/repositories/projectRepository";
 import UserRepository from "./4-infra/repositories/userRepository";
 
 export function websocket(io: any) {
@@ -48,19 +41,19 @@ export function websocket(io: any) {
     }
 
     async function buildUserViewModel(id: string) {
-        const userService = new UserService(new UserRepository(), new ConnectionsRepository());
+        const userService = new UserService(new UserRepository(), new ConnectionRepository());
         let user = await userService.findUserById(id);
 
         return new UserViewModel(
             user?._id!,
-            user?._name!,
-            user?._email!,
-            user?._password!,
-            user?._title!,
-            user?._photo!,
-            user?._bio!,
-            user?._emailValid!,
-            user?._created_at!
+            user?.name!,
+            user?.email!,
+            user?.password!,
+            user?.title!,
+            user?.photo!,
+            user?.bio!,
+            user?.emailValid!,
+            user?.created_at!
         );
     }
 
@@ -68,16 +61,16 @@ export function websocket(io: any) {
         let postViewModel: PostViewModel[] = [];
 
         post.map((value: any) => {
-            const postAsGoodIdea = goodIdea.find(x => x._idPost === value._id);
+            const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
             const _postViewModel = new PostViewModel(
                 value._id,
-                value._idUser,
-                value._countViews,
-                value._title,
-                value._description,
-                value._photo,
-                value._idProject,
-                value._created_at,
+                value.idUser,
+                value.countViews,
+                value.title,
+                value.description,
+                value.photo,
+                value.idProject,
+                value.created_at,
                 postAsGoodIdea != null,
                 userViewModel
             );
