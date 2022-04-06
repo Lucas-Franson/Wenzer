@@ -62,9 +62,22 @@ export const ContainerModal = styled.div`
             > img {
                 width: 100px;
             }
+
+            > .payment-check {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                color: ${props => props.theme.colors.succes}
+            }
         }
 
         .content {
+            > .payment-value {
+                padding-bottom:20px;
+                font-size: 0.9rem;
+            }
+
             > .image {
                 width: 100%;
                 display: flex;

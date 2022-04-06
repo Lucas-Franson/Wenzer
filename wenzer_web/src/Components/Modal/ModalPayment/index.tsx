@@ -5,19 +5,26 @@ import Button from '../../Button';
 import InputText from '../../InputText';
 import { ContainerModal, Container } from '../styles';
 import mastercard from '../../../Utils/image/mastercard.png';
+import { useWenzer } from '../../../hooks/useWenzer';
 
 export default function ModalPayment({open, setOpen}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
-  const [titlePost, setTitlePost] = useState('');
-  const [descriptionPost, setDescriptionPost] = useState('');
-  const [typePost, setTypePost] = useState('1');
+  const [impulsionamento, setImpulsionamento] = useState(0);
+  const { setPaymentImpulsionamento } = useWenzer();
 
   const handleClose = () => {
     setOpen(false);
     setImageToPost(undefined);
   };
 
-  const allProject = [
+  const handleSetPayment = () => {
+    setOpen(false);
+    setImageToPost(undefined);
+    setPaymentImpulsionamento(true);
+  };
+  
+
+  const typeImpulsionamento = [
     {
       value: 1,
       label: 'Tipo de impulsionamento'
@@ -36,16 +43,18 @@ export default function ModalPayment({open, setOpen}: any) {
     },
   ];
 
-  const onSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    const body = {
-      title: titlePost,
-      description: descriptionPost,
-      type: typePost,
-      image: imageToPost
-    }
+  function getTypePayment(type: number) {
+    switch(type) {
+      case 2:
+        return 'R$ 19,90 - renovação automática';
+      case 3:
+        return 'R$ 29,90 - renovação automática';
+      case 4:
+        return 'R$ 35,90 - renovação automática';
+      default :
+        return 'Selecione um tipo de impulsionamento';
 
-    console.log(body);
+    }
   }
 
   const body = (
@@ -56,10 +65,9 @@ export default function ModalPayment({open, setOpen}: any) {
       </header>
       
       <main>
-        <form onSubmit={onSubmit}>
           <div className="profile">
-            <select required onChange={(e) => setTypePost(e.target.value)}>
-              {allProject.map(item => (
+            <select required onChange={e => setImpulsionamento(Number(e.target.value))}>
+              {typeImpulsionamento.map(item => (
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
             </select>
@@ -77,12 +85,14 @@ export default function ModalPayment({open, setOpen}: any) {
               <InputText required placeholder="CVV" />
             </div>
 
+            <div className='payment-value'>{getTypePayment(impulsionamento)}</div>
+
             <div className="buttons">
               <Button>Cancelar</Button>
-              <Button className="payment-button">Impulsionar</Button>
+              <Button className="payment-button" type="button" onClick={handleSetPayment}>Impulsionar</Button>
             </div>
           </div>
-        </form>
+       
       </main>
     </ContainerModal>
   )

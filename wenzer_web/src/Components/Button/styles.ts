@@ -25,4 +25,9 @@ export const ContainerButton = styled.button`
       background-color: ${(props) => props.theme.colors.succes};
     }
 
+    &.button_coment {
+      margin-top: 10px;
+      width: 50%;
+    }
+
 `

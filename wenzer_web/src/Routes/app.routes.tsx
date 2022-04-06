@@ -5,6 +5,7 @@ import Explorar from "../Pages/Explore";
 import Projetos from "../Pages/Project";
 import Perfil from '../Pages/Profile';
 import Notify from "../Pages/Notify";
+import PostScreen from "../Pages/PostScreen";
 
 function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ function AppRoutes() {
         <Route path="/projects" component={Projetos} />
         <Route path="/profile" component={Perfil} />
         <Route path="/notify" component={Notify} />
+        <Route path="/post" component={PostScreen} />
 
         <Redirect to="/" />
       </Switch>

@@ -47,13 +47,20 @@ function Post({
               <p>{title}</p>
               <span>{description}</span>
             </div>
-            {photo != null && photo.data.length !== 0 ? (
+
+            {/*Retirar a div abaixo e descomentar a de baixo  */}
+
+            <div className="image">
+                <img src={photo} alt="publicação projeto" />
+            </div>
+
+            {/* {photo != null && photo.data.length !== 0 ? (
               <div className="image">
                 <img src={photo} alt="publicação projeto" />
               </div>
             ): (
               <div></div>
-            )}
+            )} */}
         </main>
 
         <footer>  

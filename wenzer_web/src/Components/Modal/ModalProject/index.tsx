@@ -1,6 +1,8 @@
 import Modal from '@material-ui/core/Modal';
 import { useState, useRef, ChangeEvent, FormEvent} from 'react';
+import { FaCheckDouble } from 'react-icons/fa';
 import { MdClose, MdImage, MdPayment } from 'react-icons/md';
+import { useWenzer } from '../../../hooks/useWenzer';
 import { HeaderAvatar } from '../../../Pages/Feed/styles';
 import Button from '../../Button';
 import InputAutoComplete from '../../InputAutoComplete';
@@ -20,10 +22,16 @@ export default function ModalProject({open, setOpen}: any) {
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
+  const { paymentImpulsionamento, setPaymentImpulsionamento } = useWenzer();
+
   const handleClose = () => {
     setOpen(false);
     setImageToPost(undefined);
   };
+
+  const handleCancelPayment = () => {
+    setPaymentImpulsionamento(false);
+  }
 
   const typesProjects = [
     {
@@ -53,6 +61,9 @@ export default function ModalProject({open, setOpen}: any) {
   ];
   
   function handleOpenModalPayment() {
+    if(paymentImpulsionamento) {
+      return;
+    }
     setOpenModalPayment(true);
   }
 
@@ -103,6 +114,14 @@ export default function ModalProject({open, setOpen}: any) {
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
             </select>
+            <div className='payment-check'>
+              {paymentImpulsionamento && (
+                <>
+                  <FaCheckDouble size={22} />
+                  <span>Impulsionado</span>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="content">
@@ -129,7 +148,11 @@ export default function ModalProject({open, setOpen}: any) {
 
               <div onClick={handleOpenModalPayment}>
                 <MdPayment size={22}/>
-                <span>Impulsionar</span>
+                {paymentImpulsionamento ? (
+                  <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
+                ) : (
+                  <span>Impulsionar</span>
+                )}
               </div>
               
             </div>

@@ -23,6 +23,12 @@ export const Container = styled.div`
       border: 1px solid ${(props) => props.theme.colors.primary};
       border-radius: 0.5rem;
     }
+
+    &.height-coment {
+      min-height: 100px;
+      margin-bottom: 0;
+      margin-top: 0.5rem;
+    }
   }
 
   .iconInput {

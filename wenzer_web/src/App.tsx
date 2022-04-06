@@ -3,6 +3,7 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './Styles/GlobalStyles';
 import { useTheme } from './Styles/Hook/theme';
 import { AuthProvider } from './Services/Authentication/auth';
+import { WenzerProvider } from './hooks/useWenzer';
 
 function App() {
   const { theme } = useTheme();
@@ -10,8 +11,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <GlobalStyles />
-        <Routes />
+        <WenzerProvider>
+          <GlobalStyles />
+          <Routes />
+        </WenzerProvider>
       </AuthProvider>
     </ThemeProvider>
   );
