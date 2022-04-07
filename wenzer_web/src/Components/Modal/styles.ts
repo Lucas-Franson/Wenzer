@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     height: 100vh;
 
-    `;
+    &.displayNone {
+        display: none;
+    }
+
+`;
 
 export const ContainerModal = styled.div`
     width: min(90vw, 600px);

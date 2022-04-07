@@ -22,7 +22,10 @@ export default function ModalProject({open, setOpen}: any) {
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
-  const { paymentImpulsionamento, setPaymentImpulsionamento } = useWenzer();
+  const {
+    paymentImpulsionamento,
+    setPaymentImpulsionamento,
+  } = useWenzer();
 
   const handleClose = () => {
     setOpen(false);
@@ -164,7 +167,7 @@ export default function ModalProject({open, setOpen}: any) {
   )
 
   return (
-    <Container>
+    <Container className={open ? '' : "displayNone"}>
       <Modal
         open={open}
         onClose={handleClose}

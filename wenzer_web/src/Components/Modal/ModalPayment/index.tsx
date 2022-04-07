@@ -23,7 +23,6 @@ export default function ModalPayment({open, setOpen}: any) {
     setPaymentImpulsionamento(true);
   };
   
-
   const typeImpulsionamento = [
     {
       value: 1,

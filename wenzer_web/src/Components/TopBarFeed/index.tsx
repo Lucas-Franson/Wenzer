@@ -15,6 +15,7 @@ import WenzerLogo from "../../Utils/image/wenzer_web.svg";
 import { Container, ContentMenu, ContainerMenu } from "./styles";
 import { useTheme } from "../../Styles/Hook/theme";
 import ModalProject from "../Modal/ModalProject";
+import { useWenzer } from "../../hooks/useWenzer";
 
 function TopBarFeed(): ReactElement {
   const { toggleTheme, theme } = useTheme();
@@ -22,7 +23,7 @@ function TopBarFeed(): ReactElement {
     theme.title === "dark" ? true : false
   );
   const [openSideMenu, setOpenSideMenu] = useState(false);
-  const [openModalProject, setOpenModalProject] = useState(false)
+  const [openModalProject, setOpenModalProject] = useState(false);
 
   const openMenuRef = useRef(false);
   const { singOut } = useAuth();
@@ -82,91 +83,92 @@ function TopBarFeed(): ReactElement {
   );
 
   return (
-    <Container>
-      {/* LOGO WENZER -------------------------------------------------------------------- */}
-      <header>
-        <Link to="/">
-          <img src={WenzerLogo} alt="Wenzer" />
-        </Link>
-        <InputSearch placeholder="Pesquisar no Wenzer" onChange={() => {}}/>
-      </header>
-
-      {/* OPÇÕES -------------------------------------------------------------------- */}
-      <div className="opcoes">
-        <Tooltip title="Página Inicial" placement="bottom" >
+    <>
+      <Container>
+        {/* LOGO WENZER -------------------------------------------------------------------- */}
+        <header>
           <Link to="/">
-            <AiFillHome size={30}/> 
+            <img src={WenzerLogo} alt="Wenzer" />
           </Link>
-        </Tooltip>
+          <InputSearch placeholder="Pesquisar no Wenzer" onChange={() => {}}/>
+        </header>
 
-        <Tooltip title="Em Alta" placement="bottom" >
-          <Link to="/explore">
-            <AiFillFire size={30}/> 
-          </Link>
-        </Tooltip>
+        {/* OPÇÕES -------------------------------------------------------------------- */}
+        <div className="opcoes">
+          <Tooltip title="Página Inicial" placement="bottom" >
+            <Link to="/">
+              <AiFillHome size={30}/> 
+            </Link>
+          </Tooltip>
 
-        <Tooltip title="Meus Projetos" placement="bottom" className="mobileProject" >
-          <Link to="/projects">
-            <AiFillProject size={30} />
-          </Link>
-        </Tooltip>
+          <Tooltip title="Em Alta" placement="bottom" >
+            <Link to="/explore">
+              <AiFillFire size={30}/> 
+            </Link>
+          </Tooltip>
 
-        <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
-          <Link to="/notify">         
-            <Notify />
-          </Link>
-        </Tooltip>
-      </div>
+          <Tooltip title="Meus Projetos" placement="bottom" className="mobileProject" >
+            <Link to="/projects">
+              <AiFillProject size={30} />
+            </Link>
+          </Tooltip>
 
-      {/* BUTTONS ACTION-------------------------------------------------------------------- */}
-      <div className="buttons">
-        <Tooltip title="Novo Projeto" placement="bottom" >
-          <Link to="" onClick={handleOpenModalProject}>
-            <MdAddCircle size={25} style={{cursor: 'pointer'}} />
-          </Link>
-        </Tooltip>
-
-        <Tooltip title="Notificação" placement="bottom" >
-          <Link to="/notify">         
-            <Notify />
-          </Link>
-        </Tooltip>
-
-        <Tooltip title="Tema" placement="bottom">
-          <Link to="##" >
-            {darkTheme ? (
-            <BsSun size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
-            ) : (
-              <BsMoon size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
-              )
-            }
-          </Link>
-        </Tooltip>
-
-        <Avatar />
-      </div>
-
-      {/* MOBILE -------------------------------------------------------------------- */}
-      <div className="IconMenuMobile">
-        <Button>
-          <MdMenu size={25} className="iconTheme" onClick={handleOpenMenu} />
-        </Button>
-        <div>
-          <SwipeableDrawer
-            anchor="right"
-            open={openSideMenu}
-            onClose={handleOpenMenu}
-            onOpen={handleOpenMenu}
-            ref={openMenuRef}
-          >
-            {sideBarMobile()}
-          </SwipeableDrawer>
+          <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
+            <Link to="/notify">         
+              <Notify />
+            </Link>
+          </Tooltip>
         </div>
-      </div>
-      <ModalProject open={openModalProject} setOpen={setOpenModalProject} />
 
-    </Container>
+        {/* BUTTONS ACTION-------------------------------------------------------------------- */}
+        <div className="buttons">
+          <Tooltip title="Novo Projeto" placement="bottom" >
+            <Link to="" onClick={handleOpenModalProject}>
+              <MdAddCircle size={25} style={{cursor: 'pointer'}} />
+            </Link>
+          </Tooltip>
+
+          <Tooltip title="Notificação" placement="bottom" >
+            <Link to="/notify">         
+              <Notify />
+            </Link>
+          </Tooltip>
+
+          <Tooltip title="Tema" placement="bottom">
+            <Link to="##" >
+              {darkTheme ? (
+              <BsSun size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
+              ) : (
+                <BsMoon size={25} style={{cursor: 'pointer'}} className="iconTheme" onClick={handleChangeTheme} />
+                )
+              }
+            </Link>
+          </Tooltip>
+
+          <Avatar />
+        </div>
+
+        {/* MOBILE -------------------------------------------------------------------- */}
+        <div className="IconMenuMobile">
+          <Button>
+            <MdMenu size={25} className="iconTheme" onClick={handleOpenMenu} />
+          </Button>
+          <div>
+            <SwipeableDrawer
+              anchor="right"
+              open={openSideMenu}
+              onClose={handleOpenMenu}
+              onOpen={handleOpenMenu}
+              ref={openMenuRef}
+            >
+              {sideBarMobile()}
+            </SwipeableDrawer>
+          </div>
+        </div>
+      </Container>
+      <ModalProject open={openModalProject} setOpen={setOpenModalProject} />
+    </>
   );
-}
+};
 
 export default memo(TopBarFeed);

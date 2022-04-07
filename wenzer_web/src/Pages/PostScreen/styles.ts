@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: min(92vw, 1300px);
+  width: min(92vw, 1200px);
   display: flex;
   color: ${(props) => props.theme.colors.white.light};
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin: auto;
   margin-top: 5rem;
 
@@ -22,9 +22,8 @@ export const Container = styled.div`
 
 export const ContainerComent = styled.div`
   width: 100%;
-  height: 560px;
+  height: 760px;
   display: flex;
-  overflow-y: scroll;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -39,10 +38,27 @@ export const ContainerComent = styled.div`
   box-sizing: border-box;
 `;
 
+export const Coment = styled.div`
+  width: 100%;
+  height: auto;
+  padding: 0.8rem 3rem 0.8rem 1rem;
+  margin-top: 0.5rem;
+  font-weight: 400;
+  font-size: 1rem;
+  text-overflow: Ellipsis;
+
+  color: ${(props) => props.theme.colors.white.light};
+  border-radius: 0.5rem;
+  background-color: ${(props) => props.theme.colors.background};
+`;
+
 export const MainComent = styled.div`
   width: 100%;
+  height: 100%;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  padding-right: 10px;
   /* border-left: 1px solid ${(props) => props.theme.colors.tertiary}; */
 
   .coment {
@@ -54,13 +70,31 @@ export const MainComent = styled.div`
       flex-direction: column;
       width: 100%;
 
-      > span {
-        margin-top: 10px;
-        font-size: 0.9rem;
-
-        &:hover {
-          opacity: 0.7;
+      .coment-like {
+        padding: 10px 0;
+        display: flex;
+        gap: 10px;
+        font-size: 0.8rem;
+        
+        span {
           cursor: pointer;
+
+          &:hover {
+            opacity: 0.7;
+            cursor: pointer;
+          }
+        }
+
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          > svg {
+            &.active {
+              color: yellow;
+            }
+          }
         }
       }
     }
@@ -69,7 +103,28 @@ export const MainComent = styled.div`
 `;
 
 export const SubComent = styled.div`
-  padding-left:  5rem;
+  padding-left:  3.5em;
   margin-top: 1rem;
+
+  @media (max-width: 900px){
+    padding-left:  1rem;
+  }
+`;
+
+export const MyComent = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 10px 0;
+
+  border-top: 1px solid ${props => props.theme.colors.tertiary};
+
+  input {
+    margin-bottom: 0 !important;
+  }
 `;
 

@@ -30,4 +30,8 @@ export const ContainerButton = styled.button`
       width: 50%;
     }
 
+    &.button_my-coment {
+      width: 40%;
+    }
+
 `
