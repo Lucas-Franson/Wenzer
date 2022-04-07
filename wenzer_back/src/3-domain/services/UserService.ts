@@ -9,6 +9,7 @@ import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewMode
 import { IConnectionRepository } from "../../4-infra/irepositories/IconnectionRepository";
 import { Connections } from "../entities/conections";
 import { UserPostGoodIdea } from "../entities/userPostGoodIdea";
+import { Db } from "mongodb";
 
 export default class UserService implements IUserService {
 
@@ -151,6 +152,11 @@ export default class UserService implements IUserService {
 
     async getConnections(idUser: string) {
         return await this.connectionRepository.getConnectionOfUser(idUser);
+    }
+
+    // WEB SERVICE
+    async findUserByIdWebService(userId: string, dbo: Db) {
+        return await this.userRepository.getByIdWebService(userId, dbo);
     }
 
 }

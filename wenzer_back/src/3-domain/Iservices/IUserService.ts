@@ -1,3 +1,4 @@
+import { Db } from "mongodb";
 import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
 import { Connections } from "../entities/conections";
 import { User } from "../entities/user";
@@ -7,6 +8,7 @@ export interface IUserService {
     findUserByEmail(email: string): Promise<User | null>;
     findUserByToken(token: string): Promise<User | null>;
     findUserById(userId: string): Promise<User | null>;
+    findUserByIdWebService(userId: string, dbo: Db): Promise<User | null>;
     create(user: User): void;
     updateUser(user: User): void;
     updateUserNewPwd(user: User, pwd: string): void;

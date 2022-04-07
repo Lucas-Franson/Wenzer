@@ -3,7 +3,7 @@ import { IPostRepository } from "../irepositories/IpostRepository";
 import { UserPostGoodIdea } from "../../3-domain/entities/userPostGoodIdea";
 import { PostComments } from "../../3-domain/entities/postComments";
 import { v4 as uuid } from 'uuid';
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 import { Orm } from "./orm";
 
 const url: string = process.env.BASE_URL_DATABASE!;
@@ -101,99 +101,6 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
-    async getNewPostToWebService(id: string, date: Date): Promise<Post[]> {
-        var _self = this;
-        return new Promise(function(resolve, reject){ 
-            MongoClient.connect(url).then(function(db){
-                var dbo = db.db(database);
-                dbo.collection(collection).aggregate([
-                    {
-                        $lookup: {
-                            from: 'Project',
-                            localField: '_id',
-                            foreignField: 'idProject',
-                            pipeline: [
-                                {
-                                    $lookup: {
-                                        from: 'Follower',
-                                        localField: '_id',
-                                        foreignField: 'idProject',
-                                        as: 'follower'
-                                    }
-                                }
-                            ],
-                            as: 'project'
-                        }
-                    },
-                    {
-                        $lookup: {
-                            from: 'Connections',
-                            localField: 'idUser',
-                            foreignField: 'idUser',
-                            as: 'userOne'
-                        }
-                    },
-                    {
-                        $lookup: {
-                            from: 'Connections',
-                            localField: 'idUser',
-                            foreignField: 'idFollower',
-                            as: 'userTwo'
-                        }
-                    },
-                    {
-                        $match: {
-                            $or: [
-                                {
-                                    project: {
-                                        $elemMatch: {
-                                            follower: {
-                                                $elemMatch: {
-                                                    follower: {
-                                                        idUser: id
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                {
-                                    idUser: id
-                                },
-                                {
-                                    userOne: {
-                                        $elemMatch: {
-                                            idFollower: id
-                                        }
-                                    }
-                                },
-                                {
-                                    userTwo: {
-                                        $elemMatch: {
-                                            idUser: id
-                                        }
-                                    }
-                                }
-                            ],
-                            $and: [
-                                {
-                                    created_at: {
-                                        $gt: new Date(date)
-                                    }
-                                }
-                            ]
-
-                        }
-                    }
-                ]).sort({ created_at: -1 }).toArray(function(err: any, results: any) {
-                    const result = _self.handleArrayResult(results);
-                    resolve(result!);
-                    db.close();
-                });
-            });
-        });
-    }
-
     async getUserPostGoodIdea(where: any): Promise<UserPostGoodIdea | null> {
         var _self = this;
         return new Promise(function(resolve, reject){ 
@@ -250,6 +157,107 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
+    // WEB SERVICE
+    async getListUserPostGoodIdeaWebService(whereClause: any, dbo: Db): Promise<UserPostGoodIdea[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            dbo.collection('UserPostGoodIdea').find(whereClause).toArray(function(err: any, results: any) {
+                const result = _self.handleUserPostGoodIdeaArrayResult(results);
+                resolve(result!);
+            });
+        });
+    }
+
+    async getNewPostToWebService(id: string, date: Date, dbo: Db): Promise<Post[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            dbo.collection(collection).aggregate([
+                {
+                    $lookup: {
+                        from: 'Project',
+                        localField: '_id',
+                        foreignField: 'idProject',
+                        pipeline: [
+                            {
+                                $lookup: {
+                                    from: 'Follower',
+                                    localField: '_id',
+                                    foreignField: 'idProject',
+                                    as: 'follower'
+                                }
+                            }
+                        ],
+                        as: 'project'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'Connections',
+                        localField: 'idUser',
+                        foreignField: 'idUser',
+                        as: 'userOne'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'Connections',
+                        localField: 'idUser',
+                        foreignField: 'idFollower',
+                        as: 'userTwo'
+                    }
+                },
+                {
+                    $match: {
+                        $or: [
+                            {
+                                project: {
+                                    $elemMatch: {
+                                        follower: {
+                                            $elemMatch: {
+                                                follower: {
+                                                    idUser: id
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                idUser: id
+                            },
+                            {
+                                userOne: {
+                                    $elemMatch: {
+                                        idFollower: id
+                                    }
+                                }
+                            },
+                            {
+                                userTwo: {
+                                    $elemMatch: {
+                                        idUser: id
+                                    }
+                                }
+                            }
+                        ],
+                        $and: [
+                            {
+                                created_at: {
+                                    $gt: new Date(date)
+                                }
+                            }
+                        ]
+
+                    }
+                }
+            ]).sort({ created_at: -1 }).toArray(function(err: any, results: any) {
+                const result = _self.handleArrayResult(results);
+                resolve(result!);
+            });
+        });
+    }
+
+    // HANDLE METHODS
     handlePostCommentsArrayResult(result: PostComments[]) {
         if (result && result instanceof Array && result.length > 0) {
             let postComments: any[] = [];

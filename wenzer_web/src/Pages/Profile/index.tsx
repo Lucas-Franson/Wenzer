@@ -41,7 +41,7 @@ function Profile(): ReactElement {
   const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
   const [name, setName] = useState(''); 
   const [bio, setBio] = useState('');
-  const [interestsSelected, setInterestsSelected] = useState([]);  
+  const [interestsSelected, setInterestsSelected] = useState<any[]>([]);  
   
   const open = Boolean(anchorEl);
   const { userInfo } = useAuth();
@@ -78,8 +78,11 @@ function Profile(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setInterestsOfUser(res.data);
-      setAlreadyGetInterests(true);
+      if (res.data) {
+        setInterestsSelected(res.data);
+        setInterestsOfUser(res.data);
+        setAlreadyGetInterests(true);
+      }
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -106,8 +109,12 @@ function Profile(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setUserProfileInfo(res.data);
-      setAlreadyGetUserInfo(true);
+      if (res.data) {
+        setName(res.data.name);
+        setBio(res.data.bio);
+        setUserProfileInfo(res.data);
+        setAlreadyGetUserInfo(true);
+      }
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -124,6 +131,14 @@ function Profile(): ReactElement {
 
     if (isLoading) return;
     setIsLoading(true);
+
+    let arrAreEqual = interestsOfUser.filter(x => interestsSelected.some(y => x.value !== y.value)).length === 0;
+
+    if (name === userProfileInfo?.name && bio === userProfileInfo.bio && arrAreEqual) {
+      toastfyWarning("Nenhum campo foi alterado.");
+      setIsLoading(false);
+      return;
+    }
 
     const data = { name, bio, interests: interestsSelected };
   

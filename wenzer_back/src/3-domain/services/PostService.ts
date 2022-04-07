@@ -1,3 +1,4 @@
+import { Db } from "mongodb";
 import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
 import { Post } from "../entities/post";
@@ -27,10 +28,6 @@ export default class PostService implements IPostService {
 
     async getAllPostsOfUser(userId: string, page: number, countPerPage: number) {
         return await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
-    }
-
-    async getNewPostToWebService(id: string, date: Date) {
-        return await this.postRepository.getNewPostToWebService(id, date);
     }
 
     async getAllGoodIdeaFromUser(userId: string) {
@@ -68,6 +65,17 @@ export default class PostService implements IPostService {
 
     async getAllComments(postId: string): Promise<PostComments[]> {
         return await this.postRepository.getCommentsByPostId(postId);
+    }
+
+    // WEB SERVICE
+    async getNewPostToWebService(id: string, date: Date, dbo: Db) {
+        return await this.postRepository.getNewPostToWebService(id, date, dbo);
+    }
+
+    async getAllGoodIdeaFromUserWebService(userId: string, dbo: Db) {
+        const where = { idUser: userId };
+        let userPost = await this.postRepository.getListUserPostGoodIdeaWebService(where, dbo);
+        return userPost;
     }
 
 }

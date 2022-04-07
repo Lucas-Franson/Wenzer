@@ -1,7 +1,7 @@
 import { User } from "../../3-domain/entities/user";
 import { IUserRepository } from "../irepositories/IuserRepository";
 import { v4 as uuid } from 'uuid';
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 import { Orm } from "./orm";
 
 const url: string = process.env.BASE_URL_DATABASE!;
@@ -47,6 +47,18 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         });
     }
 
+    // WEB SERVICE
+    getByIdWebService(userId: string, dbo: Db): Promise<User | null> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            dbo.collection(collection).findOne({ _id: userId }, {}).then(function(results: any) {
+                const result = _self.handleResult(results);
+                resolve(result);
+            });
+        });
+    }
+
+    // HANDLE METHODS
     handleArrayResult(result: User[]) {
         if (result && result instanceof Array && result.length > 0) {
             let users: any[] = [];

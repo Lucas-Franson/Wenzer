@@ -1,3 +1,4 @@
+import { Db, MongoClient } from "mongodb";
 import PostViewModel from "./1-presentation/viewmodel/PostViewModel";
 import UserViewModel from "./1-presentation/viewmodel/UserViewModel";
 import { Post } from "./3-domain/entities/post";
@@ -8,6 +9,9 @@ import { ConnectionRepository } from "./4-infra/repositories/connectionRepositor
 import { PostRepository } from "./4-infra/repositories/postRepository";
 import UserRepository from "./4-infra/repositories/userRepository";
 
+const url: string = process.env.BASE_URL_DATABASE!;
+const database = "WenzerDB";
+
 export function websocket(io: any) {
     
     let interval: any;
@@ -16,33 +20,39 @@ export function websocket(io: any) {
         if (interval) {
             clearInterval(interval);
         }
-        interval = setInterval(() => {
-            getApiAndEmit(socket), 1000
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            if (dbo) {
+                interval = setInterval(() => {
+                    getApiAndEmit(socket, dbo!), 1000
+                }); 
+            }
         });
     });
 
-    const getApiAndEmit = (socket: any) => {
+    const getApiAndEmit = (socket: any, dbo: Db) => {
         const obj = socket.request._query;
         let feed = { id: obj['id'], date: obj['date'] };
         
-        getAllPost(socket, feed);
+        getAllPost(socket, feed, dbo);
     };
 
-    async function getAllPost(socket: any, { id, date }: any) {
+    async function getAllPost(socket: any, { id, date }: any, dbo: Db) {
         const postService = new PostService(new PostRepository());
 
-        const post = await postService.getNewPostToWebService(id, date);
-        let goodIdea = await postService.getAllGoodIdeaFromUser(id);
+        const post = await postService.getNewPostToWebService(id, date, dbo);
+        let goodIdea = await postService.getAllGoodIdeaFromUserWebService(id, dbo);
 
-        const userViewModel = await buildUserViewModel(id);
+        const userViewModel = await buildUserViewModel(id, dbo);
         const postViewModel = await buildPostViewModel(post, goodIdea, userViewModel);
 
         socket.emit("GetPost", postViewModel);
     }
 
-    async function buildUserViewModel(id: string) {
+    async function buildUserViewModel(id: string, dbo: Db) {
         const userService = new UserService(new UserRepository(), new ConnectionRepository());
-        let user = await userService.findUserById(id);
+        let user = await userService.findUserByIdWebService(id, dbo);
 
         return new UserViewModel(
             user?._id!,
