@@ -3,7 +3,7 @@ import { MediaQueries } from '../../../../Constants/MediaSettings';
 
 export const Container = styled.div`
   width: 26rem;
-  height: 32rem;
+  height: 40rem;
   box-sizing: border-box;
   padding: 1.5rem 2.5rem;
 
@@ -61,6 +61,18 @@ export const Container = styled.div`
         color: ${(props) => props.theme.colors.primary};
       }
     }
+
+    >.checkbox {
+      width: 100%;
+      display: flex;
+      gap: 15px;
+      margin-bottom: 10px;
+      margin-left: 5px;
+      
+      > input::before {
+        color: ${(props) => props.theme.colors.primary};
+      }
+    }
   }
 
   span {
@@ -80,7 +92,6 @@ export const Container = styled.div`
 
   @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL}{
     width: 22rem;
-    height: 30rem;
 
     padding: 1rem 1.2rem;
 

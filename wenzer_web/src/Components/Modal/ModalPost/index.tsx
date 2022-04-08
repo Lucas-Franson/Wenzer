@@ -103,7 +103,7 @@ export default function ModalPost({open, setOpen}: any) {
             <div className="image">
               <div onClick={() => filepickerRef.current.click()}>
                 <MdImage size={25} />
-                <span>Foto/Vídeo</span>
+                <span>Foto</span>
                 <input
                   type='file'
                   onChange={addImageToPost}

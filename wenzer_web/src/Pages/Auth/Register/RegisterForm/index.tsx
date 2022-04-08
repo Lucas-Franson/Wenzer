@@ -12,12 +12,15 @@ import { Container } from "./styles";
 
 function Login() {
   const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [university, setUniversity] = useState('');
   const [isTerms, setIsTerms] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasCompany, setHasCompany] = useState(false);
 
   const history = useHistory();
 
@@ -58,11 +61,21 @@ function Login() {
     <Container>
       <strong>Crie sua conta</strong>
       <form onSubmit={onSubmit}>
+        <div className="checkbox">
+          <input type="checkbox" className="checkbox" onChange={e => setHasCompany(!hasCompany) }/>
+          <span>Empresa</span>
+        </div>
         <InputText
           type="text"
           placeholder="Nome"
           required={true}
           onChange={(e: any) => setName(e.target.value)}
+        />
+         <InputText
+          type="text"
+          placeholder="Sobrenome"
+          required={true}
+          onChange={(e: any) => setLastName(e.target.value)}
         />
         <InputText
           type="Email"
@@ -81,6 +94,13 @@ function Login() {
           required={true}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+        {!hasCompany && (
+          <InputText
+            placeholder="Universidade"
+            required={true}
+            onChange={(e: any) => setUniversity(e.target.value)}
+          />
+        )}
         <button type="submit">
           {isLoading ? (
             <CircularProgress size={16} color="inherit" />
