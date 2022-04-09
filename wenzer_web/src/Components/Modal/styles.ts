@@ -1,16 +1,21 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     height: 100vh;
+
+    &.displayNone {
+        display: none;
+    }
+
 `;
 
 export const ContainerModal = styled.div`
     width: min(90vw, 600px);
     height: auto;
-
+    
     border-radius: 8px;
     background: ${props => props.theme.colors.secondary};
     box-sizing: border-box;
@@ -57,9 +62,26 @@ export const ContainerModal = styled.div`
                 border-radius: 0.5rem;
                 background-color: ${(props) => props.theme.colors.background};
             }
+
+            > img {
+                width: 100px;
+            }
+
+            > .payment-check {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                color: ${props => props.theme.colors.succes}
+            }
         }
 
         .content {
+            > .payment-value {
+                padding-bottom:20px;
+                font-size: 0.9rem;
+            }
+
             > .image {
                 width: 100%;
                 display: flex;
@@ -99,6 +121,15 @@ export const ContainerModal = styled.div`
                     }
                 }
             }
+
+            > .buttons {
+                display: flex;
+                gap: 5px;
+            }
         }
+    }
+
+    &.payment {
+        border-bottom: 3px solid  ${props => props.theme.colors.succes};
     }
 `;

@@ -19,6 +19,19 @@ export const ContainerButton = styled.button`
     &:hover {
       background-color: ${(props) => props.theme.colors.primaryLight};
       color: white;
-    }  
+    }
+    
+    &.payment-button {
+      background-color: ${(props) => props.theme.colors.succes};
+    }
+
+    &.button_coment {
+      margin-top: 10px;
+      width: 50%;
+    }
+
+    &.button_my-coment {
+      width: 40%;
+    }
 
 `

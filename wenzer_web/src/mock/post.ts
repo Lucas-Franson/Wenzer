@@ -11,7 +11,7 @@ export const postMock: IPostProps[] = [
         _id: "", 
         idProject: 12,
         idUser: 13,
-        photo: new Buffer(''),
+        photo: image3,
         title: 'Um projeto teste',
         updated_at: new Date(),
         goodIdea: false,

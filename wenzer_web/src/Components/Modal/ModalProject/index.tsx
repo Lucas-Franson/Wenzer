@@ -1,11 +1,14 @@
 import Modal from '@material-ui/core/Modal';
 import { useState, useRef, ChangeEvent, FormEvent} from 'react';
+import { FaCheckDouble } from 'react-icons/fa';
 import { MdClose, MdImage, MdPayment } from 'react-icons/md';
+import { useWenzer } from '../../../hooks/useWenzer';
 import { HeaderAvatar } from '../../../Pages/Feed/styles';
 import Button from '../../Button';
 import InputAutoComplete from '../../InputAutoComplete';
 import InputText from '../../InputText';
 import InputTextArea from '../../InputTextArea';
+import ModalPayment from '../ModalPayment';
 import { ContainerModal, Container } from '../styles';
 
 export default function ModalProject({open, setOpen}: any) {
@@ -15,12 +18,23 @@ export default function ModalProject({open, setOpen}: any) {
   const [descriptionPost, setDescriptionPost] = useState('');
   const [typePost, setTypePost] = useState('1');
 
+  const [openModalPayment, setOpenModalPayment] = useState(false);
+
   const filepickerRef = useRef<HTMLDivElement | any>(null);
+
+  const {
+    paymentImpulsionamento,
+    setPaymentImpulsionamento,
+  } = useWenzer();
 
   const handleClose = () => {
     setOpen(false);
     setImageToPost(undefined);
   };
+
+  const handleCancelPayment = () => {
+    setPaymentImpulsionamento(false);
+  }
 
   const typesProjects = [
     {
@@ -48,6 +62,13 @@ export default function ModalProject({open, setOpen}: any) {
       label: 'Concluído'
     },
   ];
+  
+  function handleOpenModalPayment() {
+    if(paymentImpulsionamento) {
+      return;
+    }
+    setOpenModalPayment(true);
+  }
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {
     if(!event.target.files){
@@ -96,6 +117,14 @@ export default function ModalProject({open, setOpen}: any) {
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
             </select>
+            <div className='payment-check'>
+              {paymentImpulsionamento && (
+                <>
+                  <FaCheckDouble size={22} />
+                  <span>Impulsionado</span>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="content">
@@ -105,7 +134,7 @@ export default function ModalProject({open, setOpen}: any) {
             <div className="image">
               <div onClick={() => filepickerRef.current.click()}>
                 <MdImage size={25} />
-                <span>Foto/Vídeo</span>
+                <span>Foto</span>
                 <input
                   type='file'
                   onChange={addImageToPost}
@@ -120,9 +149,13 @@ export default function ModalProject({open, setOpen}: any) {
                 </div>
               )}
 
-              <div>
+              <div onClick={handleOpenModalPayment}>
                 <MdPayment size={22}/>
-                <span>Impulsionar</span>
+                {paymentImpulsionamento ? (
+                  <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
+                ) : (
+                  <span>Impulsionar</span>
+                )}
               </div>
               
             </div>
@@ -134,7 +167,7 @@ export default function ModalProject({open, setOpen}: any) {
   )
 
   return (
-    <Container>
+    <Container className={open ? '' : "displayNone"}>
       <Modal
         open={open}
         onClose={handleClose}
@@ -143,6 +176,7 @@ export default function ModalProject({open, setOpen}: any) {
       >
        {body}
       </Modal>
+      <ModalPayment open={openModalPayment} setOpen={setOpenModalPayment}/>
     </Container>
   );
 }
