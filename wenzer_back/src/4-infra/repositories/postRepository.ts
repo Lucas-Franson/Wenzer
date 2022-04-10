@@ -290,6 +290,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     value.description,
                     value.photo,
                     value.idProject,
+                    value.publicPost,
                     value._id,
                     value.created_at,
                     value.updated_at
@@ -312,6 +313,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 results.description,
                 results.photo,
                 results.idProject,
+                results.publicPost,
                 results._id,
                 results.created_at,
                 results.updated_at

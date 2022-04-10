@@ -6,14 +6,15 @@ interface IInputText {
     placeholder?: string;
     onChange(e: ChangeEvent<HTMLInputElement>): void;
     required?: boolean;
+    maxLength?: number;
 }
 
 function InputTextArea(props: IInputText & InputHTMLAttributes<HTMLInputElement> & any) {
-  const { placeholder = '', onChange, required = false  } = props;
+  const { placeholder = '', onChange, required = false, maxLength = 300  } = props;
 
   return (
     <Container>
-      <textarea maxLength={300} placeholder={placeholder} onChange={onChange} required={required} {...props}></textarea>
+      <textarea maxLength={maxLength} placeholder={placeholder} onChange={onChange} required={required} {...props}></textarea>
     </Container>
   );
 }

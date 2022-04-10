@@ -71,6 +71,9 @@ export default class ProjectController {
     async createPost(req: any, res: any, next: any) {
         const post: PostCreateViewModel = req.body;
         try {
+            if (req.files) {
+                post.photo = req.files.photo;
+            }
             await req.service.projectAppService.createPost(req.session.userId, post);
 
             res.status(201).json();

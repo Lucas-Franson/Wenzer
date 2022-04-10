@@ -10,6 +10,7 @@ export class Post extends DomainBase {
         public description: string,
         public photo: any,
         public idProject: string,
+        public publicPost: boolean,
         public _id: string = uuid(),
         public created_at: Date = new Date(),
         public updated_at: Date = new Date()

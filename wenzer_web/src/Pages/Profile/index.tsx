@@ -58,6 +58,14 @@ function Profile(): ReactElement {
     setAnchorEl(event.currentTarget);
   };
 
+  function loadTokenEmail() {
+    let searchForToken = window.location.search;
+    let token = new URLSearchParams(searchForToken);
+    let getToken = token.get('user');
+
+    return getToken;
+  }
+
   function getConnections(userId: string) {
     APIServiceAuthenticated.get(`/api/profile/connections/${userId}`, {
       headers: {
@@ -164,24 +172,28 @@ function Profile(): ReactElement {
 
   useEffect(() => {
     if(!alreadyGetConnections) {
-      getConnections(userInfo?.id!);
+      let user = loadTokenEmail();
+      getConnections(user ? user : userInfo?.id!);
     }
   }, []);
 
   useEffect(() => {
     if(!alreadyGetInterests) {
-      getInterestsOfUser(userInfo?.id!);
+      let user = loadTokenEmail();
+      getInterestsOfUser(user ? user : userInfo?.id!);
     }
   }, []);
 
   useEffect(() => {
     if(!alreadyGetUserInfo) {
-      getUserProfile(userInfo?.id!);
+      let user = loadTokenEmail();
+      getUserProfile(user ? user : userInfo?.id!);
     }
   }, []);
 
   useEffect(() => {
     if (!alreadyGetAllInterests) {
+      let user = loadTokenEmail();
       getAllInterests();
     }
   }, []);

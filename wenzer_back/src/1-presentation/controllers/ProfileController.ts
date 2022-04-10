@@ -39,8 +39,6 @@ export default class ProfileController {
     }
 
     async editPhoto(req: any, res: any, next: any) {
-        const { photo } = req.body;
-
         try {
             const file = await req.service.profileAppService.editPhoto(req.session.userId, req.files.file);
 

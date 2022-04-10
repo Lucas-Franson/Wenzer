@@ -37,9 +37,7 @@ export default function Feed(): ReactElement {
       } else {
         setDateOfLastPost(new Date());
       }
-      
       setPost(res.data);
-
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })

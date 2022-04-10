@@ -6,6 +6,7 @@ import { AiFillBulb, AiOutlineBulb, AiOutlineComment, AiOutlineProject } from 'r
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
 import { toastfyError } from "../../Components/Toastfy";
+import { useHistory } from 'react-router-dom';
 
 function Post({ 
   created_at,
@@ -18,6 +19,7 @@ function Post({
   user
  }: IPostProps): ReactElement {
   const [hasLiked, setHasLiked] = useState(goodIdea);
+  const history = useHistory();
 
   function setGoodIdea() {
     setHasLiked(!hasLiked);
@@ -32,22 +34,26 @@ function Post({
     })
   }
 
+  function goToUserProfile() {
+    history.push(`/profile?user=${user?._id}`);
+  }
+
   return (
       <ContainerPost>
-         <header>
+         <header onClick={goToUserProfile}>
           <HeaderAvatar src={user?.photo} />
           <div className="userInfo">
             <p>{user?.name}</p>
-            <span>{new Date().toLocaleDateString()}</span>
+            <span>{created_at ? new Date(created_at!).toLocaleString('pt-BR') : ""}</span>
           </div>
         </header>
 
         <main>
             <div className="text">
               <p>{title}</p>
-              <span>{description}</span>
+              <span>{description && description.length > 300 ? description.substr(0, 300) + "..." : description}</span>
             </div>
-            {photo && photo.data.length !== 0 ? (
+            {photo ? (
               <div className="image">
                 <img src={photo} alt="publicação projeto" />
               </div>

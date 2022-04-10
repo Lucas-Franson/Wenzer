@@ -2,10 +2,16 @@ import Modal from '@material-ui/core/Modal';
 import { useState, useRef, ChangeEvent, FormEvent} from 'react';
 import { MdClose, MdImage } from 'react-icons/md';
 import { HeaderAvatar } from '../../../Pages/Feed/styles';
+import APIServiceAuthenticated from '../../../Services/api/apiServiceAuthenticated';
+import { useAuth } from '../../../Services/Authentication/auth';
 import Button from '../../Button';
 import InputText from '../../InputText';
 import InputTextArea from '../../InputTextArea';
 import { ContainerModal, Container } from '../styles';
+import Cookies from "js-cookie";
+import { toastfyError, toastfySuccess, toastfyWarning } from '../../Toastfy';
+import { useEffect } from 'react';
+import { CircularProgress } from '@material-ui/core';
 
 export default function ModalPost({open, setOpen}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
@@ -13,12 +19,22 @@ export default function ModalPost({open, setOpen}: any) {
   const [titlePost, setTitlePost] = useState('');
   const [descriptionPost, setDescriptionPost] = useState('');
   const [typePost, setTypePost] = useState('1');
+  const [projectSelected, setProjectSelected] = useState("0");
+  const [allProject, setAllProject] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { userInfo } = useAuth();
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
   const handleClose = () => {
     setOpen(false);
+
     setImageToPost(undefined);
+    setPreviewImagePost('');
+    setTitlePost('');
+    setDescriptionPost('');
+    setTypePost('1');
+    setProjectSelected('0');
   };
 
   const typesProjects = [
@@ -32,23 +48,41 @@ export default function ModalPost({open, setOpen}: any) {
     },
   ];
 
-  const allProject = [
-    {
-      value: 1,
-      label: 'Selecione o Projeto'
-    },
-    {
-      value: 2,
-      label: 'projeto 1'
-    },
-    {
-      value: 3,
-      label: 'projeto 2'
-    },
-  ];
+  function getAllProjects() { 
+    if (!open) return;
+
+    APIServiceAuthenticated.get(`/api/project/${userInfo?.id}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      if (res.data.length > 0) {
+        setAllProject(res.data);
+        if (res.data.length == 1) {
+          setProjectSelected(res.data[0]._id);
+        }
+      } else {
+        setAllProject([{ name: "Nenhum projeto criado.", _id: "0" }]);
+        setProjectSelected("0");
+      }
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    });
+  }
+
+  useEffect(() => {
+    getAllProjects();
+  }, [open]);
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {
     if(!event.target.files){
+      return;
+    }
+
+    const fileMB = event.target.files[0].size / 1024 / 1024;
+    if (fileMB > 1) {
+      toastfyError("Tamanho da foto deve ser menor que 1MB.");
       return;
     }
 
@@ -63,14 +97,34 @@ export default function ModalPost({open, setOpen}: any) {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const body = {
-      title: titlePost,
-      description: descriptionPost,
-      type: typePost,
-      image: imageToPost
+
+    if (!projectSelected || projectSelected == "0") {
+      toastfyWarning("Selecione algum projeto para continuar.");
+      return;
     }
 
-    console.log(body);
+    setIsLoading(true);
+    var publicPost = typePost == "1";
+
+    const formData = new FormData();
+    formData.append("title", titlePost);
+    formData.append("description", descriptionPost);
+    formData.append("publicPost", publicPost ? "true" : "false");
+    formData.append("photo", imageToPost == undefined ? "" : imageToPost);
+    formData.append("idProject", projectSelected);
+
+    APIServiceAuthenticated.post(`/api/project/post`, formData, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      toastfySuccess("Publicação efetuada com sucesso!");
+      setIsLoading(false);
+      setOpen(false);
+    }).catch(err => {
+      setIsLoading(false);
+      toastfyError(err?.response?.data?.mensagem);
+    });
   }
 
   const body = (
@@ -83,22 +137,22 @@ export default function ModalPost({open, setOpen}: any) {
       <main>
         <form onSubmit={onSubmit}>
           <div className="profile">
-            <HeaderAvatar />
-            <select required onChange={(e) => setTypePost(e.target.value)}>
+            <HeaderAvatar src={userInfo?.photo} />
+            <select required defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
               {typesProjects.map(item => (
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
             </select>
-            <select required onChange={(e) => setTypePost(e.target.value)}>
+            <select required defaultValue={projectSelected} onChange={(e) => setProjectSelected(e.target.value)}>
               {allProject.map(item => (
-                <option value={item.value} key={item.value}>{item.label}</option>
+                <option value={item._id} key={item._id}>{item.name}</option>
               ))}
             </select>
           </div>
 
           <div className="content">
-            <InputText required placeholder="Titulo" onChange={(e: any) => setTitlePost(e.target.value)} />
-            <InputTextArea required placeholder="Qual a sua idéia?" onChange={(e: any) => setDescriptionPost(e.target.value)}/>
+            <InputText required placeholder="Titulo" maxLength={80} onChange={(e: any) => setTitlePost(e.target.value)} />
+            <InputTextArea required placeholder="Qual a sua idéia?" maxLength={1000} onChange={(e: any) => setDescriptionPost(e.target.value)}/>
 
             <div className="image">
               <div onClick={() => filepickerRef.current.click()}>
@@ -119,7 +173,13 @@ export default function ModalPost({open, setOpen}: any) {
               )}
               
             </div>
-            <Button>Publicar</Button>
+            <Button>
+            {isLoading ? (
+              <CircularProgress size={16} color="inherit" />
+            ) : (
+              "Publicar"
+            )}
+            </Button>
           </div>
         </form>
       </main>

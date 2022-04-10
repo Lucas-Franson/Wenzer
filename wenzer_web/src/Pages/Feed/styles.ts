@@ -9,6 +9,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin: auto;
+  margin-bottom: 20px;
 
   font-size: 1rem;
   font-weight: 400;

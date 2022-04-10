@@ -32,14 +32,14 @@ function PostScreen(): ReactElement {
       <Post 
         description={mock.description} 
         goodIdea={true} 
-        id={mock.id}
+        _id={mock._id}
         idProject={mock.idProject}
         idUser={mock.idUser}
         photo={mock.photo}
         title={mock.title}
         user={mock.user}
         created_at={mock.created_at}
-        key={mock.id}
+        key={mock._id}
         updated_at={mock.updated_at}
       />
       <ContainerComent>

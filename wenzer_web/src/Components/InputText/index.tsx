@@ -7,14 +7,15 @@ interface IInputText {
     placeholder?: string;
     onChange(e: ChangeEvent<HTMLInputElement>): void;
     required?: boolean;
+    maxLength?: number;
 }
 
 function InputText(props: IInputText & InputHTMLAttributes<HTMLInputElement> & any) {
-  const { type, placeholder = '', onChange, required = false } = props;
+  const { type, placeholder = '', onChange, required = false, maxLength = 240 } = props;
 
   return (
     <Container>
-      <input type={type} placeholder={placeholder} onChange={onChange} required={required} {...props}></input>
+      <input type={type} placeholder={placeholder} onChange={onChange} maxLength={maxLength} required={required} {...props}></input>
     </Container>
   );
 }

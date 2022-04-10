@@ -8,5 +8,5 @@ export interface IPostProps {
     title: string;
     updated_at?: Date;
     goodIdea: boolean;
-    user: { name: string, photo: any }
+    user: { _id: string, name: string, photo: any }
 }

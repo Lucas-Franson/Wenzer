@@ -15,7 +15,7 @@ export const postMock: IPostProps[] = [
         title: 'Um projeto teste',
         updated_at: new Date(),
         goodIdea: false,
-        user: { name: '', photo: null }
+        user: { _id: '', name: '', photo: null }
     },
     {
         created_at: new Date(),
@@ -27,7 +27,7 @@ export const postMock: IPostProps[] = [
         title: 'Um projeto teste 2',
         updated_at: new Date(),
         goodIdea: false,
-        user: { name: '', photo: null }
+        user: { _id: '', name: '', photo: null }
     },
     {
         created_at: new Date(),
@@ -39,6 +39,6 @@ export const postMock: IPostProps[] = [
         title: 'Um projeto teste 3',
         updated_at: new Date(),
         goodIdea: false,
-        user: { name: '', photo: null }
+        user: { _id: '', name: '', photo: null }
     },
 ]

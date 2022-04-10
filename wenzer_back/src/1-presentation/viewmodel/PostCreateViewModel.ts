@@ -7,6 +7,7 @@ export default class PostCreateViewModel {
         public countViews: number,
         public title: string,
         public description: string,
+        public publicPost: string,
         public photo: any,
         public idProject: string,
         public created_at: Date
