@@ -74,19 +74,44 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                                 {
                                     userOne: {
                                         $elemMatch: {
-                                            idFollower: idUser
+                                            idFollower: idUser,
+                                            accepted: true
                                         }
                                     }
                                 },
                                 {
                                     userTwo: {
                                         $elemMatch: {
-                                            idUser
+                                            idUser,
+                                            accepted: true
                                         }
                                     }
                                 }
                             ]
 
+                        }
+                    },
+                    {
+                        $skip: ((page-1)*countPerPage)
+                    }
+                ]).sort({ created_at: -1 }).limit(countPerPage).toArray(function(err: any, results: any) {
+                    const result = _self.handleArrayResult(results);
+                    resolve(result!);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    getAllPostsByUserId(userId: string, page: number, countPerPage: number): Promise<Post[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $match: {
+                            idUser: userId
                         }
                     },
                     {
@@ -151,6 +176,118 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 dbo.collection('PostComment').find({ idPost: postId }).toArray(function(err: any, results: any) {
                     const result = _self.handlePostCommentsArrayResult(results);
                     resolve(result!);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async getCommentsByPost(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('PostComment').aggregate([
+                    {
+                        $lookup: {
+                            from: 'Post',
+                            localField: 'idPost',
+                            foreignField: '_id',
+                            as: 'post',
+                            pipeline: [
+                                {
+                                    $match: {
+                                        idUser: userId
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $unwind: "$post"
+                    },
+                    {
+                        $lookup: {
+                            from: 'User',
+                            localField: 'idUser',
+                            foreignField: '_id',
+                            as: 'user'
+                        }
+                    },
+                    {
+                        $unwind: "$user"
+                    },
+                    {
+                        $match: {
+                            idUser: {
+                                $not: { $eq: userId }
+                            }
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: "$post._id",
+                            name: "$user.name",
+                            created_at: 1
+                        }
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async getCommentsCommentedByUser(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('CommentCommented').aggregate([
+                    {
+                        $lookup: {
+                            from: 'PostComment',
+                            localField: 'idPostComment',
+                            foreignField: '_id',
+                            as: 'postComment',
+                            pipeline: [
+                                {
+                                    $match: {
+                                        idUser: userId
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $unwind: "$postComment"
+                    },
+                    {
+                        $lookup: {
+                            from: 'User',
+                            localField: 'idUser',
+                            foreignField: '_id',
+                            as: 'user'
+                        }
+                    },
+                    {
+                        $unwind: "$user"
+                    },
+                    {
+                        $match: {
+                            idUser: {
+                                $not: { $eq: userId }
+                            }
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: "$postComment.idPost",
+                            name: "$user.name",
+                            created_at: 1
+                        }
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    resolve(results);
                     db.close();
                 });
             });

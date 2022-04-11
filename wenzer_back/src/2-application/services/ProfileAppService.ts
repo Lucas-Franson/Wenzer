@@ -1,7 +1,10 @@
 import { InterestsFormViewModel } from "../../1-presentation/viewmodel/InterestsFormViewModel";
+import PostViewModel from "../../1-presentation/viewmodel/PostViewModel";
 import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
+import UserViewModel from "../../1-presentation/viewmodel/UserViewModel";
 import { User } from "../../3-domain/entities/user";
 import IInterestService from "../../3-domain/Iservices/IInterestService";
+import IPostService from "../../3-domain/Iservices/IPostService";
 import IProjectService from "../../3-domain/Iservices/IProjectService";
 import { IUserService } from "../../3-domain/Iservices/IUserService";
 
@@ -11,6 +14,7 @@ export default class ProfileAppService {
         private readonly userService: IUserService, 
         private readonly interestsService: IInterestService,
         private readonly projectService: IProjectService,
+        private readonly postService: IPostService,
     ){
 
     }
@@ -85,6 +89,43 @@ export default class ProfileAppService {
             obj.push(interest);
         });
         return obj;
+    }
+
+    async getAllPosts(page: number, countPerPage: number, idUser: string) {
+        let post = await this.postService.getAllPostsByUserId(idUser, page, countPerPage);
+        let goodIdea = await this.postService.getAllGoodIdeaFromUser(idUser);
+        let postViewModel: PostViewModel[] = [];
+        let user = await this.userService.findUserById(idUser);
+        let userViewModel = new UserViewModel(
+            user?._id!,
+            user?.name!,
+            user?.email!,
+            user?.password!,
+            user?.title!,
+            user?.photo!,
+            user?.bio!,
+            user?.emailValid!,
+            user?.created_at!
+        );
+
+        post.map((value) => {
+            const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
+            const _postViewModel = new PostViewModel(
+                value._id,
+                value.idUser,
+                value.countViews,
+                value.title,
+                value.description,
+                value.photo,
+                value.idProject,
+                value.created_at,
+                postAsGoodIdea != null,
+                userViewModel
+            );
+            postViewModel.push(_postViewModel);
+        });
+
+        return postViewModel;
     }
 
 }

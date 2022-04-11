@@ -24,4 +24,5 @@ export interface IUserService {
     createConnection(userId: string, idUserToFollow: string): Promise<void>;
     deleteConnection(idConnection: string): Promise<void>;
     getConnections(idUser: string): Promise<any>;
+    getFriendRequest(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
 }

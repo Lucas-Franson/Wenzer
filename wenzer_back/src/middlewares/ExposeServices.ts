@@ -1,5 +1,6 @@
 import FeedAppService from "../2-application/services/FeedAppService";
 import LoginAppService from "../2-application/services/LoginAppService";
+import NotificationAppService from "../2-application/services/NotificationAppService";
 import ProfileAppService from "../2-application/services/ProfileAppService";
 import ProjectAppService from "../2-application/services/ProjectAppService";
 import { Connections } from "../3-domain/entities/conections";
@@ -24,15 +25,17 @@ const interestService = new InterestService(new InterestRepository());
 
 const loginAppService = new LoginAppService(userService, emailMarketingService);
 const feedAppService = new FeedAppService(userService, postService, projectService, interestService);
-const profileAppService = new ProfileAppService(userService, interestService, projectService);
+const profileAppService = new ProfileAppService(userService, interestService, projectService, postService);
 const projectAppService = new ProjectAppService(projectService, interestService, postService);
+const notificationAppService = new NotificationAppService(postService, userService);
 
 const service = () => {
     return Object.freeze({
         loginAppService,
         feedAppService,
         profileAppService,
-        projectAppService
+        projectAppService,
+        notificationAppService
     });
 };
 

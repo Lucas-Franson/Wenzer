@@ -37,6 +37,10 @@ export default class PostService implements IPostService {
         return await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
     }
 
+    async getAllPostsByUserId(userId: string, page: number, countPerPage: number) {
+        return await this.postRepository.getAllPostsByUserId(userId, page, countPerPage);
+    }
+
     async getAllGoodIdeaFromUser(userId: string) {
         const where = { idUser: userId };
         let userPost = await this.postRepository.getListUserPostGoodIdea(where);
@@ -72,6 +76,14 @@ export default class PostService implements IPostService {
 
     async getAllComments(postId: string): Promise<PostComments[]> {
         return await this.postRepository.getCommentsByPostId(postId);
+    }
+
+    async getCommentsByPost(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return this.postRepository.getCommentsByPost(userId);
+    }
+    
+    async getCommentsCommentedByUser(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return this.postRepository.getCommentsCommentedByUser(userId);
     }
 
     // WEB SERVICE

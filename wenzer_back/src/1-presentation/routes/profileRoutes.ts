@@ -132,6 +132,34 @@ routes.put('/api/editProfile', AuthUser, profileController.editProfile, () => {
                 schema: { mensagem: "<mensagem do erro>" },
                 description: "Internal server error" }
         */
+    })
+    .get('/api/profile/publications/:idUser', AuthUser, profileController.getAllPosts, () => {
+        /* 
+            #swagger.tags = ["Profile"] 
+            #swagger.description = 'Endpoint obter publicações do usuário.'
+            #swagger.parameters['page'] = {
+                in: 'body',
+                description: 'Página da listagem.',
+                required: true,
+                type: "integer",
+                schema: "8"
+            }
+            #swagger.parameters['countPerPage'] = {
+                in: 'body',
+                description: 'Quantidade de registro por página.',
+                required: true,
+                type: "integer",
+                schema: "15"
+            }
+            #swagger.responses[200] = {
+                schema: [{
+                    $ref: "#/definitions/Post"
+                }],
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
     });
 
 routes.options([
@@ -140,7 +168,8 @@ routes.options([
     '/api/profile/follow',
     '/api/profile/connections',
     '/api/profile/interests/:idUser',
-    '/api/profile/info/:idUser'
+    '/api/profile/info/:idUser',
+    '/api/profile/publications/:idUser'
 ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

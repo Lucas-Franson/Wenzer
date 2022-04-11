@@ -19,6 +19,9 @@ import InputTextArea from '../../Components/InputTextArea';
 import ModalProfilePic from '../../Components/Modal/ModalProfilePic';
 import { CircularProgress } from '@material-ui/core';
 import Select from 'react-select';
+import { IPostProps } from '../../Components/Post/interface';
+import Post from '../../Components/Post';
+import NoPostHere from "../../Components/Animation/NoPostHere";
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -27,6 +30,7 @@ function Profile(): ReactElement {
   const [interestsOfUser, setInterestsOfUser] = useState<{ label: string, value: string }[]>([]);
   const [userProfileInfo, setUserProfileInfo] = useState<IProfileProps>();
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
+  const [post, setPost] = useState<any>([]);
   
   // CONTROL REQUESTS
 
@@ -57,6 +61,23 @@ function Profile(): ReactElement {
   const handleOpenMenuSettings = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  function getAllPost(userId: string) {
+
+    APIServiceAuthenticated.get(`/api/profile/publications/${userId}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      },
+      params: {
+        page: 1,
+        countPerPage: 5
+      }
+    }).then(res => {
+      setPost(res.data);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
 
   function loadTokenEmail() {
     let searchForToken = window.location.search;
@@ -193,9 +214,13 @@ function Profile(): ReactElement {
 
   useEffect(() => {
     if (!alreadyGetAllInterests) {
-      let user = loadTokenEmail();
       getAllInterests();
     }
+  }, []);
+
+  useEffect(() => {
+    let user = loadTokenEmail();
+    getAllPost(user ? user : userInfo?.id!);
   }, []);
 
   function handleName(e: any) {
@@ -278,9 +303,29 @@ function Profile(): ReactElement {
 
       <ContainerProjects>
         {!hasEditProfile ? (
-          <div className="wraper">
-            <span>projects</span>
-          </div>
+          post.length !== 0 ? (
+            post.map(({ 
+              created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
+            }: IPostProps) => (
+              <Post
+                key={_id}
+                created_at={created_at}
+                description={description}
+                _id={_id}
+                idProject={idProject}
+                idUser={idUser}
+                photo={photo}
+                title={title}
+                goodIdea={goodIdea}
+                user={user}
+              />
+            ))
+          ) : (
+            <div>
+              <NoPostHere/>
+              Procurando publicações...
+            </div>
+          )
         ) : (
           <CardInfo>
             <h3>Editar Perfil</h3>
@@ -320,10 +365,6 @@ function Profile(): ReactElement {
             </div>
           </CardInfo>
         )}
-
-        <CardInfo className='mt-10'>
-          <h3>Projetos que estou parcipando</h3>
-        </CardInfo>
       </ContainerProjects>
 
       <Menu

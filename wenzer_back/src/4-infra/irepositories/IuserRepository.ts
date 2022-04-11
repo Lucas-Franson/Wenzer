@@ -7,4 +7,5 @@ export interface IUserRepository extends IOrm<User> {
     removePostAsGoodIdea(idUser: string, idPost: string): Promise<void>;
     getAllUsersByArrOfIds(idUserArr: string[]): Promise<User[]>
     getByIdWebService(userId: string, dbo: Db): Promise<User | null>;
+    getFriendRequest(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]>;
 }

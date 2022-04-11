@@ -154,6 +154,10 @@ export default class UserService implements IUserService {
         return await this.connectionRepository.getConnectionOfUser(idUser);
     }
 
+    async getFriendRequest(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return this.userRepository.getFriendRequest(userId);
+    }
+
     // WEB SERVICE
     async findUserByIdWebService(userId: string, dbo: Db) {
         return await this.userRepository.getByIdWebService(userId, dbo);
