@@ -49,7 +49,7 @@ function PostScreen(): ReactElement {
             <div className="coment-user">
               <p>Nome Usuário</p>
               <Coment>
-                text aquiasd asdasdasdasdasdasdasdasdasdas
+                this is a simple coment in developement  
               </Coment>
               <div className="coment-like">
                 <span onClick={handleSubComent}>Comentar</span>

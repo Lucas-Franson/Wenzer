@@ -41,11 +41,13 @@ export const ContainerComent = styled.div`
 export const Coment = styled.div`
   width: 100%;
   height: auto;
+  max-height: 150px;
+  overflow-y: scroll;
   padding: 0.8rem 3rem 0.8rem 1rem;
   margin-top: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
-  text-overflow: Ellipsis;
+  font-size: 0.8rem;
+  max-width: 100%;
 
   color: ${(props) => props.theme.colors.white.light};
   border-radius: 0.5rem;
