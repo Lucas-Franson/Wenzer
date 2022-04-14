@@ -8,7 +8,7 @@ export class EmailResetPassword extends Email {
     constructor(user: User, address: string) {
         super(
             '"Wenzer" <wenzer.marketing@gmail.com>',
-            user._email,
+            user.email,
             'Redefinicação de senha',
             `Olá! Segue o link de redefinição de senha: ${address}`,
             ''

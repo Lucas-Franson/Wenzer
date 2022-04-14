@@ -6,11 +6,12 @@ import { AiFillBulb, AiOutlineBulb, AiOutlineComment, AiOutlineProject } from 'r
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
 import { toastfyError } from "../../Components/Toastfy";
+import { useHistory } from 'react-router-dom';
 
 function Post({ 
   created_at,
   description,
-  id, idProject,
+  _id, idProject,
   idUser,
   photo,
   title,
@@ -18,10 +19,11 @@ function Post({
   user
  }: IPostProps): ReactElement {
   const [hasLiked, setHasLiked] = useState(goodIdea);
+  const history = useHistory();
 
   function setGoodIdea() {
     setHasLiked(!hasLiked);
-    APIServiceAuthenticated.post('/api/setPostAsGoodIdea', { postId: id }, {
+    APIServiceAuthenticated.post('/api/setPostAsGoodIdea', { postId: _id }, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
@@ -32,35 +34,36 @@ function Post({
     })
   }
 
+  function goToUserProfile() {
+    history.push(`/profile?user=${user?._id}`);
+  }
+
+  function goToComent() {
+    history.push(`/post/${idUser}`);
+  }
+
   return (
       <ContainerPost>
-         <header>
+         <header onClick={goToUserProfile}>
           <HeaderAvatar src={user?.photo} />
           <div className="userInfo">
             <p>{user?.name}</p>
-            <span>{new Date().toLocaleDateString()}</span>
+            <span>{created_at ? new Date(created_at!).toLocaleString('pt-BR') : ""}</span>
           </div>
         </header>
 
         <main>
             <div className="text">
               <p>{title}</p>
-              <span>{description}</span>
+              <span>{description && description.length > 300 ? description.substr(0, 300) + "..." : description}</span>
             </div>
-
-            {/*Retirar a div abaixo e descomentar a de baixo  */}
-
-            <div className="image">
-                <img src={photo} alt="publicação projeto" />
-            </div>
-
-            {/* {photo != null && photo.data.length !== 0 ? (
+            {photo ? (
               <div className="image">
                 <img src={photo} alt="publicação projeto" />
               </div>
             ): (
               <div></div>
-            )} */}
+            )}
         </main>
 
         <footer>  
@@ -68,7 +71,7 @@ function Post({
             {!hasLiked ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
             <span>Boa ideia</span>
           </div>
-          <div>
+          <div onClick={goToComent}>
             <AiOutlineComment size="22" />
             <span>Comentar</span>
           </div>

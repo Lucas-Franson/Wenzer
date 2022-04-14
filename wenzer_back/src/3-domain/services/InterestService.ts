@@ -1,5 +1,5 @@
-import { InterestsViewModel } from "../../1-presentation/viewmodel/InterestsViewModel";
-import { IInterestsRepository } from "../../4-infra/irepositories/IinterestsRepository";
+import { InterestsFormViewModel } from "../../1-presentation/viewmodel/InterestsFormViewModel";
+import { IInterestRepository } from "../../4-infra/irepositories/IinterestRepository";
 import { Interests } from "../entities/interests";
 import { InterestUser } from "../entities/interestUser";
 import { Project } from "../entities/project";
@@ -7,29 +7,29 @@ import { ProjectInterests } from "../entities/projectInterests";
 import { User } from "../entities/user";
 import IInterestService from "../Iservices/IInterestService";
 
-export default class PostService implements IInterestService {
+export default class InterestService implements IInterestService {
 
-    constructor(private readonly interestsRepository: IInterestsRepository) {
+    constructor(private readonly interestsRepository: IInterestRepository) {
         
     }
 
     async getAllInterests(): Promise<Interests[]> {
-        return await this.interestsRepository.getAll('');
+        return await this.interestsRepository.getByWhereClause({});
     }
     
-    async linkUserToInterests(user: User, interests: InterestsViewModel[]): Promise<void> {
+    async linkUserToInterests(user: User, interests: InterestsFormViewModel[]): Promise<void> {
         var userInterests: InterestUser[] = [];
-        var deleteUserInterests: InterestUser[] = [];
+        var deleteUserInterests: string[] = [];
         
         let interestUserAlreadyExist = await this.interestsRepository.findLinkUserToInterests(user._id);
         
         interests
         .filter(n => interestUserAlreadyExist
-            .filter(i => i._idInterests === n.id).length === 0)
-            .forEach((interest: InterestsViewModel) => 
+            .filter(i => i.idInterest === n.value).length === 0)
+            .forEach((interest: InterestsFormViewModel) => 
             {
                 var obj = new InterestUser(
-                    interest.id,
+                    interest.value,
                     user._id,
                 );
                 userInterests.push(obj);
@@ -37,10 +37,10 @@ export default class PostService implements IInterestService {
                 
         interestUserAlreadyExist
         .filter(i => interests
-            .filter(n => n.id === i._idInterests).length === 0)
+            .filter(n => n.value === i.idInterest).length === 0)
             .forEach((interest: InterestUser) => 
             {
-                deleteUserInterests.push(interest);
+                deleteUserInterests.push(interest._id);
             });
             
         if (userInterests.length > 0) await this.interestsRepository.createLinkToUser(userInterests);
@@ -48,35 +48,35 @@ export default class PostService implements IInterestService {
         if (deleteUserInterests.length > 0) await this.interestsRepository.deleteLinkToUser(deleteUserInterests);
     }
 
-    async getInterestsByUser(idUser: string): Promise<{id: string, name: string}[]> {
+    async getInterestsByUser(idUser: string): Promise<Interests[]> {
         return await this.interestsRepository.getInterestsByUser(idUser);
     }
 
-    async linkProjectToInterests(project: Project, interests: InterestsViewModel[]): Promise<void> {
+    async linkProjectToInterests(project: Project, interests: InterestsFormViewModel[]): Promise<void> {
         var projectInterests: ProjectInterests[] = [];
-        var deleteProjectInterests: ProjectInterests[] = [];
+        var deleteProjectInterests: string[] = [];
         
         let interestProjectsAlreadyExist = await this.interestsRepository.findLinkProjectToInterests(project._id);
         
         interests
-        .filter(n => interestProjectsAlreadyExist
-            .filter(i => i._idInterests === n.id).length === 0)
-            .forEach((interest: InterestsViewModel) => 
-            {
-                var obj = new ProjectInterests(
-                    project._id,
-                    interest.id
-                );
-                projectInterests.push(obj);
-            });
+            .filter(n => interestProjectsAlreadyExist
+                .filter(i => i.idInterests === n.value).length === 0)
+                .forEach((interest: InterestsFormViewModel) => 
+                {
+                    var obj = new ProjectInterests(
+                        project._id,
+                        interest.value
+                    );
+                    projectInterests.push(obj);
+                });
                 
-            interestProjectsAlreadyExist
-        .filter(i => interests
-            .filter(n => n.id === i._idInterests).length === 0)
-            .forEach((interest: ProjectInterests) => 
-            {
-                deleteProjectInterests.push(interest);
-            });
+        interestProjectsAlreadyExist
+            .filter(i => interests
+                .filter(n => n.value === i.idInterests).length === 0)
+                .forEach((interest: ProjectInterests) => 
+                {
+                    deleteProjectInterests.push(interest._id);
+                });
             
         if (projectInterests.length > 0) await this.interestsRepository.createLinkToProject(projectInterests);
         

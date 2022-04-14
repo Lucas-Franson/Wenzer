@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 
+export const Container = styled.div`
+
+`;
+
 export const ContainerPostProject = styled.div`
   width: 30%;
-  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -14,6 +17,14 @@ export const ContainerPostProject = styled.div`
   padding: 10px;
   margin: 0px 15px 15px 0px;
   
+  &:hover {
+    box-shadow: 1px 3px 4px #8a00ff;
+    cursor: pointer;
+  }
+
+  > span {
+    text-align: center;
+  }
   
   > img {
     width: 100%;
@@ -54,4 +65,5 @@ export const ContainerPostProject = styled.div`
       }
     }
   }
+
 `;

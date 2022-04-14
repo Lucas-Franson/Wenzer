@@ -3,7 +3,7 @@ import { Avatar } from '@material-ui/core';
 
 export const ContainerPost = styled.div`
   width: 100%;
-  height: 560px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,6 +24,7 @@ export const ContainerPost = styled.div`
     width: 100%;
     height: 60px;
     gap: 15px;
+    cursor: pointer;
 
     > .userInfo {
       > span {
@@ -37,7 +38,7 @@ export const ContainerPost = styled.div`
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: 440px;
+    height: 100%;
     text-align: left;
 
     .text {
@@ -45,8 +46,11 @@ export const ContainerPost = styled.div`
       height: auto;
 
       > p {
-        font-size: 0.9rem;
-        font-weight: 400;
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+        word-break: break-word;
+        text-align: justify;
       }
 
       > span {
@@ -55,7 +59,8 @@ export const ContainerPost = styled.div`
         display: inline-block;
         text-overflow: ellipsis;
         overflow: hidden;
-
+        word-break: break-word;
+        text-align: justify;
       }
     }
 

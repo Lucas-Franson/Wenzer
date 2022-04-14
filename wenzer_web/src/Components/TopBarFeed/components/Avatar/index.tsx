@@ -12,6 +12,7 @@ export default function FadeMenu() {
     const open = Boolean(anchorEl);
     const { singOut } = useAuth();
     const history = useHistory();
+    const { userInfo } = useAuth();
   
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorEl(event.currentTarget);
@@ -33,7 +34,7 @@ export default function FadeMenu() {
   
     return (
       <div>
-        <HeaderAvatar onClick={handleClick}>
+        <HeaderAvatar onClick={handleClick} src={userInfo?.photo}>
         </HeaderAvatar>
         <Menu
           id="fade-menu"

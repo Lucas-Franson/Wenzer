@@ -8,10 +8,17 @@ import InputTextArea from '../../Components/InputTextArea';
 import Button from '../../Components/Button';
 import InputText from '../../Components/InputText';
 import { AiFillBulb, AiOutlineBulb } from 'react-icons/ai';
+import { useParams } from 'react-router-dom';
+
+interface IpostId {
+  id: string;
+}
 
 function PostScreen(): ReactElement {
   const [hasSubComent, setHasSubComent] = useState(false);
   const [likeComent, setLikeComent] = useState(false);
+
+  const params = useParams<IpostId>(); //id que é passado ao clicar em um post pelo feed
 
   const mock = postMock[0];
 
@@ -27,19 +34,20 @@ function PostScreen(): ReactElement {
     setHasSubComent(false);
   }
 
+
   return (
     <Container>
       <Post 
         description={mock.description} 
         goodIdea={true} 
-        id={mock.id}
+        _id={mock._id}
         idProject={mock.idProject}
         idUser={mock.idUser}
         photo={mock.photo}
         title={mock.title}
         user={mock.user}
         created_at={mock.created_at}
-        key={mock.id}
+        key={mock._id}
         updated_at={mock.updated_at}
       />
       <ContainerComent>
@@ -49,7 +57,7 @@ function PostScreen(): ReactElement {
             <div className="coment-user">
               <p>Nome Usuário</p>
               <Coment>
-                this is a simple coment in developement  
+                this is a simple coment in d
               </Coment>
               <div className="coment-like">
                 <span onClick={handleSubComent}>Comentar</span>

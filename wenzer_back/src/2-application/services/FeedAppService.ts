@@ -21,33 +21,33 @@ export default class FeedAppService {
     }
 
     async getAllPosts(userId: string,  page: number, countPerPage: number): Promise<PostViewModel[]> {
-        let post = await this.postService.getAllPostsOfUser(userId, page, countPerPage);
+        let post = await this.postService.getAllPostsOfUser(userId, Number(page), Number(countPerPage));
         let goodIdea = await this.postService.getAllGoodIdeaFromUser(userId);
         let postViewModel: PostViewModel[] = [];
         let user = await this.userService.findUserById(userId);
         let userViewModel = new UserViewModel(
             user?._id!,
-            user?._name!,
-            user?._email!,
-            user?._password!,
-            user?._title!,
-            user?._photo!,
-            user?._bio!,
-            user?._emailValid!,
-            user?._created_at!
+            user?.name!,
+            user?.email!,
+            user?.password!,
+            user?.title!,
+            user?.photo!,
+            user?.bio!,
+            user?.emailValid!,
+            user?.created_at!
         );
 
         post.map((value) => {
-            const postAsGoodIdea = goodIdea.find(x => x._idPost === value._id);
+            const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
             const _postViewModel = new PostViewModel(
                 value._id,
-                value._idUser,
-                value._countViews,
-                value._title,
-                value._description,
-                value._photo,
-                value._idProject,
-                value._created_at,
+                value.idUser,
+                value.countViews,
+                value.title,
+                value.description,
+                value.photo,
+                value.idProject,
+                value.created_at,
                 postAsGoodIdea != null,
                 userViewModel
             );
@@ -59,8 +59,8 @@ export default class FeedAppService {
 
     async setGoodIdea(userId: string, postId: string): Promise<void> {
         const userPostExist = await this.postService.userPostGoodIdeaAlreadyExist(userId, postId);
-        this.postService.sumCountOfGoodIdeia(postId, userPostExist);
-        this.userService.setPostAsGoodIdea(userId, postId, userPostExist);
+        await this.postService.sumCountOfGoodIdeia(postId, userPostExist);
+        await this.userService.setPostAsGoodIdea(userId, postId, userPostExist);
     }
 
     async setComments(userId: string, postId: string, text: string): Promise<void> {
@@ -71,26 +71,27 @@ export default class FeedAppService {
         let comments = await this.postService.getAllComments(postId);
         let idUserArr: string[] = [];
         comments.forEach((comment) => {
-            if (idUserArr.filter(x => x == comment._idUser).length == 0)
-                idUserArr.push(comment._idUser);
+            if (idUserArr.filter(x => x == comment.idUser).length == 0)
+                idUserArr.push(comment.idUser);
         });
         if (idUserArr.length > 0) {
             let users = await this.userService.getAllUsersByArrOfIds(idUserArr);
             let commentsViewModel: PostCommentsViewModel[] = [];
             comments.forEach((comment) => {
-                const user = users.find(x => x._id == comment._idUser);
+                const user = users.find(x => x._id == comment.idUser);
                 if (user != undefined) {
                     const userViewModel = new UserPostCommentViewModel(
                         user?._id!,
-                        user?._name!,
-                        user?._photo
+                        user?.name!,
+                        user?.photo
                     );
                     const postViewModel = new PostCommentsViewModel(
                         comment._id,
-                        comment._idUser,
-                        comment._idPost,
+                        comment.idUser,
+                        comment.idPost,
+                        comment.text,
                         userViewModel,
-                        comment._createdAt
+                        comment.created_at
                     );
                     commentsViewModel.push(postViewModel);
                 }
@@ -103,7 +104,11 @@ export default class FeedAppService {
     async getProjectsByInterests(userId: string): Promise<Project[]> {
         const interests = await this.interestsService.getInterestsByUser(userId);
         if (interests.length > 0) {
-            const projects = await this.projectService.getProjectsByInterests(interests);
+            const ids: string[] = [];
+            interests.map((data) => {
+                ids.push(data._id);
+            });
+            const projects = await this.projectService.getProjectsByInterests(ids);
             return projects;
         }
         return [];
@@ -112,7 +117,11 @@ export default class FeedAppService {
     async getProjectsMarketing(userId: string): Promise<Project[]> {
         const interests = await this.interestsService.getInterestsByUser(userId);
         if (interests.length > 0) {
-            const projects = await this.projectService.getProjectsMarketing(interests);
+            const ids: string[] = [];
+            interests.map((data) => {
+                ids.push(data._id);
+            });
+            const projects = await this.projectService.getProjectsMarketing(ids);
             return projects;
         }
         return [];

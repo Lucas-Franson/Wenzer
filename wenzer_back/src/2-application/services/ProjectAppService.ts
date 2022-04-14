@@ -1,5 +1,6 @@
 import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { ProjectCreateViewModel } from "../../1-presentation/viewmodel/ProjectCreateViewModel";
+import { Project } from "../../3-domain/entities/project";
 import IInterestService from "../../3-domain/Iservices/IInterestService";
 import IPostService from "../../3-domain/Iservices/IPostService";
 import IProjectService from "../../3-domain/Iservices/IProjectService";
@@ -19,15 +20,29 @@ export default class ProjectAppService {
     }
 
     async create(userId: string, project: ProjectCreateViewModel) {
-        const proj = this.projectService.convertToProjectObject(project);
-        proj._userId = userId;
+        const proj = new Project(
+            project.name,
+            project.description,
+            project.photo,
+            project.active,
+            project.marketing,
+            userId
+        );
         await this.projectService.create(proj);
         this.interestsService.linkProjectToInterests(proj, project.tags);
     }
 
     async update(userId: string, project: ProjectCreateViewModel) {
-        const proj = this.projectService.convertToProjectObject(project);
-        proj._userId = userId;
+        const proj = new Project(
+            project.name,
+            project.description,
+            project.photo,
+            project.active,
+            project.marketing,
+            userId,
+            project._id,
+            project.created_at
+        );
         await this.projectService.update(proj);
         this.interestsService.linkProjectToInterests(proj, project.tags);
     }

@@ -4,36 +4,36 @@ import { v4 as uuid } from 'uuid';
 export class User extends DomainBase {
 
     constructor(
-        public _name: string,
-        public _email: string, 
-        public _password: string,
-        public _title: string = '',
-        public _photo: any = null,
-        public _bio: string = '',
-        public _emailValid: boolean = false,
+        public name: string,
+        public email: string, 
+        public password: string,
+        public title: string = '',
+        public photo: any = '',
+        public bio: string = '',
+        public emailValid: boolean = false,
         public _id: string = uuid(),
-        public _created_at: Date = new Date(),
-        public _updated_at: Date = new Date()
+        public created_at: Date = new Date(),
+        public updated_at: Date = new Date()
     ) {
         
-        super(_id, _created_at, _updated_at);
+        super(_id, created_at, updated_at);
     }
 
-    emailIsValid = () => { return this._emailValid; }
+    emailIsValid = () => { return this.emailValid; }
 
-    getName = () => { return this._name }
+    getName = () => { return this.name }
 
-    getEmail = () => { return this._email }
+    getEmail = () => { return this.email }
 
-    getPhoto = () => { return this._photo }
+    getPhoto = () => { return this.photo }
 
-    getPassword = () => { return this._password }
+    getPassword = () => { return this.password }
 
-    setPassword = (pwd: string) => { this._password = pwd }
+    setPassword = (pwd: string) => { this.password = pwd }
 
-    validateEmail = () => { this._emailValid = true }
+    validateEmail = () => { this.emailValid = true }
 
-    invalidateEmail = () => { this._emailValid = false }
+    invalidateEmail = () => { this.emailValid = false }
 
     validateObject = () => {
         return true;

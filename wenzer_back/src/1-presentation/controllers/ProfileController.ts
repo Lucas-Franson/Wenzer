@@ -1,3 +1,4 @@
+import { ErroParametro } from "../../erros";
 import { ProfileViewModel } from "../viewmodel/ProfileViewModel";
 
 export default class ProfileController {
@@ -25,14 +26,24 @@ export default class ProfileController {
     }
 
     async editProfile(req: any, res: any, next: any) {
-        const { name, bio, photo, title, interests } = req.body;
-        const profile = new ProfileViewModel('', name, bio, photo, title, interests, 0, 0);
+        const { name, bio, interests } = req.body;
+        const profile = new ProfileViewModel('', name, bio, interests, null, 0, 0);
         
         try {
             profile.validateModel();
             await req.service.profileAppService.editProfile(req.session.userId, profile);
 
             res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async editPhoto(req: any, res: any, next: any) {
+        try {
+            const file = await req.service.profileAppService.editPhoto(req.session.userId, req.files.file);
+
+            res.status(200).json({ photo: file });
         } catch(err) {
             next(err);
         }
@@ -66,6 +77,23 @@ export default class ProfileController {
             const interests = await req.service.profileAppService.getInterests(idUser);
 
             res.status(200).json(interests);
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async getAllPosts(req: any, res: any, next: any) {
+        const { page, countPerPage } = req.query;
+        const { idUser } = req.params;
+        
+        try {
+            if (!page || !countPerPage) {
+                throw new ErroParametro('Falta parâmetro para recuperar os registros de publicações.');
+            }
+
+            const posts = await req.service.profileAppService.getAllPosts(Number(page), Number(countPerPage), idUser);
+
+            res.status(200).json(posts);
         } catch(err) {
             next(err);
         }

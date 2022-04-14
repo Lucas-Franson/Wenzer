@@ -1,122 +1,242 @@
 import { Project } from "../../3-domain/entities/project";
-import { Orm } from "./orm";
 import { IProjectRepository } from "../irepositories/IprojectRepository";
-import { queryPromise } from "../dbContext/conexao";
+import { MongoClient } from "mongodb";
+import { Orm } from "./orm";
+import { Interests } from "../../3-domain/entities/interests";
+
+const url: string = process.env.BASE_URL_DATABASE!;
+const collection = "Project";
+const database = "WenzerDB";
 
 export class ProjectRepository extends Orm<Project> implements IProjectRepository {
 
-    async getProjectsByUser(userId: string) {
-        const sql = `
-            SELECT * FROM Project
-            WHERE userId = ${userId.toSql()}
-        `;
-        const result:any = await queryPromise(sql);
-        return result;
-    }
-
-    async getAllProjectsInHigh() {
-        const sql = `
-            SELECT pj.*, COUNT(fl.id) as CountOfActions FROM Project pj
-                LEFT OUTER JOIN Followers fl ON pj.id = fl.idProject
-            WHERE 
-                fl.created_at BETWEEN 
-                    DATE_ADD(NOW(), INTERVAL -24 HOUR) AND NOW()
-            GROUP BY pj.id
-            ORDER BY CountOfActions DESC
-            LIMIT 10
-            `;
-        const result: any = await queryPromise(sql);
-        let projects: Project[] = [];
-        if (result.length > 0) {
-            result.forEach((project: any) => {
-                if (project)
-                    projects.push(this.convertToProjectObject(project)!);
+    async getProjectsByUser(userId: string): Promise<Project[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).find({ userId }).toArray(function(err: any, results: any) {
+                    const projects = _self.handleArrayResult(results);
+                    resolve(projects);
+                    db.close();
+                });
             });
-        }
-        return projects;
-    }
-
-    async getProjectsByInterests(interests: { id: string; name: string; }[]): Promise<Project[]> {
-        let where = '';
-
-        interests.forEach((interest) => {
-            where += where === '' ? '' : ', ';
-            where += interest.id.toSql();
         });
-
-        const sql = `
-            SELECT pr.* FROM Project pr
-                INNER JOIN ProjectInterests ip ON pr.id = ip.idProject
-            WHERE
-                ip.idInterests in (${where})
-            LIMIT 5
-        `;
-
-        if (where != '') {
-            var result:any = await queryPromise(sql);
-            return result;
-        }
-
-        return [];
     }
 
-    async getProjectsMarketing(interests: { id: string; name: string; }[]): Promise<Project[]> {
-        let where = '';
-
-        interests.forEach((interest) => {
-            where += where === '' ? '' : ', ';
-            where += interest.id.toSql();
+    async getAllProjectsInHigh(): Promise<Project[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'UserProjectGoodIdea',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'userProjectGoodIdea'
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'Follower',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'follower'
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            name: 1,
+                            photo: 1,
+                            description: 1,
+                            countGoodIdea: { $size: "$userProjectGoodIdea" },
+                            countFollowers: { $size: "$follower" }
+                        }
+                    }
+                ])
+                .sort({ userProjectGoodIdea: -1, follower: -1 })
+                .limit(9).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
         });
+    }
 
-        const sql = `
-            SELECT pr.* FROM Project pr
-                INNER JOIN ProjectInterests ip ON pr.id = ip.idProject
-            WHERE
-                ip.idInterests in (${where}) AND
-                pr.marketing = 1
-            LIMIT 5
-        `;
+    async getProjectsByInterests(interests: string[]): Promise<Project[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'ProjectInterest',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'projectInterest'
+                        }
+                    },
+                    {
+                        $match: {
+                            projectInterest: {
+                                $elemMatch: {
+                                    idInterests: {
+                                        $in: interests
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]).limit(5).toArray(function(err: any, results: any) {
+                    const projects = _self.handleArrayResult(results);
+                    resolve(projects);
+                    db.close();
+                });
+            });
+        });
+    }
 
-        if (where != '') {
-            var result:any = await queryPromise(sql);
-            return result;
+    async getProjectsMarketing(interests: string[]): Promise<Project[]> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'ProjectInterest',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'projectInterest'
+                        }
+                    },
+                    {
+                        $match: {
+                            projectInterest: {
+                                $elemMatch: {
+                                    idInterests: {
+                                        $in: interests
+                                    }
+                                }
+                            },
+                            marketing: true
+                        }
+                    }
+                ]).limit(5).toArray(function(err: any, results: any) {
+                    const projects = _self.handleArrayResult(results);
+                    resolve(projects);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async getCountProjectsByUser(idUser: string): Promise<{ count: number }> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $match: {
+                            userId: idUser
+                        }
+                    },
+                    {
+                        $count: "count"
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    if (results && results.length > 0) {
+                        resolve(results[0]);
+                    } else {
+                        resolve({ count: 0 });
+                    }
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async getCountParticipatingByUser(idUser: string): Promise<{ count: number }> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'Participant',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'participant'
+                        }
+                    },
+                    {
+                        $match: {
+                            participant: {
+                                $elemMatch: {
+                                    idUser
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $count: "count"
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    if (results && results.length > 0) {
+                        resolve(results[0]);
+                    } else {
+                        resolve({ count: 0 });
+                    }
+                    db.close();
+                });
+            });
+        });
+    }
+
+    handleArrayResult(result: Project[]) {
+        if (result && result instanceof Array && result.length > 0) {
+            let projects: any[] = [];
+            result.forEach((value: Project) => {
+                let project = new Project(
+                    value.name,
+                    value.description,
+                    value.photo,
+                    value.active,
+                    value.marketing,
+                    value.userId,
+                    value._id,
+                    value.created_at,
+                    value.updated_at
+                );
+                projects.push(project);
+            });
+            return projects;
+        } 
+        else {
+            return [];
         }
-
-        return [];
     }
 
-    async getCountProjectsByUser(idUser: string) {
-        const sql = `SELECT COUNT(id) as count FROM Project WHERE userId = ${idUser.toSql()}`;
-        const result:any = await queryPromise(sql);
-        return result[0];
-    }
-
-    async getCountParticipatingByUser(idUser: string) {
-        const sql = `
-            SELECT COUNT(pj.id) as count FROM Project pj
-            INNER JOIN Participants pt ON pj.id = pt.idProject
-            WHERE
-                idUser = ${idUser.toSql()}
-        `;
-        const result:any = await queryPromise(sql);
-        return result[0];
-    }
-    
-    convertToProjectObject(project: any): Project | null {
-        if (!project) return null;
-
-        return new Project(
-            project?.name,
-            project?.description,
-            project?.photo,
-            project?.active,
-            project?.publicProject,
-            project?.marketing,
-            project?.userId,
-            project?.id,
-            project?.created_at,
-            project?.updated_at
-        );
+    handleResult(results: Project) {
+        if(results && !(results instanceof Array)) {
+            return new Project(
+                results.name,
+                results.description,
+                results.photo,
+                results.active,
+                results.marketing,
+                results.userId,
+                results._id,
+                results.created_at,
+                results.updated_at
+            );
+        }
+        else {
+            return null;
+        }
     }
 
 }

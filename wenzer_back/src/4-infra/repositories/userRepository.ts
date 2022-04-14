@@ -1,88 +1,144 @@
 import { User } from "../../3-domain/entities/user";
-import { Orm } from "./orm";
 import { IUserRepository } from "../irepositories/IuserRepository";
-import { queryPromise } from '../dbContext/conexao';
-import { UserPostGoodIdea } from "../../3-domain/entities/userPostGoodIdea";
 import { v4 as uuid } from 'uuid';
+import { Db, MongoClient } from "mongodb";
+import { Orm } from "./orm";
+
+const url: string = process.env.BASE_URL_DATABASE!;
+const collection = "User";
+const database = "WenzerDB";
 
 export default class UserRepository extends Orm<User> implements IUserRepository {
 
-    private TABLENAME: string = 'User';
- 
-    async get(whereClause: string): Promise<User | null> {
-        const sql = `SELECT * FROM ${this.TABLENAME} ${whereClause}`;
-        let result: any = await queryPromise(sql);
-        return this.convertToObjectUser(result[0]);
-    }
-
-    async getAll(whereClause: string): Promise<User[]> {
-        const sql = `SELECT * FROM ${this.TABLENAME} ${whereClause}`;
-        let result: any = await queryPromise(sql);
-        return this.convertArrayToUserObject(result);
-    }
-
-    async getById(id: string): Promise<User | null> {
-        const sql = `SELECT * FROM ${this.TABLENAME} WHERE ID = '${id}' LIMIT 1`;
-        let result: any = await queryPromise(sql);
-        if (result) {
-            return this.convertToObjectUser(result[0]);
-        }
-        return null;
-    }
-
-    async setPostAsGoodIdea(idUser: string, idPost: string) {
-        const sql = `
-            INSERT INTO UserPostGoodIdea (id, idUser, idPost, created_at, updated_at) 
-            VALUES 
-            (${uuid().toSql()}, ${idUser.toSql()}, ${idPost.toSql()}, now(), now())`;
-        await queryPromise(sql);
+    async setPostAsGoodIdea(postGoodIdea: any) {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            postGoodIdea._id = uuid();
+            postGoodIdea.created_at = new Date();
+            postGoodIdea.updated_at = new Date();
+            dbo?.collection("UserPostGoodIdea").insertOne(postGoodIdea, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
     }
 
     async removePostAsGoodIdea(idUser: string, idPost: string) {
-        const sql = `DELETE FROM UserPostGoodIdea WHERE idUser = ${idUser.toSql()} and idPost = ${idPost.toSql()}`;
-        await queryPromise(sql);
-    }
-
-    async getAllUsersByArrOfIds(idUserArr: string[]) {
-        let sql = `SELECT * FROM ${this.TABLENAME} WHERE id in (`;
-        let where = '';
-        idUserArr.forEach((id) => {
-            where += where == '' ? '' : ', ';
-            where += id.toSql();
-        });
-        let finalQuery = sql + where + ')';
-        let result: any = await queryPromise(finalQuery);
-        return this.convertArrayToUserObject(result);
-    }
-
-    convertArrayToUserObject(userArr: any) {
-        let users: User[] = [];
-        if (userArr) {
-            userArr.forEach((user: User) => {
-                const obj = this.convertToObjectUser(user);
-                if (obj) {
-                    users.push(obj);
-                }
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection("UserPostGoodIdea").deleteOne({ idUser, idPost }, function(err, res) {
+                if (err) throw err;
+                db?.close();
             });
-        }
-        return users;
+        });
     }
 
-    convertToObjectUser(user: any): User | null {
-        if (!user) return null;
+    async getAllUsersByArrOfIds(idUserArr: string[]): Promise<User[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).find({ _id: { $in: idUserArr }}).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
 
-        return new User(
-            user?.name,
-            user?.email,
-            user?.password,
-            user?.title,
-            user?.photo,
-            user?.bio,
-            user?.emailValid,
-            user?.id,
-            user?.created_at,
-            user?.updated_at
-        );
+    async getFriendRequest(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection("Connection").aggregate([
+                    {
+                        $lookup: {
+                            from: 'User',
+                            localField: 'idFollower',
+                            foreignField: '_id',
+                            as: 'user'
+                        }
+                    },
+                    {
+                        $unwind: "$user"
+                    },
+                    {
+                        $match: {
+                            idUser: userId,
+                            accepted: false
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: "$user._id",
+                            name: "$user.name",
+                            created_at: 1
+                        }
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    // WEB SERVICE
+    getByIdWebService(userId: string, dbo: Db): Promise<User | null> {
+        var _self = this;
+        return new Promise(function(resolve, reject){ 
+            dbo.collection(collection).findOne({ _id: userId }, {}).then(function(results: any) {
+                const result = _self.handleResult(results);
+                resolve(result);
+            });
+        });
+    }
+
+    // HANDLE METHODS
+    handleArrayResult(result: User[]) {
+        if (result && result instanceof Array && result.length > 0) {
+            let users: any[] = [];
+            result.forEach((value: User) => {
+                let user = new User(
+                    value.name,
+                    value.email,
+                    value.password,
+                    value.title,
+                    value.photo,
+                    value.bio,
+                    value.emailValid,
+                    value._id,
+                    value.created_at,
+                    value.updated_at
+                );
+                users.push(user);
+            });
+            return users;
+        } 
+        else {
+            return [];
+        }
+    }
+
+    handleResult(results: User): User | null {
+        if(results && !(results instanceof Array)) {
+            return new User(
+                results.name,
+                results.email,
+                results.password,
+                results.title,
+                results.photo,
+                results.bio,
+                results.emailValid,
+                results._id,
+                results.created_at,
+                results.updated_at
+            );
+        }
+        else {
+            return null;
+        }
     }
 
 }

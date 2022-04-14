@@ -90,6 +90,7 @@ export const ContainerModal = styled.div`
                 flex-direction: column;
                 justify-content: space-evenly;
                 align-items: center;
+                cursor: pointer;
 
                 > .imagePost {
                     > img {
@@ -114,21 +115,29 @@ export const ContainerModal = styled.div`
                     width: inherit;
 
                     > div {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        padding: 10px;
+                        margin-bottom: 15px;
+                        border-radius: 8px;
+                        gap: 10px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: ${(props) => props.theme.colors.tertiary};
+                            opacity: 0.9;
+                        }  
+                    }
+                }
+
+                > .flex {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-
-                    padding: 10px;
-                    margin-bottom: 15px;
-                    border-radius: 8px;
                     gap: 10px;
-                    cursor: pointer;
-
-                    &:hover {
-                        background-color: ${(props) => props.theme.colors.tertiary};
-                        opacity: 0.9;
-                    }  
-                }
+                    margin-bottom: 10px;
                 }
             }
 

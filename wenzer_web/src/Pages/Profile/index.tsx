@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { FormEvent, ReactElement, useEffect, useState } from 'react';
 import { HeaderAvatar } from '../Feed/styles';
 import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useAuth } from '../../Services/Authentication/auth';
@@ -13,26 +13,43 @@ import InputText from '../../Components/InputText';
 import Button from '../../Components/Button';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
-import { toastfyError } from '../../Components/Toastfy';
+import { toastfyError, toastfySuccess, toastfyWarning } from '../../Components/Toastfy';
 import { IProfileProps } from './interface';
 import InputAutoComplete from '../../Components/InputAutoComplete';
 import InputTextArea from '../../Components/InputTextArea';
 import ModalProfilePic from '../../Components/Modal/ModalProfilePic';
+import { CircularProgress } from '@material-ui/core';
+import Select from 'react-select';
+import { IPostProps } from '../../Components/Post/interface';
+import Post from '../../Components/Post';
+import NoPostHere from "../../Components/Animation/NoPostHere";
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [hasEditProfile, setHasEditProfile] = useState(false);
   const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
-  const [interests, setInterests] = useState<{ id: string, name: string }[]>([]);
-  const [userProfileInfo, setuserProfileInfo] = useState<IProfileProps>();
-  const [projects, setProjects] = useState([]);
+  const [interestsOfUser, setInterestsOfUser] = useState<{ label: string, value: string }[]>([]);
+  const [userProfileInfo, setUserProfileInfo] = useState<IProfileProps>();
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
+  const [post, setPost] = useState<any>([]);
+  
+  // CONTROL REQUESTS
+
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
   const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
 
   const [test, setTest] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [alreadyGetAllInterests, setAlreadyGetAllInterests] = useState(false);
+
+  // FORM UPDATE PROFILE
+
+  const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
+  const [name, setName] = useState(''); 
+  const [bio, setBio] = useState('');
+  const [interestsSelected, setInterestsSelected] = useState<any[]>([]);  
   
   const open = Boolean(anchorEl);
   const { userInfo } = useAuth();
@@ -49,7 +66,30 @@ function Profile(): ReactElement {
     setAnchorEl(event.currentTarget);
   };
 
-  const arrMock = [1, 2, 3, 4, 5, 6];
+  function getAllPost(userId: string) {
+
+    APIServiceAuthenticated.get(`/api/profile/publications/${userId}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      },
+      params: {
+        page: 1,
+        countPerPage: 5
+      }
+    }).then(res => {
+      setPost(res.data);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function loadTokenEmail() {
+    let searchForToken = window.location.search;
+    let token = new URLSearchParams(searchForToken);
+    let getToken = token.get('user');
+
+    return getToken;
+  }
 
   function getConnections(userId: string) {
     APIServiceAuthenticated.get(`/api/profile/connections/${userId}`, {
@@ -65,14 +105,31 @@ function Profile(): ReactElement {
     })
  }
 
-  function getInterests(userId: string) {
+  function getInterestsOfUser(userId: string) {
     APIServiceAuthenticated.get(`/api/profile/interests/${userId}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
+      if (res.data) {
+        setInterestsSelected(res.data);
+        setInterestsOfUser(res.data);
+        setAlreadyGetInterests(true);
+      }
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function getAllInterests() {
+    APIServiceAuthenticated.get(`/api/getAllInterests`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
       setInterests(res.data);
-      setAlreadyGetInterests(true);
+      setAlreadyGetAllInterests(true);
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -85,22 +142,12 @@ function Profile(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setuserProfileInfo(res.data);
-      setAlreadyGetUserInfo(true);
-
-    }).catch(err => {
-      toastfyError(err?.response?.data?.mensagem);
-    })
-  }
-
-  function getProjectsByUser(userId: string) {
-    APIServiceAuthenticated.get(`/api/project/${userId}`, {
-      headers: {
-        auth: Cookies.get('WenzerToken')
+      if (res.data) {
+        setName(res.data.name);
+        setBio(res.data.bio);
+        setUserProfileInfo(res.data);
+        setAlreadyGetUserInfo(true);
       }
-    }).then(res => {
-      setProjects(res.data);
-      setAlreadyGetProjects(true);
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -112,21 +159,102 @@ function Profile(): ReactElement {
     setAnchorEl(null);
   }
 
- useEffect(() => {
+  function save(event: FormEvent) {
+    event.preventDefault();
+
+    if (isLoading) return;
+    setIsLoading(true);
+
+    let arrAreEqual = interestsOfUser.filter(x => interestsSelected.some(y => x.value !== y.value)).length === 0;
+
+    if (name === userProfileInfo?.name && bio === userProfileInfo.bio && arrAreEqual) {
+      toastfyWarning("Nenhum campo foi alterado.");
+      setIsLoading(false);
+      return;
+    }
+
+    const data = { name, bio, interests: interestsSelected };
+  
+    APIServiceAuthenticated.put(`/api/editProfile`, data, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      let obj = userProfileInfo!;
+      obj.name = name;
+      obj.bio = bio;
+      setUserProfileInfo(obj);
+      setInterestsOfUser(interestsSelected);
+
+      toastfySuccess("Perfil editado!");
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    })
+
+  }
+
+  useEffect(() => {
     if(!alreadyGetConnections) {
-      getConnections(userInfo?.id!);
+      let user = loadTokenEmail();
+      getConnections(user ? user : userInfo?.id!);
     }
+  }, []);
+
+  useEffect(() => {
     if(!alreadyGetInterests) {
-      getInterests(userInfo?.id!);
+      let user = loadTokenEmail();
+      getInterestsOfUser(user ? user : userInfo?.id!);
     }
+  }, []);
+
+  useEffect(() => {
     if(!alreadyGetUserInfo) {
-      getUserProfile(userInfo?.id!);
+      let user = loadTokenEmail();
+      getUserProfile(user ? user : userInfo?.id!);
     }
-    if(!alreadyGetProjects) {
-      getProjectsByUser(userInfo?.id!);
+  }, []);
+
+  useEffect(() => {
+    if (!alreadyGetAllInterests) {
+      getAllInterests();
     }
-    console.log(connections);
- });
+  }, []);
+
+  useEffect(() => {
+    let user = loadTokenEmail();
+    getAllPost(user ? user : userInfo?.id!);
+  }, []);
+
+  function handleName(e: any) {
+    e.preventDefault();
+    let name = capitalize(e.target.value.trim());
+    let qtdNumber = name.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Nome não pode possuir número");
+      return;
+    }
+    setName(name);
+  }
+
+  function handleBio(e: any) {
+    e.preventDefault();
+    if (e.target.value == '') setBio('');
+
+    let bio = e.target.value.trim();
+    setBio(bio);
+  }
+
+  function capitalize(str: string) {
+    const arr = str.split(" ");
+    
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+    }
+
+    return arr.join(" ");
+  }
   
   return (
     <Container>
@@ -138,7 +266,7 @@ function Profile(): ReactElement {
               </div>
               <HeaderAvatar className='avatarProfile' src={userProfileInfo?.photo} />
               <p>{userProfileInfo?.name}</p>
-              <span>{userProfileInfo?.title}</span>
+              <span>{userProfileInfo?.bio}</span>
             </div>
 
             <div className="counterProject">
@@ -177,9 +305,9 @@ function Profile(): ReactElement {
         
         <CardInfo>
           <h3>Interesses</h3>
-          {interests.length > 0 ? (
-            interests.map((value) => (
-              <span>{value?.name}</span>
+          {interestsOfUser.length > 0 ? (
+            interestsOfUser.map((value) => (
+              <span> {value?.label} </span>
             ))
           ):(
             <span>Você ainda não tem nenhum interesse</span>
@@ -190,11 +318,29 @@ function Profile(): ReactElement {
 
       <ContainerProjects>
         {!hasEditProfile ? (
-          <div className="wraper">
-            {projects.map(item => (
-              <PostProfile key={item}/>
-            ))} 
-          </div>
+          post.length !== 0 ? (
+            post.map(({ 
+              created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
+            }: IPostProps) => (
+              <Post
+                key={_id}
+                created_at={created_at}
+                description={description}
+                _id={_id}
+                idProject={idProject}
+                idUser={idUser}
+                photo={photo}
+                title={title}
+                goodIdea={goodIdea}
+                user={user}
+              />
+            ))
+          ) : (
+            <div>
+              <NoPostHere/>
+              Procurando publicações...
+            </div>
+          )
         ) : (
           <CardInfo>
             <h3>Editar Perfil</h3>
@@ -202,7 +348,9 @@ function Profile(): ReactElement {
               <InputText 
                 type="text"
                 placeholder="Nome de usuario" 
-                defaultValue={userInfo?.name}
+                onChange={handleName}
+                min={3}
+                defaultValue={userProfileInfo?.name}
               />
               <InputText 
                 type="text"
@@ -214,21 +362,26 @@ function Profile(): ReactElement {
               <InputTextArea
                 type="text"
                 placeholder="Bio" 
+                defaultValue={userProfileInfo?.bio}
+                onChange={handleBio}
                 maxLenght={400}
               />
-              <InputAutoComplete />
+              <InputAutoComplete options={interests} defaultValues={interestsOfUser} onchange={(e: any) => setInterestsSelected(e)} />
               <div>
                 <Button className="onlyBorder" onClick={handleChangeEditProfile}>Cancelar</Button>
-                <Button>Salvar</Button>
+                <Button onClick={save}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : (
+                    "Salvar"
+                  )}
+                </Button>
               </div>
             </div>
           </CardInfo>
         )}
-
-        <CardInfo className='mt-10'>
-          <h3>Projetos que estou parcipando</h3>
-        </CardInfo>
       </ContainerProjects>
+
       <Menu
         id="fade-menu"
         anchorEl={anchorEl}

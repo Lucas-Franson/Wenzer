@@ -1,17 +1,17 @@
-import { InterestsViewModel } from "./InterestsViewModel";
+import { InterestsFormViewModel } from "./InterestsFormViewModel";
+
 
 export class ProjectCreateViewModel {
     
     constructor(
-        private id: string,
-        private name: string,
-        private description: string,
-        private photo: any,
-        private active: boolean,
-        private publicProject: boolean,
-        private marketing: boolean,
-        public tags: InterestsViewModel[],
-        private created_at: Date
+        public _id: string,
+        public name: string,
+        public description: string,
+        public photo: any,
+        public active: boolean,
+        public marketing: boolean,
+        public tags: InterestsFormViewModel[],
+        public created_at: Date
     ) {
 
     }

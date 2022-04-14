@@ -16,25 +16,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function InputAutoComplete() {
+export default function InputAutoComplete({ options, onchange, defaultValues }: any) {
   const classes = useStyles();
 
   return (
     <Container>
-      {/* <Autocomplete
-        multiple
-        options={top100Films}
-        getOptionLabel={(option) => option.title}
-        defaultValue={[top100Films[13]]}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="filled"
-            placeholder="Interesses"
-          />
-        )}
-      /> */}
-      <Select isMulti options={mockOption} placeholder="Interesses" />
+      <Select isMulti options={options} defaultValue={defaultValues} onChange={onchange} placeholder="Interesses" />
     </Container>
   );
 }

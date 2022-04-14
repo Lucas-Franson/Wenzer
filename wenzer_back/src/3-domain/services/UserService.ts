@@ -6,8 +6,10 @@ import { createTokenJWT, verifyTokenJWT } from "../../1-presentation/utils/jwt/t
 import { EmailVerify } from "../utils/email/EmailVerify";
 import { EmailResetPassword } from "../utils/email/EmailResetPassword";
 import { ProfileViewModel } from "../../1-presentation/viewmodel/ProfileViewModel";
-import { IConnectionRepository } from "../../4-infra/irepositories/IconnectionsRepository";
+import { IConnectionRepository } from "../../4-infra/irepositories/IconnectionRepository";
 import { Connections } from "../entities/conections";
+import { UserPostGoodIdea } from "../entities/userPostGoodIdea";
+import { Db } from "mongodb";
 
 export default class UserService implements IUserService {
 
@@ -17,9 +19,13 @@ export default class UserService implements IUserService {
     ) {
     }
 
-    async findUserByEmail(email: string) {
-        const where = `WHERE Email = '${email}'`;
-        return await this.userRepository.get(where);
+    async findUserByEmail(email: string): Promise<User | null> {
+        const where = { email };
+        const user = await this.userRepository.getByWhereClause(where);
+        if (user && user.length > 0) {
+            return user[0];
+        }
+        return null;
     }
 
     async findUserByToken(token: string) {
@@ -38,10 +44,8 @@ export default class UserService implements IUserService {
     }
 
     async updateUserByProfile(user: User, profile: ProfileViewModel) {
-        user._name = profile.getName();
-        user._bio = profile.getBio();
-        user._title = profile.getTitle();
-        user._photo = profile.getPhoto();
+        user.name = profile.getName();
+        user.bio = profile.getBio();
 
         await this.updateUser(user);
     }
@@ -54,6 +58,12 @@ export default class UserService implements IUserService {
         const newPassword = await this.generatePasswordHash(pwd);
         user.setPassword(newPassword);
         this.updateUser(user);
+    }
+
+    async updateUserPhoto(user: User, photo: any) {
+        user.photo = photo;
+
+        await this.updateUser(user);
     }
 
     async sendEmailOfVerification(user: User) {
@@ -106,10 +116,14 @@ export default class UserService implements IUserService {
     }
 
     async setPostAsGoodIdea(idUser: string, idPost: string, userPostExist: boolean) {
+        const postGoodIdea = new UserPostGoodIdea(
+            idUser,
+            idPost
+        );
         if (userPostExist) {
             await this.userRepository.removePostAsGoodIdea(idUser, idPost);
         } else {
-            await this.userRepository.setPostAsGoodIdea(idUser, idPost);
+            await this.userRepository.setPostAsGoodIdea(postGoodIdea);
         }
     }
 
@@ -117,16 +131,17 @@ export default class UserService implements IUserService {
         return await this.userRepository.getAllUsersByArrOfIds(idUserArr);
     }
 
-    async getConnectionFromUsers(userId: string, idUserToFollow: string) {
-        const connection = await this.connectionRepository.get(`WHERE idUser = ${idUserToFollow.toSql()} and idFollower = ${userId.toSql()}`);
-        return this.connectionRepository.convertToConnectionObject(connection);
+    async getConnectionFromUsers(userId: string, idUserToFollow: string): Promise<Connections[]> {
+        const where = { idUser: idUserToFollow, idFollower: userId }
+        const connection = await this.connectionRepository.getByWhereClause(where);
+        return connection;
     }
 
     async createConnection(userId: string, idUserToFollow: string) {
         const connection = new Connections(
             idUserToFollow,
             userId,
-            true
+            false
         );
         this.connectionRepository.insert(connection);
     }
@@ -137,6 +152,15 @@ export default class UserService implements IUserService {
 
     async getConnections(idUser: string) {
         return await this.connectionRepository.getConnectionOfUser(idUser);
+    }
+
+    async getFriendRequest(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+        return this.userRepository.getFriendRequest(userId);
+    }
+
+    // WEB SERVICE
+    async findUserByIdWebService(userId: string, dbo: Db) {
+        return await this.userRepository.getByIdWebService(userId, dbo);
     }
 
 }

@@ -1,0 +1,26 @@
+version: "1.0"
+services:
+    front:
+        build: /wenzer_web
+        ports:
+        - "3000:3000"
+        environment:
+            REACT_APP_PROTOCOL: 'http'
+            REACT_APP_SERVER: 'localhost'
+            REACT_APP_PORT: '3333'
+    back:
+        build: /wenzer_back
+        ports:
+        - "3333:3333"
+        environment:
+            CHAVE_JWT: "o3zn5PTPrVQMwtkNfmk1sZ190TjxsrMSAXplg95VQmubXFdIUVPy/3AKpzh6HoazYSA4mSjLT0OSbrDfucTpz9v/xb38hivNhu5xAP23pyQhj1yyyMjUa51KAQBuur6uZRPr+yazDEZLoEoevnugfwnl0IzV6ar/i1QBc6G8kAqYS4GKu2/r/37o02VxI8tkPgacTLqWD0sBITZlqXyU86l3SEwtJN+abgdUXuYu/GG1qof6L8K9oB6iAC9JQbvaC7h+ENmm5b58Z9EF0pjUl28UpG9ZpuiRghaK6rdoMRxzc/D7n9dACK+0Sj9WwFUfMRO1hh1EVEkfsI3yDxtCeQ=="
+            BASE_URL: 'wenzer.com.br:3333'
+            BASE_URL_WEB: 'http://wenzer.com.br:80'
+            EMAIL_HOST: 'smtp.gmail.com'
+            EMAIL_USUARIO: 'wenzer.marketing@gmail.com'
+            EMAIL_SENHA: '234WER@#$wer'
+            ENVIRONMENT: 'desenv'
+    mongo:
+        image: "mongo"
+        ports:
+        - "27017:27017"

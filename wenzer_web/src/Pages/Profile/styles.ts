@@ -147,12 +147,13 @@ export const CardInfo = styled.div`
       font-size: 0.8rem;
     }
   }
+
 `;
 
 export const ContainerProjects = styled.main`
   width: min(92vw, 900px);
   border-radius: 8px;
-  height: 900px;
+  height: 100%;
 
   margin-bottom: 15px;
 

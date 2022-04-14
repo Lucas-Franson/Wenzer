@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import sessions from 'express-session';
 import { router } from './1-presentation/routes/index';
-import { connection } from './4-infra/dbContext/conexao';
 import { Tabelas } from './4-infra/dbContext/tabelas';
 import swaggerUi from 'swagger-ui-express';
 import GlobalErrorHandler from './middlewares/GlobalErrorHandler';
@@ -11,6 +10,10 @@ import ExposeServices from './middlewares/ExposeServices'; './middlewares/Expose
 import './extension-method/string';
 import './extension-method/date';
 const swaggerFile = require('./swagger_output.json');
+const fileupload = require("express-fileupload");
+import socketIo from 'socket.io';
+import http from 'http';
+import { websocket } from './webserver';
 
 const port = 3333;
 
@@ -23,7 +26,7 @@ app.use((req, res, proximo) => {
     proximo();
 });
 
-new Tabelas(connection);
+new Tabelas();
 
 app.use(express.json());
 app.use(sessions({
@@ -34,12 +37,19 @@ app.use(sessions({
 }));
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(cors());
-
-require("./1-presentation/routes/index")
+app.use(fileupload());
+app.use(express.static("files"));
 
 ExposeServices(app);
 router(app);
 GlobalErrorHandler(app);
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+const server = http.createServer(app);
+const io = new socketIo.Server(server);
+
+websocket(io);
+
+require("./1-presentation/routes/index");
+
+server.listen(port, () => console.log(`Server is running on port ${port}`));
 
