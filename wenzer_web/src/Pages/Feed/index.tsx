@@ -62,7 +62,7 @@ export default function Feed(): ReactElement {
 
   useEffect(() => {
     if (dateOfLastPost != null) {
-      const socketConn = socketIOClient('http://127.0.0.1:3333', { transports: ['websocket'], query: { id: userInfo?.id, date: dateOfLastPost } });
+      const socketConn = socketIOClient('http://127.0.0.1:3333', { transports: ['websocket'], query: { id: userInfo?.id, date: dateOfLastPost, type: 'post' } });
       setSocket(socketConn);
       socketConn.on("GetPost", data => {
         if (data.length > 0) {

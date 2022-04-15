@@ -131,10 +131,12 @@ export default class UserService implements IUserService {
         return await this.userRepository.getAllUsersByArrOfIds(idUserArr);
     }
 
-    async getConnectionFromUsers(userId: string, idUserToFollow: string): Promise<Connections[]> {
+    async getConnectionFromUsers(userId: string, idUserToFollow: string): Promise<Connections | null> {
         const where = { idUser: idUserToFollow, idFollower: userId }
         const connection = await this.connectionRepository.getByWhereClause(where);
-        return connection;
+        if (connection.length > 0)
+            return connection[0];
+        return null;
     }
 
     async createConnection(userId: string, idUserToFollow: string) {

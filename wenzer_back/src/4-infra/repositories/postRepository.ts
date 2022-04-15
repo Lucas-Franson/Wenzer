@@ -394,6 +394,110 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
+    async getCommentsByPostWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number> {
+        return new Promise(function(resolve, reject){ 
+            dbo.collection('PostComment').aggregate([
+                {
+                    $lookup: {
+                        from: 'Post',
+                        localField: 'idPost',
+                        foreignField: '_id',
+                        as: 'post',
+                        pipeline: [
+                            {
+                                $match: {
+                                    idUser
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $unwind: "$post"
+                },
+                {
+                    $lookup: {
+                        from: 'User',
+                        localField: 'idUser',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+                {
+                    $unwind: "$user"
+                },
+                {
+                    $match: {
+                        _id: {
+                            $nin: idNotifications
+                        },
+                        idUser: {
+                            $not: { $eq: idUser }
+                        }
+                    }
+                },
+                {
+                    $count: "count"
+                }
+            ]).toArray(function(err: any, results: any) {
+                if (results.length > 0) resolve(results[0].count)
+                else resolve(0);
+            });
+        });
+    }
+
+    async getCommentsCommentedByUserWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number> {
+        return new Promise(function(resolve, reject){ 
+            dbo.collection('CommentCommented').aggregate([
+                {
+                    $lookup: {
+                        from: 'PostComment',
+                        localField: 'idPostComment',
+                        foreignField: '_id',
+                        as: 'postComment',
+                        pipeline: [
+                            {
+                                $match: {
+                                    idUser: idUser
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $unwind: "$postComment"
+                },
+                {
+                    $lookup: {
+                        from: 'User',
+                        localField: 'idUser',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+                {
+                    $unwind: "$user"
+                },
+                {
+                    $match: {
+                        _id: {
+                            $nin: idNotifications
+                        },
+                        idUser: {
+                            $not: { $eq: idUser }
+                        }
+                    }
+                },
+                {
+                    $count: "count"
+                }
+            ]).toArray(function(err: any, results: any) {
+                if (results.length > 0) resolve(results[0].count)
+                else resolve(0);
+            });
+        });
+    }
+
     // HANDLE METHODS
     handlePostCommentsArrayResult(result: PostComments[]) {
         if (result && result instanceof Array && result.length > 0) {

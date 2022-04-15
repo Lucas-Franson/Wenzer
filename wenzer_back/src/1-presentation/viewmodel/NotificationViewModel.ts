@@ -2,7 +2,7 @@
 export class NotificationViewModel {
     
     constructor(
-        public type: Type,
+        public type: NotificationType,
         public text: string,
         public _id: string,
         public created_at: Date
@@ -11,7 +11,7 @@ export class NotificationViewModel {
     }
 }
 
-export enum Type {
+export enum NotificationType {
     FriendRequest,
     CommentedOnYourComment,
     CommentedOnYourPost

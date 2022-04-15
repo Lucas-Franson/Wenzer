@@ -69,8 +69,8 @@ export default class ProfileAppService {
 
     async followUser(userId: string, idUserToFollow: string) {
         const connection = await this.userService.getConnectionFromUsers(userId, idUserToFollow);
-        if (connection.length > 0) {
-            await this.userService.deleteConnection(connection[0]._id);
+        if (connection) {
+            await this.userService.deleteConnection(connection._id);
         } 
         else {
             await this.userService.createConnection(userId, idUserToFollow);

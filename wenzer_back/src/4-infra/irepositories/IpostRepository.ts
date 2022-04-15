@@ -14,5 +14,7 @@ export interface IPostRepository extends IOrm<Post> {
     setComment(postComment: any): Promise<void>;
     getCommentsByPostId(postId: string): Promise<PostComments[]>;
     getCommentsByPost(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]>;
+    getCommentsByPostWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number>;
+    getCommentsCommentedByUserWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number>;
     getCommentsCommentedByUser(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]>;
 }

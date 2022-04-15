@@ -20,7 +20,7 @@ export interface IUserService {
     validateUserEmail(user: User): void;
     setPostAsGoodIdea(idUser: string, idPost: string, userPostExist: boolean): Promise<void>;
     getAllUsersByArrOfIds(idUserArr: string[]): Promise<User[]>;
-    getConnectionFromUsers(userId: string, idUserToFollow: string): Promise<Connections[]>;
+    getConnectionFromUsers(userId: string, idUserToFollow: string): Promise<Connections | null>;
     createConnection(userId: string, idUserToFollow: string): Promise<void>;
     deleteConnection(idConnection: string): Promise<void>;
     getConnections(idUser: string): Promise<any>;

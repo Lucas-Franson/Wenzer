@@ -1,8 +1,10 @@
 import { Db, MongoClient } from "mongodb";
 import PostViewModel from "./1-presentation/viewmodel/PostViewModel";
 import UserViewModel from "./1-presentation/viewmodel/UserViewModel";
+import NotificationAppService from "./2-application/services/NotificationAppService";
 import { Post } from "./3-domain/entities/post";
 import { UserPostGoodIdea } from "./3-domain/entities/userPostGoodIdea";
+import NotificationService from "./3-domain/services/NotificationService";
 import PostService from "./3-domain/services/PostService";
 import UserService from "./3-domain/services/UserService";
 import { ConnectionRepository } from "./4-infra/repositories/connectionRepository";
@@ -33,9 +35,17 @@ export function websocket(io: any) {
 
     const getApiAndEmit = (socket: any, dbo: Db) => {
         const obj = socket.request._query;
-        let feed = { id: obj['id'], date: obj['date'] };
-        
-        getAllPost(socket, feed, dbo);
+        const type = obj['type'];
+
+        if(type == 'post') {
+            let feed = { id: obj['id'], date: obj['date'] };
+            
+            getAllPost(socket, feed, dbo);
+        } else if (type == 'notification') {
+            let user = { id: obj['id'] };
+            
+            getAllNotifications(socket, dbo, user);
+        }
     };
 
     async function getAllPost(socket: any, { id, date }: any, dbo: Db) {
@@ -88,6 +98,18 @@ export function websocket(io: any) {
         });
 
         return postViewModel;
+    }
+
+    async function getAllNotifications(socket: any, dbo: Db, { id }: any) {
+        const notificationService = new NotificationService(new PostRepository(), new UserRepository());
+
+        let commentsByPostNumber = await notificationService.getCommentsByPostWebService(dbo, id);
+
+        let commentsCommentedByUserNumber = await notificationService.getCommentsCommentedByUserWebService(dbo, id);
+
+        let friendRequestNumber = await notificationService.getFriendRequestWebService(dbo, id);
+
+        socket.emit("GetNotification", (commentsByPostNumber + commentsCommentedByUserNumber + friendRequestNumber));
     }
     
 

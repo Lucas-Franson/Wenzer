@@ -6,6 +6,7 @@ import ProjectAppService from "../2-application/services/ProjectAppService";
 import { Connections } from "../3-domain/entities/conections";
 import EmailMarketingService from "../3-domain/services/EmailMarketingService";
 import InterestService from "../3-domain/services/InterestService";
+import NotificationService from "../3-domain/services/NotificationService";
 import PostService from "../3-domain/services/PostService";
 import ProjectService from "../3-domain/services/ProjectService";
 import UserService from "../3-domain/services/UserService";
@@ -22,12 +23,13 @@ const emailMarketingService = new EmailMarketingService(new EmailMarketingReposi
 const postService = new PostService(new PostRepository());
 const projectService = new ProjectService(new ProjectRepository(), new FollowerRepository(), new InterestRepository());
 const interestService = new InterestService(new InterestRepository());
+const notificationService = new NotificationService(new PostRepository(), new UserRepository());
 
 const loginAppService = new LoginAppService(userService, emailMarketingService);
 const feedAppService = new FeedAppService(userService, postService, projectService, interestService);
 const profileAppService = new ProfileAppService(userService, interestService, projectService, postService);
 const projectAppService = new ProjectAppService(projectService, interestService, postService);
-const notificationAppService = new NotificationAppService(postService, userService);
+const notificationAppService = new NotificationAppService(notificationService, userService);
 
 const service = () => {
     return Object.freeze({

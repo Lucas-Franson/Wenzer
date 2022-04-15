@@ -3,13 +3,15 @@ import { IUserRepository } from "../irepositories/IuserRepository";
 import { v4 as uuid } from 'uuid';
 import { Db, MongoClient } from "mongodb";
 import { Orm } from "./orm";
+import { NotificationType } from "../../1-presentation/viewmodel/NotificationViewModel";
+import { Connections } from "../../3-domain/entities/conections";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "User";
 const database = "WenzerDB";
 
 export default class UserRepository extends Orm<User> implements IUserRepository {
-
+    
     async setPostAsGoodIdea(postGoodIdea: any) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
@@ -84,6 +86,55 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         });
     }
 
+    async getNotificationSeen(userId: string, type: NotificationType): Promise<{ idNotification: string }[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection("UserNotificationSeen").aggregate([
+                    { 
+                        $match: {
+                            idUser: userId, 
+                            type: type 
+                        }
+                    }, 
+                    { 
+                        $project: {
+                            _id: 0,
+                            idNotification: 1
+                        }
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    updateConnection(connection: Connections): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            connection.updated_at = new Date();
+            dbo?.collection("Connection").updateOne({ _id: connection._id }, { $set: connection }, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
+    setNotificationSeen(userId: string, type: NotificationType, idNotification: string): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            let data: any = { _id: uuid(), idUser: userId, type, idNotification };
+            dbo?.collection("UserNotificationSeen").insertOne(data, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
     // WEB SERVICE
     getByIdWebService(userId: string, dbo: Db): Promise<User | null> {
         var _self = this;
@@ -91,6 +142,60 @@ export default class UserRepository extends Orm<User> implements IUserRepository
             dbo.collection(collection).findOne({ _id: userId }, {}).then(function(results: any) {
                 const result = _self.handleResult(results);
                 resolve(result);
+            });
+        });
+    }
+
+    getFriendRequestWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number> {
+        return new Promise(function(resolve, reject){ 
+            dbo.collection("Connection").aggregate([
+                {
+                    $lookup: {
+                        from: 'User',
+                        localField: 'idFollower',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+                {
+                    $unwind: "$user"
+                },
+                {
+                    $match: {
+                        _id: {
+                            $nin: idNotifications
+                        },
+                        idUser: idUser,
+                        accepted: false
+                    }
+                },
+                {
+                    $count: "count"
+                }
+            ]).toArray(function(err: any, results: any) {
+                if (results.length > 0) resolve(results[0].count)
+                else resolve(0);
+            });
+        });
+    }
+
+    async getNotificationSeenWebSocket(dbo: Db, userId: string, type: NotificationType): Promise<{ idNotification: string }[]> {
+        return new Promise(function(resolve, reject){ 
+            dbo.collection("UserNotificationSeen").aggregate([
+                { 
+                    $match: {
+                        idUser: userId, 
+                        type: type 
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        idNotification: 1
+                    }
+                }
+            ]).toArray(function(err: any, results: any) {
+                resolve(results);
             });
         });
     }

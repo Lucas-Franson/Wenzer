@@ -1,47 +1,46 @@
-import { NotificationViewModel, Type } from "../../1-presentation/viewmodel/NotificationViewModel";
+import { NotificationViewModel } from "../../1-presentation/viewmodel/NotificationViewModel";
+import INotificationService from "../../3-domain/Iservices/INotificationService";
 import IPostService from "../../3-domain/Iservices/IPostService";
 import { IUserService } from "../../3-domain/Iservices/IUserService";
+import { ErroParametro, NaoEncontrado } from "../../erros";
 
 export default class NotificationAppService {
 
     constructor(
-        private postService: IPostService,
+        private notificationService: INotificationService,
         private userService: IUserService
     ){
 
     }
 
     async getAllNotificationByUserId(userId: string): Promise<NotificationViewModel[]> {
-        let notifications: NotificationViewModel[] = [];
+        let commentsByUser = await this.notificationService.getCommentsByPost(userId);
 
-        let commentsByPost = await this.postService.getCommentsByPost(userId);
-        commentsByPost.map((comment) => {
-            if (comment && comment.name) {
-                let name = comment.name.charAt(0).toUpperCase() + comment.name.slice(1);
-                let notification = new NotificationViewModel(Type.CommentedOnYourPost, `${name.trim()} comentou em uma publicação sua.`, comment._id, comment.created_at);
-                notifications.push(notification);
-            }
-        });
+        let friendRequests = await this.notificationService.getFriendRequest(userId);
 
-        let friendRequests = await this.userService.getFriendRequest(userId);
-        friendRequests.map((request) => {
-            if (request && request.name) {
-                let name = request.name.charAt(0).toUpperCase() + request.name.slice(1);
-                let notification = new NotificationViewModel(Type.FriendRequest, `${name.trim()} enviou uma solicitação de amizade.`, request._id, request.created_at);
-                notifications.push(notification);
-            }
-        });
+        let commentsCommentedByUser = await this.notificationService.getCommentsCommentedByUser(userId);
 
-        let commentsCommentedByUser = await this.postService.getCommentsCommentedByUser(userId);
-        commentsCommentedByUser.map((comment) => {
-            if (comment && comment.name) {
-                let name = comment.name.charAt(0).toUpperCase() + comment.name.slice(1);
-                let notification = new NotificationViewModel(Type.CommentedOnYourComment, `${name.trim()} comentou em um comentário seu.`, comment._id, comment.created_at);
-                notifications.push(notification);
-            }
-        });
+        return this.orderByCreatedAt([...commentsByUser, ...friendRequests, ...commentsCommentedByUser]);
+    }
 
-        return this.orderByCreatedAt(notifications);
+    async acceptFriendRequest(idUser: string, idFollower: string) {
+      const connection = await this.userService.getConnectionFromUsers(idFollower, idUser);
+      
+      if (!connection) throw new NaoEncontrado("Solicitação de amizade não encontrado.");
+
+      if (connection.accepted) throw new ErroParametro("Solicitação de amizade já aceita.");
+
+      this.notificationService.acceptFriendRequest(connection);
+    }
+
+    async rejectFriendRequest(idUser: string, idFollower: string) {
+      const connection = await this.userService.getConnectionFromUsers(idFollower, idUser);
+      
+      if (!connection) throw new NaoEncontrado("Solicitação de amizade não encontrado.");
+
+      if (connection.accepted) throw new ErroParametro("Solicitação de amizade já aceita.");
+
+      this.userService.deleteConnection(connection._id);
     }
 
     orderByCreatedAt(arr: NotificationViewModel[]) {
@@ -55,4 +54,4 @@ export default class NotificationAppService {
             return 0;
           });
     }
-}
+} 
