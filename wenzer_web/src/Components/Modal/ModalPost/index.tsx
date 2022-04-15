@@ -155,7 +155,7 @@ export default function ModalPost({open, setOpen}: any) {
             <InputTextArea required placeholder="Qual a sua idéia?" maxLength={1000} onChange={(e: any) => setDescriptionPost(e.target.value)}/>
 
             <div className="image">
-              <div onClick={() => filepickerRef.current.click()}>
+              <div className="flex" onClick={() => filepickerRef.current.click()}>
                 <MdImage size={25} />
                 <span>Foto</span>
                 <input

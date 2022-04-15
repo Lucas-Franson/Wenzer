@@ -7,7 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Fade from '@material-ui/core/Fade';
 
 import { CardInfo, CardProfile, Container, ContainerProfile, ContainerProjects } from './styles';
-import { MdImage, MdSettings } from 'react-icons/md';
+import PostProfile from '../../Components/PostProfile';
+import { MdImage, MdPersonAdd, MdSettings } from 'react-icons/md';
 import InputText from '../../Components/InputText';
 import Button from '../../Components/Button';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
@@ -37,6 +38,9 @@ function Profile(): ReactElement {
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
+  const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
+
+  const [test, setTest] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [alreadyGetAllInterests, setAlreadyGetAllInterests] = useState(false);
 
@@ -266,14 +270,25 @@ function Profile(): ReactElement {
             </div>
 
             <div className="counterProject">
-              <div className="counter">
-                <span>Projetos</span>
-                <span>{userProfileInfo?.countProjects}</span>
-              </div>
-              <div className="counter">
-                <span>Participando</span>
-                <span>{userProfileInfo?.countParticipating}</span>
+             {!test ? (
+               <>
+                  <div className="counter">
+                    <span>Projetos</span>
+                    <span>{userProfileInfo?.countProjects}</span>
+                  </div>
+                  <div className="counter">
+                    <span>Participando</span>
+                    <span>{userProfileInfo?.countParticipating}</span>
+                  </div>
+               </>
+             ) : (
+                <div className="counter">
+                  <Button className="onlyBorder flex white-content">
+                    <MdPersonAdd size={20}/>
+                    Conectar
+                  </Button>
                 </div>
+             )}
             </div>
 
         </CardProfile>

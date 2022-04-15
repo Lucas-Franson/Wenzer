@@ -34,4 +34,19 @@ export const ContainerButton = styled.button`
       width: 40%;
     }
 
+    &.flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    &.white-content {
+      color: ${(props) => props.theme.colors.white.light};
+
+      &:hover {
+        color: white;
+      }
+    }
+
 `

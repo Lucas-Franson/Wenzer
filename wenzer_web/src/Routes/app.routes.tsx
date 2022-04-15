@@ -16,7 +16,7 @@ function AppRoutes() {
         <Route path="/projects" component={Projetos} />
         <Route path="/profile" component={Perfil} />
         <Route path="/notify" component={Notify} />
-        <Route path="/post" component={PostScreen} />
+        <Route path="/post/:id" component={PostScreen} />
 
         <Redirect to="/" />
       </Switch>

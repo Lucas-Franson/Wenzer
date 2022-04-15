@@ -15,6 +15,8 @@ export const Container = styled.div`
 export const ContainerModal = styled.div`
     width: min(90vw, 600px);
     height: auto;
+    max-height: 800px;
+    overflow-y: scroll;
     
     border-radius: 8px;
     background: ${props => props.theme.colors.secondary};
@@ -85,25 +87,10 @@ export const ContainerModal = styled.div`
             > .image {
                 width: 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: space-evenly;
                 align-items: center;
-
-                > div {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                    padding: 10px;
-                    margin-bottom: 15px;
-                    border-radius: 8px;
-                    gap: 10px;
-                    cursor: pointer;
-
-                    &:hover {
-                        background-color: ${(props) => props.theme.colors.tertiary};
-                        opacity: 0.9;
-                    }  
-                }
+                cursor: pointer;
 
                 > .imagePost {
                     > img {
@@ -119,6 +106,38 @@ export const ContainerModal = styled.div`
                         object-fit: contain;
                         border-radius: 8px;
                     }
+                }
+
+                > .buttons-image {
+                    display: flex;
+                    justify-content: space-evenly;
+                    align-items: center;
+                    width: inherit;
+
+                    > div {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        padding: 10px;
+                        margin-bottom: 15px;
+                        border-radius: 8px;
+                        gap: 10px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: ${(props) => props.theme.colors.tertiary};
+                            opacity: 0.9;
+                        }  
+                    }
+                }
+
+                > .flex {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 10px;
                 }
             }
 

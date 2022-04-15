@@ -132,32 +132,33 @@ export default function ModalProject({open, setOpen}: any) {
             <InputTextArea required placeholder="Qual a sua idéia?" onChange={(e: any) => setDescriptionPost(e.target.value)}/>
             <InputAutoComplete />
             <div className="image">
-              <div onClick={() => filepickerRef.current.click()}>
-                <MdImage size={25} />
-                <span>Foto</span>
-                <input
-                  type='file'
-                  onChange={addImageToPost}
-                  ref={filepickerRef}
-                  hidden
-                />
-              </div>
-
-              {imageToPost && (
-                <div className='imagePost' onClick={removeImage}>
-                  <img src={previewImagePost} alt="postagem" />
-                </div>
-              )}
-
-              <div onClick={handleOpenModalPayment}>
-                <MdPayment size={22}/>
-                {paymentImpulsionamento ? (
-                  <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
-                ) : (
-                  <span>Impulsionar</span>
+                {imageToPost && (
+                  <div className='imagePost' onClick={removeImage}>
+                    <img src={previewImagePost} alt="postagem" />
+                  </div>
                 )}
-              </div>
-              
+
+              <div className="buttons-image">
+                <div onClick={() => filepickerRef.current.click()}>
+                  <MdImage size={25} />
+                  <span>Foto</span>
+                  <input
+                    type='file'
+                    onChange={addImageToPost}
+                    ref={filepickerRef}
+                    hidden
+                  />
+                </div>
+
+                <div onClick={handleOpenModalPayment}>
+                  <MdPayment size={22}/>
+                  {paymentImpulsionamento ? (
+                    <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
+                  ) : (
+                    <span>Impulsionar</span>
+                  )}
+                </div>
+              </div>              
             </div>
             <Button>Publicar</Button>
           </div>

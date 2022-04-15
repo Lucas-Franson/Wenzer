@@ -21,10 +21,9 @@ function Login(): ReactElement {
           .then(() => {
             toastfySuccess("E-mail confirmado!");
           })
-          .catch(() => {
-            toastfyWarning(
-              "Falha ao autenticar seu e-mail, verifique sua caixa de entrada ou spam!"
-            );
+          .catch((err) => {
+            console.log(err)
+            toastfyWarning(err.response.data.mensagem);
           });
       }
     }

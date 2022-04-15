@@ -1,6 +1,8 @@
 import { ReactElement, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import NoContent from '../../Components/Animation/NoContent';
+import NotifyFriendRequest from '../../Components/NotifyCard/NotifyFriendRequest';
+import NotifyGeneral from '../../Components/NotifyCard/NotifyGeneral';
 import { removeAllNotify } from '../../Store/Slices/notifySlice';
 
 import { Container } from '../Feed/styles';
@@ -20,6 +22,8 @@ function Notify(): ReactElement {
             </header>
 
             <main>
+              <NotifyFriendRequest/>
+              <NotifyGeneral/>
               <NoContent />
               <span>
                 Sem notificações por aqui.

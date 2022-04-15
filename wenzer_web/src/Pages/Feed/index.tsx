@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
-import { MdImage, MdTextFormat, MdVideoCall } from "react-icons/md";
+import { MdImage, MdTextFormat, MdUpdate, MdVideoCall } from "react-icons/md";
 import NoPostHere from "../../Components/Animation/NoPostHere";
 import Modal from '../../Components/Modal/ModalPost';
 import { useAuth } from "../../Services/Authentication/auth";
@@ -12,6 +12,7 @@ import socketIOClient from 'socket.io-client';
 import APIServiceAuthenticated from "../../Services/api/apiServiceAuthenticated";
 import Cookies from "js-cookie";
 import { toastfyError } from "../../Components/Toastfy";
+import Button from "../../Components/Button";
 
 export default function Feed(): ReactElement {
   const [post, setPost] = useState<any>([]);
@@ -109,7 +110,9 @@ export default function Feed(): ReactElement {
       
       {
         newPost.length > 0 ? (
-          <button onClick={handleNewPost}>Novas publicações</button>
+          <Button className="flex button_coment" onClick={handleNewPost}>
+            <MdUpdate size={22}/> Novas publicações
+          </Button>
         ) : (
           <span></span>
         )

@@ -46,9 +46,9 @@ export const ContainerPost = styled.div`
       height: auto;
 
       > p {
-        margin: 10px;
         font-size: 1.2rem;
-        font-weight: 700;
+        font-weight: 500;
+        margin-bottom: 8px;
         word-break: break-word;
         text-align: justify;
       }
@@ -61,7 +61,6 @@ export const ContainerPost = styled.div`
         overflow: hidden;
         word-break: break-word;
         text-align: justify;
-
       }
     }
 

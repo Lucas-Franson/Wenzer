@@ -38,6 +38,10 @@ function Post({
     history.push(`/profile?user=${user?._id}`);
   }
 
+  function goToComent() {
+    history.push(`/post/${idUser}`);
+  }
+
   return (
       <ContainerPost>
          <header onClick={goToUserProfile}>
@@ -67,7 +71,7 @@ function Post({
             {!hasLiked ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
             <span>Boa ideia</span>
           </div>
-          <div>
+          <div onClick={goToComent}>
             <AiOutlineComment size="22" />
             <span>Comentar</span>
           </div>
