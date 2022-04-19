@@ -127,4 +127,8 @@ export default class FeedAppService {
         return [];
     }
 
+    async setDateOfLastPost(userId: string, date: Date): Promise<void> {
+        await this.postService.setPostAlreadySeenByDate(date, userId);
+    }
+
 }

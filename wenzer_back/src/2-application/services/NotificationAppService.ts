@@ -23,7 +23,7 @@ export default class NotificationAppService {
         return this.orderByCreatedAt([...commentsByUser, ...friendRequests, ...commentsCommentedByUser]);
     }
 
-    async acceptFriendRequest(idUser: string, idFollower: string) {
+    async acceptFriendRequest(idFollower: string, idUser: string) {
       const connection = await this.userService.getConnectionFromUsers(idFollower, idUser);
       
       if (!connection) throw new NaoEncontrado("Solicitação de amizade não encontrado.");
@@ -33,7 +33,7 @@ export default class NotificationAppService {
       this.notificationService.acceptFriendRequest(connection);
     }
 
-    async rejectFriendRequest(idUser: string, idFollower: string) {
+    async rejectFriendRequest(idFollower: string, idUser: string) {
       const connection = await this.userService.getConnectionFromUsers(idFollower, idUser);
       
       if (!connection) throw new NaoEncontrado("Solicitação de amizade não encontrado.");

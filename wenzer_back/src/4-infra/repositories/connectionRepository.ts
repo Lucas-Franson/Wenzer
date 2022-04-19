@@ -28,14 +28,16 @@ export class ConnectionRepository extends Orm<Connections> implements IConnectio
                                 {
                                     connection: {
                                         $elemMatch: {
-                                            idFollower: idUser
+                                            idFollower: idUser,
+                                            accepted: true
                                         }
                                     }
                                 },
                                 {
                                     connection: {
                                         $elemMatch: {
-                                            idUser: idUser
+                                            idUser: idUser,
+                                            accepted: true
                                         }
                                     }
                                 }

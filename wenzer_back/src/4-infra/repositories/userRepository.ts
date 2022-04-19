@@ -165,7 +165,7 @@ export default class UserRepository extends Orm<User> implements IUserRepository
                         _id: {
                             $nin: idNotifications
                         },
-                        idUser: idUser,
+                        idFollower: idUser,
                         accepted: false
                     }
                 },

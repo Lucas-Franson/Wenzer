@@ -38,7 +38,7 @@ export default class NotificationService implements INotificationService {
         let notifications: NotificationViewModel[] = [];
 
         let friendRequests = await this.userRepository.getFriendRequest(idUser);
-        let idNotifications = await this.userRepository.getNotificationSeen(idUser, NotificationType.CommentedOnYourPost);
+        let idNotifications = await this.userRepository.getNotificationSeen(idUser, NotificationType.FriendRequest);
         friendRequests.map((request: any) => {
             if (request && request.name) {
                 let name = request.name.charAt(0).toUpperCase() + request.name.slice(1);
@@ -46,7 +46,7 @@ export default class NotificationService implements INotificationService {
                 notifications.push(notification);
                 let exist = idNotifications.find(x => x.idNotification === request._id);
                 if (!exist) {
-                    this.userRepository.setNotificationSeen(idUser, NotificationType.CommentedOnYourPost, request._id);
+                    this.userRepository.setNotificationSeen(idUser, NotificationType.FriendRequest, request._id);
                 }
             }
         });
@@ -57,7 +57,7 @@ export default class NotificationService implements INotificationService {
         let notifications: NotificationViewModel[] = [];
 
         let commentsCommentedByUser = await this.postRepository.getCommentsCommentedByUser(idUser);
-        let idNotifications = await this.userRepository.getNotificationSeen(idUser, NotificationType.CommentedOnYourPost);
+        let idNotifications = await this.userRepository.getNotificationSeen(idUser, NotificationType.CommentedOnYourComment);
         commentsCommentedByUser.map((comment: any) => {
             if (comment && comment.name) {
                 let name = comment.name.charAt(0).toUpperCase() + comment.name.slice(1);
@@ -65,7 +65,7 @@ export default class NotificationService implements INotificationService {
                 notifications.push(notification);
                 let exist = idNotifications.find(x => x.idNotification === comment._id);
                 if (!exist) {
-                    this.userRepository.setNotificationSeen(idUser, NotificationType.CommentedOnYourPost, comment._id);
+                    this.userRepository.setNotificationSeen(idUser, NotificationType.CommentedOnYourComment, comment._id);
                 }
             }
         });

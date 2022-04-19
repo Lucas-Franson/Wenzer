@@ -35,29 +35,25 @@ export function websocket(io: any) {
 
     const getApiAndEmit = (socket: any, dbo: Db) => {
         const obj = socket.request._query;
-        const type = obj['type'];
-
-        if(type == 'post') {
-            let feed = { id: obj['id'], date: obj['date'] };
-            
-            getAllPost(socket, feed, dbo);
-        } else if (type == 'notification') {
-            let user = { id: obj['id'] };
-            
-            getAllNotifications(socket, dbo, user);
-        }
+        let user = { id: obj['id'] };
+        
+        getAllPost(socket, user, dbo);
+        getAllNotifications(socket, dbo, user);
     };
 
-    async function getAllPost(socket: any, { id, date }: any, dbo: Db) {
+    async function getAllPost(socket: any, { id }: any, dbo: Db) {
         const postService = new PostService(new PostRepository());
 
-        const post = await postService.getNewPostToWebService(id, date, dbo);
+        const post = await postService.getNewPostToWebService(id, dbo);
         let goodIdea = await postService.getAllGoodIdeaFromUserWebService(id, dbo);
 
         const userViewModel = await buildUserViewModel(id, dbo);
-        const postViewModel = await buildPostViewModel(post, goodIdea, userViewModel);
-
-        socket.emit("GetPost", postViewModel);
+        if (post && post?.length > 0) {
+            const postViewModel = await buildPostViewModel(post, goodIdea, userViewModel);
+            socket.emit("GetPost", postViewModel);
+        } else {
+            socket.emit("GetPost", []);
+        }
     }
 
     async function buildUserViewModel(id: string, dbo: Db) {

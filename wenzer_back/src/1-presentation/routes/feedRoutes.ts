@@ -115,6 +115,20 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
                 schema: { mensagem: "<mensagem do erro>" },
                 description: "Internal server error" }
         */
+    })
+    .post('/api/feed/setDateOfLastPost', AuthUser, feedController.setDateOfLastPost, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint setar data último post lido.'
+            #swagger.responses[200] = { 
+                schema: {
+                    date: "Date"
+                },
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
     });
 
 routes.options([
@@ -123,7 +137,8 @@ routes.options([
         '/api/setComments',
         '/api/getAllComments',
         '/api/feed/projectsByInterests',
-        '/api/feed/projectsMarketing'
+        '/api/feed/projectsMarketing',
+        '/api/feed/setDateOfLastPost'
     ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['GET', 'POST']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

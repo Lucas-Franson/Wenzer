@@ -8,7 +8,7 @@ export default interface IPostService {
     create(userId: string, post: PostCreateViewModel): Promise<void>;
     getAllPostsOfUser(userId: string, page: number, countPerPage: number): Promise<Post[]>;
     getAllPostsByUserId(userId: string, page: number, countPerPage: number): Promise<Post[]>;
-    getNewPostToWebService(id: string, date: Date, dbo: Db): Promise<Post[]>;
+    getNewPostToWebService(id: string, dbo: Db): Promise<Post[] | null>;
     getAllGoodIdeaFromUserWebService(userId: string, dbo: Db): Promise<UserPostGoodIdea[]>;
     getAllGoodIdeaFromUser(userId: string): Promise<UserPostGoodIdea[]>;
     sumCountOfGoodIdeia(postId: string, userPostExist: boolean): Promise<void>;
@@ -17,4 +17,5 @@ export default interface IPostService {
     getAllComments(postId: string): Promise<PostComments[]>;
     getCommentsByPost(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
     getCommentsCommentedByUser(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
+    setPostAlreadySeenByDate(date: Date, idUser: string): void;
 }

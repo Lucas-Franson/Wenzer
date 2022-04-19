@@ -13,14 +13,16 @@ import APIServiceAuthenticated from "../../Services/api/apiServiceAuthenticated"
 import Cookies from "js-cookie";
 import { toastfyError } from "../../Components/Toastfy";
 import Button from "../../Components/Button";
+import { useWenzer } from "../../hooks/useWenzer";
+import { CircularProgress } from "@material-ui/core";
 
 export default function Feed(): ReactElement {
   const [post, setPost] = useState<any>([]);
   const [newPost, setNewPost] = useState<any>([]);
-  const [socket, setSocket] = useState<any>(null);
-  const [dateOfLastPost, setDateOfLastPost] = useState<any>(null);
   const [openModalPost, setOpenModalPost] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { userInfo } = useAuth();
+  const { getSocketIOClient } = useWenzer();
 
   function getAllPost() {
 
@@ -49,12 +51,35 @@ export default function Feed(): ReactElement {
   }
 
   function handleNewPost() {
-    if (newPost.length > 0) {
-      socket.disconnect();
+    if (newPost.length > 0 && !isLoading) {
+      setIsLoading(true);
       setPost([...newPost, ...post]);
-      setDateOfLastPost(newPost[0].created_at!);
-      setNewPost([]);
+      let created_at = newPost[0].created_at;
+      setDateOfLastPost(created_at!);
     }
+  }
+
+  function setDateOfLastPost(date: Date) {
+
+    APIServiceAuthenticated.post('/api/feed/setDateOfLastPost', { date }, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    })
+  }
+
+  function createWebService() {
+    let socketConn = getSocketIOClient();
+    socketConn.on("GetPost", data => {
+      if (!isLoading) {
+        setNewPost(data);
+      }
+    });
   }
 
   useEffect(() => {
@@ -62,19 +87,8 @@ export default function Feed(): ReactElement {
   }, []);
 
   useEffect(() => {
-    if (dateOfLastPost != null) {
-      const socketConn = socketIOClient('http://127.0.0.1:3333', { transports: ['websocket'], query: { id: userInfo?.id, date: dateOfLastPost, type: 'post' } });
-      setSocket(socketConn);
-      socketConn.on("GetPost", data => {
-        if (data.length > 0) {
-          setNewPost(data);
-        }
-      });
-      return () => {
-        socketConn.disconnect();
-      } 
-    }
-  }, [dateOfLastPost]);
+    createWebService();
+  }, []);
 
   return (
     <Container>
@@ -111,7 +125,11 @@ export default function Feed(): ReactElement {
       {
         newPost.length > 0 ? (
           <Button className="flex button_coment" onClick={handleNewPost}>
-            <MdUpdate size={22}/> Novas publicações
+            <MdUpdate size={22}/> {isLoading ? (
+                                    <CircularProgress size={16} color="inherit" />
+                                  ) : (
+                                    "Novas publicações"
+                                  )}
           </Button>
         ) : (
           <span></span>

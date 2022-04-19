@@ -5,6 +5,7 @@ import { PostComments } from "../../3-domain/entities/postComments";
 import { v4 as uuid } from 'uuid';
 import { Db, MongoClient } from "mongodb";
 import { Orm } from "./orm";
+import { PostAlreadySeen } from "../../3-domain/entities/postAlreadySeen";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Post";
@@ -281,7 +282,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     },
                     {
                         $project: {
-                            _id: "$postComment.idPost",
+                            _id: "$idPostComment",
                             name: "$user.name",
                             created_at: 1
                         }
@@ -289,6 +290,40 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 ]).toArray(function(err: any, results: any) {
                     resolve(results);
                     db.close();
+                });
+            });
+        });
+    }
+
+    setPostAlreadySeen(postAlreadySeen: any): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection('PostAlreadySeen').insertOne(postAlreadySeen, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
+    updatePostAlreadySeen(postAlreadySeen: PostAlreadySeen): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection('PostAlreadySeen').updateOne({ idUser: postAlreadySeen.idUser }, { $set: postAlreadySeen }, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
+    async getDateLastPostSeen(id: string): Promise<PostAlreadySeen> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection('PostAlreadySeen').findOne({ idUser: id }, function(err: any, results: any) {
+                    resolve(results);
                 });
             });
         });
@@ -305,7 +340,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
-    async getNewPostToWebService(id: string, date: Date, dbo: Db): Promise<Post[]> {
+    async getNewPostToWebService(id: string, alreadySeen: PostAlreadySeen, dbo: Db): Promise<Post[]> {
         var _self = this;
         return new Promise(function(resolve, reject){ 
             dbo.collection(collection).aggregate([
@@ -380,7 +415,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                         $and: [
                             {
                                 created_at: {
-                                    $gt: new Date(date)
+                                    $gt: new Date(alreadySeen.dateLastPost)
                                 }
                             }
                         ]
@@ -428,7 +463,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 },
                 {
                     $match: {
-                        _id: {
+                        idPost: {
                             $nin: idNotifications
                         },
                         idUser: {
@@ -480,7 +515,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 },
                 {
                     $match: {
-                        _id: {
+                        idPostComment: {
                             $nin: idNotifications
                         },
                         idUser: {
@@ -494,6 +529,14 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
             ]).toArray(function(err: any, results: any) {
                 if (results.length > 0) resolve(results[0].count)
                 else resolve(0);
+            });
+        });
+    }
+
+    async getDateLastPostSeenWebService(id: string, dbo: Db): Promise<PostAlreadySeen> {
+        return new Promise(function(resolve, reject){ 
+            dbo.collection('PostAlreadySeen').findOne({ idUser: id }, function(err: any, results: any) {
+                resolve(results);
             });
         });
     }

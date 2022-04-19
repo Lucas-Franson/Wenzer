@@ -2,6 +2,7 @@ import { Db } from "mongodb";
 import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
 import { Post } from "../entities/post";
+import { PostAlreadySeen } from "../entities/postAlreadySeen";
 import { PostComments } from "../entities/postComments";
 import IPostService from "../Iservices/IPostService";
 
@@ -34,11 +35,51 @@ export default class PostService implements IPostService {
     }
 
     async getAllPostsOfUser(userId: string, page: number, countPerPage: number) {
-        return await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
+        let posts = await this.postRepository.getAllPostsOfUser(userId, page, countPerPage);
+        await this.setPostAlreadySeen(posts, userId);
+        return posts;
     }
 
     async getAllPostsByUserId(userId: string, page: number, countPerPage: number) {
-        return await this.postRepository.getAllPostsByUserId(userId, page, countPerPage);
+        let posts = await this.postRepository.getAllPostsByUserId(userId, page, countPerPage);
+        await this.setPostAlreadySeen(posts, userId);
+        return posts;
+    }
+
+    async setPostAlreadySeen(posts: Post[], idUser: string) {
+        let datePostAlreadySeen = await this.postRepository.getDateLastPostSeen(idUser);
+        if (posts.length > 0) {
+            if (!datePostAlreadySeen) {
+                let obj = new PostAlreadySeen(
+                    idUser,
+                    posts[0].created_at
+                );
+                this.postRepository.setPostAlreadySeen(obj);
+            } else {
+                let postNotSeenYet = posts.filter(x => x.created_at > datePostAlreadySeen.dateLastPost);
+                
+                if (postNotSeenYet.length > 0) {
+                    datePostAlreadySeen.dateLastPost = postNotSeenYet[0].created_at;
+                    this.postRepository.updatePostAlreadySeen(datePostAlreadySeen);
+                }
+            }
+        }
+    }
+
+    async setPostAlreadySeenByDate(date: Date, idUser: string) {
+        let datePostAlreadySeen = await this.postRepository.getDateLastPostSeen(idUser);
+        if (date) {
+            if (!datePostAlreadySeen) {
+                let obj = new PostAlreadySeen(
+                    idUser,
+                    date
+                );
+                this.postRepository.setPostAlreadySeen(obj);
+            } else if(datePostAlreadySeen && datePostAlreadySeen.dateLastPost < date) {
+                datePostAlreadySeen.dateLastPost = date;
+                this.postRepository.updatePostAlreadySeen(datePostAlreadySeen);
+            }
+        }
     }
 
     async getAllGoodIdeaFromUser(userId: string) {
@@ -87,8 +128,12 @@ export default class PostService implements IPostService {
     }
 
     // WEB SERVICE
-    async getNewPostToWebService(id: string, date: Date, dbo: Db) {
-        return await this.postRepository.getNewPostToWebService(id, date, dbo);
+    async getNewPostToWebService(id: string, dbo: Db) {
+        let alreadySeen = await this.postRepository.getDateLastPostSeenWebService(id, dbo);
+        if (alreadySeen) {
+            return await this.postRepository.getNewPostToWebService(id, alreadySeen, dbo);
+        }
+        return null;
     }
 
     async getAllGoodIdeaFromUserWebService(userId: string, dbo: Db) {

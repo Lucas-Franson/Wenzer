@@ -57,9 +57,9 @@ function TopBarFeed(): ReactElement {
           <Link to="##" onClick={handleOpenModalProject} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
         </div>
 
-        <div>
+        {/* <div>
           <Link to="notify" onClick={handleOpenModalProject} > <Notify/> <p>Notificações</p></Link>
-        </div>
+        </div> */}
 
         <div>
           {darkTheme ? (
@@ -113,11 +113,11 @@ function TopBarFeed(): ReactElement {
             </Link>
           </Tooltip>
 
-          <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
+          {/* <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
             <Link to="/notify">         
               <Notify />
             </Link>
-          </Tooltip>
+          </Tooltip> */}
         </div>
 
         {/* BUTTONS ACTION-------------------------------------------------------------------- */}

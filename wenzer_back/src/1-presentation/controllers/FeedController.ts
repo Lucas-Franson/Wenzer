@@ -85,4 +85,20 @@ export default class FeedController {
             next(err);
         }
     }
+
+    async setDateOfLastPost(req: any, res: any, next: any) {
+        const { date } = req.body;
+        try {
+            if(!date) {
+                throw new ErroParametro("Falta enviar a data.");
+            }
+
+            await req.service.feedAppService.setDateOfLastPost(req.session.userId, date);
+
+            res.status(200).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
 }

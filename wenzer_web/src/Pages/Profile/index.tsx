@@ -255,14 +255,24 @@ function Profile(): ReactElement {
 
     return arr.join(" ");
   }
+
+  function userAuthSameProfile() {
+    let user = loadTokenEmail();
+
+    if (user) {
+      return user === userInfo?.id;
+    }
+
+    return true;
+  }
   
   return (
     <Container>
       <ContainerProfile>
         <CardProfile>
             <div className="imageProfile">
-              <div onClick={handleOpenMenuSettings}>
-              <AiOutlineEllipsis size={28} className='option' />
+              <div style={{ display: userAuthSameProfile() ? 'block' : 'none' }} onClick={handleOpenMenuSettings}>
+                <AiOutlineEllipsis size={28} className='option' />
               </div>
               <HeaderAvatar className='avatarProfile' src={userProfileInfo?.photo} />
               <p>{userProfileInfo?.name}</p>
