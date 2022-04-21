@@ -15,7 +15,7 @@ export const Container = styled.div`
 export const ContainerModal = styled.div`
     width: min(90vw, 600px);
     height: auto;
-    max-height: 800px;
+    max-height: 500px;
     overflow-y: scroll;
     
     border-radius: 8px;

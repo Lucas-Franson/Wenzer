@@ -6,6 +6,12 @@ export default class ProjectController {
     async create(req: any, res: any, next: any) {
         const project: ProjectCreateViewModel = req.body;
         try {
+            if (req.files) {
+                project.photo = req.files.photo;
+            }
+            if (typeof project.tags === 'string' && project.tags != '') {
+                project.tags = JSON.parse(project.tags);
+            }
             await req.service.projectAppService.create(req.session.userId, project);
 
             res.status(201).json();

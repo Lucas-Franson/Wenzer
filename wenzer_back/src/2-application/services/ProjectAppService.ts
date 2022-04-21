@@ -25,6 +25,7 @@ export default class ProjectAppService {
             project.description,
             project.photo,
             project.active,
+            project.publicProject,
             project.marketing,
             userId
         );
@@ -38,6 +39,7 @@ export default class ProjectAppService {
             project.description,
             project.photo,
             project.active,
+            project.publicProject,
             project.marketing,
             userId,
             project._id,

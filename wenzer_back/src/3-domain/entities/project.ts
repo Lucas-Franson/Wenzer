@@ -8,6 +8,7 @@ export class Project extends DomainBase {
         public description: string,
         public photo: Blob,
         public active: boolean,
+        public publicProject: boolean,
         public marketing: boolean,
         public userId: string,
         public _id: string = uuid(),
