@@ -24,13 +24,30 @@ export const ContainerPost = styled.div`
     width: 100%;
     height: 60px;
     gap: 15px;
-    cursor: pointer;
-
+    position: relative;
+    
     > .userInfo {
+      cursor: pointer;
       > span {
         font-size:  0.7rem;
       }
     }
+
+    > .menuPost {
+      .option {
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        cursor: pointer;
+
+        &:hover {
+          background-color: ${props => props.theme.colors.tertiary};
+          border-radius: 50%;
+        }
+      }
+    }
+   
   }
 
   > main {
@@ -110,6 +127,10 @@ export const ContainerPost = styled.div`
           cursor: pointer;
       }  
     }
+  }
+
+  > .noMarginTop {
+    margin-top: 0px;
   }
 `;
 

@@ -2,24 +2,33 @@ import { ReactElement, useState } from 'react';
 
 import { ContainerPost, HeaderAvatar } from './styles';
 import { IPostProps } from './interface';
-import { AiFillBulb, AiOutlineBulb, AiOutlineComment, AiOutlineProject } from 'react-icons/ai';
+import { AiFillBulb, AiOutlineBulb, AiOutlineComment, AiOutlineEllipsis, AiOutlineProject } from 'react-icons/ai';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
 import { toastfyError } from "../../Components/Toastfy";
 import { useHistory } from 'react-router-dom';
+import { MdDelete } from 'react-icons/md';
+
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Fade from '@material-ui/core/Fade';
 
 function Post({ 
   created_at,
   description,
-  _id, idProject,
+  _id,
+  idProject,
   idUser,
   photo,
   title,
   goodIdea,
-  user
+  user,
  }: IPostProps): ReactElement {
   const [hasLiked, setHasLiked] = useState(goodIdea);
   const history = useHistory();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const open = Boolean(anchorEl);
 
   function setGoodIdea() {
     setHasLiked(!hasLiked);
@@ -27,8 +36,6 @@ function Post({
       headers: {
         auth: Cookies.get('WenzerToken')
       }
-    }).then(res => {
-
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
@@ -40,15 +47,26 @@ function Post({
 
   function goToComent() {
     history.push(`/post/${idUser}`);
-  }
+  };
+
+  const handleOpenMenuSettings = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
       <ContainerPost>
-         <header onClick={goToUserProfile}>
-          <HeaderAvatar src={user?.photo} />
+         <header>
+          <HeaderAvatar onClick={goToUserProfile} src={user?.photo} />
           <div className="userInfo">
-            <p>{user?.name}</p>
+            <p onClick={goToUserProfile}>{user?.name}</p>
             <span>{created_at ? new Date(created_at!).toLocaleString('pt-BR') : ""}</span>
+          </div>
+          <div className='menuPost' onClick={handleOpenMenuSettings}>
+            <AiOutlineEllipsis size={28} className='option' />
           </div>
         </header>
 
@@ -80,6 +98,17 @@ function Post({
             <span>Projeto</span>
           </div>
         </footer>
+       
+        <Menu
+          id="fade-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={() => {}} > <MdDelete size={22}/>  Excluir</MenuItem>
+        </Menu>
       </ContainerPost>
   )
 }

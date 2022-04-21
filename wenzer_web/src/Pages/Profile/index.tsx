@@ -329,26 +329,31 @@ function Profile(): ReactElement {
       <ContainerProjects>
         {!hasEditProfile ? (
           post.length !== 0 ? (
-            post.map(({ 
-              created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
-            }: IPostProps) => (
-              <Post
-                key={_id}
-                created_at={created_at}
-                description={description}
-                _id={_id}
-                idProject={idProject}
-                idUser={idUser}
-                photo={photo}
-                title={title}
-                goodIdea={goodIdea}
-                user={user}
-              />
-            ))
+            <>
+              <span>Publicações</span>
+             {
+                post.map(({ 
+                  created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
+                }: IPostProps) => (
+                  <Post
+                    key={_id}
+                    created_at={created_at}
+                    description={description}
+                    _id={_id}
+                    idProject={idProject}
+                    idUser={idUser}
+                    photo={photo}
+                    title={title}
+                    goodIdea={goodIdea}
+                    user={user}
+                  />
+                ))
+             }
+            </>
           ) : (
             <div>
               <NoPostHere/>
-              Procurando publicações...
+              Você ainda não possui nenhuma publicação.
             </div>
           )
         ) : (

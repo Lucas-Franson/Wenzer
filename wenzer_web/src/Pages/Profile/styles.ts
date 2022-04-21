@@ -4,7 +4,7 @@ import { MediaQueries } from '../../Constants/MediaSettings';
 export const Container = styled.div`
   width: min(92vw, 1350px);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   color: ${(props) => props.theme.colors.white.light};
   margin: auto;
 
@@ -151,7 +151,13 @@ export const CardInfo = styled.div`
 `;
 
 export const ContainerProjects = styled.main`
-  width: min(92vw, 900px);
+  width: min(92vw, 700px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
   border-radius: 8px;
   height: 100%;
 
@@ -169,5 +175,9 @@ export const ContainerProjects = styled.main`
   @media (max-width: 1490px){
     width:  min(92vw, 750px);
     margin-left: 20px;
+  }
+
+  > span {
+    font-size: 1.1rem;
   }
 `;
