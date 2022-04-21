@@ -39,7 +39,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     },
                     {
                         $lookup: {
-                            from: 'Connections',
+                            from: 'Connection',
                             localField: 'idUser',
                             foreignField: 'idUser',
                             as: 'userOne'
@@ -47,7 +47,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     },
                     {
                         $lookup: {
-                            from: 'Connections',
+                            from: 'Connection',
                             localField: 'idUser',
                             foreignField: 'idFollower',
                             as: 'userTwo'
