@@ -21,6 +21,7 @@ export default function Feed(): ReactElement {
   const [newPost, setNewPost] = useState<any>([]);
   const [openModalPost, setOpenModalPost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [idProject, setIdProject] = useState(null);
   const { userInfo } = useAuth();
   const { getSocketIOClient } = useWenzer();
 
@@ -80,6 +81,11 @@ export default function Feed(): ReactElement {
         setNewPost(data);
       }
     });
+  }
+
+  function removePost(_id: string) {
+    let newListPost = post.filter((x: any) => x._id !== _id);
+    setPost(newListPost);
   }
 
   useEffect(() => {
@@ -151,6 +157,7 @@ export default function Feed(): ReactElement {
               title={title}
               goodIdea={goodIdea}
               user={user}
+              removePost={removePost}
             />
           ))
         ) : (
@@ -160,7 +167,7 @@ export default function Feed(): ReactElement {
           </div>
         )
       }
-      <Modal open={openModalPost} setOpen={setOpenModalPost} />
+      <Modal idProject={idProject} open={openModalPost} setOpen={setOpenModalPost} />
     </Container>
   )
 }

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { Avatar } from '@material-ui/core';
 
+export const Container = styled.div`
+  width: 100%
+`;
+
 export const ContainerPost = styled.div`
   width: 100%;
   height: 100%;

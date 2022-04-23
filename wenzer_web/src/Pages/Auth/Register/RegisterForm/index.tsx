@@ -37,7 +37,7 @@ function Login() {
     }
 
     const data = {
-      name, email, password
+      name, lastName, email, password, university, hasCompany
     }
 
     api

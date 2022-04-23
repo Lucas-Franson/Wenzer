@@ -40,12 +40,15 @@ export default class UserService implements IUserService {
     async create(user: User) {
         const newPassword = await this.generatePasswordHash(user.getPassword());
         user.setPassword(newPassword);
-        await this.userRepository.insert(user);
+        return await this.userRepository.insertUser(user);
     }
 
     async updateUserByProfile(user: User, profile: ProfileViewModel) {
         user.name = profile.getName();
+        user.lastName = profile.getLastName();
         user.bio = profile.getBio();
+        user.university = profile.getUniversity();
+        user.hasCompany = profile.getHasCompany();
 
         await this.updateUser(user);
     }

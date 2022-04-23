@@ -18,6 +18,22 @@ export default class FeedController {
         }
     }
 
+    async getPostById(req: any, res: any, next: any) {
+        const { _id } = req.params;
+        
+        try {
+            if (!_id) {
+                throw new ErroParametro('Falta parâmetro para buscar post.');
+            }
+
+            const post = await req.service.feedAppService.getPostById(req.session.userId, _id);
+
+            res.status(200).json(post);
+        } catch(err) {
+            next(err);
+        }
+    }
+
     async setPostAsGoodIdea(req: any, res: any, next: any) {
         const { postId } = req.body;
         
@@ -35,7 +51,7 @@ export default class FeedController {
     }
 
     async getAllComments(req: any, res: any, next: any) {
-        const { postId } = req.body;
+        const { postId } = req.params;
         
         try {
             if (!postId) {
@@ -96,6 +112,21 @@ export default class FeedController {
             await req.service.feedAppService.setDateOfLastPost(req.session.userId, date);
 
             res.status(200).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async deletePost(req: any, res: any, next: any) {
+        const { _id } = req.params;
+        try {
+            if(!_id) {
+                throw new ErroParametro("Falta enviar o id do post.");
+            }
+
+            await req.service.feedAppService.deletePost(req.session.userId, _id);
+
+            res.status(204).json();
         } catch(err) {
             next(err);
         }

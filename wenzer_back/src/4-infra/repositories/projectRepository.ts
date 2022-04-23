@@ -196,6 +196,18 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
         });
     }
 
+    async verifyIfUserIsFollowingProject(idUser: string, idProject: string): Promise<boolean> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection("Follower").findOne({ idProject, idUser }, function(err: any, results: any) {
+                    results ? resolve(true) : resolve(false);
+                    db.close();
+                });
+            });
+        });
+    }
+
     handleArrayResult(result: Project[]) {
         if (result && result instanceof Array && result.length > 0) {
             let projects: any[] = [];

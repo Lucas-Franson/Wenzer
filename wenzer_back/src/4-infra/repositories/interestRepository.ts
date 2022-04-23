@@ -121,6 +121,36 @@ export class InterestRepository extends Orm<Interests> implements IInterestRepos
         });
     }
 
+    async getInterestsByProject(idProject: string): Promise<Interests[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'ProjectInterest',
+                            localField: '_id',
+                            foreignField: 'idInterests',
+                            as: 'interestProject'
+                        }
+                    },
+                    {
+                        $match: {
+                            interestProject: {
+                                $elemMatch: {
+                                    idProject
+                                }
+                            }
+                        }
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
     handleArrayResult(result: Interests[]) {
         if (result && result instanceof Array && result.length > 0) {
             let interests: any[] = [];

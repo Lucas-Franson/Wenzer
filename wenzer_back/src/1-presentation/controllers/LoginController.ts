@@ -27,7 +27,8 @@ export default class LoginController {
     }
 
     async register(req: any, res: any, next: any) {
-        const user = new UserRegisterViewModel(req.body.name, req.body.email, req.body.password);
+        const { name, lastName, email, password, university, hasCompany } = req.body;
+        const user = new UserRegisterViewModel(name, lastName, email, password, university, hasCompany);
 
         try {
             user.validateModel();

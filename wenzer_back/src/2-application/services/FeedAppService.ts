@@ -24,21 +24,30 @@ export default class FeedAppService {
         let post = await this.postService.getAllPostsOfUser(userId, Number(page), Number(countPerPage));
         let goodIdea = await this.postService.getAllGoodIdeaFromUser(userId);
         let postViewModel: PostViewModel[] = [];
-        let user = await this.userService.findUserById(userId);
-        let userViewModel = new UserViewModel(
-            user?._id!,
-            user?.name!,
-            user?.email!,
-            user?.password!,
-            user?.title!,
-            user?.photo!,
-            user?.bio!,
-            user?.emailValid!,
-            user?.created_at!
-        );
+        let idsUser: string[] = [];
+
+        post.map((data) => {
+            if (idsUser.filter(x => x == data.idUser).length == 0) idsUser.push(data.idUser);
+        });
+
+        let listUsers = await this.userService.getAllUsersByArrOfIds(idsUser);
 
         post.map((value) => {
             const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
+            const user = listUsers.find(x => x._id === value.idUser);
+
+            let userViewModel = new UserViewModel(
+                user?._id!,
+                user?.name!,
+                user?.email!,
+                user?.password!,
+                user?.title!,
+                user?.photo!,
+                user?.bio!,
+                user?.emailValid!,
+                user?.created_at!
+            );
+
             const _postViewModel = new PostViewModel(
                 value._id,
                 value.idUser,
@@ -55,6 +64,43 @@ export default class FeedAppService {
         });
 
         return postViewModel;
+    }
+
+    async getPostById(idUser: string, _id: string) {
+        let post = await this.postService.getById(_id);
+        if (post) {
+            let user = await this.userService.findUserById(post?.idUser);
+            let goodIdea = await this.postService.getAllGoodIdeaFromUser(idUser);
+            const postAsGoodIdea = goodIdea.find(x => x.idPost === post?._id);
+
+            let userViewModel = new UserViewModel(
+                user?._id!,
+                user?.name!,
+                user?.email!,
+                user?.password!,
+                user?.title!,
+                user?.photo!,
+                user?.bio!,
+                user?.emailValid!,
+                user?.created_at!
+            );
+
+            const _postViewModel = new PostViewModel(
+                post._id,
+                post.idUser,
+                post.countViews,
+                post.title,
+                post.description,
+                post.photo,
+                post.idProject,
+                post.created_at,
+                postAsGoodIdea != null,
+                userViewModel
+            );
+
+            return _postViewModel;
+        }
+        return post;
     }
 
     async setGoodIdea(userId: string, postId: string): Promise<void> {
@@ -129,6 +175,13 @@ export default class FeedAppService {
 
     async setDateOfLastPost(userId: string, date: Date): Promise<void> {
         await this.postService.setPostAlreadySeenByDate(date, userId);
+    }
+
+    async deletePost(idUser: string, idPost: string) {
+        let post = await this.postService.getById(idPost);
+        if (post?.idUser != idUser) throw new Error("Usuário não tem permissão de deletar este post.");
+        
+        this.postService.deletePost(idPost);
     }
 
 }

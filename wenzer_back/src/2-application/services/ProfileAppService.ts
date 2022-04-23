@@ -37,9 +37,12 @@ export default class ProfileAppService {
         return new ProfileViewModel(
             user?._id!,
             user?.name!,
+            user?.lastName!,
             user?.bio!,
+            user?.university!,
             [],
             user?.photo,
+            user?.hasCompany!,
             countProjects?.count,
             countParticipating?.count
         )

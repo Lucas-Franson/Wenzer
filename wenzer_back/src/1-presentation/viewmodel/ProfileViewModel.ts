@@ -7,9 +7,12 @@ export class ProfileViewModel {
     constructor(
         public _id: string,
         public name: string,
+        public lastName: string,
         public bio: string,
+        public university: string,
         public interests: InterestsFormViewModel[],
         public photo: any,
+        public hasCompany: boolean,
         public countProjects: number,
         public countParticipating: number
     ) {
@@ -18,7 +21,13 @@ export class ProfileViewModel {
 
     public getName = () => { return this.name }
 
+    public getLastName = () => { return this.lastName }
+
     public getBio = () => { return this.bio }
+
+    public getUniversity = () => { return this.university }
+    
+    public getHasCompany = () => { return this.hasCompany }
 
     public getInterests = () => { return this.interests }
 

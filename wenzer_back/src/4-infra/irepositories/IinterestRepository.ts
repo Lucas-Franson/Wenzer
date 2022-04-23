@@ -11,4 +11,5 @@ export interface IInterestRepository extends IOrm<Interests> {
     findLinkUserToInterests(userId: string): Promise<InterestUser[]>;
     findLinkProjectToInterests(projectId: string): Promise<ProjectInterests[]>;
     getInterestsByUser(idUser: string): Promise<Interests[]>;
+    getInterestsByProject(idProject: string): Promise<Interests[]>;
 }

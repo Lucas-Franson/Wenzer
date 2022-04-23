@@ -5,11 +5,14 @@ export class User extends DomainBase {
 
     constructor(
         public name: string,
+        public lastName: string,
         public email: string, 
         public password: string,
+        public university: string,
         public title: string = '',
         public photo: any = '',
         public bio: string = '',
+        public hasCompany: boolean = false,
         public emailValid: boolean = false,
         public _id: string = uuid(),
         public created_at: Date = new Date(),

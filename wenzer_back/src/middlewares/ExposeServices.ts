@@ -21,14 +21,14 @@ import UserRepository from "../4-infra/repositories/userRepository";
 const userService = new UserService(new UserRepository(), new ConnectionRepository());
 const emailMarketingService = new EmailMarketingService(new EmailMarketingRepository());
 const postService = new PostService(new PostRepository());
-const projectService = new ProjectService(new ProjectRepository(), new FollowerRepository(), new InterestRepository());
+const projectService = new ProjectService(new ProjectRepository(), new FollowerRepository(), new InterestRepository(), new PostRepository());
 const interestService = new InterestService(new InterestRepository());
 const notificationService = new NotificationService(new PostRepository(), new UserRepository());
 
 const loginAppService = new LoginAppService(userService, emailMarketingService);
 const feedAppService = new FeedAppService(userService, postService, projectService, interestService);
 const profileAppService = new ProfileAppService(userService, interestService, projectService, postService);
-const projectAppService = new ProjectAppService(projectService, interestService, postService);
+const projectAppService = new ProjectAppService(projectService, interestService, postService, userService);
 const notificationAppService = new NotificationAppService(notificationService, userService);
 
 const service = () => {

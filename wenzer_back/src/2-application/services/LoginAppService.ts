@@ -22,11 +22,14 @@ export default class LoginAppService {
 
             if (userFound && !userFound.emailIsValid()) {
                 user = new User(userViewModel.getName(),
+                                userViewModel.getLastName(),
                                 userViewModel.getEmail(),
                                 userViewModel.getPassword(),
+                                userViewModel.getUniversity(),
                                 userFound.title,
                                 userFound.photo,
                                 userFound.bio,
+                                userViewModel.getHasCompany(),
                                 false,
                                 userFound._id,
                                 userFound.created_at,
@@ -34,10 +37,12 @@ export default class LoginAppService {
                                 );
                 await this.userService.updateUserNewPwd(user, userViewModel.getPassword());
             } else {
-                await this.userService.create(user);
+                let _id = await this.userService.create(user);
+                user._id = _id;
+
+                await this.userService.sendEmailOfVerification(user);
             }
             
-            await this.userService.sendEmailOfVerification(user);
             return user.getId();
         } catch(err) {
             // LOG

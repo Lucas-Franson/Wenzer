@@ -3,10 +3,11 @@ export interface IPostProps {
     description: string;
     _id: string;
     idProject: number;
-    idUser: number;
+    idUser: string;
     photo: any;
     title: string;
     updated_at?: Date;
     goodIdea: boolean;
     user: { _id: string, name: string, photo: any };
+    removePost: any;
 }

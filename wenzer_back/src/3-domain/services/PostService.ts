@@ -13,6 +13,10 @@ export default class PostService implements IPostService {
         
     }
 
+    async getById(_id: string): Promise<Post | null> {
+        return await this.postRepository.getById(_id);
+    }
+
     async create(userId: string, post: PostCreateViewModel) {
         if (post != null) {
             let photo = "";
@@ -125,6 +129,10 @@ export default class PostService implements IPostService {
     
     async getCommentsCommentedByUser(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
         return this.postRepository.getCommentsCommentedByUser(userId);
+    }
+
+    deletePost(idPost: string): void {
+        this.postRepository.deleteListPost([idPost]);
     }
 
     // WEB SERVICE

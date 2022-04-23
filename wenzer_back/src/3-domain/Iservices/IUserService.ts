@@ -9,7 +9,7 @@ export interface IUserService {
     findUserByToken(token: string): Promise<User | null>;
     findUserById(userId: string): Promise<User | null>;
     findUserByIdWebService(userId: string, dbo: Db): Promise<User | null>;
-    create(user: User): void;
+    create(user: User): Promise<string>;
     updateUser(user: User): void;
     updateUserNewPwd(user: User, pwd: string): void;
     updateUserByProfile(user: User, profile: ProfileViewModel): void;

@@ -7,4 +7,5 @@ export default interface IInterestService {
     linkUserToInterests(user: any, interests: InterestsFormViewModel[]): void;
     linkProjectToInterests(project: Project, interests: InterestsFormViewModel[]): void;
     getInterestsByUser(idUser: string): Promise<Interests[]>;
+    getInterestsByProject(idProject: string): Promise<Interests[]>;
 }

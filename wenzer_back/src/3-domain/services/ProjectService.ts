@@ -1,5 +1,6 @@
 import { IFollowerRepository } from "../../4-infra/irepositories/IfollowerRepository";
 import { IInterestRepository } from "../../4-infra/irepositories/IinterestRepository";
+import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
 import { IProjectRepository } from "../../4-infra/irepositories/IprojectRepository";
 import { Followers } from "../entities/followers";
 import { Interests } from "../entities/interests";
@@ -11,9 +12,14 @@ export default class ProjectService implements IProjectService {
     constructor(
         private readonly projectRepository: IProjectRepository, 
         private readonly followerRepository: IFollowerRepository,
-        private readonly interestRepository: IInterestRepository
+        private readonly interestRepository: IInterestRepository,
+        private readonly postRepository: IPostRepository
     ) {
 
+    }
+
+    async getById(_id: string): Promise<Project | null> {
+        return await this.projectRepository.getById(_id);
     }
 
     async getProjectsByUser(userId: string) {
@@ -36,6 +42,15 @@ export default class ProjectService implements IProjectService {
             idLinkInterestToProject.push(data._id);
         });
 
+        const posts = await this.postRepository.getPostsByProject(projectId);
+        const idsPost: string[] = [];
+        
+        posts.map((data) => {
+            idsPost.push(data._id);
+        });
+
+        if (idsPost.length > 0) 
+            this.postRepository.deleteListPost(idsPost);
         if (idLinkInterestToProject.length > 0)
             await this.interestRepository.deleteLinkToProject(idLinkInterestToProject);
         await this.projectRepository.delete(projectId);
@@ -80,6 +95,10 @@ export default class ProjectService implements IProjectService {
 
     async getCountOfParticipatingByUser(idUser: string): Promise<{count: number}> {
         return await this.projectRepository.getCountParticipatingByUser(idUser);
+    }
+
+    async verifyIfUserIsFollowingProject(idUser: string, idProject: string): Promise<boolean> {
+        return await this.projectRepository.verifyIfUserIsFollowingProject(idUser, idProject);
     }
 
 }

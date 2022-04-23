@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import PostProfile from '../../Components/PostProfile';
 import { toastfyError } from '../../Components/Toastfy';
+import { screens } from '../../Constants/MediaSettings';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import { useAuth } from '../../Services/Authentication/auth';
 
@@ -43,12 +44,13 @@ const Explorar: React.FC = () => {
             {projects.map((item: any, index: number) => (
               <PostProfile 
                 index={index}
-                id={item.id}
+                _id={item._id}
                 name={item.name}
                 photo={item.photo}
                 countOfGoodIdea={item.CountOfGoodIdea}
                 countOfActions={item.CountOfActions}
-                key={item}/>
+                screen={screens.HotProjects}
+                key={item._id}/>
             ))} 
           </div>
         </ContainerProjects>

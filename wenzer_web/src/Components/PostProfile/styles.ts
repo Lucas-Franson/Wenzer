@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-
+  width: 100%
 `;
 
 export const ContainerPostProject = styled.div`
   width: 30%;
+  max-height: 345px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -28,6 +29,7 @@ export const ContainerPostProject = styled.div`
   
   > img {
     width: 100%;
+    max-height: 250px;
     object-fit: contain;
   }
   

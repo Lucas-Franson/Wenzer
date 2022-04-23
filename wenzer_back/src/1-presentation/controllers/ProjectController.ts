@@ -3,6 +3,17 @@ import { ProjectCreateViewModel } from '../viewmodel/ProjectCreateViewModel';
 
 export default class ProjectController {
 
+    async get(req: any, res: any, next: any) {
+        const { _id } = req.params;
+        try {
+            let project = await req.service.projectAppService.get(req.session.userId, _id);
+
+            res.status(200).json(project);
+        } catch(err) {
+            next(err);
+        }
+    }
+
     async create(req: any, res: any, next: any) {
         const project: ProjectCreateViewModel = req.body;
         try {
@@ -23,6 +34,12 @@ export default class ProjectController {
     async update(req: any, res: any, next: any) {
         const project: ProjectCreateViewModel = req.body;
         try {
+            if (req.files) {
+                project.photo = req.files.photo;
+            }
+            if (typeof project.tags === 'string' && project.tags != '') {
+                project.tags = JSON.parse(project.tags);
+            }
             await req.service.projectAppService.update(req.session.userId, project);
 
             res.status(204).json();

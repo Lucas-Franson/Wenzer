@@ -3,7 +3,8 @@ import { Interests } from "../entities/interests";
 import { Project } from "../entities/project";
 
 export default interface IProjectService {
-    getProjectsByUser(userId: string): Promise<Project[]>
+    getProjectsByUser(userId: string): Promise<Project[]>;
+    getById(_id: string): Promise<Project | null>;
     create(project: Project): Promise<void>;
     update(project: Project): Promise<void>;
     delete(projectId: string): Promise<void>;
@@ -15,4 +16,5 @@ export default interface IProjectService {
     getProjectsMarketing(interests: string[]): Promise<Project[]>;
     getCountOfProjectsByUser(idUser: string): Promise<{count: number}>;
     getCountOfParticipatingByUser(idUser: string): Promise<{count: number}>;
+    verifyIfUserIsFollowingProject(idUser: string, idProject: string): Promise<boolean>
 }

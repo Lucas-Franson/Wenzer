@@ -1,21 +1,51 @@
-import React from 'react';
-import NoContent from '../../Components/Animation/NoContent';
+import Cookies from 'js-cookie';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import PostProfile from '../../Components/PostProfile';
+import { toastfyError } from '../../Components/Toastfy';
+import { screens } from '../../Constants/MediaSettings';
+import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
+import { useAuth } from '../../Services/Authentication/auth';
 
-import { Container } from '../Feed/styles';
-import {ContainerNotify} from '../Notify/styles';
+import { Container, ContainerProjects } from './styles';
 
 const Projetos: React.FC = () => {
+  const [projects, setProjects] = useState<any[]>([]);
+  const { userInfo } = useAuth();
+
+  function getProjects() {
+    APIServiceAuthenticated.get(`/api/project/${userInfo?.id}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setProjects(res.data);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    });
+  }
+
+  useEffect(() => {
+    if (userInfo) getProjects();
+  }, []);
+
   return (
       <Container>
-          <ContainerNotify>
-            <header>
-              <h2>Meus Projetos</h2>
-            </header>
-            <main>
-              <NoContent />
-              <span>Sem projetos por aqusadssssssi.</span>
-            </main>
-          </ContainerNotify>
+          <ContainerProjects>
+          <div className="wraper">
+            {projects.map((item: any, index: number) => (
+              <PostProfile 
+                index={index}
+                _id={item._id}
+                name={item.name}
+                photo={item.photo}
+                countOfGoodIdea={item.CountOfGoodIdea}
+                countOfActions={item.CountOfActions}
+                screen={screens.MyProjects}
+                key={item._id}/>
+            ))} 
+          </div>
+        </ContainerProjects>
       </Container>
   )
 }

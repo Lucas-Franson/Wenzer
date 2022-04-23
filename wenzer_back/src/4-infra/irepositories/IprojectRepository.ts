@@ -9,4 +9,5 @@ export interface IProjectRepository extends IOrm<Project> {
     getProjectsMarketing(interests: string[]): Promise<Project[]>;
     getCountProjectsByUser(idUser: string): Promise<{count: number}>;
     getCountParticipatingByUser(idUser: string): Promise<{count: number}>;
+    verifyIfUserIsFollowingProject(idUser: string, idProject: string): Promise<boolean>;
 }

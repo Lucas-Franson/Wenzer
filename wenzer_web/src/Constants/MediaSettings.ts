@@ -6,6 +6,13 @@ export enum BreakPoints {
     XLarge = 1400
 }
 
+export enum screens { 
+    Feed,
+    HotProjects,
+    MyProjects,
+    Profile
+}
+
 export const MediaQueries = {
     XSMALL: `only screen and (max-width: ${BreakPoints.xsmall}px)`,
     SMALL: `only screen and (min-width: ${BreakPoints.xsmall}px) and (max-width: ${BreakPoints.small}px)`,

@@ -5,6 +5,7 @@ import { PostComments } from "../entities/postComments";
 import { UserPostGoodIdea } from "../entities/userPostGoodIdea";
 
 export default interface IPostService {
+    getById(_id: string): Promise<Post | null>;
     create(userId: string, post: PostCreateViewModel): Promise<void>;
     getAllPostsOfUser(userId: string, page: number, countPerPage: number): Promise<Post[]>;
     getAllPostsByUserId(userId: string, page: number, countPerPage: number): Promise<Post[]>;
@@ -18,4 +19,5 @@ export default interface IPostService {
     getCommentsByPost(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
     getCommentsCommentedByUser(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
     setPostAlreadySeenByDate(date: Date, idUser: string): void;
+    deletePost(idPost: string): void;
 }

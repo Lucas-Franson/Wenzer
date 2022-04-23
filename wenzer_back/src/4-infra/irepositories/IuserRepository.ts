@@ -15,4 +15,5 @@ export interface IUserRepository extends IOrm<User> {
     getNotificationSeenWebSocket(dbo: Db, userId: string, type: NotificationType): Promise<{ idNotification: string }[]>;
     getFriendRequestWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number>;
     updateConnection(connection: Connections): void;
+    insertUser(object: any): Promise<string>;
 }

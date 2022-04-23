@@ -11,11 +11,20 @@ interface IInputText {
 }
 
 function InputText(props: IInputText & InputHTMLAttributes<HTMLInputElement> & any) {
-  const { type, placeholder = '', onChange, required = false, maxLength = 240 } = props;
+  const { type, placeholder = '', onChange, required = false, maxLength = 240, disabled = false } = props;
 
   return (
     <Container>
-      <input type={type} placeholder={placeholder} onChange={onChange} maxLength={maxLength} required={required} {...props}></input>
+      <input 
+        type={type} 
+        disabled={disabled}
+        placeholder={placeholder} 
+        onChange={onChange} 
+        maxLength={maxLength} 
+        required={required} 
+        {...props}>
+
+        </input>
     </Container>
   );
 }

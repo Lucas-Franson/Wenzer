@@ -16,12 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function InputAutoComplete({ options, onchange, defaultValues }: any) {
+export default function InputAutoComplete({ options, onchange, defaultValues, disabled }: any) {
   const classes = useStyles();
 
   return (
     <Container>
-      <Select isMulti options={options} defaultValue={defaultValues} onChange={onchange} placeholder="Interesses" />
+      <Select 
+        isMulti 
+        options={options} 
+        defaultValue={defaultValues} 
+        onChange={onchange} 
+        placeholder="Interesses" 
+        isDisabled={disabled}
+      />
     </Container>
   );
 }

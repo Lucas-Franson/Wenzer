@@ -74,7 +74,7 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
                 description: "Internal server error" }
         */
     })
-    .get('/api/getAllComments', AuthUser, feedController.getAllComments, () => {
+    .get('/api/getAllComments/:postId', AuthUser, feedController.getAllComments, () => {
         /* 
             #swagger.tags = ["Feed"] 
             #swagger.description = 'Endpoint obter todos os comentários de um post.'
@@ -129,6 +129,29 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
                 schema: { mensagem: "<mensagem do erro>" },
                 description: "Internal server error" }
         */
+    })
+    .delete('/api/feed/post/:_id', AuthUser, feedController.deletePost, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint para deletar post.'
+            #swagger.responses[204] = { 
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
+    .get('/api/feed/post/:_id', AuthUser, feedController.getPostById, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint para buscar post.'
+            #swagger.responses[200] = { 
+                schema: [{$ref: "#/definitions/Post"}]
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
     });
 
 routes.options([
@@ -138,9 +161,10 @@ routes.options([
         '/api/getAllComments',
         '/api/feed/projectsByInterests',
         '/api/feed/projectsMarketing',
-        '/api/feed/setDateOfLastPost'
+        '/api/feed/setDateOfLastPost',
+        '/api/feed/post'
     ], (req: any, res: any) => {
-    res.set('Access-Control-Allow-Methods', ['GET', 'POST']);
+    res.set('Access-Control-Allow-Methods', ['GET', 'POST', 'DELETE']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);
     res.status(204);
     res.end();

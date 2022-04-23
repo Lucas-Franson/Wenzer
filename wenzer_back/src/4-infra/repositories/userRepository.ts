@@ -111,6 +111,23 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         });
     }
 
+    async insertUser(object: any): Promise<string> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                object._id = uuid();
+                object.created_at = new Date();
+                object.updated_at = new Date();
+                dbo?.collection("User").insertOne(object, function(err, res) {
+                    if (err) throw err;
+                    resolve(object._id);
+                    db?.close();
+                });
+            });
+        });
+    }
+
     updateConnection(connection: Connections): void {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
@@ -207,11 +224,14 @@ export default class UserRepository extends Orm<User> implements IUserRepository
             result.forEach((value: User) => {
                 let user = new User(
                     value.name,
+                    value.lastName,
                     value.email,
                     value.password,
+                    value.university,
                     value.title,
                     value.photo,
                     value.bio,
+                    value.hasCompany,
                     value.emailValid,
                     value._id,
                     value.created_at,
@@ -230,11 +250,14 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         if(results && !(results instanceof Array)) {
             return new User(
                 results.name,
+                results.lastName,
                 results.email,
                 results.password,
+                results.university,
                 results.title,
                 results.photo,
                 results.bio,
+                results.hasCompany,
                 results.emailValid,
                 results._id,
                 results.created_at,

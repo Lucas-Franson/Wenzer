@@ -118,6 +118,20 @@ export const CardInfo = styled.div`
     border-bottom: 1px solid ${props => props.theme.colors.tertiary}
   }
 
+  > .thumbUser {
+    margin: auto;
+  }
+
+  > .connectionComponent {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px;
+    background-color: #333;
+    padding: 10px;
+  }
+
   > span {
     font-size: 0.9rem;
     font-weight: 400;

@@ -13,46 +13,68 @@ export class ConnectionRepository extends Orm<Connections> implements IConnectio
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
-                dbo.collection('User').aggregate([
+                dbo.collection('Connection').aggregate([
                     {
                         $lookup: {
-                            from: 'Connection',
-                            localField: '_id',
-                            foreignField: 'idUser',
-                            as: 'connection'
+                            from: 'User',
+                            localField: 'idUser',
+                            foreignField: '_id',
+                            as: 'userOne'
                         }
-                    }, 
+                    },
+                    {
+                        $unwind: "$userOne"
+                    },
+                    {
+                        $lookup: {
+                            from: 'User',
+                            localField: 'idFollower',
+                            foreignField: '_id',
+                            as: 'userTwo'
+                        }
+                    },
+                    {
+                        $unwind: "$userTwo"
+                    },
                     {
                         $match: {
                             $or: [
                                 {
-                                    connection: {
-                                        $elemMatch: {
-                                            idFollower: idUser,
-                                            accepted: true
-                                        }
-                                    }
+                                    idFollower: idUser
                                 },
                                 {
-                                    connection: {
-                                        $elemMatch: {
-                                            idUser: idUser,
-                                            accepted: true
-                                        }
-                                    }
+                                    idUser
                                 }
                             ]
                         }
                     },
                     {
                         $project: {
-                            _id: 1,
-                            name: 1,
-                            photo: 1
+                            _id: { 
+                                $cond: {
+                                    if: { $eq: [ idUser, "$userOne._id" ]},
+                                    then: "$userTwo._id",
+                                    else: "$userOne._id"
+                                }
+                            },
+                            name: { 
+                                $cond: {
+                                    if: { $eq: [ idUser, "$userOne._id" ]},
+                                    then: "$userTwo.name",
+                                    else: "$userOne.name"
+                                }
+                            },
+                            photo: { 
+                                $cond: {
+                                    if: { $eq: [ idUser, "$userOne._id" ]},
+                                    then: "$userTwo.photo",
+                                    else: "$userOne.photo"
+                                }
+                            },
                         }
                     }
                 ])
-                .sort({ "connection.created_at": 1 })
+                .sort({ created_at: 1 })
                 .limit(3).toArray(function(err: any, results: any) {
                     resolve(results);
                     db.close();

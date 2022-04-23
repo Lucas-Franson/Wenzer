@@ -15,15 +15,20 @@ import { ContainerModal, Container } from '../styles';
 import Cookies from 'js-cookie';
 import { toastfyError, toastfySuccess, toastfyWarning } from '../../Toastfy';
 import { CircularProgress } from '@material-ui/core';
+import { IProjectProps } from './interface';
 
-export default function ModalProject({open, setOpen}: any) {
+export default function ModalProject({open, setOpen, idProject}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
   const [previewImagePost, setPreviewImagePost] = useState('');
   const [titlePost, setTitlePost] = useState('');
   const [descriptionPost, setDescriptionPost] = useState('');
   const [typePost, setTypePost] = useState("1");
   const [isLoading, setIsLoading] = useState(false);
+  const [project, setProject] = useState<IProjectProps>();
+  const [viewing, setViewing] = useState(false);
+  const [following, setFollowing] = useState(false);
   
+  const [tagsOfProject, setTagOfProjects] = useState<{ label: string, value: string }[]>([]); 
   const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
   const [interestsSelected, setInterestsSelected] = useState<{ label: string, value: string }[]>([]);
 
@@ -46,6 +51,7 @@ export default function ModalProject({open, setOpen}: any) {
     setDescriptionPost("");
     setInterestsSelected([]);
     setPaymentImpulsionamento(false);
+    setTypePost("1");
   };
 
   const handleCancelPayment = () => {
@@ -87,11 +93,17 @@ export default function ModalProject({open, setOpen}: any) {
   }
 
   const removeImage = () => {
+    if (viewing) return;
     setImageToPost(undefined);
   }
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
+
+    if (project && userInfo?.id !== project?.userId) {
+      toastfyError("Você não possui permissão para editar este projeto.");
+      return;
+    }
 
     if (isLoading) return;
     setIsLoading(true);
@@ -107,7 +119,7 @@ export default function ModalProject({open, setOpen}: any) {
       setIsLoading(false);
       return;
     }
-
+    
     const formData = new FormData();
     formData.append("name", titlePost);
     formData.append("description", descriptionPost);
@@ -117,6 +129,15 @@ export default function ModalProject({open, setOpen}: any) {
     formData.append("marketing", paymentImpulsionamento ? "true" : "false");
     formData.append("tags", JSON.stringify(interestsSelected));
 
+    if (idProject) {
+      formData.append("_id", idProject);
+      updateProject(formData);
+    } else {
+      createProject(formData);
+    }
+  }
+
+  function createProject(formData: any) {
     APIServiceAuthenticated.post(`/api/project`, formData, {
       headers: {
         auth: Cookies.get('WenzerToken')
@@ -131,34 +152,129 @@ export default function ModalProject({open, setOpen}: any) {
     });
   }
 
-  function getAllInterests() {
+  function updateProject(formData: any) {
+    APIServiceAuthenticated.put(`/api/project`, formData, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      toastfySuccess("Projeto editado com sucesso!");
+      setIsLoading(false);
+      handleClose();
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    });
+  }
+
+  function getAllInterests(isMounted: boolean) {
     APIServiceAuthenticated.get(`/api/getAllInterests`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setInterests(res.data);
+      if (isMounted) setInterests(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-    })
+    });
   }
 
+  function getProject(isMounted: boolean) {
+    APIServiceAuthenticated.get(`/api/project/byid/${idProject}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {  
+      if (!res.data) {
+        toastfyError("Nenhum projeto encontrado.");
+        handleClose();  
+      }
+      if (isMounted) {
+        setProject(res.data);
+        handleForm(res.data);
+        if (res.data.userId != userInfo?.id) setViewing(true);
+        else setViewing(false);
+      }
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      handleClose();
+    });
+  }
+
+  function followProject(event: FormEvent) {
+    event.preventDefault();
+    
+    if (isLoading) return;
+    setIsLoading(true);
+
+    APIServiceAuthenticated.post(`/api/project/follower`, { idProject }, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setFollowing(!following);
+      let message = !following ? "Você começou a seguir este projeto." : "Voce deixou de seguir este projeto.";
+      toastfySuccess(message);
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    });
+  }
+
+  function handleForm(project: IProjectProps) {
+    let publicProject = JSON.parse(project.publicProject + "") ? "1" : "2";
+    setTypePost(publicProject);
+    setTitlePost(project.name);
+    setDescriptionPost(project.description);
+    setInterestsSelected(project.tags);
+    setPaymentImpulsionamento(JSON.parse(project.marketing + ""));
+    setFollowing(project.following);
+    if (project.photo && typeof project.photo === 'object') {
+      let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
+      let file = dataURLtoFile(base64, project.photo.name);
+      setImageToPost(file);
+      setPreviewImagePost(base64);
+    }
+  }
+
+  function dataURLtoFile(dataurl: string, filename: string) {
+    var arr: any = dataurl.split(',');
+    if (arr && arr.length > 0) {
+      var mime = arr[0]!.match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), 
+      n = bstr.length, 
+      u8arr = new Uint8Array(n);
+          
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+    }
+}
+
   useEffect(() => {
-    getAllInterests();
-  }, []);
+    let isMounted = true;
+    if (isMounted) setViewing(false);
+    if (idProject) {
+      getProject(isMounted);
+    }
+    getAllInterests(isMounted);
+    return () => { isMounted = false };
+  }, [open]);
 
   const body = (
     <ContainerModal >
       <header>
-        <h2>Novo Projeto</h2>
+        <h2>{viewing ? "Visualizando" : (idProject ? "Editando" : "Novo")} Projeto</h2>
         <MdClose onClick={handleClose} size={25} />
       </header>
       
       <main>
-        <form onSubmit={onSubmit}>
+        <form>
           <div className="profile">
-            <HeaderAvatar src={userInfo?.photo} />
-            <select required onChange={(e) => setTypePost(e.target.value)}>
+            <HeaderAvatar src={project ? project.user.photo : userInfo?.photo} />
+            <select required disabled={viewing} defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
               {typesProjects.map(item => (
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
@@ -174,9 +290,29 @@ export default function ModalProject({open, setOpen}: any) {
           </div>
 
           <div className="content">
-            <InputText required placeholder="Titulo" onChange={(e: any) => setTitlePost(e.target.value)} />
-            <InputTextArea required placeholder="Qual a sua idéia?" onChange={(e: any) => setDescriptionPost(e.target.value)}/>
-            <InputAutoComplete options={interests} defaultValues={interestsSelected} onchange={(e: any) => setInterestsSelected(e)} />
+            <InputText 
+              required 
+              defaultValue={project?.name} 
+              placeholder="Titulo" 
+              disabled={viewing}
+              onChange={(e: any) => 
+                setTitlePost(e.target.value)
+              } />
+            <InputTextArea 
+              required 
+              defaultValue={project?.description} 
+              placeholder="Qual a sua idéia?" 
+              disabled={viewing}
+              onChange={(e: any) => 
+                setDescriptionPost(e.target.value)
+              } />
+            <InputAutoComplete 
+              options={interests} 
+              defaultValues={interestsSelected} 
+              disabled={viewing}
+              onchange={(e: any) => 
+                setInterestsSelected(e)
+              } />
             <div className="image">
                 {imageToPost && (
                   <div className='imagePost' onClick={removeImage}>
@@ -184,7 +320,7 @@ export default function ModalProject({open, setOpen}: any) {
                   </div>
                 )}
 
-              <div className="buttons-image">
+              <div className="buttons-image" style={{ display: viewing ? 'none' : 'block' }}>
                 <div onClick={() => filepickerRef.current.click()}>
                   <MdImage size={25} />
                   <span>Foto</span>
@@ -206,12 +342,19 @@ export default function ModalProject({open, setOpen}: any) {
                 </div>
               </div>              
             </div>
-            <Button>
+            <Button onClick={onSubmit} style={{ display: viewing ? 'none' : 'block' }}>
               {isLoading ? (
                 <CircularProgress size={16} color="inherit" />
-              ) : (
-                "Publicar"
-              )}
+              ) : 
+                idProject ? ("Editar") : ("Publicar")
+              }
+            </Button>
+            <Button onClick={followProject} style={{ display: viewing ? 'block' : 'none' }}>
+              {isLoading ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : 
+                following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
+              }
             </Button>
           </div>
         </form>

@@ -26,8 +26,8 @@ export default class ProfileController {
     }
 
     async editProfile(req: any, res: any, next: any) {
-        const { name, bio, interests } = req.body;
-        const profile = new ProfileViewModel('', name, bio, interests, null, 0, 0);
+        const { name, lastName, bio, university, hasCompany, interests } = req.body;
+        const profile = new ProfileViewModel('', name, lastName, bio, university, interests, null, hasCompany, 0, 0);
         
         try {
             profile.validateModel();

@@ -52,6 +52,10 @@ export default class InterestService implements IInterestService {
         return await this.interestsRepository.getInterestsByUser(idUser);
     }
 
+    async getInterestsByProject(idProject: string): Promise<Interests[]> {
+        return await this.interestsRepository.getInterestsByProject(idProject);
+    }
+
     async linkProjectToInterests(project: Project, interests: InterestsFormViewModel[]): Promise<void> {
         var projectInterests: ProjectInterests[] = [];
         var deleteProjectInterests: string[] = [];

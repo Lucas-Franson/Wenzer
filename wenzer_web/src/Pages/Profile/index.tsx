@@ -23,22 +23,24 @@ import Select from 'react-select';
 import { IPostProps } from '../../Components/Post/interface';
 import Post from '../../Components/Post';
 import NoPostHere from "../../Components/Animation/NoPostHere";
+import { useHistory } from 'react-router-dom';
 
 function Profile(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [hasEditProfile, setHasEditProfile] = useState(false);
-  const [connections, setConnections] = useState<{ id: string, name: string, photo: any }[]>([]);
+  const [connections, setConnections] = useState<{ _id: string, name: string, photo: any }[]>([]);
   const [interestsOfUser, setInterestsOfUser] = useState<{ label: string, value: string }[]>([]);
   const [userProfileInfo, setUserProfileInfo] = useState<IProfileProps>();
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
   const [post, setPost] = useState<any>([]);
+  const history = useHistory();
+  const [viewConnection, setViewConnection] = useState(false);
   
   // CONTROL REQUESTS
 
   const [alreadyGetConnections, setAlreadyGetConnections] = useState(false);
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
-  const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
 
   const [test, setTest] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,10 @@ function Profile(): ReactElement {
 
   const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
   const [name, setName] = useState(''); 
+  const [lastName, setLastName] = useState('');
   const [bio, setBio] = useState('');
+  const [university, setUniversity] = useState('');
+  const [hasCompany, setHasCompany] = useState(false);
   const [interestsSelected, setInterestsSelected] = useState<any[]>([]);  
   
   const open = Boolean(anchorEl);
@@ -144,7 +149,10 @@ function Profile(): ReactElement {
     }).then(res => {
       if (res.data) {
         setName(res.data.name);
+        setLastName(res.data.lastName);
         setBio(res.data.bio);
+        setHasCompany(res.data.hasCompany);
+        setUniversity(res.data.university);
         setUserProfileInfo(res.data);
         setAlreadyGetUserInfo(true);
       }
@@ -167,13 +175,17 @@ function Profile(): ReactElement {
 
     let arrAreEqual = interestsOfUser.filter(x => interestsSelected.some(y => x.value !== y.value)).length === 0;
 
-    if (name === userProfileInfo?.name && bio === userProfileInfo.bio && arrAreEqual) {
+    if (name === userProfileInfo?.name && 
+      bio === userProfileInfo.bio && 
+      arrAreEqual &&
+      lastName === userProfileInfo.lastName &&
+      university === userProfileInfo.university) {
       toastfyWarning("Nenhum campo foi alterado.");
       setIsLoading(false);
       return;
     }
 
-    const data = { name, bio, interests: interestsSelected };
+    const data = { name, lastName, bio, university, hasCompany, interests: interestsSelected };
   
     APIServiceAuthenticated.put(`/api/editProfile`, data, {
       headers: {
@@ -182,7 +194,10 @@ function Profile(): ReactElement {
     }).then(res => {
       let obj = userProfileInfo!;
       obj.name = name;
+      obj.lastName = lastName;
       obj.bio = bio;
+      obj.university = university;
+      obj.hasCompany = hasCompany;
       setUserProfileInfo(obj);
       setInterestsOfUser(interestsSelected);
 
@@ -200,21 +215,21 @@ function Profile(): ReactElement {
       let user = loadTokenEmail();
       getConnections(user ? user : userInfo?.id!);
     }
-  }, []);
+  }, [alreadyGetConnections]);
 
   useEffect(() => {
     if(!alreadyGetInterests) {
       let user = loadTokenEmail();
       getInterestsOfUser(user ? user : userInfo?.id!);
     }
-  }, []);
+  }, [alreadyGetInterests]);
 
   useEffect(() => {
     if(!alreadyGetUserInfo) {
       let user = loadTokenEmail();
       getUserProfile(user ? user : userInfo?.id!);
     }
-  }, []);
+  }, [alreadyGetUserInfo]);
 
   useEffect(() => {
     if (!alreadyGetAllInterests) {
@@ -225,7 +240,7 @@ function Profile(): ReactElement {
   useEffect(() => {
     let user = loadTokenEmail();
     getAllPost(user ? user : userInfo?.id!);
-  }, []);
+  }, [alreadyGetUserInfo]);
 
   function handleName(e: any) {
     e.preventDefault();
@@ -265,6 +280,18 @@ function Profile(): ReactElement {
 
     return true;
   }
+
+  function goToUserProfile(_id: string) {
+    history.push(`/profile?user=${_id}`);
+    setAlreadyGetUserInfo(false);
+    setAlreadyGetConnections(false);
+    setAlreadyGetInterests(false);
+  }
+
+  function removePost(_id: string) {
+    let newListPost = post.filter((x: any) => x._id !== _id);
+    setPost(newListPost);
+  }
   
   return (
     <Container>
@@ -275,7 +302,8 @@ function Profile(): ReactElement {
                 <AiOutlineEllipsis size={28} className='option' />
               </div>
               <HeaderAvatar className='avatarProfile' src={userProfileInfo?.photo} />
-              <p>{userProfileInfo?.name}</p>
+              <p>{userProfileInfo?.name} {userProfileInfo?.lastName}</p>
+              <span>{userProfileInfo?.university && (`Estuda em ${userProfileInfo.university}`)}</span>
               <span>{userProfileInfo?.bio}</span>
             </div>
 
@@ -306,7 +334,10 @@ function Profile(): ReactElement {
           <h3>Conexões</h3>
           {connections.length > 0 ? (
             connections.map((value) => (
-              <span>{value?.name}</span>
+              <div key={value?._id} className="connectionComponent" onClick={() => goToUserProfile(value?._id)}>
+                <HeaderAvatar className="thumbUser" src={value?.photo} />
+                <span>{value?.name}</span>
+              </div>
             ))
           ): (
             <span>Você ainda não tem nenhuma conexão</span>
@@ -317,7 +348,7 @@ function Profile(): ReactElement {
           <h3>Interesses</h3>
           {interestsOfUser.length > 0 ? (
             interestsOfUser.map((value) => (
-              <span> {value?.label} </span>
+              <span key={value?.value}> {value?.label} </span>
             ))
           ):(
             <span>Você ainda não tem nenhum interesse</span>
@@ -346,6 +377,7 @@ function Profile(): ReactElement {
                     title={title}
                     goodIdea={goodIdea}
                     user={user}
+                    removePost={removePost}
                   />
                 ))
              }
@@ -367,19 +399,34 @@ function Profile(): ReactElement {
                 min={3}
                 defaultValue={userProfileInfo?.name}
               />
+              <InputText
+                type="text"
+                placeholder="Sobrenome"
+                required={true}
+                defaultValue={userProfileInfo?.lastName}
+                onChange={(e: any) => setLastName(e.target.value)}
+              />
               <InputText 
                 type="text"
-                placeholder="E=mail" 
+                placeholder="E-mail" 
                 defaultValue={userInfo?.email}
                 disabled={true}
                 className='noCopy'
               />
+              {!hasCompany && (
+                <InputText
+                  placeholder="Universidade"
+                  required={true}
+                  defaultValue={userProfileInfo?.university}
+                  onChange={(e: any) => setUniversity(e.target.value)}
+                />
+              )}
               <InputTextArea
                 type="text"
                 placeholder="Bio" 
                 defaultValue={userProfileInfo?.bio}
                 onChange={handleBio}
-                maxLenght={400}
+                maxLength={400}
               />
               <InputAutoComplete options={interests} defaultValues={interestsOfUser} onchange={(e: any) => setInterestsSelected(e)} />
               <div>

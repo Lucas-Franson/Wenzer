@@ -324,7 +324,32 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 var dbo = db?.db(database);
                 dbo?.collection('PostAlreadySeen').findOne({ idUser: id }, function(err: any, results: any) {
                     resolve(results);
+                    db?.close();
                 });
+            });
+        });
+    }
+
+    async getPostsByProject(idProject: string): Promise<Post[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection(collection).find({ idProject }).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db?.close();
+                });
+            });
+        });
+    }
+
+    deleteListPost(idsPost: string[]): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection(collection).deleteMany({ _id: { $in: idsPost } }, function(err, res) {
+                if (err) throw err;
+                db?.close();
             });
         });
     }
