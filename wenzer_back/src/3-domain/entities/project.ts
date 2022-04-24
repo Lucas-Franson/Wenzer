@@ -11,6 +11,7 @@ export class Project extends DomainBase {
         public publicProject: boolean,
         public marketing: boolean,
         public userId: string,
+        public countGoodIdea: number,
         public _id: string = uuid(),
         public created_at: Date = new Date(),
         public updated_at: Date = new Date()

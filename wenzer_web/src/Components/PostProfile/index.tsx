@@ -6,7 +6,7 @@ import imageTeste from '../../Utils/image/bgFgtsDescktop.jpg';
 import ModalProject from '../Modal/ModalProject';
 import { Container, ContainerPostProject } from './styles';
 
-const PostProfile = ({ index, _id, name, photo, countOfGoodIdea, countOfActions, screen }: any) => {
+const PostProfile = ({ index, _id, name, photo, countGoodIdea, countFollowers, screen }: any) => {
 
   const [openModalProject, setOpenModalProject] = useState(false);
 
@@ -24,12 +24,12 @@ const PostProfile = ({ index, _id, name, photo, countOfGoodIdea, countOfActions,
           <div className='ContainerAction'>
             <div className="action" title="Boa ideia">
               <AiOutlineBulb size={20} className="idea"/> 
-              <span>{countOfGoodIdea ? countOfGoodIdea : 0}</span>
+              <span>{countGoodIdea ? countGoodIdea : 0}</span>
             </div>
 
             <div className="action" title="Seguidores">
               <AiOutlineTeam size={20}/>  
-              <span>{countOfActions ? countOfActions : 0}</span>
+              <span>{countFollowers ? countFollowers : 0}</span>
             </div>
           </div>
         </div>

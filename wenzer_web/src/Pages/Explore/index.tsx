@@ -47,8 +47,8 @@ const Explorar: React.FC = () => {
                 _id={item._id}
                 name={item.name}
                 photo={item.photo}
-                countOfGoodIdea={item.CountOfGoodIdea}
-                countOfActions={item.CountOfActions}
+                countGoodIdea={item.countGoodIdea}
+                countFollowers={item.countFollowers}
                 screen={screens.HotProjects}
                 key={item._id}/>
             ))} 

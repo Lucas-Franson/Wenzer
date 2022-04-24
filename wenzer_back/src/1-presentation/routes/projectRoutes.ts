@@ -126,6 +126,17 @@ routes.post('/api/project', AuthUser, projectController.create, () => {
             schema: { mensagem: "<mensagem do erro>" },
             description: "Internal server error" }
     */
+})
+.post('/api/project/goodidea/:_id', AuthUser, projectController.setUserProjectGoodIdea, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para setar projeto como boa ideia.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
 });
 
 routes.options([
@@ -133,7 +144,8 @@ routes.options([
     '/api/project/onhigh',
     '/api/project/follower',
     '/api/project/post',
-    '/api/project/byid'
+    '/api/project/byid',
+    '/api/project/goodidea'
 ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

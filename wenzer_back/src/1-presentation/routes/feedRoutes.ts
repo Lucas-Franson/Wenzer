@@ -51,6 +51,17 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
                 description: "Internal server error" }
         */
     })
+    .post('/api/setCommentAsGoodIdea/:_id', AuthUser, feedController.setCommentAsGoodIdea, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint para setar boa ideia no comentário.'
+            #swagger.responses[200] = { 
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
     .post('/api/setComments', AuthUser, feedController.setComments, () => {
         /* 
             #swagger.tags = ["Feed"] 
@@ -58,6 +69,29 @@ routes.get('/api/getallposts', AuthUser, feedController.getAllPosts, () => {
             #swagger.parameters['postId'] = {
                 in: 'body',
                 description: 'Id do post que receberá o boa idéia.',
+                required: true,
+                schema: "GUID"
+            }
+            #swagger.parameters['text'] = {
+                in: 'body',
+                description: 'Texto do usuário para o comentário.',
+                required: true,
+                schema: "Isso aqui ta uma porra..."
+            }
+            #swagger.responses[200] = { 
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { mensagem: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */
+    })
+    .post('/api/setSubComment', AuthUser, feedController.setSubComment, () => {
+        /* 
+            #swagger.tags = ["Feed"] 
+            #swagger.description = 'Endpoint para setar novo comentário ao post.'
+            #swagger.parameters['idPostComment'] = {
+                in: 'body',
+                description: 'Id do comentário que receberá o sub comentário.',
                 required: true,
                 schema: "GUID"
             }

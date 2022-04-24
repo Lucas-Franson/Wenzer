@@ -16,6 +16,7 @@ import Cookies from 'js-cookie';
 import { toastfyError, toastfySuccess, toastfyWarning } from '../../Toastfy';
 import { CircularProgress } from '@material-ui/core';
 import { IProjectProps } from './interface';
+import { AiFillBulb, AiOutlineBulb } from 'react-icons/ai';
 
 export default function ModalProject({open, setOpen, idProject}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
@@ -27,6 +28,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [project, setProject] = useState<IProjectProps>();
   const [viewing, setViewing] = useState(false);
   const [following, setFollowing] = useState(false);
+  const [goodIdea, setGoodIdea] = useState(false);
   
   const [tagsOfProject, setTagOfProjects] = useState<{ label: string, value: string }[]>([]); 
   const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
@@ -189,6 +191,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         toastfyError("Nenhum projeto encontrado.");
         handleClose();  
       }
+      
       if (isMounted) {
         setProject(res.data);
         handleForm(res.data);
@@ -222,6 +225,25 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     });
   }
 
+  function goodIdeaProject(event: FormEvent) {
+    event.preventDefault();
+
+    if (isLoading || !idProject) return;
+    setIsLoading(true);
+    
+    APIServiceAuthenticated.post(`/api/project/goodidea/${idProject}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setGoodIdea(!goodIdea);
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    });
+  }
+
   function handleForm(project: IProjectProps) {
     let publicProject = JSON.parse(project.publicProject + "") ? "1" : "2";
     setTypePost(publicProject);
@@ -230,6 +252,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     setInterestsSelected(project.tags);
     setPaymentImpulsionamento(JSON.parse(project.marketing + ""));
     setFollowing(project.following);
+    setGoodIdea(project.goodIdea);
     if (project.photo && typeof project.photo === 'object') {
       let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
       let file = dataURLtoFile(base64, project.photo.name);
@@ -349,13 +372,26 @@ export default function ModalProject({open, setOpen, idProject}: any) {
                 idProject ? ("Editar") : ("Publicar")
               }
             </Button>
-            <Button onClick={followProject} style={{ display: viewing ? 'block' : 'none' }}>
-              {isLoading ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : 
-                following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
-              }
-            </Button>
+            <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
+              <Button onClick={followProject}>
+                {isLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : 
+                  following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
+                }
+              </Button>
+              <Button onClick={goodIdeaProject}>
+                {isLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : ( 
+                    <div>
+                      {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
+                      <span>Boa ideia</span>
+                    </div>
+                  )
+                }
+              </Button>
+            </div>
           </div>
         </form>
       </main>

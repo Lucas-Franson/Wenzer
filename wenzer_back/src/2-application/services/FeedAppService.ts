@@ -1,3 +1,4 @@
+import { CommentCommentedViewModel } from "../../1-presentation/viewmodel/CommentCommentedViewModel";
 import { PostCommentsViewModel } from "../../1-presentation/viewmodel/PostCommentsViewModel";
 import PostViewModel from "../../1-presentation/viewmodel/PostViewModel";
 import { UserPostCommentViewModel } from "../../1-presentation/viewmodel/UserPostCommentViewModel";
@@ -109,19 +110,82 @@ export default class FeedAppService {
         await this.userService.setPostAsGoodIdea(userId, postId, userPostExist);
     }
 
-    async setComments(userId: string, postId: string, text: string): Promise<void> {
-        await this.postService.setComment(userId, postId, text);
+    async setPostCommentGoodIdea(userId: string, idPostComment: string): Promise<void> {
+        const userPostExist = await this.postService.userCommentGoodIdeaAlreadyExist(userId, idPostComment);
+        await this.postService.sumCountOfCommentGoodIdeia(idPostComment, userPostExist != null);
+        this.postService.setCommentAsGoodIdea(userId, idPostComment, userPostExist != null);
+    }
+
+    async setComments(userId: string, postId: string, text: string): Promise<PostCommentsViewModel> {
+        let comment = await this.postService.setComment(userId, postId, text);
+        let user = await this.userService.findUserById(comment.idUser);
+
+        let userViewModel = new UserPostCommentViewModel(
+            user?._id!,
+            user?.name!,
+            user?.photo
+        );
+
+        const postViewModel = new PostCommentsViewModel(
+            comment._id,
+            comment.idUser,
+            comment.idPost,
+            comment.text,
+            userViewModel,
+            [],
+            comment.created_at,
+            false,
+            0
+        );
+
+        return postViewModel;
+    }
+
+    async setSubComment(userId: string, idPostComment: string, text: string): Promise<CommentCommentedViewModel> {
+        let comment = await this.postService.setSubComment(userId, idPostComment, text);
+
+        let user = await this.userService.findUserById(comment.idUser);
+
+        let userViewModel = new UserPostCommentViewModel(
+            user?._id!,
+            user?.name!,
+            user?.photo
+        );
+
+        const commentCommented = new CommentCommentedViewModel(
+            comment._id,
+            comment.idUser,
+            comment.idPostComment,
+            comment.text,
+            userViewModel,
+            comment.created_at
+        );
+
+        return commentCommented;
     }
 
     async getAllComments(userId: string, postId: string): Promise<PostCommentsViewModel[]> {
         let comments = await this.postService.getAllComments(postId);
         let idUserArr: string[] = [];
+        let idSubCommentArr: string[] = [];
+
         comments.forEach((comment) => {
             if (idUserArr.filter(x => x == comment.idUser).length == 0)
                 idUserArr.push(comment.idUser);
+            if (idSubCommentArr.filter(x => x == comment._id).length == 0)
+                idSubCommentArr.push(comment._id);
         });
+
         if (idUserArr.length > 0) {
+            let listSubComments = await this.postService.getAllSubCommentsByPostCommentArrIds(idSubCommentArr);
+            listSubComments.forEach((comment) => {
+                if (idUserArr.filter(x => x == comment.idUser).length == 0)
+                    idUserArr.push(comment.idUser);
+            });
+
             let users = await this.userService.getAllUsersByArrOfIds(idUserArr);
+            let userGoodIdea = await this.postService.getAllCommentGoodIdeaFromUser(userId);
+
             let commentsViewModel: PostCommentsViewModel[] = [];
             comments.forEach((comment) => {
                 const user = users.find(x => x._id == comment.idUser);
@@ -131,13 +195,37 @@ export default class FeedAppService {
                         user?.name!,
                         user?.photo
                     );
+                    const subComments: CommentCommentedViewModel[] = [];
+                    listSubComments.filter(x => x.idPostComment === comment._id).map((data) => {
+                        const userSubComment = users.find(x => x._id == data.idUser);
+                        if (userSubComment) {
+                            const userSubCommentViewModel = new UserPostCommentViewModel(
+                                userSubComment?._id!,
+                                userSubComment?.name!,
+                                userSubComment?.photo
+                            );
+                            const commentCommented = new CommentCommentedViewModel(
+                                data._id,
+                                data.idUser,
+                                data.idPostComment,
+                                data.text,
+                                userSubCommentViewModel,
+                                data.created_at
+                            );
+                            subComments.push(commentCommented);
+                        }
+                    });
+                    const goodIdea = userGoodIdea.find(x => x.idPostComment === comment._id);
                     const postViewModel = new PostCommentsViewModel(
                         comment._id,
                         comment.idUser,
                         comment.idPost,
                         comment.text,
                         userViewModel,
-                        comment.created_at
+                        subComments,
+                        comment.created_at,
+                        goodIdea != null,
+                        comment.countViews
                     );
                     commentsViewModel.push(postViewModel);
                 }

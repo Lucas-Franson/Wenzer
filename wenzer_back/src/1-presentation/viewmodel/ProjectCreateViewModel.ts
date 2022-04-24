@@ -13,9 +13,11 @@ export class ProjectCreateViewModel {
         public marketing: boolean,
         public tags: InterestsFormViewModel[],
         public created_at: Date,
+        public countGoodIdea: number,
         public userId: string = "",
         public following: boolean = false,
-        public user: any = null
+        public user: any = null,
+        public goodIdea: boolean = false
     ) {
 
     }

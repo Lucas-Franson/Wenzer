@@ -94,9 +94,9 @@ export default class ProfileAppService {
         return obj;
     }
 
-    async getAllPosts(page: number, countPerPage: number, idUser: string) {
+    async getAllPosts(page: number, countPerPage: number, idUser: string, idUserServer: string) {
         let post = await this.postService.getAllPostsByUserId(idUser, page, countPerPage);
-        let goodIdea = await this.postService.getAllGoodIdeaFromUser(idUser);
+        let goodIdea = await this.postService.getAllGoodIdeaFromUser(idUserServer);
         let postViewModel: PostViewModel[] = [];
         let user = await this.userService.findUserById(idUser);
         let userViewModel = new UserViewModel(

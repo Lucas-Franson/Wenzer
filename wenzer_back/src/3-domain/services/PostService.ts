@@ -1,9 +1,13 @@
 import { Db } from "mongodb";
+import { CommentCommentedViewModel } from "../../1-presentation/viewmodel/CommentCommentedViewModel";
+import { PostCommentsViewModel } from "../../1-presentation/viewmodel/PostCommentsViewModel";
 import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
+import { CommentCommented } from "../entities/commentCommented";
 import { Post } from "../entities/post";
 import { PostAlreadySeen } from "../entities/postAlreadySeen";
 import { PostComments } from "../entities/postComments";
+import { UserCommentGoodIdea } from "../entities/userCommentGoodIdea";
 import IPostService from "../Iservices/IPostService";
 
 
@@ -104,23 +108,68 @@ export default class PostService implements IPostService {
         await this.postRepository.update(post!);
     }
 
+    setCommentAsGoodIdea(userId: string, idPostComment: string, userPostExist: boolean): void {
+        const commentGoodIdea = new UserCommentGoodIdea(
+            userId,
+            idPostComment
+        );
+        if (userPostExist) {
+            this.postRepository.removeCommentAsGoodIdea(userId, idPostComment);
+        } else {
+            this.postRepository.setCommentAsGoodIdea(commentGoodIdea);
+        }
+    }
+
+    async sumCountOfCommentGoodIdeia(idPostComment: string, userPostExist: boolean): Promise<void> {
+        const comment: any = await this.postRepository.getCommentById(idPostComment);
+        if (!comment) throw new Error("Post não encontrado.");
+
+        if (userPostExist) {
+            comment!.countViews--;
+        } else {
+            comment!.countViews++;
+        }
+        await this.postRepository.updateComment(comment!);
+    }
+
     async userPostGoodIdeaAlreadyExist(userId: string, postId: string): Promise<boolean> {
         const where = { idUser: userId, idPost: postId };
         let userPost = await this.postRepository.getUserPostGoodIdea(where);
         return userPost != null;
     }
 
-    async setComment(userId: string, postId: string, text: string): Promise<void> {
+    async userCommentGoodIdeaAlreadyExist(userId: string, idPostComment: string): Promise<UserCommentGoodIdea> {
+        let commentPost = await this.postRepository.getUserCommentGoodIdea(userId, idPostComment);
+        return commentPost!;
+    }
+
+    async setComment(userId: string, postId: string, text: string): Promise<PostComments> {
         const postComment = new PostComments(
             userId,
             postId,
-            text
+            text,
+            0
         );
         await this.postRepository.setComment(postComment);
+        return postComment;
+    }
+
+    async setSubComment(userId: string, idPostComment: string, text: string): Promise<CommentCommented> {
+        const commentCommented = new CommentCommented(
+            userId,
+            idPostComment,
+            text
+        );
+        await this.postRepository.setSubComment(commentCommented);
+        return commentCommented;
     }
 
     async getAllComments(postId: string): Promise<PostComments[]> {
         return await this.postRepository.getCommentsByPostId(postId);
+    }
+
+    async getAllSubCommentsByPostCommentArrIds(idSubCommentArr: string[]): Promise<CommentCommented[]> {
+        return await this.postRepository.getAllSubCommentsByPostCommentArrIds(idSubCommentArr);
     }
 
     async getCommentsByPost(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
@@ -133,6 +182,10 @@ export default class PostService implements IPostService {
 
     deletePost(idPost: string): void {
         this.postRepository.deleteListPost([idPost]);
+    }
+
+    async getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]> {
+        return await this.postRepository.getAllCommentGoodIdeaFromUser(userId);
     }
 
     // WEB SERVICE

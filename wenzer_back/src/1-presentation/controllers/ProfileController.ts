@@ -91,7 +91,7 @@ export default class ProfileController {
                 throw new ErroParametro('Falta parâmetro para recuperar os registros de publicações.');
             }
 
-            const posts = await req.service.profileAppService.getAllPosts(Number(page), Number(countPerPage), idUser);
+            const posts = await req.service.profileAppService.getAllPosts(Number(page), Number(countPerPage), idUser, req.session.userId);
 
             res.status(200).json(posts);
         } catch(err) {

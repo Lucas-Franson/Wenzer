@@ -6,6 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { Db, MongoClient } from "mongodb";
 import { Orm } from "./orm";
 import { PostAlreadySeen } from "../../3-domain/entities/postAlreadySeen";
+import { CommentCommented } from "../../3-domain/entities/commentCommented";
+import { UserCommentGoodIdea } from "../../3-domain/entities/userCommentGoodIdea";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Post";
@@ -155,14 +157,38 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
+    async getUserCommentGoodIdea(userId: string, idPostComment: string): Promise<UserCommentGoodIdea | null> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('UserCommentGoodIdea').findOne({ idUser: userId, idPostComment }, function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
     async setComment(postComments: any): Promise<void> {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db?.db(database);
-            postComments._id = uuid();
             postComments.created_at = new Date();
             postComments.updated_at = new Date();
             dbo?.collection('PostComment').insertOne(postComments, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
+    async setSubComment(commentCommented: any): Promise<void> {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            commentCommented.created_at = new Date();
+            commentCommented.updated_at = new Date();
+            dbo?.collection('CommentCommented').insertOne(commentCommented, function(err, res) {
                 if (err) throw err;
                 db?.close();
             });
@@ -174,9 +200,21 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
-                dbo.collection('PostComment').find({ idPost: postId }).toArray(function(err: any, results: any) {
+                dbo.collection('PostComment').find({ idPost: postId }).sort({ countViews: -1, created_at: 1 }).toArray(function(err: any, results: any) {
                     const result = _self.handlePostCommentsArrayResult(results);
                     resolve(result!);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    async getAllSubCommentsByPostCommentArrIds(idSubCommentArr: string[]): Promise<CommentCommented[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('CommentCommented').find({ idPostComment: { $in: idSubCommentArr } }).sort({ created_at: 1 }).toArray(function(err: any, results: any) {
+                    resolve(results!);
                     db.close();
                 });
             });
@@ -350,6 +388,62 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
             dbo?.collection(collection).deleteMany({ _id: { $in: idsPost } }, function(err, res) {
                 if (err) throw err;
                 db?.close();
+            });
+        });
+    }
+
+    async getCommentById(idPostComment: string): Promise<PostComments> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection('PostComment').findOne({ _id: idPostComment }, function(err: any, results: any) {
+                    resolve(results);
+                    db?.close();
+                });
+            });
+        });
+    }
+
+    updateComment(comment: PostComments): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection('PostComment').updateOne({ _id: comment._id }, { $set: comment }, function(err: any, results: any) {
+                db?.close();
+            });
+        });
+    }
+
+    removeCommentAsGoodIdea(userId: string, idPostComment: string): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection('UserCommentGoodIdea').deleteOne({ idUser: userId, idPostComment }, function(err: any, results: any) {
+                db?.close();
+            });
+        });
+    }
+
+    setCommentAsGoodIdea(commentGoodIdea: any): void {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection('UserCommentGoodIdea').insertOne(commentGoodIdea, function(err: any, results: any) {
+                db?.close();
+            });
+        });
+    }
+
+    async getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection('UserCommentGoodIdea').find({ idUser: userId }).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db?.close();
+                });
             });
         });
     }
@@ -575,6 +669,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     value.idUser,
                     value.idPost,
                     value.text,
+                    value.countViews,
                     value._id,
                     value.created_at,
                     value.updated_at

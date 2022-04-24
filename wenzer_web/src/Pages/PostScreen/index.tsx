@@ -13,31 +13,86 @@ import Cookies from 'js-cookie';
 import { toastfyError, toastfySuccess, toastfyWarning } from '../../Components/Toastfy';
 import { useEffect } from 'react';
 import { useAuth } from '../../Services/Authentication/auth';
+import { CircularProgress } from '@material-ui/core';
 
 interface IpostId {
   id: string;
 }
 
 function PostScreen(): ReactElement {
-  const [hasSubComent, setHasSubComent] = useState(false);
-  const [likeComent, setLikeComent] = useState(false);
+  const [hasSubComent, setHasSubComent] = useState<string[]>([]);
+  const [likeComent, setLikeComent] = useState<string[]>([]);
   const [post, setPost] = useState<any>();
   const [txtComment, setTxtComment] = useState("");
-  const [comments, setComments] = useState([]);
+  const [txtSubComment, setTxtSubComment] = useState("");
+  const [comments, setComments] = useState<any[]>([]);
   const { userInfo } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const params = useParams<IpostId>(); //id que é passado ao clicar em um post pelo feed
 
-  function handleLikedComent(){
-    setLikeComent(prev => !prev);
+  function handleLikedComent(_id: string){
+    if (!_id || isLoading) return;
+    setIsLoading(true);
+    
+    APIServiceAuthenticated.post(`/api/setCommentAsGoodIdea/${_id}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      let like = likeComent.find(x => x === _id);
+      if (like) {
+        comments.find(x => x._id === _id).countGoodIdea--;
+        setLikeComent(likeComent.filter(x => x !== _id));
+      } else {
+        comments.find(x => x._id === _id).countGoodIdea++;
+        likeComent.push(_id);
+        setLikeComent(likeComent);
+      }
+      setComments(comments);
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    })
   }
 
-  function handleSubComent() {
-    setHasSubComent(!hasSubComent);
+  function handleSubComent(_id: string) {
+    let id = hasSubComent.find(x => x === _id);
+    if (id) {
+      setHasSubComent([]);
+    } else {
+      setHasSubComent([_id]);
+    }
   };
 
   function sendSubComent(_id: string) {
-    setHasSubComent(false);
+    if (!_id) return;
+    
+    if (!txtSubComment || txtSubComment.trim() == '') {
+      toastfyWarning("Preencha o campo de comentário.");
+      return;
+    }
+
+    setIsLoading(true);
+    
+    APIServiceAuthenticated.post(`/api/setSubComment`, { idPostComment: _id, text: txtSubComment }, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      if (res.data) {
+        comments.find(x => x._id === res.data.idPostComment).subComments.push(res.data);
+        setComments(comments);
+        toastfySuccess("Comentário publicado.");
+        setHasSubComent([]);
+        setTxtSubComment("");
+      }
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    })
   }
 
   function getPost() {
@@ -62,7 +117,12 @@ function PostScreen(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      debugger;
+      res.data.map((data: any) => {
+        if (data.goodIdea) {
+          likeComent.push(data._id);
+          setLikeComent(likeComent);
+        } 
+      });
       setComments(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
@@ -70,22 +130,30 @@ function PostScreen(): ReactElement {
   }
 
   function onSave() {
+    if (!params?.id) return;
+
     if (!txtComment || txtComment.trim() == '') {
       toastfyWarning("Preencha o campo de comentário.");
       return;
     }
 
-    if (!params?.id) return;
+    setIsLoading(true);
 
     APIServiceAuthenticated.post(`/api/setComments`, { postId: params.id, text: txtComment }, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      toastfySuccess("Comentário publicado.");
       setTxtComment("");
+      if (res.data) {
+        comments.push(res.data);
+        setComments(comments);
+        toastfySuccess("Comentário publicado.");
+      }
+      setIsLoading(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
     })
   }
 
@@ -115,7 +183,7 @@ function PostScreen(): ReactElement {
       <ContainerComent>
         <MainComent>
           {comments.map((data: any) => (
-            <div>
+            <div key={data?._id}>
               <div className="coment">
                 <HeaderAvatar src={data.usuario.photo} />
                 <div className="coment-user">
@@ -124,10 +192,10 @@ function PostScreen(): ReactElement {
                     {data.text}
                   </Coment>
                   <div className="coment-like">
-                    <span onClick={handleSubComent}>Comentar</span>
-                    <div onClick={handleLikedComent}>
-                      <p>2.5k</p>
-                      {!likeComent ? <AiOutlineBulb size="18"/> : <AiFillBulb className='active' size="18"/>}
+                    <span onClick={() => handleSubComent(data?._id)}>Comentar</span>
+                    <div onClick={() => handleLikedComent(data?._id)}>
+                      <p>{data?.countGoodIdea}</p>
+                      {!likeComent?.find(x => x === data?._id) ? <AiOutlineBulb size="18"/> : <AiFillBulb className='active' size="18"/>}
                       <span>Boa ideia</span>
                       <span>{ data.createdAt ? new Date(data.createdAt!).toLocaleString('pt-BR') : "" }</span>
                     </div>
@@ -135,27 +203,38 @@ function PostScreen(): ReactElement {
                 </div>
               </div>          
               <SubComent>
-                <div className="coment">
-                  <HeaderAvatar/>
-                  <div className="coment-user">
-                    <p>Nome Usuário</p>
-                    <Coment>
-                      subcomentario aqui
-                    </Coment>
-                    <div className="coment-like">
-                      <span>23/11/2000</span>
+                {data.subComments.map((subData: any) => (
+                  <div key={subData._id} className="coment">
+                    <HeaderAvatar src={subData.usuario.photo} />
+                    <div className="coment-user">
+                      <p>{subData.usuario.name}</p>
+                      <Coment>
+                        {subData.text}
+                      </Coment>
+                      <div className="coment-like">
+                        <span>{ subData.createdAt ? new Date(subData.createdAt!).toLocaleString('pt-BR') : "" }</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
 
-                {hasSubComent && (
+                {hasSubComent.find(x => x === data?._id) && (
                   <div className="coment">
                     <HeaderAvatar src={userInfo?.photo}/>
                     <div className="coment-user">
                       <p>{userInfo?.name}</p>
-                      <InputTextArea className="height-coment" placeholder="Escreva um comentário" />
+                      <InputTextArea 
+                        type="text"
+                        defaultValue={txtSubComment}
+                        onChange={(e: any) => setTxtSubComment(e.target.value)}
+                        className="height-coment" 
+                        placeholder="Escreva um comentário" />
                       <Button onClick={() => sendSubComent(data?._id)} className="button_coment">
-                        Comentar
+                        {isLoading ? (
+                          <CircularProgress size={16} color="inherit" />
+                        ) : (
+                          "Comentar"
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -171,7 +250,13 @@ function PostScreen(): ReactElement {
             defaultValue={txtComment}
             onChange={(e: any) => setTxtComment(e.target.value)}
             placeholder="Escreva um comentário"/>
-          <Button onClick={onSave} className="button_my-coment">comentar</Button>
+          <Button onClick={onSave} className="button_my-coment">
+            {isLoading ? (
+              <CircularProgress size={16} color="inherit" />
+            ) : (
+              "Comentar"
+            )}
+          </Button>
         </MyComent>
       </ContainerComent>
     </Container>

@@ -1,3 +1,4 @@
+import { ErroParametro } from '../../erros';
 import PostCreateViewModel from '../viewmodel/PostCreateViewModel';
 import { ProjectCreateViewModel } from '../viewmodel/ProjectCreateViewModel';
 
@@ -98,6 +99,21 @@ export default class ProjectController {
                 post.photo = req.files.photo;
             }
             await req.service.projectAppService.createPost(req.session.userId, post);
+
+            res.status(201).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async setUserProjectGoodIdea(req: any, res: any, next: any) {
+        const { _id } = req.params;
+
+        try {
+            if (!_id) {
+                throw new ErroParametro('Falta parâmetro para setar os registros de boa ideia.');
+            }
+            await req.service.projectAppService.setUserProjectGoodIdea(req.session.userId, _id);
 
             res.status(201).json();
         } catch(err) {

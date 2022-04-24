@@ -3,6 +3,7 @@ import { IProjectRepository } from "../irepositories/IprojectRepository";
 import { MongoClient } from "mongodb";
 import { Orm } from "./orm";
 import { Interests } from "../../3-domain/entities/interests";
+import { UserProjectGoodIdea } from "../../3-domain/entities/userProjectGoodIdea";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Project";
@@ -31,14 +32,6 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
                 dbo.collection(collection).aggregate([
                     {
                         $lookup: {
-                            from: 'UserProjectGoodIdea',
-                            localField: '_id',
-                            foreignField: 'idProject',
-                            as: 'userProjectGoodIdea'
-                        }
-                    },
-                    {
-                        $lookup: {
                             from: 'Follower',
                             localField: '_id',
                             foreignField: 'idProject',
@@ -51,7 +44,7 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
                             name: 1,
                             photo: 1,
                             description: 1,
-                            countGoodIdea: { $size: "$userProjectGoodIdea" },
+                            countGoodIdea: 1,
                             countFollowers: { $size: "$follower" }
                         }
                     }
@@ -208,6 +201,38 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
         });
     }
 
+    async findUserProjectGoodIdeaById(idUser: string, idProject: string): Promise<UserProjectGoodIdea> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('UserProjectGoodIdea').findOne({ idUser, idProject }, function(err: any, results: any) {
+                    resolve(results);
+                    db.close();
+                });
+            });
+        });
+    }
+
+    deleteProjectGoodIdea(goodIdea: UserProjectGoodIdea): void {
+        MongoClient.connect(url).then(function(db){
+            var dbo = db.db(database);
+            dbo.collection("UserProjectGoodIdea").deleteOne({ idUser: goodIdea.idUser, idProject: goodIdea.idProject }, function(err: any, results: any) {
+                if (!results) throw new Error(err);
+                db.close();
+            });
+        });
+    }
+
+    setProjectGoodIdea(userProjectGoodIdea: any): void {
+        MongoClient.connect(url).then(function(db){
+            var dbo = db.db(database);
+            dbo.collection("UserProjectGoodIdea").insertOne(userProjectGoodIdea, function(err: any, results: any) {
+                if (!results) throw new Error(err);
+                db.close();
+            });
+        });
+    }
+
     handleArrayResult(result: Project[]) {
         if (result && result instanceof Array && result.length > 0) {
             let projects: any[] = [];
@@ -220,6 +245,7 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
                     value.publicProject,
                     value.marketing,
                     value.userId,
+                    value.countGoodIdea,
                     value._id,
                     value.created_at,
                     value.updated_at
@@ -243,6 +269,7 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
                 results.publicProject,
                 results.marketing,
                 results.userId,
+                results.countGoodIdea,
                 results._id,
                 results.created_at,
                 results.updated_at

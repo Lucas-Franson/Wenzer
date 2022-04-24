@@ -5,6 +5,7 @@ import { IProjectRepository } from "../../4-infra/irepositories/IprojectReposito
 import { Followers } from "../entities/followers";
 import { Interests } from "../entities/interests";
 import { Project } from "../entities/project";
+import { UserProjectGoodIdea } from "../entities/userProjectGoodIdea";
 import IProjectService from "../Iservices/IProjectService";
 
 export default class ProjectService implements IProjectService {
@@ -99,6 +100,35 @@ export default class ProjectService implements IProjectService {
 
     async verifyIfUserIsFollowingProject(idUser: string, idProject: string): Promise<boolean> {
         return await this.projectRepository.verifyIfUserIsFollowingProject(idUser, idProject);
+    }
+
+    setUserProjectGoodIdea(idUser: string, idProject: string, userProjectAlreadyExist: boolean): void {
+        let goodIdea = new UserProjectGoodIdea(
+            idUser,
+            idProject
+        );
+        if(userProjectAlreadyExist) {
+            this.projectRepository.deleteProjectGoodIdea(goodIdea);
+        } else {
+            this.projectRepository.setProjectGoodIdea(goodIdea);
+        }
+    }
+
+    async userProjectGoodIdeaAlreadyExist(idUser: string, idProject: string): Promise<UserProjectGoodIdea> {
+        let userProject = await this.projectRepository.findUserProjectGoodIdeaById(idUser, idProject);
+        return userProject;
+    }
+
+    async sumCountOfGoodIdeia(idProject: string, userProjectExist: boolean) {
+        const project: any = await this.projectRepository.getById(idProject);
+        if (!project) throw new Error("Project não encontrado.");
+
+        if (userProjectExist) {
+            project!.countGoodIdea--;
+        } else {
+            project!.countGoodIdea++;
+        }
+        await this.projectRepository.update(project!);
     }
 
 }

@@ -11,5 +11,6 @@ export interface IProjectProps {
     updated_at: Date,
     tags: [],
     following: boolean,
-    user: any
+    user: any,
+    goodIdea: boolean
 }

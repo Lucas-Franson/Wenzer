@@ -29,6 +29,11 @@ export const ContainerModal = styled.div`
         font-size: 1.1rem;
     }
 
+    .btnViewing {
+        display: flex;
+        justify-content: space-between;
+    }
+
     > header {
         padding: 10px 20px;
         border-bottom: 1px solid  ${props => props.theme.colors.tertiary};

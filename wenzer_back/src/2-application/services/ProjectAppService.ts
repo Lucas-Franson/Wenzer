@@ -37,6 +37,8 @@ export default class ProjectAppService {
             following = await this.projectService.verifyIfUserIsFollowingProject(idUser, _id);
         }
 
+        let goodIdea = await this.projectService.userProjectGoodIdeaAlreadyExist(idUser, _id);
+
         let viewModel = new ProjectCreateViewModel(
             project?._id ? project._id : "",
             project?.name!,
@@ -47,9 +49,11 @@ export default class ProjectAppService {
             project?.marketing!,
             interestViewModel,
             project?.created_at!,
+            project?.countGoodIdea!,
             project?.userId,
             following,
-            user
+            user,
+            goodIdea != null
         );
 
         return viewModel;
@@ -67,7 +71,8 @@ export default class ProjectAppService {
             project.active,
             project.publicProject,
             project.marketing,
-            userId
+            userId,
+            project.countGoodIdea
         );
         await this.projectService.create(proj);
         this.interestsService.linkProjectToInterests(proj, project.tags);
@@ -82,6 +87,7 @@ export default class ProjectAppService {
             project.publicProject,
             project.marketing,
             userId,
+            project.countGoodIdea,
             project._id,
             project.created_at
         );
@@ -108,6 +114,12 @@ export default class ProjectAppService {
 
     async createPost(userId: string, post: PostCreateViewModel) {
         await this.postService.create(userId, post);
+    }
+
+    async setUserProjectGoodIdea(idUser: string, idProject: string) {
+        const userPostExist = await this.projectService.userProjectGoodIdeaAlreadyExist(idUser, idProject);
+        await this.projectService.sumCountOfGoodIdeia(idProject, userPostExist != null);
+        this.projectService.setUserProjectGoodIdea(idUser, idProject, userPostExist != null);
     }
 
 }

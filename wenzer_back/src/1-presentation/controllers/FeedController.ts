@@ -74,9 +74,41 @@ export default class FeedController {
                 throw new ErroParametro('Falta parâmetro para buscar comentários do post.');
             }
 
-            await req.service.feedAppService.setComments(req.session.userId, postId, text);
+            let comment = await req.service.feedAppService.setComments(req.session.userId, postId, text);
+
+            res.status(200).json(comment);
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async setCommentAsGoodIdea(req: any, res: any, next: any) {
+        const { _id } = req.params;
+        
+        try {
+            if (!_id) {
+                throw new ErroParametro('Falta parâmetro para dar boa ideia no comentário.');
+            }
+
+            await req.service.feedAppService.setPostCommentGoodIdea(req.session.userId, _id);
 
             res.status(200).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async setSubComment(req: any, res: any, next: any) {
+        const { idPostComment, text } = req.body;
+        
+        try {
+            if (!idPostComment|| !text || text.trim() == '') {
+                throw new ErroParametro('Falta parâmetro para buscar sub comentários.');
+            }
+
+            let comment = await req.service.feedAppService.setSubComment(req.session.userId, idPostComment, text);
+
+            res.status(200).json(comment);
         } catch(err) {
             next(err);
         }
