@@ -2,31 +2,39 @@ import styled from 'styled-components';
 import { MediaQueries } from '../../Constants/MediaSettings';
 
 export const Container = styled.div`
-width: min(92vw, 1350px);
-display: flex;
-justify-content: space-between;
-color: ${(props) => props.theme.colors.white.light};
-margin: auto;
-
-font-size: 1rem;
-font-weight: 400;
-margin-top: 5rem;
-
-@media (max-width: 1490px){
-  width: min(92vw, 1200px);
-  font-size: 1rem;
-}
-
-@media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
+  width: min(92vw, 1350px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  justify-content: space-between;
+  color: ${(props) => props.theme.colors.white.light};
+  margin: auto;
 
-@media ${MediaQueries.LAYMODE} {
-  height: 50rem;
-}
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 5rem;
+
+  .ButtonSearch {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 1490px){
+    width: min(92vw, 1200px);
+    font-size: 1rem;
+  }
+
+  @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media ${MediaQueries.LAYMODE} {
+    height: 50rem;
+  }
 `;
 
 export const ContainerProjects = styled.main`
@@ -43,4 +51,48 @@ export const ContainerProjects = styled.main`
     justify-content: space-around;
     flex-wrap: wrap;
   }
+`;
+
+export const ContainerSearch = styled.div`
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: ${props => props.theme.colors.secondary};
+  border-bottom:1px solid ${props => props.theme.colors.succes};
+  box-sizing: border-box;
+  padding: 10px;
+
+  > div {
+    display: flex;
+    justify-content: space-around;
+    
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      input {
+        border: none;
+        transform: scale(1.5);
+
+        @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
+          transform: scale(1);
+        }
+      }
+
+      input:checked {
+        background-color: #ff0000;
+      }
+    }
+
+    @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
+      align-items: flex-start;
+    }
+  }
+
 `;

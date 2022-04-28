@@ -3,7 +3,7 @@ import Avatar from "./components/Avatar";
 import Notify from "./components/Notify";
 import InputSearch from "../InputSearch";
 import { useAuth } from "../../Services/Authentication/auth";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { BsSun, BsMoon } from "react-icons/bs";
@@ -27,6 +27,10 @@ function TopBarFeed(): ReactElement {
 
   const openMenuRef = useRef(false);
   const { singOut } = useAuth();
+
+  const { setSearchKey, searchKey } = useWenzer();
+  
+  const history = useHistory();
 
   const handleChangeTheme = () => {
     setDarkTheme(!darkTheme);
@@ -82,6 +86,19 @@ function TopBarFeed(): ReactElement {
     </ContainerMenu>
   );
 
+  function moveToExplore() {
+    history.push('/explore');
+  }
+
+  function handleChangeSearch(e: any) {
+    setSearchKey(e.target.value);
+
+    if(searchKey.length === 0) {
+      moveToExplore();
+    }
+    
+  }
+
   return (
     <>
       <Container>
@@ -90,7 +107,7 @@ function TopBarFeed(): ReactElement {
           <Link to="/">
             <img src={WenzerLogo} alt="Wenzer" />
           </Link>
-          <InputSearch placeholder="Pesquisar no Wenzer" onChange={() => {}}/>
+          <InputSearch placeholder="Pesquisar no Wenzer" onClick={moveToExplore} onChange={handleChangeSearch} />
         </header>
 
         {/* OPÇÕES -------------------------------------------------------------------- */}

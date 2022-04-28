@@ -1,18 +1,22 @@
 import Cookies from 'js-cookie';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useEffect } from 'react';
+import { MdSearch } from 'react-icons/md';
+import Button from '../../Components/Button';
 import PostProfile from '../../Components/PostProfile';
 import { toastfyError } from '../../Components/Toastfy';
 import { screens } from '../../Constants/MediaSettings';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import { useAuth } from '../../Services/Authentication/auth';
 
-import { Container, ContainerProjects } from './styles';
+import { Container, ContainerProjects, ContainerSearch } from './styles';
 
-const Explorar: React.FC = () => {
-
+function Explorar(): ReactElement {
   const [projects, setProjects] = useState([]);
   const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
+  const [person, setPerson] = useState(false);
+  const [project, setProject] = useState(false);
+  const [post, setPost] = useState(false);
   const { userInfo } = useAuth();
 
   function getProjectsByUser(userId: string) {
@@ -39,6 +43,31 @@ const Explorar: React.FC = () => {
 
   return (
       <Container>
+        <ContainerSearch>
+          <h4>Filtrar por:</h4>
+          <div>
+            <div>
+              <input type="checkbox" onChange={(e) => setPerson(!person)}/>
+              <span>Pessoa</span>
+            </div>
+            <div>
+              <input type="checkbox" onChange={(e) => setProject(!project)}/>
+              <span>Projeto</span>
+            </div>
+            <div>
+              <input type="checkbox" onChange={(e) => setPost(!post)}/>
+              <span>Publicação</span>
+            </div>
+          </div>
+        </ContainerSearch>
+
+        <div className='ButtonSearch'>
+          <Button className="flex button-search">
+            Pesquisar
+            <MdSearch size={20}/>
+          </Button>
+        </div>
+
         <ContainerProjects>
           <div className="wraper">
             {projects.map((item: any, index: number) => (

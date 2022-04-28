@@ -34,6 +34,10 @@ export const ContainerButton = styled.button`
       width: 40%;
     }
 
+    &.button-search {
+      width: 30%;
+    }
+
     &.flex {
       display: flex;
       align-items: center;
