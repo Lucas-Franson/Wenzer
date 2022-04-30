@@ -6,7 +6,7 @@ import imageTeste from '../../Utils/image/bgFgtsDescktop.jpg';
 import ModalProject from '../Modal/ModalProject';
 import { Container, ContainerPostProject } from './styles';
 
-const PostProfile = ({ index, _id, name, photo, countGoodIdea, countFollowers, screen }: any) => {
+const PostProfile = ({ index, _id, name, bio, type, photo, countGoodIdea, countFollowers, screen }: any) => {
 
   const [openModalProject, setOpenModalProject] = useState(false);
 

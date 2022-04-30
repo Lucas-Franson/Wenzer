@@ -8,7 +8,7 @@ import { Connections } from "../../3-domain/entities/conections";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "User";
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export default class UserRepository extends Orm<User> implements IUserRepository {
     
@@ -190,7 +190,7 @@ export default class UserRepository extends Orm<User> implements IUserRepository
                     $count: "count"
                 }
             ]).toArray(function(err: any, results: any) {
-                if (results.length > 0) resolve(results[0].count)
+                if (results && results.length > 0) resolve(results[0].count)
                 else resolve(0);
             });
         });

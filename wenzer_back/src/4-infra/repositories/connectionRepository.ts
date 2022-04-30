@@ -5,7 +5,7 @@ import { MongoClient } from "mongodb";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Connection";
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export class ConnectionRepository extends Orm<Connections> implements IConnectionRepository {
     

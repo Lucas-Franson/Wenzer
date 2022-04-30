@@ -11,7 +11,7 @@ import { UserCommentGoodIdea } from "../../3-domain/entities/userCommentGoodIdea
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Post";
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export class PostRepository extends Orm<Post> implements IPostRepository {
     
@@ -594,7 +594,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     $count: "count"
                 }
             ]).toArray(function(err: any, results: any) {
-                if (results.length > 0) resolve(results[0].count)
+                if (results && results.length > 0) resolve(results[0].count)
                 else resolve(0);
             });
         });
@@ -646,7 +646,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     $count: "count"
                 }
             ]).toArray(function(err: any, results: any) {
-                if (results.length > 0) resolve(results[0].count)
+                if (results && results.length > 0) resolve(results[0].count)
                 else resolve(0);
             });
         });

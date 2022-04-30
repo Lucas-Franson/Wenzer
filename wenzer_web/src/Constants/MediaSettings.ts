@@ -10,7 +10,14 @@ export enum screens {
     Feed,
     HotProjects,
     MyProjects,
-    Profile
+    Profile,
+    Search
+}
+
+export enum searchTypes { 
+    People,
+    Project,
+    Post
 }
 
 export const MediaQueries = {

@@ -5,7 +5,7 @@ import { Orm } from "./orm";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Participant";
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export class ParticipantRepository extends Orm<Participants> implements IParticipantRepository {
 

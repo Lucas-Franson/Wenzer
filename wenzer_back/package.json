@@ -4,7 +4,7 @@
   "description": "Backend da rede social Wenzer",
   "main": "./src/server.ts",
   "scripts": {
-    "start": "ts-node ./src/server.ts",
+    "start": "ts-node ./src/index.ts",
     "build": "tsc",
     "test": "mocha ./test/*",
     "swagger": "node src/swagger.ts"

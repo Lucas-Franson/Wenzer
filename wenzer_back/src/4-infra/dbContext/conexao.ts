@@ -8,7 +8,7 @@ const db_config = {
     host: 'wenzerdb.cbljsy0yxezl.us-east-1.rds.amazonaws.com',
     port: '3306',
     user: 'admin',
-    password: 'Wenzer#2021!',
+    password: 'Wenzer#2022!',
     database: 'wenzer'
 }
 

@@ -4,13 +4,13 @@ import { Container } from './styles';
 
 interface IInputText {
     placeholder?: string;
-    onChange(e: ChangeEvent<HTMLInputElement>): void;
+    onKeyDown(e: ChangeEvent<HTMLInputElement>): void;
     required?: boolean;
     hasError?: boolean;
 }
 
 function InputSearch(props: IInputText & InputHTMLAttributes<HTMLInputElement> ): ReactElement {
-  const { placeholder = '', onChange, required = false, hasError = false} = props;
+  const { placeholder = '', onKeyDown, required = false, hasError = false} = props;
 
   return (
     <Container>
@@ -18,7 +18,7 @@ function InputSearch(props: IInputText & InputHTMLAttributes<HTMLInputElement> )
         className={hasError ? 'hasError' : 'hasOkay'}
         placeholder={placeholder}
         required={required}
-        onChange={onChange}
+        onKeyDown={onKeyDown}
       />
         <MdSearch
           size={30}

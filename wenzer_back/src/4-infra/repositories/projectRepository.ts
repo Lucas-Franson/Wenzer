@@ -7,7 +7,7 @@ import { UserProjectGoodIdea } from "../../3-domain/entities/userProjectGoodIdea
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Project";
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export class ProjectRepository extends Orm<Project> implements IProjectRepository {
 

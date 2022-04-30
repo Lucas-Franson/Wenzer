@@ -86,17 +86,10 @@ function TopBarFeed(): ReactElement {
     </ContainerMenu>
   );
 
-  function moveToExplore() {
-    history.push('/explore');
-  }
-
-  function handleChangeSearch(e: any) {
-    setSearchKey(e.target.value);
-
-    if(searchKey.length === 0) {
-      moveToExplore();
+  function moveToExplore(e: any) {
+    if (e.key === 'Enter') {
+      history.push(`/explore?search=${e.target.value}`);
     }
-    
   }
 
   return (
@@ -107,7 +100,7 @@ function TopBarFeed(): ReactElement {
           <Link to="/">
             <img src={WenzerLogo} alt="Wenzer" />
           </Link>
-          <InputSearch placeholder="Pesquisar no Wenzer" onClick={moveToExplore} onChange={handleChangeSearch} />
+          <InputSearch placeholder="Pesquisar no Wenzer" onKeyDown={(e) => moveToExplore(e)} />
         </header>
 
         {/* OPÇÕES -------------------------------------------------------------------- */}

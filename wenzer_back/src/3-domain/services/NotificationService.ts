@@ -83,9 +83,11 @@ export default class NotificationService implements INotificationService {
         let idNotifications: string[] = [];
 
         let notificationSeen = await this.userRepository.getNotificationSeenWebSocket(dbo, idUser, NotificationType.CommentedOnYourPost);
-        notificationSeen.map((value) => {
-            idNotifications.push(value.idNotification);
-        });
+        if (notificationSeen) {
+            notificationSeen.map((value) => {
+                idNotifications.push(value.idNotification);
+            });
+        }
 
         return await this.postRepository.getCommentsByPostWebService(dbo, idUser, idNotifications);
     }

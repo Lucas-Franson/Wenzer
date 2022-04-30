@@ -12,7 +12,7 @@ import { PostRepository } from "./4-infra/repositories/postRepository";
 import UserRepository from "./4-infra/repositories/userRepository";
 
 const url: string = process.env.BASE_URL_DATABASE!;
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export function websocket(io: any) {
     

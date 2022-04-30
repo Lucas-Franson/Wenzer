@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import { v4 as uuid } from 'uuid';
 
 const url: string = process.env.BASE_URL_DATABASE!;
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export class Orm<T extends DomainBase> implements IOrm<T> {
     async getByWhereClause(whereClause: any): Promise<T[]> {

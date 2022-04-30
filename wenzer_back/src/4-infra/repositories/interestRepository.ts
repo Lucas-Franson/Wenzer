@@ -7,7 +7,7 @@ import { MongoClient } from "mongodb";
 
 const url: string = process.env.BASE_URL_DATABASE!;
 const collection = "Interest";
-const database = "WenzerDB";
+const database = process.env.BASE_NAME_DATABASE!;
 
 export class InterestRepository extends Orm<Interests> implements IInterestRepository {
 
