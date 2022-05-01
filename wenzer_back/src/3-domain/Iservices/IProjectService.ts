@@ -21,4 +21,5 @@ export default interface IProjectService {
     setUserProjectGoodIdea(idUser: string, idProject: string, userProjectAlreadyExist: boolean): void;
     userProjectGoodIdeaAlreadyExist(idUser: string, idProject: string): Promise<UserProjectGoodIdea>;
     sumCountOfGoodIdeia(idProject: string, userProjectExist: boolean): void;
+    search(userId: string, search: string): Promise<Project[]>;
 }

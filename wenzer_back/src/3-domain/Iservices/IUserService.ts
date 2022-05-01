@@ -25,4 +25,5 @@ export interface IUserService {
     deleteConnection(idConnection: string): Promise<void>;
     getConnections(idUser: string): Promise<any>;
     getFriendRequest(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
+    search(userId: string, search: string): Promise<User[]>;
 }

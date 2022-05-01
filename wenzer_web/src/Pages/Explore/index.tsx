@@ -6,6 +6,7 @@ import Button from '../../Components/Button';
 import PostProfile from '../../Components/PostProfile';
 import { toastfyError } from '../../Components/Toastfy';
 import { screens, searchTypes } from '../../Constants/MediaSettings';
+import { useWenzer } from '../../hooks/useWenzer';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import { useAuth } from '../../Services/Authentication/auth';
 
@@ -14,11 +15,13 @@ import { Container, ContainerProjects, ContainerSearch } from './styles';
 function Explorar(): ReactElement {
   const [objects, setObjects] = useState([]);
   const [alreadyGetProjects, setAlreadyGetProjects] = useState(false);
+  const [alreadySearch, setAlreadySearch] = useState(false);
   const [person, setPerson] = useState(false);
   const [project, setProject] = useState(false);
   const [post, setPost] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
   const { userInfo } = useAuth();
+  const { setSearchKey, searchKey } = useWenzer();
 
   function loadSearchFilter() {
     let searchForFilter = window.location.search;
@@ -42,9 +45,36 @@ function Explorar(): ReactElement {
     })
   }
 
+  function search() {
+    let filterByPerson = person ? "&types[]=0" : "";
+    let filterByProject = project ? "&types[]=1" : "";
+    let filterByPost = post ? "&types[]=2" : "";
+    APIServiceAuthenticated.get(`/api/project/search?search=${loadSearchFilter()}${filterByPerson}${filterByProject}${filterByPost}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setObjects(res.data);
+      setAlreadySearch(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function setFilterState(post: boolean, project: boolean, person: boolean) {
+    setPost(post);
+    setProject(project);
+    setPerson(person);
+    setAlreadySearch(false);
+  }
+
   useEffect(() => {
-    let search = loadSearchFilter();
-    if (search) {
+    let filterParams = loadSearchFilter();
+    if (filterParams) {
+      if (!alreadySearch) {
+        search();
+      }
       setIsFiltering(true);
     } else {
       if(!alreadyGetProjects) {
@@ -52,7 +82,7 @@ function Explorar(): ReactElement {
       }
       setIsFiltering(false);
     }
-  });
+  }, [alreadyGetProjects, alreadySearch]);
 
   return (
       <Container>
@@ -60,26 +90,19 @@ function Explorar(): ReactElement {
           <h4>Filtrar por:</h4>
           <div>
             <div>
-              <input type="checkbox" onChange={(e) => setPerson(!person)}/>
+              <input type="checkbox" onChange={(e) => setFilterState(post, project, !person)} />
               <span>Pessoa</span>
             </div>
             <div>
-              <input type="checkbox" onChange={(e) => setProject(!project)}/>
+              <input type="checkbox" onChange={(e) => setFilterState(post, !project, person)} />
               <span>Projeto</span>
             </div>
             <div>
-              <input type="checkbox" onChange={(e) => setPost(!post)}/>
+              <input type="checkbox" onChange={(e) => setFilterState(!post, project, person)} />
               <span>Publicação</span>
             </div>
           </div>
         </ContainerSearch>
-
-        <div className='ButtonSearch' style={{ display: isFiltering ? 'block' : 'none' }}>
-          <Button className="flex button-search">
-            Pesquisar
-            <MdSearch size={20}/>
-          </Button>
-        </div>
 
         <ContainerProjects>
           <div className="wraper">

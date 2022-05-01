@@ -213,6 +213,22 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
         });
     }
 
+    async search(userId: string, search: string): Promise<Project[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection(collection).find({ 
+                    name: new RegExp(["(", search.split(" ").join("|"), ")"].join(""), "i"),
+                    userId: { $ne: userId }
+                }).project({ _id: 1, name: 1, description: 1, photo: 1 }).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db?.close();
+                });
+            });
+        });
+    }
+
     deleteProjectGoodIdea(goodIdea: UserProjectGoodIdea): void {
         MongoClient.connect(url).then(function(db){
             var dbo = db.db(database);

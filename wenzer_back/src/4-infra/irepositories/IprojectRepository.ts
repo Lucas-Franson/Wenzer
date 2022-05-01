@@ -14,4 +14,5 @@ export interface IProjectRepository extends IOrm<Project> {
     setProjectGoodIdea(userProjectGoodIdea: UserProjectGoodIdea): void;
     deleteProjectGoodIdea(goodIdea: UserProjectGoodIdea): void;
     findUserProjectGoodIdeaById(idUser: string, idProject: string): Promise<UserProjectGoodIdea>;
+    search(userId: string, search: string): Promise<Project[]>;
 }

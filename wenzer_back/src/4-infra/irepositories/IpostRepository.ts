@@ -34,4 +34,5 @@ export interface IPostRepository extends IOrm<Post> {
     removeCommentAsGoodIdea(userId: string, idPostComment: string): void;
     setCommentAsGoodIdea(commentGoodIdea: UserCommentGoodIdea): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
+    search(userId: string, search: string): Promise<Post[]>;
 }

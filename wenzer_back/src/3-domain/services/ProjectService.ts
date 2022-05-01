@@ -131,4 +131,8 @@ export default class ProjectService implements IProjectService {
         await this.projectRepository.update(project!);
     }
 
+    async search(userId: string, search: string): Promise<Project[]> {
+        return await this.projectRepository.search(userId, search);
+    }
+
 }

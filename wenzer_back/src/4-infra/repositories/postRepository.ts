@@ -448,6 +448,23 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
+    async search(userId: string, search: string): Promise<Post[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                let filter = new RegExp(["(", search.split(" ").join("|"), ")"].join(""), "i");
+                dbo?.collection(collection).find({ 
+                    title: filter,
+                    idUser: { $ne: userId }
+                }).project({ _id: 1, title: 1, description: 1, photo: 1 }).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db?.close();
+                });
+            });
+        });
+    }
+
     // WEB SERVICE
     async getListUserPostGoodIdeaWebService(whereClause: any, dbo: Db): Promise<UserPostGoodIdea[]> {
         var _self = this;

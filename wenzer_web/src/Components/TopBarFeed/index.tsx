@@ -87,8 +87,12 @@ function TopBarFeed(): ReactElement {
   );
 
   function moveToExplore(e: any) {
+    setSearchKey(e.target.value);
     if (e.key === 'Enter') {
-      history.push(`/explore?search=${e.target.value}`);
+      let filter = e.target.value;
+      if (filter && filter != '' && filter.trim() != '' && filter.length > 0) {
+        history.push(`/explore?search=${e.target.value.trim()}`);
+      }
     }
   }
 
@@ -100,7 +104,7 @@ function TopBarFeed(): ReactElement {
           <Link to="/">
             <img src={WenzerLogo} alt="Wenzer" />
           </Link>
-          <InputSearch placeholder="Pesquisar no Wenzer" onKeyDown={(e) => moveToExplore(e)} />
+          <InputSearch placeholder="Pesquisar no Wenzer" defaultValue={searchKey} onKeyDown={(e) => moveToExplore(e)} />
         </header>
 
         {/* OPÇÕES -------------------------------------------------------------------- */}

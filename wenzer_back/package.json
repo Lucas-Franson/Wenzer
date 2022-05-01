@@ -2,7 +2,7 @@
   "name": "wenzer_back",
   "version": "1.0.0",
   "description": "Backend da rede social Wenzer",
-  "main": "./src/server.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "build": "tsc",

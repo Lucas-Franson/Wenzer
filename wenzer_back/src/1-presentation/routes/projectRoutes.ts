@@ -23,6 +23,17 @@ routes.post('/api/project', AuthUser, projectController.create, () => {
             description: "Internal server error" }
     */
 })
+.get('/api/project/search', AuthUser, projectController.search, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para buscar pessoas, projetos e publicações.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
+})
 .put('/api/project', AuthUser, projectController.update, () => {
     /* 
         #swagger.tags = ["Project"] 
@@ -145,7 +156,8 @@ routes.options([
     '/api/project/follower',
     '/api/project/post',
     '/api/project/byid',
-    '/api/project/goodidea'
+    '/api/project/goodidea',
+    '/api/project/search'
 ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

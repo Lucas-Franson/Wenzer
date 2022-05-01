@@ -81,6 +81,23 @@ export default class ProjectController {
         }
     }
 
+    async search(req: any, res: any, next: any) {
+        var { search, types } = req.query;
+        
+        try {
+            if (search && search != '' && search.trim() != '' && search.length > 0) {
+                if (!types) types = [];
+                const objFound = await req.service.projectAppService.search(req.session.userId, search, types);
+                res.status(200).json(objFound);
+            } 
+            else {
+                throw new ErroParametro("Preencha o que deseja pesquisar.");
+            }
+        } catch(err) {
+            next(err);
+        }
+    }
+
     async follow(req: any, res: any, next: any) {
         const { idProject } = req.body;
         try {

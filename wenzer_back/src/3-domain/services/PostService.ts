@@ -188,6 +188,10 @@ export default class PostService implements IPostService {
         return await this.postRepository.getAllCommentGoodIdeaFromUser(userId);
     }
 
+    async search(userId: string, search: string): Promise<Post[]> {
+        return await this.postRepository.search(userId, search);
+    }
+
     // WEB SERVICE
     async getNewPostToWebService(id: string, dbo: Db) {
         let alreadySeen = await this.postRepository.getDateLastPostSeenWebService(id, dbo);

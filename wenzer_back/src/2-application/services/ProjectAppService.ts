@@ -1,6 +1,7 @@
 import { InterestsFormViewModel } from "../../1-presentation/viewmodel/InterestsFormViewModel";
 import PostCreateViewModel from "../../1-presentation/viewmodel/PostCreateViewModel";
 import { ProjectCreateViewModel } from "../../1-presentation/viewmodel/ProjectCreateViewModel";
+import { SearchType, SearchViewModel } from "../../1-presentation/viewmodel/SearchViewModel";
 import { Project } from "../../3-domain/entities/project";
 import IInterestService from "../../3-domain/Iservices/IInterestService";
 import IPostService from "../../3-domain/Iservices/IPostService";
@@ -101,6 +102,67 @@ export default class ProjectAppService {
 
     async highProjects() {
         return await this.projectService.highProjects();
+    }
+
+    async search(userId: string, search: string, types: SearchType[]) {
+        let found: SearchViewModel[] = [];
+
+        // Procurar por usuário
+        if (types.find(x => x == 0) || types.length == 0) {
+            let user = await this.userService.search(userId, search.toLowerCase().trim());
+            if (user) {
+                user.map((data) => {
+                    let searchViewModel = new SearchViewModel(
+                        data._id,
+                        data.name + " " + data.lastName,
+                        data.bio,
+                        SearchType.People,
+                        data.photo
+                    );
+                    found.push(searchViewModel);
+                });
+            }
+        }
+
+        // Procurar por projeto
+        if (types.find(x => x == 1) || types.length == 0) {
+            let project = await this.projectService.search(userId, search.toLocaleLowerCase().trim());
+            if (project) {
+                project.map((data) => {
+                    let searchViewModel = new SearchViewModel(
+                        data._id,
+                        data.name,
+                        data.description,
+                        SearchType.Project,
+                        data.photo
+                    );
+                    found.push(searchViewModel);
+                });
+            }
+        }
+
+        // Procurar por publicação
+        if (types.find(x => x == 2) || types.length == 0) {
+            let post = await this.postService.search(userId, search.toLocaleLowerCase().trim());
+            if (post) {
+                post.map((data) => {
+                    let searchViewModel = new SearchViewModel(
+                        data._id,
+                        data.title,
+                        data.description,
+                        SearchType.Post,
+                        data.photo
+                    );
+                    found.push(searchViewModel);
+                });
+            }
+        }
+
+        return found.sort((a, b) => {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+            return 0;
+        });
     }
 
     async follow(userId: string, idProject: string) {

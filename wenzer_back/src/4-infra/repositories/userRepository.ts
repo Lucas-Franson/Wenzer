@@ -152,6 +152,29 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         });
     }
 
+    async search(userId: string, search: string): Promise<User[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection(collection).find({ 
+                    $or: [ 
+                        { 
+                            name: new RegExp(["(", search.split(" ").join("|"), ")"].join(""), "i")
+                        }, 
+                        { 
+                            lastName: new RegExp(["(", search.split(" ").join("|"), ")"].join(""), "i")
+                        } 
+                    ],
+                    _id: { $ne: userId }
+                }).project({ _id: 1, name: 1, lastName: 1, bio: 1, photo: 1 }).toArray(function(err: any, results: any) {
+                    resolve(results);
+                    db?.close();
+                });
+            });
+        });
+    }
+
     // WEB SERVICE
     getByIdWebService(userId: string, dbo: Db): Promise<User | null> {
         var _self = this;

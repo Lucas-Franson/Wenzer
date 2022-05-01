@@ -30,4 +30,5 @@ export default interface IPostService {
     setPostAlreadySeenByDate(date: Date, idUser: string): void;
     deletePost(idPost: string): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
+    search(userId: string, search: string): Promise<Post[]>;
 }
