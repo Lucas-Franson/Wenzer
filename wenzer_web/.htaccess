@@ -1,0 +1,5 @@
+Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^wenzer.com.br$ [OR]
+RewriteCond %{HTTP_HOST} ^www.wenzer.com.br$
+RewriteRule ^(.*) https://wenzer.com.br/$1 [P]

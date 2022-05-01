@@ -15,7 +15,7 @@ import socketIo from 'socket.io';
 import http from 'http';
 import { websocket } from './webserver';
 
-const port = 3333;
+const port = 21002;
 
 const oneDay = 1000 * 60 * 60 * 24;
 const app = express(); 

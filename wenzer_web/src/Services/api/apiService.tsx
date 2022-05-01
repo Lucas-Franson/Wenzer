@@ -5,7 +5,7 @@ const {
 } = process.env;
 
 const apiService = axios.create({
-  baseURL: `${REACT_APP_PROTOCOL}://${REACT_APP_SERVER}:${REACT_APP_PORT}`
+  baseURL: `${REACT_APP_PROTOCOL}://${REACT_APP_SERVER}${REACT_APP_PORT == '' ? '' : ':' + REACT_APP_PORT}`
 });
 
 export default apiService;
