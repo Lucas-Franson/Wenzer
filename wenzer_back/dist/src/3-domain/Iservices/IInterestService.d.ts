@@ -1,6 +1,10 @@
+import { InterestsFormViewModel } from "../../1-presentation/viewmodel/InterestsFormViewModel";
 import { Interests } from "../entities/interests";
-import { User } from "../entities/user";
+import { Project } from "../entities/project";
 export default interface IInterestService {
     getAllInterests(): Promise<Interests[]>;
-    linkUserToInterests(user: User, interests: Interests[]): void;
+    linkUserToInterests(user: any, interests: InterestsFormViewModel[]): void;
+    linkProjectToInterests(project: Project, interests: InterestsFormViewModel[]): void;
+    getInterestsByUser(idUser: string): Promise<Interests[]>;
+    getInterestsByProject(idProject: string): Promise<Interests[]>;
 }

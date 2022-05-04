@@ -1,15 +1,21 @@
-import { Interests } from "../../3-domain/entities/interests";
+import { InterestsFormViewModel } from "./InterestsFormViewModel";
 export declare class ProfileViewModel {
-    private name;
-    private bio;
-    private photo;
-    private title;
-    private interests;
-    constructor(name: string, bio: string, photo: any, title: string, interests: Interests[]);
+    _id: string;
+    name: string;
+    lastName: string;
+    bio: string;
+    university: string;
+    interests: InterestsFormViewModel[];
+    photo: any;
+    hasCompany: boolean;
+    countProjects: number;
+    countParticipating: number;
+    constructor(_id: string, name: string, lastName: string, bio: string, university: string, interests: InterestsFormViewModel[], photo: any, hasCompany: boolean, countProjects: number, countParticipating: number);
     getName: () => string;
+    getLastName: () => string;
     getBio: () => string;
-    getPhoto: () => any;
-    getTitle: () => string;
-    getInterests: () => Interests[];
+    getUniversity: () => string;
+    getHasCompany: () => boolean;
+    getInterests: () => InterestsFormViewModel[];
     validateModel(): void;
 }

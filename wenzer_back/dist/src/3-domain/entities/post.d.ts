@@ -1,14 +1,15 @@
 import DomainBase from './domainBase';
 export declare class Post extends DomainBase {
-    _idUser: string;
-    _countViews: number;
-    _title: string;
-    _description: string;
-    _photo: Blob;
-    _idProject: string;
+    idUser: string;
+    countViews: number;
+    title: string;
+    description: string;
+    photo: any;
+    idProject: string;
+    publicPost: boolean;
     _id: string;
-    _created_at: Date;
-    _updated_at: Date;
-    constructor(_idUser: string, _countViews: number, _title: string, _description: string, _photo: Blob, _idProject: string, _id?: string, _created_at?: Date, _updated_at?: Date);
+    created_at: Date;
+    updated_at: Date;
+    constructor(idUser: string, countViews: number, title: string, description: string, photo: any, idProject: string, publicPost: boolean, _id?: string, created_at?: Date, updated_at?: Date);
     validateObject: () => boolean;
 }

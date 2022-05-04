@@ -7,12 +7,12 @@ exports.Interests = void 0;
 const domainBase_1 = __importDefault(require("./domainBase"));
 const uuid_1 = require("uuid");
 class Interests extends domainBase_1.default {
-    constructor(_name, _id = (0, uuid_1.v4)(), _created_at = new Date(), _updated_at = new Date()) {
-        super(_id, _created_at, _updated_at);
-        this._name = _name;
+    constructor(name, _id = (0, uuid_1.v4)(), created_at = new Date(), updated_at = new Date()) {
+        super(_id, created_at, updated_at);
+        this.name = name;
         this._id = _id;
-        this._created_at = _created_at;
-        this._updated_at = _updated_at;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
         this.validateObject = () => {
             return true;
         };

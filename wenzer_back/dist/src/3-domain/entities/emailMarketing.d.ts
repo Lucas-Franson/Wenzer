@@ -1,11 +1,11 @@
 import DomainBase from './domainBase';
 export declare class EmailMarketing extends DomainBase {
-    _email: string;
-    _emailValid: Boolean;
+    email: string;
+    emailValid: Boolean;
     _id: string;
-    _created_at: Date;
-    _updated_at: Date;
-    constructor(_email: string, _emailValid?: Boolean, _id?: string, _created_at?: Date, _updated_at?: Date);
+    created_at: Date;
+    updated_at: Date;
+    constructor(email: string, emailValid?: Boolean, _id?: string, created_at?: Date, updated_at?: Date);
     emailIsValid: () => Boolean;
     validateEmail: () => void;
     invalidateEmail: () => void;

@@ -26,13 +26,14 @@ class LoginAppService {
                 }
                 let user = userViewModel.convertToUserEntity();
                 if (userFound && !userFound.emailIsValid()) {
-                    user = new user_1.User(userViewModel.getName(), userViewModel.getEmail(), userViewModel.getPassword(), userFound._title, userFound._photo, userFound._bio, false, userFound.getId(), userFound.getCreatedAt(), new Date());
+                    user = new user_1.User(userViewModel.getName(), userViewModel.getLastName(), userViewModel.getEmail(), userViewModel.getPassword(), userViewModel.getUniversity(), userFound.title, userFound.photo, userFound.bio, userViewModel.getHasCompany(), false, userFound._id, userFound.created_at, new Date());
                     yield this.userService.updateUserNewPwd(user, userViewModel.getPassword());
                 }
                 else {
-                    yield this.userService.create(user);
+                    let _id = yield this.userService.create(user);
+                    user._id = _id;
+                    yield this.userService.sendEmailOfVerification(user);
                 }
-                yield this.userService.sendEmailOfVerification(user);
                 return user.getId();
             }
             catch (err) {
@@ -54,9 +55,16 @@ class LoginAppService {
             if (!found.emailIsValid()) {
                 throw new erros_1.ValideSeuEmail("Valide seu email para continuar.");
             }
-            const accessToken = (0, token_1.createTokenJWT)(found.getId(), [1, 'h']);
-            return accessToken;
+            return this.createLoginReturnJson(found);
         });
+    }
+    createLoginReturnJson(found) {
+        const accessToken = (0, token_1.createTokenJWT)(found.getId());
+        const id = found.getId();
+        const name = found.getName();
+        const email = found.getEmail();
+        const photo = found.getPhoto();
+        return { id, name, email, photo, accessToken };
     }
     logout(session) {
         return __awaiter(this, void 0, void 0, function* () {

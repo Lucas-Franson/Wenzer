@@ -19,7 +19,7 @@ class LoginController {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, password } = req.body;
             try {
-                const accessToken = yield req.service.loginService.verifyUser({ email, password });
+                const accessToken = yield req.service.loginAppService.verifyUser({ email, password });
                 res.status(200).json({ token: accessToken });
             }
             catch (err) {
@@ -31,7 +31,7 @@ class LoginController {
     logout(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield req.service.loginService.logout(req.session);
+                yield req.service.loginAppService.logout(req.session);
                 res.status(200).json({ message: "Usuário desconectado" });
             }
             catch (err) {
@@ -41,10 +41,11 @@ class LoginController {
     }
     register(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = new UserRegisterViewModel_1.UserRegisterViewModel(req.body.name, req.body.email, req.body.password);
+            const { name, lastName, email, password, university, hasCompany } = req.body;
+            const user = new UserRegisterViewModel_1.UserRegisterViewModel(name, lastName, email, password, university, hasCompany);
             try {
                 user.validateModel();
-                const id = yield req.service.loginService.register(user);
+                const id = yield req.service.loginAppService.register(user);
                 return res.status(201).json({ id });
             }
             catch (err) {
@@ -57,7 +58,7 @@ class LoginController {
             const response = { mensagem: 'Se encontrarmos um usuário com este email, enviaremos o link para alterar a senha.' };
             try {
                 const { email } = req.body;
-                yield req.service.loginService.recoverPassword({ email });
+                yield req.service.loginAppService.recoverPassword({ email });
                 res.status(200).json(response);
             }
             catch (err) {
@@ -69,7 +70,7 @@ class LoginController {
         return __awaiter(this, void 0, void 0, function* () {
             const { token } = req.params;
             try {
-                yield req.service.loginService.verifyEmail(token);
+                yield req.service.loginAppService.verifyEmail(token);
                 return res.status(200).end();
             }
             catch (err) {
@@ -88,7 +89,7 @@ class LoginController {
             const { token } = req.params;
             const { password } = req.body;
             try {
-                yield req.service.loginService.alterPassword(token, password);
+                yield req.service.loginAppService.alterPassword(token, password);
                 return res.status(200).end();
             }
             catch (err) {
@@ -103,7 +104,7 @@ class LoginController {
         return __awaiter(this, void 0, void 0, function* () {
             const { email } = req.body;
             try {
-                yield req.service.loginService.salvarEmailMarketing(email);
+                yield req.service.loginAppService.salvarEmailMarketing(email);
                 return res.status(200).end();
             }
             catch (err) {
@@ -116,7 +117,7 @@ class LoginController {
         return __awaiter(this, void 0, void 0, function* () {
             const { token } = req.params;
             try {
-                yield req.service.loginService.confirmarEmailMarketing(token);
+                yield req.service.loginAppService.confirmarEmailMarketing(token);
                 return res.status(200).end();
             }
             catch (err) {

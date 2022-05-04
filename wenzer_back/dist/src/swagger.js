@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const UserPostCommentViewModel_1 = require("./1-presentation/viewmodel/UserPostCommentViewModel");
 const swaggerAutogen = require('swagger-autogen')();
 const outputFile = './src/swagger_output.json';
 const endpointsFiles = ['./src/1-presentation/routes/index.ts'];
@@ -94,6 +96,18 @@ const doc = {
             password: "*******",
             created_at: new Date().toString(),
             updated_at: new Date().toString()
+        },
+        PostCommentsViewModel: {
+            id: "GUID",
+            idUser: "GUID",
+            idPost: "GUID",
+            usuario: UserPostCommentViewModel_1.UserPostCommentViewModel,
+            created_at: new Date().toString()
+        },
+        UserPostCommentViewModel: {
+            id: "GUID",
+            name: "João",
+            photo: "File"
         }
     }
 };

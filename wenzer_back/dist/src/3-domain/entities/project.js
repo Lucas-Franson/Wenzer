@@ -7,16 +7,20 @@ exports.Project = void 0;
 const domainBase_1 = __importDefault(require("./domainBase"));
 const uuid_1 = require("uuid");
 class Project extends domainBase_1.default {
-    constructor(_name, _description, _photo, _active, _publicProject, _id = (0, uuid_1.v4)(), _created_at = new Date(), _updated_at = new Date()) {
-        super(_id, _created_at, _updated_at);
-        this._name = _name;
-        this._description = _description;
-        this._photo = _photo;
-        this._active = _active;
-        this._publicProject = _publicProject;
+    constructor(name, description, photo, active, publicProject, marketing, userId, countGoodIdea, _id = (0, uuid_1.v4)(), created_at = new Date(), updated_at = new Date()) {
+        super(_id, created_at, updated_at);
+        this.name = name;
+        this.description = description;
+        this.photo = photo;
+        this.active = active;
+        this.publicProject = publicProject;
+        this.marketing = marketing;
+        this.userId = userId;
+        this.countGoodIdea = countGoodIdea;
         this._id = _id;
-        this._created_at = _created_at;
-        this._updated_at = _updated_at;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.getId = () => { return this._id; };
         this.validateObject = () => {
             return true;
         };

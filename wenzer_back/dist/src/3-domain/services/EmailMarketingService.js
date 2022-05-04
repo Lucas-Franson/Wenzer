@@ -18,15 +18,23 @@ class EmailMarketingService {
     }
     findEmailMarketing(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const where = `WHERE Email = '${email}'`;
-            return yield this.emailMarketingRepository.get(where);
+            const where = { email };
+            const emailMarketing = yield this.emailMarketingRepository.getByWhereClause(where);
+            if (emailMarketing.length > 0) {
+                return emailMarketing[0];
+            }
+            return null;
         });
     }
     findEmailMarketingByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             const email = (0, token_1.verifyTokenJWT)(token);
-            const where = `WHERE Email = '${email}'`;
-            return yield this.emailMarketingRepository.get(where);
+            const where = { email };
+            const emailMarketing = yield this.emailMarketingRepository.getByWhereClause(where);
+            if (emailMarketing.length > 0) {
+                return emailMarketing[0];
+            }
+            return null;
         });
     }
     create(email) {
@@ -46,7 +54,7 @@ class EmailMarketingService {
     }
     sendEmailMarketingVerification(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const token = (0, token_1.createTokenJWT)(email, [1, 'h']);
+            const token = (0, token_1.createTokenJWT)(email);
             const route = '?token=';
             const address = `${process.env.BASE_URL_WEB}${route}${token}`;
             if (process.env.ENVIRONMENT === 'desenv')

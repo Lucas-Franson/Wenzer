@@ -1,9 +1,12 @@
 import DomainBase from './domainBase';
 export declare class Participants extends DomainBase {
-    _active: boolean;
+    idProject: string;
+    idUser: string;
+    accepted: boolean;
+    role: string;
     _id: string;
-    _created_at: Date;
-    _updated_at: Date;
-    constructor(_active: boolean, _id?: string, _created_at?: Date, _updated_at?: Date);
+    created_at: Date;
+    updated_at: Date;
+    constructor(idProject: string, idUser: string, accepted: boolean, role: string, _id?: string, created_at?: Date, updated_at?: Date);
     validateObject: () => boolean;
 }

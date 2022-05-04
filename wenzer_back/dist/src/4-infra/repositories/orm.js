@@ -10,93 +10,97 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Orm = void 0;
-const conexao_1 = require("../dbContext/conexao");
+const mongodb_1 = require("mongodb");
+const uuid_1 = require("uuid");
+const url = process.env.BASE_URL_DATABASE;
+const database = process.env.BASE_NAME_DATABASE;
 class Orm {
-    get(whereClause) {
+    getByWhereClause(whereClause) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _self = this;
             const tableName = this.constructor["name"].replace("Repository", "");
-            const sql = `SELECT * FROM ${tableName} ${whereClause}`;
-            let result = yield (0, conexao_1.queryPromise)(sql);
-            return result[0];
-        });
-    }
-    getAll(whereClause) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const tableName = this.constructor["name"].replace("Repository", "");
-            const sql = `SELECT * FROM ${tableName} ${whereClause}`;
-            let result = yield (0, conexao_1.queryPromise)(sql);
-            return result;
+            return new Promise(function (resolve, reject) {
+                mongodb_1.MongoClient.connect(url).then(function (db) {
+                    var dbo = db.db(database);
+                    dbo.collection(tableName).find(whereClause).toArray(function (err, results) {
+                        const result = _self.handleArrayResult(results);
+                        resolve(result);
+                        db.close();
+                    });
+                });
+            });
         });
     }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _self = this;
             const tableName = this.constructor["name"].replace("Repository", "");
-            const sql = `SELECT * FROM ${tableName} WHERE ID = '${id}' LIMIT 1`;
-            let result = yield (0, conexao_1.queryPromise)(sql);
-            return result.length > 0 ? result[0] : null;
+            return new Promise(function (resolve, reject) {
+                mongodb_1.MongoClient.connect(url).then(function (db) {
+                    var dbo = db.db(database);
+                    dbo.collection(tableName).findOne({ _id: id }, {}).then(function (results) {
+                        const result = _self.handleResult(results);
+                        resolve(result);
+                        db.close();
+                    });
+                });
+            });
         });
     }
     insert(object) {
         return __awaiter(this, void 0, void 0, function* () {
             const tableName = this.constructor["name"].replace("Repository", "");
-            if (!object.validateObject())
-                throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
-            const sql = `INSERT INTO ${tableName} SET ?`;
-            yield conexao_1.conexao.query(sql, object, (err) => {
+            mongodb_1.MongoClient.connect(url, function (err, db) {
                 if (err)
-                    throw new Error(err);
+                    throw err;
+                var dbo = db === null || db === void 0 ? void 0 : db.db(database);
+                object._id = (0, uuid_1.v4)();
+                object.created_at = new Date();
+                object.updated_at = new Date();
+                dbo === null || dbo === void 0 ? void 0 : dbo.collection(tableName).insertOne(object, function (err, res) {
+                    if (err)
+                        throw err;
+                    db === null || db === void 0 ? void 0 : db.close();
+                });
             });
         });
     }
     update(object) {
         return __awaiter(this, void 0, void 0, function* () {
             const tableName = this.constructor["name"].replace("Repository", "");
-            if (!object.validateObject())
-                throw new Error(`${this._capitalizeFirstLetter(tableName)} possui dados incorretos.`);
-            const sql = `UPDATE ${tableName}
-                     SET ${this._createSetOfData(object)}
-                     WHERE ID = "${object.getId()}"`;
-            conexao_1.conexao.query(sql, (err) => {
+            mongodb_1.MongoClient.connect(url, function (err, db) {
                 if (err)
-                    throw new Error(err);
+                    throw err;
+                var dbo = db === null || db === void 0 ? void 0 : db.db(database);
+                object.updated_at = new Date();
+                dbo === null || dbo === void 0 ? void 0 : dbo.collection(tableName).updateOne({ _id: object._id }, { $set: object }, function (err, res) {
+                    if (err)
+                        throw err;
+                    db === null || db === void 0 ? void 0 : db.close();
+                });
             });
         });
     }
-    _capitalizeFirstLetter(word) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    }
-    _createSetOfData(object) {
-        const arrPropertiesName = Object.getOwnPropertyNames(object);
-        const arrNamesToIgnore = ['id', 'created_at'];
-        let setClause = '';
-        for (let name of arrPropertiesName.filter((el) => el != "" &&
-            el.charAt(0) === "_" &&
-            !arrNamesToIgnore.includes(el))) {
-            if (!name)
-                continue;
-            setClause += setClause !== '' ? ', ' : '';
-            const propertieValue = object[name];
-            setClause += `${name.replace('_', '')} = ${this._formatPropertyValueToSQL(propertieValue)}`;
-        }
-        return setClause;
-    }
-    _formatPropertyValueToSQL(property) {
-        if (typeof property === 'boolean') {
-            return property ? '1' : '0';
-        }
-        else {
-            return `'${property}'`;
-        }
-    }
-    delete(object) {
+    delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const tableName = this.constructor["name"].replace("Repository", "");
-            const sql = `DELETE FROM ${tableName} WHERE ID = ${object.getId()}`;
-            conexao_1.conexao.query(sql, (err) => {
+            mongodb_1.MongoClient.connect(url, function (err, db) {
                 if (err)
-                    throw new Error(err);
+                    throw err;
+                var dbo = db === null || db === void 0 ? void 0 : db.db(database);
+                dbo === null || dbo === void 0 ? void 0 : dbo.collection(tableName).deleteOne({ _id: id }, function (err, res) {
+                    if (err)
+                        throw err;
+                    db === null || db === void 0 ? void 0 : db.close();
+                });
             });
         });
+    }
+    handleArrayResult(result) {
+        throw new Error("Method not implemented.");
+    }
+    handleResult(result) {
+        throw new Error("Method not implemented.");
     }
 }
 exports.Orm = Orm;
