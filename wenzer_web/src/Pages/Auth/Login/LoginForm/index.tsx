@@ -40,7 +40,7 @@ function Login() {
       history.push('/');
     })
     .catch((err) => {
-      toastfyError(err.response.data.mensagem);
+      toastfyError(err?.response?.data?.mensagem);
       setIsLoading(false);
       setIsRequesting(false);
     });
