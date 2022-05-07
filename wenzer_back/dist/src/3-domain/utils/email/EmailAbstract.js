@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Email = void 0;
-const aws_sdk_1 = __importDefault(require("aws-sdk"));
 const logger_1 = __importDefault(require("../../../4-infra/utils/logger"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 class Email {
     constructor(_from, _to, _subject, _text, _html) {
         this.From = '';
@@ -33,32 +33,28 @@ class Email {
      */
     sendEmail() {
         return __awaiter(this, void 0, void 0, function* () {
-            aws_sdk_1.default.config.update({ region: 'us-east-1' });
-            const params = {
-                Destination: {
-                    ToAddresses: [
-                        this.To
-                    ]
-                },
-                Message: {
-                    Body: {
-                        Html: {
-                            Charset: "UTF-8",
-                            Data: this.Html
-                        }
-                    },
-                    Subject: {
-                        Charset: 'UTF-8',
-                        Data: this.Subject
-                    }
-                },
-                Source: this.From
+            var transporter = nodemailer_1.default.createTransport({
+                host: 'smtp.hostinger.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: 'suporte@wenzer.com.br',
+                    pass: 'Wenzer#2022!'
+                }
+            });
+            var mailOptions = {
+                from: '"Wenzer" <suporte@wenzer.com.br>',
+                to: this.To,
+                subject: this.Subject,
+                html: this.Html
             };
-            var sendPromise = new aws_sdk_1.default.SES({ apiVersion: "2012-10-17" }).sendEmail(params).promise();
-            sendPromise.then(function (data) {
-                new logger_1.default('Sent Email', data.MessageId).log();
-            }).catch(function (err) {
-                new logger_1.default('Send Email Error', err).log();
+            transporter.sendMail(mailOptions, function (err, info) {
+                if (err) {
+                    new logger_1.default('Send Email Error', err === null || err === void 0 ? void 0 : err.message).log();
+                }
+                else {
+                    new logger_1.default('Sent Email', info === null || info === void 0 ? void 0 : info.messageId).log();
+                }
             });
         });
     }

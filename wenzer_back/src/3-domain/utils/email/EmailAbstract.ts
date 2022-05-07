@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
 import Logger from '../../../4-infra/utils/logger';
+import nodemailer from 'nodemailer';
 
 export abstract class Email {
 
@@ -21,38 +21,30 @@ export abstract class Email {
      * @description Cria o transportador e realiza o envio do email
      */
     async sendEmail() {
-        AWS.config.update({region: 'us-east-1'});
+        var transporter = nodemailer.createTransport({
+          host: 'smtp.hostinger.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'suporte@wenzer.com.br',
+            pass: 'Wenzer#2022!'
+          }
+        });
 
-        const params = {
-            Destination: { 
-              ToAddresses: [
-                this.To
-              ]
-            },
-            Message: {
-              Body: { 
-                Html: {
-                 Charset: "UTF-8",
-                 Data: this.Html
-                }
-               },
-               Subject: {
-                Charset: 'UTF-8',
-                Data: this.Subject
-               }
-              },
-            Source: this.From
+        var mailOptions = {
+          from: '"Wenzer" <suporte@wenzer.com.br>',
+          to: this.To,
+          subject: this.Subject,
+          html: this.Html
         };
 
-        var sendPromise = new AWS.SES({apiVersion: "2012-10-17"}).sendEmail(params).promise();
-
-        sendPromise.then(
-            function(data) {
-              new Logger('Sent Email', data.MessageId).log();
-            }).catch(
-              function(err) {
-                new Logger('Send Email Error', err).log();
-            });
+        transporter.sendMail(mailOptions, function (err, info) {
+          if (err) {
+            new Logger('Send Email Error', err?.message).log();
+          } else {
+            new Logger('Sent Email', info?.messageId).log();
+          }
+        });
     }
 
     /**
