@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { promisify } from 'util';
+import Logger from '../../../4-infra/utils/logger';
 import { Email } from './EmailAbstract';
 import { IEmail } from "./IEmail";
 
@@ -18,11 +19,16 @@ export class EmailVerify extends Email implements IEmail {
     }
 
     async prepareHTML(link: string): Promise<void> {
-        const _self = this;
-        const text = await readFile(
-            './src/1-presentation/views/email-confirmed-community.html', 
-            'utf8').then((data: string) => {
-            _self.Html = data.replace('$_TOKEN_$', link);
-        });
+        try {
+            
+            const _self = this;
+            const text = await readFile(
+                './src/1-presentation/views/email-confirmed-community.html', 
+                'utf8').then((data: string) => {
+                _self.Html = data.replace('$_TOKEN_$', link);
+            });
+        } catch (err: any) {
+            new Logger('Get View Email Error', err?.message).log();
+        }
     }
 }
