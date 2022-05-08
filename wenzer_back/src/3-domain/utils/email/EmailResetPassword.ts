@@ -3,6 +3,7 @@ import { promisify } from 'util';
 import fs from 'fs';
 import { User } from "../../entities/user";
 const readFile = promisify(fs.readFile);
+const html = require("../../../1-presentation/views/Alterar_Senha.html");
 
 export class EmailResetPassword extends Email {
     constructor(user: User, address: string) {
@@ -18,7 +19,7 @@ export class EmailResetPassword extends Email {
     async prepareHTML(link: string): Promise<void> {
         const _self = this;
         const text = await readFile(
-            '../../../1-presentation/views/Alterar_Senha.html', 
+            html, 
             'utf8').then((data: string) => {
             _self.Html = data.replace('$_URL_UPDATE_$', link);
         });

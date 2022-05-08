@@ -17,6 +17,7 @@ const EmailAbstract_1 = require("./EmailAbstract");
 const util_1 = require("util");
 const fs_1 = __importDefault(require("fs"));
 const readFile = (0, util_1.promisify)(fs_1.default.readFile);
+const html = require("../../../1-presentation/views/Alterar_Senha.html");
 class EmailResetPassword extends EmailAbstract_1.Email {
     constructor(user, address) {
         super('"Wenzer" <wenzer.marketing@gmail.com>', user.email, 'Redefinicação de senha', `Olá! Segue o link de redefinição de senha: ${address}`, '');
@@ -24,7 +25,7 @@ class EmailResetPassword extends EmailAbstract_1.Email {
     prepareHTML(link) {
         return __awaiter(this, void 0, void 0, function* () {
             const _self = this;
-            const text = yield readFile('../../../1-presentation/views/Alterar_Senha.html', 'utf8').then((data) => {
+            const text = yield readFile(html, 'utf8').then((data) => {
                 _self.Html = data.replace('$_URL_UPDATE_$', link);
             });
         });

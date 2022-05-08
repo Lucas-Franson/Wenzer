@@ -3,6 +3,7 @@ import { promisify } from 'util';
 import Logger from '../../../4-infra/utils/logger';
 import { Email } from './EmailAbstract';
 import { IEmail } from "./IEmail";
+const html = require("../../../1-presentation/views/email-confirmed-community.html");
 
 const readFile = promisify(fs.readFile);
 
@@ -23,7 +24,7 @@ export class EmailVerify extends Email implements IEmail {
             
             const _self = this;
             const text = await readFile(
-                '../../../1-presentation/views/email-confirmed-community.html', 
+                html, 
                 'utf8').then((data: string) => {
                 _self.Html = data.replace('$_TOKEN_$', link);
             });
