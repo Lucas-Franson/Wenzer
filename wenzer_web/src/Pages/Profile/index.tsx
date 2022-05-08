@@ -34,7 +34,6 @@ function Profile(): ReactElement {
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
   const [post, setPost] = useState<any>([]);
   const history = useHistory();
-  const [viewConnection, setViewConnection] = useState(false);
   
   // CONTROL REQUESTS
 
@@ -42,8 +41,9 @@ function Profile(): ReactElement {
   const [alreadyGetInterests, setAlreadyGetInterests] = useState(false);
   const [alreadyGetUserInfo, setAlreadyGetUserInfo] = useState(false);
 
-  const [test, setTest] = useState(false);
+  const [alreadyConnected, setAlreadyConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingFollow, setIsLoadingFollow] = useState(false);
   const [alreadyGetAllInterests, setAlreadyGetAllInterests] = useState(false);
 
   // FORM UPDATE PROFILE
@@ -148,6 +148,7 @@ function Profile(): ReactElement {
       }
     }).then(res => {
       if (res.data) {
+        setAlreadyConnected(res.data.alreadyConnected);
         setName(res.data.name);
         setLastName(res.data.lastName);
         setBio(res.data.bio);
@@ -208,6 +209,29 @@ function Profile(): ReactElement {
       setIsLoading(false);
     })
 
+  }
+
+  function followUser(event: FormEvent) {
+    event.preventDefault();
+
+    if (userAuthSameProfile()) return;
+
+    setIsLoadingFollow(true);
+    let user = loadTokenEmail();
+
+    APIServiceAuthenticated.post(`/api/profile/follow`, { idUserToFollow: user }, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      toastfySuccess("Você enviou uma solicitação de amizade para este usuário.");
+      setIsLoadingFollow(false);
+      setAlreadyConnected(true);
+
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoadingFollow(false);
+    })
   }
 
   useEffect(() => {
@@ -308,8 +332,19 @@ function Profile(): ReactElement {
             </div>
 
             <div className="counterProject">
-             {!test ? (
-               <>
+             {!userAuthSameProfile() && !alreadyConnected ? (
+               <div className="counter">
+                  <Button className="onlyBorder flex white-content" onClick={followUser}>
+                    <MdPersonAdd size={20}/>
+                    {isLoadingFollow ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : (
+                      "Conectar"
+                    )}
+                  </Button>
+                </div>
+             ) : (
+              <>
                   <div className="counter">
                     <span>Projetos</span>
                     <span>{userProfileInfo?.countProjects}</span>
@@ -318,14 +353,7 @@ function Profile(): ReactElement {
                     <span>Participando</span>
                     <span>{userProfileInfo?.countParticipating}</span>
                   </div>
-               </>
-             ) : (
-                <div className="counter">
-                  <Button className="onlyBorder flex white-content">
-                    <MdPersonAdd size={20}/>
-                    Conectar
-                  </Button>
-                </div>
+              </>
              )}
             </div>
 

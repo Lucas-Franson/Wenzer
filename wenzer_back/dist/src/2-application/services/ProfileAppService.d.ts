@@ -12,7 +12,7 @@ export default class ProfileAppService {
     private readonly postService;
     constructor(userService: IUserService, interestsService: IInterestService, projectService: IProjectService, postService: IPostService);
     getAllInterests(): Promise<InterestsFormViewModel[]>;
-    getInfoUser(idUser: string): Promise<ProfileViewModel>;
+    getInfoUser(idUserServer: string, idUser: string): Promise<ProfileViewModel>;
     editProfile(userId: string, profile: ProfileViewModel): Promise<void>;
     editPhoto(userId: string, photo: any): Promise<string>;
     followUser(userId: string, idUserToFollow: string): Promise<void>;

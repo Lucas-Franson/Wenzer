@@ -28,4 +28,5 @@ export interface IUserService {
         name: string;
     }[]>;
     search(userId: string, search: string): Promise<User[]>;
+    alreadyConnected(idUserServer: string, idUser: string): Promise<boolean>;
 }

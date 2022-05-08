@@ -167,6 +167,11 @@ class UserService {
             return yield this.connectionRepository.getConnectionOfUser(idUser);
         });
     }
+    alreadyConnected(idUserServer, idUser) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.connectionRepository.alreadyConnected(idUserServer, idUser);
+        });
+    }
     getFriendRequest(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.userRepository.getFriendRequest(userId);

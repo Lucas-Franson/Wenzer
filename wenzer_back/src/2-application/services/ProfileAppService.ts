@@ -29,10 +29,15 @@ export default class ProfileAppService {
         return newInterests;
     }
 
-    async getInfoUser(idUser: string) {
+    async getInfoUser(idUserServer: string, idUser: string) {
         let user = await this.userService.findUserById(idUser);
         let countProjects = await this.projectService.getCountOfProjectsByUser(idUser);
         let countParticipating = await this.projectService.getCountOfParticipatingByUser(idUser);
+        let alreadyConnected = false;
+
+        if (idUser != idUserServer) {
+            alreadyConnected = await this.userService.alreadyConnected(idUserServer, idUser);
+        }
 
         return new ProfileViewModel(
             user?._id!,
@@ -44,7 +49,8 @@ export default class ProfileAppService {
             user?.photo,
             user?.hasCompany!,
             countProjects?.count,
-            countParticipating?.count
+            countParticipating?.count,
+            alreadyConnected
         )
     }
 

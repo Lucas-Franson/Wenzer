@@ -81,6 +81,34 @@ class ConnectionRepository extends orm_1.Orm {
             });
         });
     }
+    alreadyConnected(idUserServer, idUser) {
+        return new Promise(function (resolve, reject) {
+            mongodb_1.MongoClient.connect(url).then(function (db) {
+                var dbo = db.db(database);
+                dbo.collection('Connection').find({
+                    $and: [
+                        { $or: [
+                                { idUser: idUser },
+                                { idFollower: idUser }
+                            ] },
+                        { $or: [
+                                { idUser: idUserServer },
+                                { idFollower: idUserServer }
+                            ]
+                        }
+                    ]
+                }).toArray(function (err, results) {
+                    if (results && results.length > 0) {
+                        resolve(true);
+                    }
+                    else {
+                        resolve(false);
+                    }
+                    db.close();
+                });
+            });
+        });
+    }
     handleArrayResult(result) {
         if (result && result instanceof Array && result.length > 0) {
             let connections = [];

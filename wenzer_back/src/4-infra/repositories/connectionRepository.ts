@@ -83,6 +83,33 @@ export class ConnectionRepository extends Orm<Connections> implements IConnectio
         });
     }
 
+    alreadyConnected(idUserServer: string, idUser: string): Promise<boolean> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(function(db){
+                var dbo = db.db(database);
+                dbo.collection('Connection').find({ 
+                    $and: [
+                        { $or: [
+                            { idUser: idUser }, 
+                            { idFollower: idUser }
+                        ]}, 
+                        { $or: [
+                            { idUser: idUserServer },
+                            { idFollower: idUserServer } 
+                        ]
+                    }] 
+                }).toArray(function(err: any, results: any) {
+                    if (results && results.length > 0) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                    db.close();
+                });
+            });
+        });
+    }
+
     handleArrayResult(result: Connections[]) {
         if (result && result instanceof Array && result.length > 0) {
             let connections: any[] = [];

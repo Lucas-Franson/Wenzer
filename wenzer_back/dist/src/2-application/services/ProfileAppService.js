@@ -34,12 +34,16 @@ class ProfileAppService {
             return newInterests;
         });
     }
-    getInfoUser(idUser) {
+    getInfoUser(idUserServer, idUser) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield this.userService.findUserById(idUser);
             let countProjects = yield this.projectService.getCountOfProjectsByUser(idUser);
             let countParticipating = yield this.projectService.getCountOfParticipatingByUser(idUser);
-            return new ProfileViewModel_1.ProfileViewModel(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.lastName, user === null || user === void 0 ? void 0 : user.bio, user === null || user === void 0 ? void 0 : user.university, [], user === null || user === void 0 ? void 0 : user.photo, user === null || user === void 0 ? void 0 : user.hasCompany, countProjects === null || countProjects === void 0 ? void 0 : countProjects.count, countParticipating === null || countParticipating === void 0 ? void 0 : countParticipating.count);
+            let alreadyConnected = false;
+            if (idUser != idUserServer) {
+                alreadyConnected = yield this.userService.alreadyConnected(idUserServer, idUser);
+            }
+            return new ProfileViewModel_1.ProfileViewModel(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.lastName, user === null || user === void 0 ? void 0 : user.bio, user === null || user === void 0 ? void 0 : user.university, [], user === null || user === void 0 ? void 0 : user.photo, user === null || user === void 0 ? void 0 : user.hasCompany, countProjects === null || countProjects === void 0 ? void 0 : countProjects.count, countParticipating === null || countParticipating === void 0 ? void 0 : countParticipating.count, alreadyConnected);
         });
     }
     editProfile(userId, profile) {

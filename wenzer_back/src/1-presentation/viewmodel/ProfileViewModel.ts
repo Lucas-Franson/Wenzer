@@ -14,7 +14,8 @@ export class ProfileViewModel {
         public photo: any,
         public hasCompany: boolean,
         public countProjects: number,
-        public countParticipating: number
+        public countParticipating: number,
+        public alreadyConnected: boolean = false
     ) {
 
     }

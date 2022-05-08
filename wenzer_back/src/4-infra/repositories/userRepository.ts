@@ -190,23 +190,12 @@ export default class UserRepository extends Orm<User> implements IUserRepository
         return new Promise(function(resolve, reject){ 
             dbo.collection("Connection").aggregate([
                 {
-                    $lookup: {
-                        from: 'User',
-                        localField: 'idFollower',
-                        foreignField: '_id',
-                        as: 'user'
-                    }
-                },
-                {
-                    $unwind: "$user"
-                },
-                {
                     $match: {
                         _id: {
                             $nin: idNotifications
                         },
-                        idFollower: idUser,
-                        accepted: false
+                        accepted: false,
+                        idUser: idUser
                     }
                 },
                 {

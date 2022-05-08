@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfileViewModel = void 0;
 const erros_1 = require("../../erros");
 class ProfileViewModel {
-    constructor(_id, name, lastName, bio, university, interests, photo, hasCompany, countProjects, countParticipating) {
+    constructor(_id, name, lastName, bio, university, interests, photo, hasCompany, countProjects, countParticipating, alreadyConnected = false) {
         this._id = _id;
         this.name = name;
         this.lastName = lastName;
@@ -14,6 +14,7 @@ class ProfileViewModel {
         this.hasCompany = hasCompany;
         this.countProjects = countProjects;
         this.countParticipating = countParticipating;
+        this.alreadyConnected = alreadyConnected;
         this.getName = () => { return this.name; };
         this.getLastName = () => { return this.lastName; };
         this.getBio = () => { return this.bio; };

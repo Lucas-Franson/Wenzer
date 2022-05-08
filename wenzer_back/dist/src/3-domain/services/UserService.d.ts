@@ -29,6 +29,7 @@ export default class UserService implements IUserService {
     createConnection(userId: string, idUserToFollow: string): Promise<void>;
     deleteConnection(idConnection: string): Promise<void>;
     getConnections(idUser: string): Promise<any>;
+    alreadyConnected(idUserServer: string, idUser: string): Promise<boolean>;
     getFriendRequest(userId: string): Promise<{
         _id: string;
         created_at: Date;

@@ -10,7 +10,8 @@ export declare class ProfileViewModel {
     hasCompany: boolean;
     countProjects: number;
     countParticipating: number;
-    constructor(_id: string, name: string, lastName: string, bio: string, university: string, interests: InterestsFormViewModel[], photo: any, hasCompany: boolean, countProjects: number, countParticipating: number);
+    alreadyConnected: boolean;
+    constructor(_id: string, name: string, lastName: string, bio: string, university: string, interests: InterestsFormViewModel[], photo: any, hasCompany: boolean, countProjects: number, countParticipating: number, alreadyConnected?: boolean);
     getName: () => string;
     getLastName: () => string;
     getBio: () => string;

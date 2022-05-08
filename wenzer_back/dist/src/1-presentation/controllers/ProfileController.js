@@ -27,7 +27,7 @@ class ProfileController {
         return __awaiter(this, void 0, void 0, function* () {
             const { idUser } = req.params;
             try {
-                const user = yield req.service.profileAppService.getInfoUser(idUser);
+                const user = yield req.service.profileAppService.getInfoUser(req.session.userId, idUser);
                 res.status(200).json(user);
             }
             catch (err) {

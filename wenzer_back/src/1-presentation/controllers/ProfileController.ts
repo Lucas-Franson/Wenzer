@@ -17,7 +17,7 @@ export default class ProfileController {
         const { idUser } = req.params;
         
         try {
-            const user = await req.service.profileAppService.getInfoUser(idUser);
+            const user = await req.service.profileAppService.getInfoUser(req.session.userId, idUser);
 
             res.status(200).json(user);
         } catch(err) {
