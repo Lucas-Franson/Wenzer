@@ -39,9 +39,9 @@ export default class LoginAppService {
             } else {
                 let _id = await this.userService.create(user);
                 user._id = _id;
-
-                await this.userService.sendEmailOfVerification(user);
             }
+
+            await this.userService.sendEmailOfVerification(user);
             
             return user.getId();
         } catch(err) {
