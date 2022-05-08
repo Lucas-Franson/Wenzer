@@ -32,8 +32,8 @@ class LoginAppService {
                 else {
                     let _id = yield this.userService.create(user);
                     user._id = _id;
-                    yield this.userService.sendEmailOfVerification(user);
                 }
+                yield this.userService.sendEmailOfVerification(user);
                 return user.getId();
             }
             catch (err) {
