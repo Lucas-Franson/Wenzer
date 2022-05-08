@@ -17,7 +17,6 @@ const fs_1 = __importDefault(require("fs"));
 const util_1 = require("util");
 const logger_1 = __importDefault(require("../../../4-infra/utils/logger"));
 const EmailAbstract_1 = require("./EmailAbstract");
-const html = require("../../../1-presentation/views/email-confirmed-community.html");
 const readFile = (0, util_1.promisify)(fs_1.default.readFile);
 class EmailVerify extends EmailAbstract_1.Email {
     constructor(email) {
@@ -27,7 +26,7 @@ class EmailVerify extends EmailAbstract_1.Email {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const _self = this;
-                const text = yield readFile(html, 'utf8').then((data) => {
+                const text = yield readFile(__dirname + "../../../../1-presentation/views/email-confirmed-community.html", 'utf8').then((data) => {
                     _self.Html = data.replace('$_TOKEN_$', link);
                 });
             }

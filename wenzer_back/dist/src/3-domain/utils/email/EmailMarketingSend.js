@@ -17,7 +17,6 @@ const fs_1 = __importDefault(require("fs"));
 const EmailAbstract_1 = require("./EmailAbstract");
 const util_1 = require("util");
 const readFile = (0, util_1.promisify)(fs_1.default.readFile);
-const html = require("../../../1-presentation/views/Confirmar_Acesso_Marketing.html");
 class EmailMarketingSend extends EmailAbstract_1.Email {
     constructor(email) {
         super('"Wenzer" <wenzer.marketing@gmail.com>', email, 'Bem-vindo ao Wenzer', ``, '');
@@ -25,7 +24,7 @@ class EmailMarketingSend extends EmailAbstract_1.Email {
     prepareHTML(link) {
         return __awaiter(this, void 0, void 0, function* () {
             const _self = this;
-            const text = yield readFile(html, 'utf8').then((data) => {
+            const text = yield readFile(__dirname + "../../../../1-presentation/views/Confirmar_Acesso_Marketing.html", 'utf8').then((data) => {
                 _self.Html = data.replace('$_TOKEN_$', link);
             });
         });
