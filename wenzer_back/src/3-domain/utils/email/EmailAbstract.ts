@@ -21,6 +21,7 @@ export abstract class Email {
      * @description Cria o transportador e realiza o envio do email
      */
     async sendEmail() {
+      try {
         var transporter = nodemailer.createTransport({
           host: 'smtp.hostinger.com',
           port: 465,
@@ -40,11 +41,14 @@ export abstract class Email {
 
         transporter.sendMail(mailOptions, function (err, info) {
           if (err) {
-            new Logger('Send Email Error', err?.message).log();
+            new Logger('Transporter Send Email Error', err?.message).log();
           } else {
-            new Logger('Sent Email', info?.messageId).log();
+            new Logger('Transporter Sent Email', info?.messageId).log();
           }
         });
+      } catch(err: any) {
+        new Logger('Send Email Error', err?.message).log();
+      }
     }
 
     /**

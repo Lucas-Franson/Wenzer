@@ -33,29 +33,34 @@ class Email {
      */
     sendEmail() {
         return __awaiter(this, void 0, void 0, function* () {
-            var transporter = nodemailer_1.default.createTransport({
-                host: 'smtp.hostinger.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    user: 'suporte@wenzer.com.br',
-                    pass: 'Wenzer#2022!'
-                }
-            });
-            var mailOptions = {
-                from: '"Wenzer" <suporte@wenzer.com.br>',
-                to: this.To,
-                subject: this.Subject,
-                html: this.Html
-            };
-            transporter.sendMail(mailOptions, function (err, info) {
-                if (err) {
-                    new logger_1.default('Send Email Error', err === null || err === void 0 ? void 0 : err.message).log();
-                }
-                else {
-                    new logger_1.default('Sent Email', info === null || info === void 0 ? void 0 : info.messageId).log();
-                }
-            });
+            try {
+                var transporter = nodemailer_1.default.createTransport({
+                    host: 'smtp.hostinger.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        user: 'suporte@wenzer.com.br',
+                        pass: 'Wenzer#2022!'
+                    }
+                });
+                var mailOptions = {
+                    from: '"Wenzer" <suporte@wenzer.com.br>',
+                    to: this.To,
+                    subject: this.Subject,
+                    html: this.Html
+                };
+                transporter.sendMail(mailOptions, function (err, info) {
+                    if (err) {
+                        new logger_1.default('Transporter Send Email Error', err === null || err === void 0 ? void 0 : err.message).log();
+                    }
+                    else {
+                        new logger_1.default('Transporter Sent Email', info === null || info === void 0 ? void 0 : info.messageId).log();
+                    }
+                });
+            }
+            catch (err) {
+                new logger_1.default('Send Email Error', err === null || err === void 0 ? void 0 : err.message).log();
+            }
         });
     }
 }
