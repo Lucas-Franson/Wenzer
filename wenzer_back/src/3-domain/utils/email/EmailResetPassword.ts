@@ -18,7 +18,7 @@ export class EmailResetPassword extends Email {
     async prepareHTML(link: string): Promise<void> {
         const _self = this;
         const text = await readFile(
-            __dirname + "../../../../1-presentation/views/Alterar_Senha.html", 
+            __dirname + "/views/Alterar_Senha.html", 
             'utf8').then((data: string) => {
             _self.Html = data.replace('$_URL_UPDATE_$', link);
         });

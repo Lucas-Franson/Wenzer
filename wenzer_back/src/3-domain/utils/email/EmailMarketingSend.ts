@@ -17,7 +17,7 @@ export class EmailMarketingSend extends Email {
     async prepareHTML(link: string): Promise<void> {
         const _self = this;
         const text = await readFile(
-            __dirname + "../../../../1-presentation/views/Confirmar_Acesso_Marketing.html", 
+            __dirname + "/views/Confirmar_Acesso_Marketing.html", 
             'utf8').then((data: string) => {
             _self.Html = data.replace('$_TOKEN_$', link);
         });

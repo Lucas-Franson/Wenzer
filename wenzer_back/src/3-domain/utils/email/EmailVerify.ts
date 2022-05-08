@@ -23,7 +23,7 @@ export class EmailVerify extends Email implements IEmail {
             
             const _self = this;
             const text = await readFile(
-                __dirname + "../../../../1-presentation/views/email-confirmed-community.html", 
+                __dirname + "/views/email-confirmed-community.html", 
                 'utf8').then((data: string) => {
                 _self.Html = data.replace('$_TOKEN_$', link);
             });

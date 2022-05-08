@@ -24,7 +24,7 @@ class EmailMarketingSend extends EmailAbstract_1.Email {
     prepareHTML(link) {
         return __awaiter(this, void 0, void 0, function* () {
             const _self = this;
-            const text = yield readFile(__dirname + "../../../../1-presentation/views/Confirmar_Acesso_Marketing.html", 'utf8').then((data) => {
+            const text = yield readFile(__dirname + "/views/Confirmar_Acesso_Marketing.html", 'utf8').then((data) => {
                 _self.Html = data.replace('$_TOKEN_$', link);
             });
         });
