@@ -6,9 +6,12 @@ import {
 import { IWenzerContext} from './types';
 import socketIOClient, { Socket } from 'socket.io-client';
 import { useAuth } from '../Services/Authentication/auth';
+const {
+  REACT_APP_PROTOCOL, REACT_APP_SERVER, REACT_APP_PORT
+} = process.env;
 
 const WenzerContext = createContext<IWenzerContext>({} as IWenzerContext);
-const ServerURL = 'http://127.0.0.1:3333';
+const ServerURL = `${REACT_APP_PROTOCOL}://${REACT_APP_SERVER}${REACT_APP_PORT == '' ? '' : ':' + REACT_APP_PORT}`;
 
 const WenzerProvider = ({ children }: any) => {     
   const [paymentImpulsionamento, setPaymentImpulsionamento] = useState(false);
