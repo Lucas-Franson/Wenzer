@@ -4,17 +4,19 @@ import NoPostHere from "../../Components/Animation/NoPostHere";
 import Modal from '../../Components/Modal/ModalPost';
 import { useAuth } from "../../Services/Authentication/auth";
 
-import { Container, ContainerNewPost, HeaderAvatar, InputNewPost } from "./styles";
+import { Container, ContainerNewPost, HeaderAvatar, InputNewPost, ContainerAds, ContainerRecomendado } from "./styles";
 import Post from "../../Components/Post";
 import { IPostProps } from "../../Components/Post/interface";
 
-import socketIOClient from 'socket.io-client';
 import APIServiceAuthenticated from "../../Services/api/apiServiceAuthenticated";
 import Cookies from "js-cookie";
 import { toastfyError } from "../../Components/Toastfy";
 import Button from "../../Components/Button";
 import { useWenzer } from "../../hooks/useWenzer";
 import { CircularProgress } from "@material-ui/core";
+import Ads1 from '../../Utils/image/adscoca.jpg';
+import Ads2 from '../../Utils/image/adsuniso.jpg';
+import PostRecomendado from "../../Components/PostRecomendado";
 
 export default function Feed(): ReactElement {
   const [post, setPost] = useState<any>([]);
@@ -125,17 +127,17 @@ export default function Feed(): ReactElement {
             </div>
         </main>
 
-      </ContainerNewPost>
-      {/* <button onClick={() => dispatch(incrementCounterNotify())}>notificação +</button> */}
-      
+      </ContainerNewPost>  
       {
         newPost.length > 0 ? (
           <Button className="flex button_coment" onClick={handleNewPost}>
-            <MdUpdate size={22}/> {isLoading ? (
-                                    <CircularProgress size={16} color="inherit" />
-                                  ) : (
-                                    "Novas publicações"
-                                  )}
+            <MdUpdate size={22}/> 
+            {isLoading ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : (
+                "Novas publicações"
+              )
+            }
           </Button>
         ) : (
           <span></span>
@@ -147,7 +149,7 @@ export default function Feed(): ReactElement {
             created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
           }: IPostProps) => (
             <Post
-              key={_id}
+            key={_id}
               created_at={created_at}
               description={description}
               _id={_id}
@@ -167,6 +169,52 @@ export default function Feed(): ReactElement {
           </div>
         )
       }
+      <ContainerAds>
+        <div>
+          <img src={Ads1} alt="adsense" />
+          <img src={Ads2} alt="adsense 2" />
+
+        </div>
+      </ContainerAds>
+      <ContainerRecomendado>
+        <p>Projetos Recomendados</p>
+        <PostRecomendado
+         index={0}
+         _id={0}
+         name='teste'
+         bio='teste bio'
+         type=''
+         photo=''
+         countGoodIdea={true}
+         countFollowers={5}
+         screen=''
+         />
+
+          <PostRecomendado
+         index={0}
+         _id={0}
+         name='teste 2'
+         bio='teste bio'
+         type=''
+         photo=''
+         countGoodIdea={true}
+         countFollowers={5}
+         screen=''
+         />
+
+          <PostRecomendado
+         index={0}
+         _id={0}
+         name='teste 3'
+         bio='teste bio'
+         type=''
+         photo=''
+         countGoodIdea={true}
+         countFollowers={5}
+         screen=''
+         />
+      </ContainerRecomendado>
+
       <Modal idProject={idProject} open={openModalPost} setOpen={setOpenModalPost} />
     </Container>
   )

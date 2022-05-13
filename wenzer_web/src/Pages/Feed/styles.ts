@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Avatar } from '@material-ui/core';
 
 export const Container = styled.div`
-  width: min(92vw, 600px);
+  width: 600px;
   display: flex;
   flex-direction: column;
   color: ${(props) => props.theme.colors.white.light};
@@ -31,6 +31,7 @@ export const ContainerNewPost = styled.div`
 
   background: ${(props) => props.theme.colors.secondary};
   border-radius: 8px;
+  border-bottom: 1px solid ${(props) => props.theme.colors.primary};
 
   margin-top: 5rem;
   padding: 15px;
@@ -88,4 +89,54 @@ export const InputNewPost = styled.div`
   background-color: ${(props) => props.theme.colors.background};
 
   cursor: pointer;
+`;
+
+export const ContainerAds = styled.div`
+  width: 350px;
+  height: 600px;
+  position: fixed;
+  top: 10%;
+  right: 5%;
+
+  display: flex;
+  justify-content: center;
+
+  background: ${(props) => props.theme.colors.secondary};
+  border-radius: 8px;
+  border-bottom: 1px solid ${(props) => props.theme.colors.primary};
+
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+  
+  @media (max-width: 1400px){
+    display: none;
+  }
+`;
+
+export const ContainerRecomendado = styled.div`
+  width: 350px;
+  height: 700px;
+  position: fixed;
+  overflow-y:  scroll;
+  top: 10%;
+  left: 5%;
+
+  padding: 10px 5px 10px 5px;
+
+  background: ${(props) => props.theme.colors.secondary};
+  border-radius: 8px;
+  border-bottom: 1px solid ${(props) => props.theme.colors.primary};
+
+  p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+  }
+
+  @media (max-width: 1400px){
+    display: none;
+  }
 `;
