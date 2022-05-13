@@ -112,7 +112,7 @@ function Explorar(): ReactElement {
                 _id={item._id}
                 name={item.name}
                 bio={item.bio}
-                type={item.type}
+                type={item.type ?? searchTypes.Project}
                 photo={item.photo}
                 countGoodIdea={item.countGoodIdea}
                 countFollowers={item.countFollowers}

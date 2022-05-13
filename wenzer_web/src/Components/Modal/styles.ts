@@ -89,6 +89,35 @@ export const ContainerModal = styled.div`
                 font-size: 0.9rem;
             }
 
+            > .participant {
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+                padding: 10px;
+
+                > .btnRejectAccept {
+                    display: flex;
+                    align-items: center;
+
+                    > button {
+                        margin: 5px;
+                        padding: 0.4rem 1rem;
+                    }
+                }
+
+                > .participantHeader {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    > span {
+                        margin-left: 10px;
+                    }
+                }
+            }
+
             > .image {
                 width: 100%;
                 display: flex;

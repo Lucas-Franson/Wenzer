@@ -14,9 +14,239 @@ import ModalPayment from '../ModalPayment';
 import { ContainerModal, Container } from '../styles';
 import Cookies from 'js-cookie';
 import { toastfyError, toastfySuccess, toastfyWarning } from '../../Toastfy';
-import { CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress, Paper, Tab, Tabs, Typography } from '@material-ui/core';
 import { IProjectProps } from './interface';
 import { AiFillBulb, AiOutlineBulb } from 'react-icons/ai';
+import { useHistory } from 'react-router-dom';
+import { useTheme } from '../../../Styles/Hook/theme';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={2}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+interface TabDataContentProps {
+  idProject: string;
+  project: IProjectProps | undefined;
+  viewing: boolean;
+  interests: { label: string, value: string }[];
+  interestsSelected: { label: string, value: string }[];
+  isLoading: boolean;
+  goodIdea: boolean;
+  following: boolean;
+  paymentImpulsionamento: boolean;
+  previewImagePost: string;
+  imageToPost: File | undefined;
+
+  setTitlePost: any;
+  setDescriptionPost: any;
+  setInterestsSelected: any;
+  removeImage: any;
+  addImageToPost: any;
+  handleOpenModalPayment: any;
+  handleCancelPayment: any;
+  onSubmit: any;
+  followProject: any;
+  goodIdeaProject: any;
+}
+
+function TabDataContent(props: TabDataContentProps) {
+
+  const { 
+    idProject, project, viewing, interests, interestsSelected, isLoading, goodIdea, following, paymentImpulsionamento, previewImagePost, imageToPost,
+    setTitlePost, setDescriptionPost, setInterestsSelected, removeImage, addImageToPost, handleOpenModalPayment, handleCancelPayment, onSubmit, followProject, goodIdeaProject
+  } = props;
+
+  const filepickerRef = useRef<HTMLDivElement | any>(null);
+
+  return (
+    <div className="content">
+      <InputText 
+        required 
+        defaultValue={project?.name} 
+        placeholder="Titulo" 
+        disabled={viewing}
+        onChange={(e: any) => 
+          setTitlePost(e.target.value)
+        } />
+      <InputTextArea 
+        required 
+        defaultValue={project?.description} 
+        placeholder="Qual a sua idéia?" 
+        disabled={viewing}
+        onChange={(e: any) => 
+          setDescriptionPost(e.target.value)
+        } />
+      <InputAutoComplete 
+        options={interests} 
+        defaultValues={interestsSelected} 
+        disabled={viewing}
+        onchange={(e: any) => 
+          setInterestsSelected(e)
+        } />
+      <div className="image">
+          {imageToPost && (
+            <div className='imagePost' onClick={removeImage}>
+              <img src={previewImagePost} alt="postagem" />
+            </div>
+          )}
+
+        <div className="buttons-image" style={{ display: viewing ? 'none' : 'block' }}>
+          <div onClick={() => filepickerRef.current.click()}>
+            <MdImage size={25} />
+            <span>Foto</span>
+            <input
+              type='file'
+              onChange={addImageToPost}
+              ref={filepickerRef}
+              hidden
+            />
+          </div>
+
+          <div onClick={handleOpenModalPayment}>
+            <MdPayment size={22}/>
+            {paymentImpulsionamento ? (
+              <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
+            ) : (
+              <span>Impulsionar</span>
+            )}
+          </div>
+        </div>              
+      </div>
+      <Button onClick={onSubmit} style={{ display: viewing ? 'none' : 'block' }}>
+        {isLoading ? (
+          <CircularProgress size={16} color="inherit" />
+        ) : 
+          idProject ? ("Editar") : ("Publicar")
+        }
+      </Button>
+      <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
+        <Button onClick={followProject}>
+          {isLoading ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : 
+            following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
+          }
+        </Button>
+        <Button onClick={goodIdeaProject}>
+          {isLoading ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : ( 
+              <div>
+                {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
+                <span>Boa ideia</span>
+              </div>
+            )
+          }
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+interface TabPaticipantsContent {
+
+}
+
+function TabParticipantsContent(props: TabPaticipantsContent) {
+
+  const data = [
+    {
+      _id: '1',
+      name: 'Lucas',
+      photo: '',
+      role: 'Desenvolvedor',
+      pending: false
+    },
+    {
+      _id: '2',
+      name: 'Elisson',
+      photo: '',
+      role: 'Advogado',
+      pending: false
+    },
+    {
+      _id: '8',
+      name: 'Matheus',
+      photo: '',
+      role: 'Designer',
+      pending: true
+    }
+  ]
+  const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useTheme();
+  const [darkTheme, setDarkTheme] = useState(() =>
+    theme.title === "dark" ? true : false
+  );
+
+  const history = useHistory();
+
+  function goToUserProfile(_id: string) {
+    history.push(`/profile?user=${_id}`);
+  }
+
+  function reject() {
+
+  }
+
+  function accept() {
+
+  }
+
+  return (
+    <div className="content">
+      {data && data.map(participant => (
+        <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant" onClick={() => goToUserProfile(participant._id)}>
+          <div className="participantHeader">
+            <HeaderAvatar className="thumbUser" src={participant.photo} />
+            <span>{participant.name}</span>
+          </div>
+          {participant.pending ? (
+            <div className="btnRejectAccept">
+              <Button onClick={reject}>
+                {isLoading ? (
+                  <CircularProgress size={16} color="secondary" />
+                ) : 
+                  "Rejeitar"
+                }
+              </Button>
+              <Button onClick={accept}>
+                {isLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : 
+                  "Aceitar"
+                }
+              </Button>
+            </div>
+          ) : (
+            <span>{participant.role}</span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function ModalProject({open, setOpen, idProject}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
@@ -29,16 +259,24 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [viewing, setViewing] = useState(false);
   const [following, setFollowing] = useState(false);
   const [goodIdea, setGoodIdea] = useState(false);
+
+  const { theme } = useTheme();
+  const [darkTheme, setDarkTheme] = useState(() =>
+    theme.title === "dark" ? true : false
+  );
   
-  const [tagsOfProject, setTagOfProjects] = useState<{ label: string, value: string }[]>([]); 
   const [interests, setInterests] = useState<{ label: string, value: string }[]>([]);
   const [interestsSelected, setInterestsSelected] = useState<{ label: string, value: string }[]>([]);
 
   const [openModalPayment, setOpenModalPayment] = useState(false);
 
-  const filepickerRef = useRef<HTMLDivElement | any>(null);
-
   const { userInfo } = useAuth();
+
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const handleChangeTab = (event: any, newValue: any) => {
+    setTabIndex(newValue);
+  };
 
   const {
     paymentImpulsionamento,
@@ -274,7 +512,14 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
       return new File([u8arr], filename, {type:mime});
     }
-}
+  }
+
+  function a11yProps(index: any) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -296,7 +541,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       <main>
         <form>
           <div className="profile">
-            <HeaderAvatar src={project ? project.user.photo : userInfo?.photo} />
+            <HeaderAvatar src={project && project.user ? project.user.photo : userInfo?.photo} />
             <select required disabled={viewing} defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
               {typesProjects.map(item => (
                 <option value={item.value} key={item.value}>{item.label}</option>
@@ -312,87 +557,48 @@ export default function ModalProject({open, setOpen, idProject}: any) {
             </div>
           </div>
 
-          <div className="content">
-            <InputText 
-              required 
-              defaultValue={project?.name} 
-              placeholder="Titulo" 
-              disabled={viewing}
-              onChange={(e: any) => 
-                setTitlePost(e.target.value)
-              } />
-            <InputTextArea 
-              required 
-              defaultValue={project?.description} 
-              placeholder="Qual a sua idéia?" 
-              disabled={viewing}
-              onChange={(e: any) => 
-                setDescriptionPost(e.target.value)
-              } />
-            <InputAutoComplete 
-              options={interests} 
-              defaultValues={interestsSelected} 
-              disabled={viewing}
-              onchange={(e: any) => 
-                setInterestsSelected(e)
-              } />
-            <div className="image">
-                {imageToPost && (
-                  <div className='imagePost' onClick={removeImage}>
-                    <img src={previewImagePost} alt="postagem" />
-                  </div>
-                )}
+          <Paper square>
+            <Tabs 
+              value={tabIndex} 
+              indicatorColor="primary"
+              textColor="primary"
+              style={{ backgroundColor: darkTheme ? '#1d1d21' : '#FFF' }}
+              onChange={handleChangeTab} 
+              aria-label="Abas do projeto"
+            >
+              <Tab style={{ color: tabIndex!=0 ? (darkTheme ? '#FFF' : '#000') : '' }} label="Dados" {...a11yProps(0)} />
+              <Tab style={{ color: tabIndex!=1 ? (darkTheme ? '#FFF' : '#000') : '' }} label="Participantes" {...a11yProps(1)} />
+            </Tabs>
+          </Paper>
 
-              <div className="buttons-image" style={{ display: viewing ? 'none' : 'block' }}>
-                <div onClick={() => filepickerRef.current.click()}>
-                  <MdImage size={25} />
-                  <span>Foto</span>
-                  <input
-                    type='file'
-                    onChange={addImageToPost}
-                    ref={filepickerRef}
-                    hidden
-                  />
-                </div>
-
-                <div onClick={handleOpenModalPayment}>
-                  <MdPayment size={22}/>
-                  {paymentImpulsionamento ? (
-                    <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
-                  ) : (
-                    <span>Impulsionar</span>
-                  )}
-                </div>
-              </div>              
-            </div>
-            <Button onClick={onSubmit} style={{ display: viewing ? 'none' : 'block' }}>
-              {isLoading ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : 
-                idProject ? ("Editar") : ("Publicar")
-              }
-            </Button>
-            <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
-              <Button onClick={followProject}>
-                {isLoading ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : 
-                  following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
-                }
-              </Button>
-              <Button onClick={goodIdeaProject}>
-                {isLoading ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : ( 
-                    <div>
-                      {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
-                      <span>Boa ideia</span>
-                    </div>
-                  )
-                }
-              </Button>
-            </div>
-          </div>
+          <TabPanel value={tabIndex} index={0}>
+            <TabDataContent 
+              idProject={idProject}
+              project={project}
+              viewing={viewing}
+              interests={interests}
+              interestsSelected={interestsSelected}
+              isLoading={isLoading}
+              goodIdea={goodIdea}
+              following={following}
+              paymentImpulsionamento={paymentImpulsionamento}
+              previewImagePost={previewImagePost}
+              imageToPost={imageToPost}
+              setTitlePost={setTitlePost}
+              setDescriptionPost={setDescriptionPost}
+              setInterestsSelected={setInterestsSelected}
+              removeImage={removeImage}
+              addImageToPost={addImageToPost}
+              handleOpenModalPayment={handleOpenModalPayment}
+              handleCancelPayment={handleCancelPayment}
+              onSubmit={onsubmit}
+              followProject={followProject}
+              goodIdeaProject={goodIdea}
+            />
+          </TabPanel>
+          <TabPanel value={tabIndex} index={1}>
+            <TabParticipantsContent />
+          </TabPanel>
         </form>
       </main>
     </ContainerModal>

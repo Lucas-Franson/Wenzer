@@ -364,7 +364,7 @@ function Profile(): ReactElement {
             connections.map((value) => (
               <div key={value?._id} className="connectionComponent" onClick={() => goToUserProfile(value?._id)}>
                 <HeaderAvatar className="thumbUser" src={value?.photo} />
-                <span>{value?.name}</span>
+                <span style={{ marginLeft: 10 }}>{value?.name}</span>
               </div>
             ))
           ): (

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import PostProfile from '../../Components/PostProfile';
 import { toastfyError } from '../../Components/Toastfy';
-import { screens } from '../../Constants/MediaSettings';
+import { screens, searchTypes } from '../../Constants/MediaSettings';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import { useAuth } from '../../Services/Authentication/auth';
 
@@ -38,6 +38,7 @@ const Projetos: React.FC = () => {
                 index={index}
                 _id={item._id}
                 name={item.name}
+                type={searchTypes.Project}
                 photo={item.photo}
                 countOfGoodIdea={item.CountOfGoodIdea}
                 countOfActions={item.CountOfActions}
