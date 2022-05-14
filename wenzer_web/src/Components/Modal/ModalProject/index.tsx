@@ -46,125 +46,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-interface TabDataContentProps {
-  idProject: string;
-  project: IProjectProps | undefined;
-  viewing: boolean;
-  interests: { label: string, value: string }[];
-  interestsSelected: { label: string, value: string }[];
-  isLoading: boolean;
-  goodIdea: boolean;
-  following: boolean;
-  paymentImpulsionamento: boolean;
-  previewImagePost: string;
-  imageToPost: File | undefined;
-
-  setTitlePost: any;
-  setDescriptionPost: any;
-  setInterestsSelected: any;
-  removeImage: any;
-  addImageToPost: any;
-  handleOpenModalPayment: any;
-  handleCancelPayment: any;
-  onSubmit: any;
-  followProject: any;
-  goodIdeaProject: any;
-}
-
-function TabDataContent(props: TabDataContentProps) {
-
-  const { 
-    idProject, project, viewing, interests, interestsSelected, isLoading, goodIdea, following, paymentImpulsionamento, previewImagePost, imageToPost,
-    setTitlePost, setDescriptionPost, setInterestsSelected, removeImage, addImageToPost, handleOpenModalPayment, handleCancelPayment, onSubmit, followProject, goodIdeaProject
-  } = props;
-
-  const filepickerRef = useRef<HTMLDivElement | any>(null);
-
-  return (
-    <div className="content">
-      <InputText 
-        required 
-        defaultValue={project?.name} 
-        placeholder="Titulo" 
-        disabled={viewing}
-        onChange={(e: any) => 
-          setTitlePost(e.target.value)
-        } />
-      <InputTextArea 
-        required 
-        defaultValue={project?.description} 
-        placeholder="Qual a sua idéia?" 
-        disabled={viewing}
-        onChange={(e: any) => 
-          setDescriptionPost(e.target.value)
-        } />
-      <InputAutoComplete 
-        options={interests} 
-        defaultValues={interestsSelected} 
-        disabled={viewing}
-        onchange={(e: any) => 
-          setInterestsSelected(e)
-        } />
-      <div className="image">
-          {imageToPost && (
-            <div className='imagePost' onClick={removeImage}>
-              <img src={previewImagePost} alt="postagem" />
-            </div>
-          )}
-
-        <div className="buttons-image" style={{ display: viewing ? 'none' : 'block' }}>
-          <div onClick={() => filepickerRef.current.click()}>
-            <MdImage size={25} />
-            <span>Foto</span>
-            <input
-              type='file'
-              onChange={addImageToPost}
-              ref={filepickerRef}
-              hidden
-            />
-          </div>
-
-          <div onClick={handleOpenModalPayment}>
-            <MdPayment size={22}/>
-            {paymentImpulsionamento ? (
-              <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
-            ) : (
-              <span>Impulsionar</span>
-            )}
-          </div>
-        </div>              
-      </div>
-      <Button onClick={onSubmit} style={{ display: viewing ? 'none' : 'block' }}>
-        {isLoading ? (
-          <CircularProgress size={16} color="inherit" />
-        ) : 
-          idProject ? ("Editar") : ("Publicar")
-        }
-      </Button>
-      <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
-        <Button onClick={followProject}>
-          {isLoading ? (
-            <CircularProgress size={16} color="inherit" />
-          ) : 
-            following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
-          }
-        </Button>
-        <Button onClick={goodIdeaProject}>
-          {isLoading ? (
-            <CircularProgress size={16} color="inherit" />
-          ) : ( 
-              <div>
-                {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
-                <span>Boa ideia</span>
-              </div>
-            )
-          }
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 interface TabPaticipantsContent {
 
 }
@@ -259,6 +140,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [viewing, setViewing] = useState(false);
   const [following, setFollowing] = useState(false);
   const [goodIdea, setGoodIdea] = useState(false);
+  const filepickerRef = useRef<HTMLDivElement | any>(null);
 
   const { theme } = useTheme();
   const [darkTheme, setDarkTheme] = useState(() =>
@@ -339,7 +221,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-
+    
     if (project && userInfo?.id !== project?.userId) {
       toastfyError("Você não possui permissão para editar este projeto.");
       return;
@@ -572,29 +454,87 @@ export default function ModalProject({open, setOpen, idProject}: any) {
           </Paper>
 
           <TabPanel value={tabIndex} index={0}>
-            <TabDataContent 
-              idProject={idProject}
-              project={project}
-              viewing={viewing}
-              interests={interests}
-              interestsSelected={interestsSelected}
-              isLoading={isLoading}
-              goodIdea={goodIdea}
-              following={following}
-              paymentImpulsionamento={paymentImpulsionamento}
-              previewImagePost={previewImagePost}
-              imageToPost={imageToPost}
-              setTitlePost={setTitlePost}
-              setDescriptionPost={setDescriptionPost}
-              setInterestsSelected={setInterestsSelected}
-              removeImage={removeImage}
-              addImageToPost={addImageToPost}
-              handleOpenModalPayment={handleOpenModalPayment}
-              handleCancelPayment={handleCancelPayment}
-              onSubmit={onsubmit}
-              followProject={followProject}
-              goodIdeaProject={goodIdea}
-            />
+            <div className="content">
+              <InputText 
+                required 
+                defaultValue={project?.name} 
+                placeholder="Titulo" 
+                disabled={viewing}
+                onChange={(e: any) => 
+                  setTitlePost(e.target.value)
+                } />
+              <InputTextArea 
+                required 
+                defaultValue={project?.description} 
+                placeholder="Qual a sua idéia?" 
+                disabled={viewing}
+                onChange={(e: any) => 
+                  setDescriptionPost(e.target.value)
+                } />
+              <InputAutoComplete 
+                options={interests} 
+                defaultValues={interestsSelected} 
+                disabled={viewing}
+                onchange={(e: any) => 
+                  setInterestsSelected(e)
+                } />
+              <div className="image">
+                  {imageToPost && (
+                    <div className='imagePost' onClick={removeImage}>
+                      <img src={previewImagePost} alt="postagem" />
+                    </div>
+                  )}
+
+                <div className="buttons-image" style={{ display: viewing ? 'none' : 'block' }}>
+                  <div onClick={() => filepickerRef.current.click()}>
+                    <MdImage size={25} />
+                    <span>Foto</span>
+                    <input
+                      type='file'
+                      onChange={addImageToPost}
+                      ref={filepickerRef}
+                      hidden
+                    />
+                  </div>
+
+                  <div onClick={handleOpenModalPayment}>
+                    <MdPayment size={22}/>
+                    {paymentImpulsionamento ? (
+                      <span onClick={handleCancelPayment}>Cancelar Impulsionamento</span>
+                    ) : (
+                      <span>Impulsionar</span>
+                    )}
+                  </div>
+                </div>              
+              </div>
+              <Button onClick={onSubmit} style={{ display: viewing ? 'none' : 'block' }}>
+                {isLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : 
+                  idProject ? ("Editar") : ("Publicar")
+                }
+              </Button>
+              <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
+                <Button onClick={followProject}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : 
+                    following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
+                  }
+                </Button>
+                <Button onClick={goodIdeaProject}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : ( 
+                      <div>
+                        {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
+                        <span>Boa ideia</span>
+                      </div>
+                    )
+                  }
+                </Button>
+              </div>
+            </div>
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
             <TabParticipantsContent />

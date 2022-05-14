@@ -17,10 +17,12 @@ import { CircularProgress } from "@material-ui/core";
 import Ads1 from '../../Utils/image/adscoca.jpg';
 import Ads2 from '../../Utils/image/adsuniso.jpg';
 import PostRecomendado from "../../Components/PostRecomendado";
+import { searchTypes } from "../../Constants/MediaSettings";
 
 export default function Feed(): ReactElement {
   const [post, setPost] = useState<any>([]);
   const [newPost, setNewPost] = useState<any>([]);
+  const [recommendedProjects, setRecommendedProjects] = useState<any[]>([]);
   const [openModalPost, setOpenModalPost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [idProject, setIdProject] = useState(null);
@@ -44,6 +46,19 @@ export default function Feed(): ReactElement {
         setDateOfLastPost(new Date());
       }
       setPost(res.data);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    })
+  }
+
+  function getAllRecommendedProjects() {
+
+    APIServiceAuthenticated.get('/api/feed/projectsByInterests', {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setRecommendedProjects(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
@@ -92,6 +107,7 @@ export default function Feed(): ReactElement {
 
   useEffect(() => {
     getAllPost();
+    getAllRecommendedProjects();
   }, []);
 
   useEffect(() => {
@@ -178,41 +194,16 @@ export default function Feed(): ReactElement {
       </ContainerAds>
       <ContainerRecomendado>
         <p>Projetos Recomendados</p>
-        <PostRecomendado
-         index={0}
-         _id={0}
-         name='teste'
-         bio='teste bio'
-         type=''
-         photo=''
-         countGoodIdea={true}
-         countFollowers={5}
-         screen=''
-         />
 
+        {recommendedProjects && recommendedProjects.map(data => (
           <PostRecomendado
-         index={0}
-         _id={0}
-         name='teste 2'
-         bio='teste bio'
-         type=''
-         photo=''
-         countGoodIdea={true}
-         countFollowers={5}
-         screen=''
-         />
-
-          <PostRecomendado
-         index={0}
-         _id={0}
-         name='teste 3'
-         bio='teste bio'
-         type=''
-         photo=''
-         countGoodIdea={true}
-         countFollowers={5}
-         screen=''
-         />
+            _id={data._id}
+            name={data.name}
+            bio={data.description}
+            photo={data.photo}
+            key={data._id}
+            />
+        ))}
       </ContainerRecomendado>
 
       <Modal idProject={idProject} open={openModalPost} setOpen={setOpenModalPost} />
