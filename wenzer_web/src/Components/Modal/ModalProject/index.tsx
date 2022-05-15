@@ -19,6 +19,7 @@ import { IProjectProps } from './interface';
 import { AiFillBulb, AiOutlineBulb } from 'react-icons/ai';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from '../../../Styles/Hook/theme';
+import ModalConfirm from '../ModalConfirm';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -76,6 +77,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
     }
   ]
   const [isLoading, setIsLoading] = useState(false);
+  const [openModalConfirm, setOpenModalConfirm] = useState(false);
   const { theme } = useTheme();
   const [darkTheme, setDarkTheme] = useState(() =>
     theme.title === "dark" ? true : false
@@ -95,37 +97,49 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
 
   }
 
+  function handleOpenModalConfirm() {
+    setOpenModalConfirm(!openModalConfirm)
+  }
+
   return (
-    <div className="content">
-      {data && data.map(participant => (
-        <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant" onClick={() => goToUserProfile(participant._id)}>
-          <div className="participantHeader">
-            <HeaderAvatar className="thumbUser" src={participant.photo} />
-            <span>{participant.name}</span>
-          </div>
-          {participant.pending ? (
-            <div className="btnRejectAccept">
-              <Button onClick={reject}>
-                {isLoading ? (
-                  <CircularProgress size={16} color="secondary" />
-                ) : 
-                  "Rejeitar"
-                }
-              </Button>
-              <Button onClick={accept}>
-                {isLoading ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : 
-                  "Aceitar"
-                }
-              </Button>
+    <>
+      <div className="content">
+        {data && data.map(participant => (
+          <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant">
+            <div className="participantHeader">
+              <div onClick={() => goToUserProfile(participant._id)}>
+                <HeaderAvatar className="thumbUser" src={participant.photo} />
+              </div>
+              <div className="nameAndRole" onClick={() => goToUserProfile(participant._id)}>
+                <span>{participant.name}</span>
+                <p>{participant.role}</p>
+              </div>
             </div>
-          ) : (
-            <span>{participant.role}</span>
-          )}
-        </div>
-      ))}
-    </div>
+            {participant.pending ? (
+              <div className="btnRejectAccept">
+                <Button onClick={reject}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="secondary" />
+                  ) : 
+                    "Rejeitar"
+                  }
+                </Button>
+                <Button onClick={accept}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : 
+                    "Aceitar"
+                  }
+                </Button>
+              </div>
+            ) : (
+              <span className='removeParticipant' onClick={handleOpenModalConfirm}>Remover participante</span>
+            )}
+          </div>
+        ))}
+      </div>
+      <ModalConfirm open={openModalConfirm} setOpen={setOpenModalConfirm} title='participante'/>
+    </>
   );
 }
 
@@ -444,12 +458,12 @@ export default function ModalProject({open, setOpen, idProject}: any) {
               value={tabIndex} 
               indicatorColor="primary"
               textColor="primary"
-              style={{ backgroundColor: darkTheme ? '#1d1d21' : '#FFF' }}
+              style={{ backgroundColor: theme.colors.background }}
               onChange={handleChangeTab} 
               aria-label="Abas do projeto"
             >
-              <Tab style={{ color: tabIndex!=0 ? (darkTheme ? '#FFF' : '#000') : '' }} label="Dados" {...a11yProps(0)} />
-              <Tab style={{ color: tabIndex!=1 ? (darkTheme ? '#FFF' : '#000') : '' }} label="Participantes" {...a11yProps(1)} />
+              <Tab style={{ color: tabIndex!=0 ? (darkTheme ? '#FFF' : '#000') : theme.colors.primary }} label="Dados" {...a11yProps(0)} />
+              <Tab style={{ color: tabIndex!=1 ? (darkTheme ? '#FFF' : '#000') : theme.colors.primary }} label="Participantes" {...a11yProps(1)} />
             </Tabs>
           </Paper>
 

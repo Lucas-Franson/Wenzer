@@ -87,7 +87,7 @@ export default function ModalPayment({open, setOpen}: any) {
             <div className='payment-value'>{getTypePayment(impulsionamento)}</div>
 
             <div className="buttons">
-              <Button>Cancelar</Button>
+              <Button onClick={handleClose}>Cancelar</Button>
               <Button className="payment-button" type="button" onClick={handleSetPayment}>Impulsionar</Button>
             </div>
           </div>

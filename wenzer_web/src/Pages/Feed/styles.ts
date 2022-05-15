@@ -101,16 +101,17 @@ export const ContainerAds = styled.div`
   display: flex;
   justify-content: center;
 
-  background: ${(props) => props.theme.colors.secondary};
-  border-radius: 8px;
-  border-bottom: 1px solid ${(props) => props.theme.colors.primary};
-
   img {
     width: 100%;
     object-fit: contain;
   }
   
-  @media (max-width: 1400px){
+  @media (max-width: 1490px){
+    width: 250px;
+    height: 600px;
+  }
+
+  @media (max-width: 1180px){
     display: none;
   }
 `;
@@ -136,7 +137,12 @@ export const ContainerRecomendado = styled.div`
     padding-bottom: 10px;
   }
 
-  @media (max-width: 1400px){
+  @media (max-width: 1490px){
+    width: 250px;
+    height: 600px;
+  }
+
+  @media (max-width: 1180px){
     display: none;
   }
 `;
