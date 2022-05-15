@@ -90,7 +90,6 @@ export const ContainerModal = styled.div`
             }
 
             > .participant {
-                cursor: pointer;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -107,14 +106,37 @@ export const ContainerModal = styled.div`
                     }
                 }
 
+                > .removeParticipant {
+                    font-size: 0.8rem;
+                    cursor: pointer;
+
+
+                    &:hover {
+                        color: ${props => props.theme.colors.primary}
+                    }
+                }
+
                 > .participantHeader {
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
 
-                    > span {
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        
+                        > span {
+                            margin-left: 0px;
+                        }
+
+                        > p {
+                            font-size: 0.8rem;
+                        }
+                   }
+
+                   > .nameAndRole {
                         margin-left: 10px;
-                    }
+                        cursor: pointer;
+                   }
                 }
             }
 
@@ -178,6 +200,24 @@ export const ContainerModal = styled.div`
             > .buttons {
                 display: flex;
                 gap: 5px;
+            }
+        }
+
+        >.ConfirmarDeleteModal {
+            >.buttonDelete {
+                margin-top: 15px;
+                display: flex;
+                gap: 15px;
+            }
+
+            > span {
+                font-weight: 400;
+                font-size: 0.9rem;
+                color: ${props => props.theme.colors.grey};
+            }
+
+            > p {
+                font-weight: 400;
             }
         }
     }

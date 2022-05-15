@@ -10,17 +10,22 @@ export const ContainerButton = styled.button`
 
     transition: ease all 0.2s;
 
+    &:hover {
+      background-color: ${(props) => props.theme.colors.primaryLight};
+      color: white;
+    }
+
+    &.noHover {
+      background-color: ${(props) => props.theme.colors.secondary};
+      color: white;
+    }
+
     &.onlyBorder {
       border: 1px solid ${(props) => props.theme.colors.primary};
       background-color: transparent;
       color: ${(props) => props.theme.colors.primary};
     }
 
-    &:hover {
-      background-color: ${(props) => props.theme.colors.primaryLight};
-      color: white;
-    }
-    
     &.payment-button {
       background-color: ${(props) => props.theme.colors.succes};
     }
@@ -51,6 +56,16 @@ export const ContainerButton = styled.button`
       &:hover {
         color: white;
       }
+    }
+
+    &.deleteYes {
+      background-color: ${props => props.theme.colors.warning};
+    }
+
+    &.deleteNo {
+      border: 1px solid ${(props) => props.theme.colors.background};
+      background-color: transparent;
+      color: ${(props) => props.theme.colors.white.dark};
     }
 
 `
