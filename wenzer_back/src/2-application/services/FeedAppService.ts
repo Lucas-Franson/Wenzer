@@ -59,7 +59,8 @@ export default class FeedAppService {
                 value.idProject,
                 value.created_at,
                 postAsGoodIdea != null,
-                userViewModel
+                userViewModel,
+                0
             );
             postViewModel.push(_postViewModel);
         });
@@ -71,6 +72,12 @@ export default class FeedAppService {
         let post = await this.postService.getById(_id);
         if (post) {
             let user = await this.userService.findUserById(post?.idUser);
+            let participant = await this.projectService.getParticipantByProjectAndUser(post.idProject, idUser);
+
+            if (!post.publicPost && !participant) throw new Error("Usuário não tem permissão de visualizar essa publicação.");
+
+            let numberGoodIdea = await this.postService.getCountOfGoodIdeaByPost(_id);
+
             let goodIdea = await this.postService.getAllGoodIdeaFromUser(idUser);
             const postAsGoodIdea = goodIdea.find(x => x.idPost === post?._id);
 
@@ -96,7 +103,8 @@ export default class FeedAppService {
                 post.idProject,
                 post.created_at,
                 postAsGoodIdea != null,
-                userViewModel
+                userViewModel,
+                numberGoodIdea
             );
 
             return _postViewModel;

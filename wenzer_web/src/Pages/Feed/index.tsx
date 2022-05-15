@@ -6,7 +6,7 @@ import { useAuth } from "../../Services/Authentication/auth";
 
 import { Container, ContainerNewPost, HeaderAvatar, InputNewPost, ContainerAds, ContainerRecomendado } from "./styles";
 import Post from "../../Components/Post";
-import { IPostProps } from "../../Components/Post/interface";
+import { IPostProps, PostTypeEnum } from "../../Components/Post/interface";
 
 import APIServiceAuthenticated from "../../Services/api/apiServiceAuthenticated";
 import Cookies from "js-cookie";
@@ -162,10 +162,10 @@ export default function Feed(): ReactElement {
 
       {post.length !== 0 ? (
           post.map(({ 
-            created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
+            created_at, description, _id, idProject, idUser, photo, title, goodIdea, user, countGoodIdea
           }: IPostProps) => (
             <Post
-            key={_id}
+              key={_id}
               created_at={created_at}
               description={description}
               _id={_id}
@@ -176,6 +176,8 @@ export default function Feed(): ReactElement {
               goodIdea={goodIdea}
               user={user}
               removePost={removePost}
+              type={PostTypeEnum.Feed}
+              countGoodIdea={countGoodIdea}
             />
           ))
         ) : (

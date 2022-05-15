@@ -35,4 +35,5 @@ export interface IPostRepository extends IOrm<Post> {
     setCommentAsGoodIdea(commentGoodIdea: UserCommentGoodIdea): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
     search(userId: string, search: string): Promise<Post[]>;
+    getCountOfGoodIdeaByProject(_id: string): Promise<{ idPost: number }[]>;
 }

@@ -7,13 +7,69 @@ import InputTextArea from '../../Components/InputTextArea';
 import Button from '../../Components/Button';
 import InputText from '../../Components/InputText';
 import { AiFillBulb, AiOutlineBulb } from 'react-icons/ai';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
 import { toastfyError, toastfySuccess, toastfyWarning } from '../../Components/Toastfy';
 import { useEffect } from 'react';
 import { useAuth } from '../../Services/Authentication/auth';
 import { CircularProgress } from '@material-ui/core';
+import { PostTypeEnum } from '../../Components/Post/interface';
+
+interface ICommentComponent {
+  id: string;
+  reloadComments: any;
+}
+
+function CommentComponent(props: ICommentComponent) {
+
+  const [txtComment, setTxtComment] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  function onSave() {
+    if (!props.id) return;
+
+    if (!txtComment || txtComment.trim() == '') {
+      toastfyWarning("Preencha o campo de comentário.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    APIServiceAuthenticated.post(`/api/setComments`, { postId: props.id, text: txtComment }, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      setTxtComment("");
+      if (res.data) {
+        props.reloadComments();
+        toastfySuccess("Comentário publicado.");
+      }
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    })
+  }
+
+  return (
+    <MyComent>
+      <InputText 
+        type="text"
+        defaultValue={txtComment}
+        onChange={(e: any) => setTxtComment(e.target.value)}
+        placeholder="Escreva um comentário"/>
+      <Button onClick={onSave} className="button_my-coment">
+        {isLoading ? (
+          <CircularProgress size={16} color="inherit" />
+        ) : (
+          "Comentar"
+        )}
+      </Button>
+    </MyComent>
+  )
+}
 
 interface IpostId {
   id: string;
@@ -23,11 +79,12 @@ function PostScreen(): ReactElement {
   const [hasSubComent, setHasSubComent] = useState<string[]>([]);
   const [likeComent, setLikeComent] = useState<string[]>([]);
   const [post, setPost] = useState<any>();
-  const [txtComment, setTxtComment] = useState("");
   const [txtSubComment, setTxtSubComment] = useState("");
   const [comments, setComments] = useState<any[]>([]);
   const { userInfo } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [reloadComments, setReloadComments] = useState(false);
+  const history = useHistory();
 
   const params = useParams<IpostId>(); //id que é passado ao clicar em um post pelo feed
 
@@ -97,15 +154,18 @@ function PostScreen(): ReactElement {
 
   function getPost() {
     if (!params || !params.id) return;
-    
     APIServiceAuthenticated.get(`/api/feed/post/${params.id}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
+      debugger;
       setPost(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
+      if (err?.response?.data?.mensagem.includes("Usuário não tem permissão")) {
+        history.push(`/feed`);
+      }
     })
   }
 
@@ -129,45 +189,20 @@ function PostScreen(): ReactElement {
     })
   }
 
-  function onSave() {
-    if (!params?.id) return;
-
-    if (!txtComment || txtComment.trim() == '') {
-      toastfyWarning("Preencha o campo de comentário.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    APIServiceAuthenticated.post(`/api/setComments`, { postId: params.id, text: txtComment }, {
-      headers: {
-        auth: Cookies.get('WenzerToken')
-      }
-    }).then(res => {
-      setTxtComment("");
-      if (res.data) {
-        comments.push(res.data);
-        setComments(comments);
-        toastfySuccess("Comentário publicado.");
-      }
-      setIsLoading(false);
-    }).catch(err => {
-      toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
-    })
-  }
-
   useEffect(() => {
     getPost();
-    getComments();
   }, []);
+  
+  useEffect(() => {
+    getComments();
+  }, [reloadComments]);
 
   return (
     <Container>
       { post && (
         <Post 
           description={post.description} 
-          goodIdea={true} 
+          goodIdea={post.goodIdea} 
           _id={post._id}
           idProject={post.idProject}
           idUser={post.idUser}
@@ -178,6 +213,8 @@ function PostScreen(): ReactElement {
           key={post._id}
           updated_at={post.updated_at}
           removePost={null}
+          type={PostTypeEnum.Comment}
+          countGoodIdea={post.countGoodIdea}
         />
       )}
       <ContainerComent>
@@ -244,20 +281,7 @@ function PostScreen(): ReactElement {
           ))}
         </MainComent>
 
-        <MyComent>
-          <InputText 
-            type="text"
-            defaultValue={txtComment}
-            onChange={(e: any) => setTxtComment(e.target.value)}
-            placeholder="Escreva um comentário"/>
-          <Button onClick={onSave} className="button_my-coment">
-            {isLoading ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              "Comentar"
-            )}
-          </Button>
-        </MyComent>
+        <CommentComponent id={params?.id} reloadComments={setReloadComments} />
       </ContainerComent>
     </Container>
   )

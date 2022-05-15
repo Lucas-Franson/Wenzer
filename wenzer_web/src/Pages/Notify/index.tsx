@@ -51,7 +51,7 @@ function Notify(): ReactElement {
             <main>
               {notification.length > 0 ? 
                 notification.map((data) => (
-                  <div>
+                  <div key={data._id}>
                     {data.type === NotificationType.FriendRequest ? (
                       <NotifyFriendRequest 
                         key={data._id}

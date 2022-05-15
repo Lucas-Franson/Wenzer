@@ -192,6 +192,11 @@ export default class PostService implements IPostService {
         return await this.postRepository.search(userId, search);
     }
 
+    async getCountOfGoodIdeaByPost(_id: string): Promise<number> {
+        let count = await this.postRepository.getCountOfGoodIdeaByProject(_id);
+        return count[0].idPost;
+    }
+
     // WEB SERVICE
     async getNewPostToWebService(id: string, dbo: Db) {
         let alreadySeen = await this.postRepository.getDateLastPostSeenWebService(id, dbo);

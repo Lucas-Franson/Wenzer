@@ -14,7 +14,8 @@ export default class PostViewModel {
         public idProject: string,
         public created_at: Date,
         public goodIdea: boolean,
-        public user: UserViewModel
+        public user: UserViewModel,
+        public countGoodIdea: number
     ) {
 
     }

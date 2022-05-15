@@ -56,6 +56,14 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                         }
                     },
                     {
+                        $lookup: {
+                            from: 'Participant',
+                            localField: 'idProject',
+                            foreignField: 'idProject',
+                            as: 'participants'
+                        }
+                    },
+                    {
                         $match: {
                             $or: [
                                 {
@@ -69,6 +77,15 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                                                 }
                                             }
                                         }
+                                    },
+                                    publicPost: true
+                                },
+                                {
+                                    participants: {
+                                        $elemMatch: {
+                                            idUser,
+                                            accepted: true
+                                        }
                                     }
                                 },
                                 {
@@ -80,7 +97,8 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                                             idFollower: idUser,
                                             accepted: true
                                         }
-                                    }
+                                    },
+                                    publicPost: true
                                 },
                                 {
                                     userTwo: {
@@ -88,7 +106,8 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                                             idUser,
                                             accepted: true
                                         }
-                                    }
+                                    },
+                                    publicPost: true
                                 }
                             ]
 
@@ -113,8 +132,30 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 var dbo = db.db(database);
                 dbo.collection(collection).aggregate([
                     {
+                        $lookup: {
+                            from: 'Participant',
+                            localField: 'idProject',
+                            foreignField: 'idProject',
+                            as: 'participants'
+                        }
+                    },
+                    {
                         $match: {
-                            idUser: userId
+                            $or: [
+                                {
+                                    idUser: userId,
+                                    publicPost: true
+                                },
+                                {
+                                    idUser: userId,
+                                    participants: {
+                                        $elemMatch: {
+                                            idUser: userId,
+                                            accepted: true
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     {
@@ -320,7 +361,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     },
                     {
                         $project: {
-                            _id: "$idPostComment",
+                            _id: "$postComment.idPost",
                             name: "$user.name",
                             created_at: 1
                         }
@@ -456,9 +497,33 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 let filter = new RegExp(["(", search.split(" ").join("|"), ")"].join(""), "i");
                 dbo?.collection(collection).find({ 
                     title: filter,
-                    idUser: { $ne: userId }
+                    idUser: { $ne: userId },
+                    publicPost: true
                 }).project({ _id: 1, title: 1, description: 1, photo: 1 }).toArray(function(err: any, results: any) {
                     resolve(results);
+                    db?.close();
+                });
+            });
+        });
+    }
+    
+    async getCountOfGoodIdeaByProject(_id: string): Promise<{ idPost: number }[]> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db?.db(database);
+                dbo?.collection('UserPostGoodIdea').aggregate([
+                    {
+                        $match: {
+                            idPost: _id
+                        }
+                    },
+                    {
+                        $count: "idPost"
+                    }
+                ]).toArray(function(err: any, results: any) {
+                    if (results && results.length > 0) resolve(results);
+                    else resolve([{ idPost: 0 }]);
                     db?.close();
                 });
             });
@@ -515,6 +580,14 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     }
                 },
                 {
+                    $lookup: {
+                        from: 'Participant',
+                        localField: 'idProject',
+                        foreignField: 'idProject',
+                        as: 'participants'
+                    }
+                },
+                {
                     $match: {
                         $or: [
                             {
@@ -528,6 +601,15 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                                             }
                                         }
                                     }
+                                },
+                                publicPost: true
+                            },
+                            {
+                                participants: {
+                                    $elemMatch: {
+                                        idUser: id,
+                                        accepted: true
+                                    }
                                 }
                             },
                             {
@@ -538,14 +620,16 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                                     $elemMatch: {
                                         idFollower: id
                                     }
-                                }
+                                },
+                                publicPost: true
                             },
                             {
                                 userTwo: {
                                     $elemMatch: {
                                         idUser: id
                                     }
-                                }
+                                },
+                                publicPost: true
                             }
                         ],
                         $and: [

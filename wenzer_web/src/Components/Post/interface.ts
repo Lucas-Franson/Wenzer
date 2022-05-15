@@ -10,4 +10,11 @@ export interface IPostProps {
     goodIdea: boolean;
     user: { _id: string, name: string, photo: any };
     removePost: any;
+    type: PostTypeEnum;
+    countGoodIdea: number;
+}
+
+export enum PostTypeEnum {
+    Feed,
+    Comment
 }

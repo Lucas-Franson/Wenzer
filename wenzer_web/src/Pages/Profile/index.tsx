@@ -20,7 +20,7 @@ import InputTextArea from '../../Components/InputTextArea';
 import ModalProfilePic from '../../Components/Modal/ModalProfilePic';
 import { CircularProgress } from '@material-ui/core';
 import Select from 'react-select';
-import { IPostProps } from '../../Components/Post/interface';
+import { IPostProps, PostTypeEnum } from '../../Components/Post/interface';
 import Post from '../../Components/Post';
 import NoPostHere from "../../Components/Animation/NoPostHere";
 import { useHistory } from 'react-router-dom';
@@ -174,6 +174,20 @@ function Profile(): ReactElement {
     if (isLoading) return;
     setIsLoading(true);
 
+    let qtdNumber = name.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Nome não pode possuir números");
+      setIsLoading(false);
+      return;
+    }
+
+    qtdNumber = lastName.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Sobrenome não pode possuir números");
+      setIsLoading(false);
+      return;
+    }
+
     let arrAreEqual = interestsOfUser.filter(x => interestsSelected.some(y => x.value !== y.value)).length === 0;
 
     if (name === userProfileInfo?.name && 
@@ -277,6 +291,17 @@ function Profile(): ReactElement {
     setName(name);
   }
 
+  function handleLastName(e: any) {
+    e.preventDefault();
+    let lastName = capitalize(e.target.value.trim());
+    let qtdNumber = lastName.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Sobrenome não pode possuir número");
+      return;
+    }
+    setLastName(lastName);
+  }
+
   function handleBio(e: any) {
     e.preventDefault();
     if (e.target.value == '') setBio('');
@@ -306,6 +331,8 @@ function Profile(): ReactElement {
   }
 
   function goToUserProfile(_id: string) {
+    setHasEditProfile(false);
+    setAnchorEl(null);
     history.push(`/profile?user=${_id}`);
     setAlreadyGetUserInfo(false);
     setAlreadyGetConnections(false);
@@ -392,7 +419,7 @@ function Profile(): ReactElement {
               <span>Publicações</span>
              {
                 post.map(({ 
-                  created_at, description, _id, idProject, idUser, photo, title, goodIdea, user
+                  created_at, description, _id, idProject, idUser, photo, title, goodIdea, user, countGoodIdea
                 }: IPostProps) => (
                   <Post
                     key={_id}
@@ -406,6 +433,8 @@ function Profile(): ReactElement {
                     goodIdea={goodIdea}
                     user={user}
                     removePost={removePost}
+                    type={PostTypeEnum.Feed}
+                    countGoodIdea={countGoodIdea}
                   />
                 ))
              }
@@ -432,7 +461,7 @@ function Profile(): ReactElement {
                 placeholder="Sobrenome"
                 required={true}
                 defaultValue={userProfileInfo?.lastName}
-                onChange={(e: any) => setLastName(e.target.value)}
+                onChange={handleLastName}
               />
               <InputText 
                 type="text"

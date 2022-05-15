@@ -130,6 +130,10 @@ export const CardInfo = styled.div`
     margin-top: 10px;
     background-color: #333;
     padding: 10px;
+
+    > div {
+      margin-bottom: 0px;
+    }
   }
 
   > span {

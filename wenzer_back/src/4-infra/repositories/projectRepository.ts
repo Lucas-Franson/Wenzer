@@ -27,7 +27,33 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
-                dbo.collection(collection).find({ userId }).toArray(function(err: any, results: any) {
+                dbo.collection(collection).aggregate([
+                    {
+                        $lookup: {
+                            from: 'Participant',
+                            localField: '_id',
+                            foreignField: 'idProject',
+                            as: 'participants'
+                        }
+                    },
+                    {
+                        $match: {
+                            $or: [
+                                {
+                                    participants: {
+                                        $elemMatch: {
+                                            idUser: userId,
+                                            accepted: true
+                                        }
+                                    }
+                                },
+                                {
+                                    userId
+                                }
+                            ]
+                        }
+                    }
+                ]).toArray(function(err: any, results: any) {
                     const projects = _self.handleArrayResult(results);
                     resolve(projects);
                     db.close();
@@ -182,6 +208,9 @@ export class ProjectRepository extends Orm<Project> implements IProjectRepositor
                                 $elemMatch: {
                                     idUser
                                 }
+                            },
+                            userId: {
+                                $ne: idUser
                             }
                         }
                     },

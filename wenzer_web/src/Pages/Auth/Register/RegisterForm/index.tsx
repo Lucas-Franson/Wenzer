@@ -5,7 +5,7 @@ import api from "../../../../Services/api/apiService";
 import InputText from "../../../../Components/InputText";
 import InputPassword from "../../../../Components/InputPassword";
 import DialogTermsAndPolicy from "../../../../Components/DialogTermsPolicy";
-import { toastfyError, toastfySuccess } from "../../../../Components/Toastfy";
+import { toastfyError, toastfySuccess, toastfyWarning } from "../../../../Components/Toastfy";
 import { CircularProgress } from "@material-ui/core";
 
 import { Container } from "./styles";
@@ -35,6 +35,22 @@ function Login() {
       setIsLoading(false);
       return
     }
+    
+    let qtdNumber = name.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Nome não pode possuir número");
+      setHasError(true);
+      setIsLoading(false);
+      return;
+    }
+
+    qtdNumber = lastName.split('').find(x => x !== ' ' && !isNaN(Number(x)))?.length;
+    if (qtdNumber && qtdNumber > 0) {
+      toastfyWarning("Sobrenome não pode possuir número");
+      setHasError(true);
+      setIsLoading(false);
+      return;
+    }
 
     const data = {
       name, lastName, email, password, university, hasCompany
@@ -53,9 +69,9 @@ function Login() {
       });
   }
 
-   function handleShowTerms() {
-     setIsTerms(!isTerms);
-   }
+  function handleShowTerms() {
+    setIsTerms(!isTerms);
+  }
 
   return (
     <Container>

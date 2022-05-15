@@ -88,7 +88,8 @@ export function websocket(io: any) {
                 value.idProject,
                 value.created_at,
                 postAsGoodIdea != null,
-                userViewModel
+                userViewModel,
+                0
             );
             postViewModel.push(_postViewModel);
         });

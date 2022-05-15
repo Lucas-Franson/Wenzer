@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react';
 
 import { Container, ContainerPost, HeaderAvatar } from './styles';
-import { IPostProps } from './interface';
+import { IPostProps, PostTypeEnum } from './interface';
 import { AiFillBulb, AiOutlineBulb, AiOutlineComment, AiOutlineEllipsis, AiOutlineProject } from 'react-icons/ai';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import Cookies from 'js-cookie';
@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Fade from '@material-ui/core/Fade';
 import { useAuth } from '../../Services/Authentication/auth';
 import ModalProject from '../Modal/ModalProject';
+import ModalConfirm from '../Modal/ModalConfirm';
 
 function Post({ 
   created_at,
@@ -25,40 +26,38 @@ function Post({
   title,
   goodIdea,
   user,
-  removePost
+  removePost,
+  type,
+  countGoodIdea
  }: IPostProps): ReactElement {
   const [hasLiked, setHasLiked] = useState(goodIdea);
+  let [countGoodIdeaState, setCountGoodIdeaState] = useState(countGoodIdea);
   const [openModalProject, setOpenModalProject] = useState(false);
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { userInfo } = useAuth();
+  const [openModalConfirm, setOpenModalConfirm] = useState(false);
 
   const open = Boolean(anchorEl);
 
   function setGoodIdea() {
-    setHasLiked(!hasLiked);
     APIServiceAuthenticated.post('/api/setPostAsGoodIdea', { postId: _id }, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
+    }).then(data => {
+      debugger;
+      if (!hasLiked) {
+        let newCount = ++countGoodIdeaState;
+        setCountGoodIdeaState(newCount);
+      } else {
+        let newCount = --countGoodIdeaState;
+        setCountGoodIdeaState(newCount);
+      }
+      setHasLiked(!hasLiked);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
-  }
-
-  function deletePost() {
-    APIServiceAuthenticated.delete(`/api/feed/post/${_id}`, {
-      headers: {
-        auth: Cookies.get('WenzerToken')
-      }
-    })
-    .then(data => {
-      toastfySuccess("Publicação deletada!");
-      if (removePost) removePost(_id);
-    })
-    .catch(err => {
-      toastfyError(err?.response?.data?.mensagem);
-    });
   }
 
   function goToUserProfile() {
@@ -71,6 +70,14 @@ function Post({
 
   function openProject() {
     setOpenModalProject(true);
+  }
+
+  function handleConfirm() {
+    if (removePost) removePost(_id);
+  }
+
+  function handleOpenModalConfirm() {
+    setOpenModalConfirm(!openModalConfirm);
   }
 
   const handleOpenMenuSettings = (event: React.MouseEvent<HTMLElement>) => {
@@ -99,7 +106,7 @@ function Post({
         <main>
             <div className="text">
               <p>{title}</p>
-              <span>{description && description.length > 300 ? description.substr(0, 300) + "..." : description}</span>
+              <span>{description && type == PostTypeEnum.Feed && description.length > 300 ? description.substr(0, 300) + "..." : description}</span>
             </div>
             {photo ? (
               <div className="image">
@@ -112,6 +119,7 @@ function Post({
 
         <footer>  
           <div onClick={setGoodIdea}>
+            <p>{type == PostTypeEnum.Comment ? countGoodIdeaState : ""}</p>
             {!hasLiked ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
             <span>Boa ideia</span>
           </div>
@@ -133,10 +141,11 @@ function Post({
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={deletePost} > <MdDelete size={22}/>  Excluir</MenuItem>
+          <MenuItem style={{margin: '5px', gap: '10px'}} onClick={handleOpenModalConfirm} > <MdDelete size={22}/>  Excluir</MenuItem>
         </Menu>
       </ContainerPost>
       <ModalProject idProject={idProject} open={openModalProject} setOpen={setOpenModalProject} />
+      <ModalConfirm open={openModalConfirm} setOpen={setOpenModalConfirm} setConfirm={handleConfirm} title='publicação' url={`/api/feed/post/${_id}`} />
     </Container>
   )
 }
