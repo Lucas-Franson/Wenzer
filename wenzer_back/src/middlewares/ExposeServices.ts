@@ -14,6 +14,7 @@ import { ConnectionRepository } from "../4-infra/repositories/connectionReposito
 import EmailMarketingRepository from "../4-infra/repositories/emailMarketingRepository";
 import { FollowerRepository } from "../4-infra/repositories/followerRepository";
 import { InterestRepository } from "../4-infra/repositories/interestRepository";
+import { ParticipantRepository } from "../4-infra/repositories/participantRepository";
 import { PostRepository } from "../4-infra/repositories/postRepository";
 import { ProjectRepository } from "../4-infra/repositories/projectRepository";
 import UserRepository from "../4-infra/repositories/userRepository";
@@ -21,7 +22,7 @@ import UserRepository from "../4-infra/repositories/userRepository";
 const userService = new UserService(new UserRepository(), new ConnectionRepository());
 const emailMarketingService = new EmailMarketingService(new EmailMarketingRepository());
 const postService = new PostService(new PostRepository());
-const projectService = new ProjectService(new ProjectRepository(), new FollowerRepository(), new InterestRepository(), new PostRepository());
+const projectService = new ProjectService(new ProjectRepository(), new FollowerRepository(), new InterestRepository(), new PostRepository(), new ParticipantRepository());
 const interestService = new InterestService(new InterestRepository());
 const notificationService = new NotificationService(new PostRepository(), new UserRepository());
 

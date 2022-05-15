@@ -1,6 +1,8 @@
 import { Followers } from "../entities/followers";
 import { Interests } from "../entities/interests";
+import { Participant } from "../entities/participant";
 import { Project } from "../entities/project";
+import { User } from "../entities/user";
 import { UserProjectGoodIdea } from "../entities/userProjectGoodIdea";
 
 export default interface IProjectService {
@@ -22,4 +24,9 @@ export default interface IProjectService {
     userProjectGoodIdeaAlreadyExist(idUser: string, idProject: string): Promise<UserProjectGoodIdea>;
     sumCountOfGoodIdeia(idProject: string, userProjectExist: boolean): void;
     search(userId: string, search: string): Promise<Project[]>;
+    getParticipants(_id: string): Promise<User[]>;
+    acceptParticipant(idProject: string, idUserRequest: string, role: string): Promise<void>;
+    rejectParticipant(idProject: string, idUserRequest: string): Promise<void>;
+    requestParticipant(idUserServer: string, idProject: string): Promise<void>;
+    removeParticipant(idProject: string, idUserRequest: string): Promise<void>;
 }

@@ -184,4 +184,36 @@ export default class ProjectAppService {
         this.projectService.setUserProjectGoodIdea(idUser, idProject, userPostExist != null);
     }
 
+    async getParticipants(_id: string) {
+        return await this.projectService.getParticipants(_id);
+    }
+
+    async acceptParticipant(idUserServer: string, idProject: string, idUserRequest: string, role: string) {
+        let project = await this.projectService.getById(idProject);
+
+        if (project?.userId != idUserServer) throw Error("Você não possui permissão para aceitar o usuário nesse projeto.");
+
+        await this.projectService.acceptParticipant(idProject, idUserRequest, role);
+    }
+
+    async rejectParticipant(idUserServer: string, idProject: string, idUserRequest: string) {
+        let project = await this.projectService.getById(idProject);
+
+        if (project?.userId != idUserServer) throw Error("Você não possui permissão para rejeitar o usuário nesse projeto.");
+
+        await this.projectService.rejectParticipant(idProject, idUserRequest);
+    }
+
+    async requestParticipant(idUserServer: string, idProject: string) {
+        await this.projectService.requestParticipant(idUserServer, idProject);
+    }
+
+    async removeParticipant(idUserServer: string, idProject: string, idUserRequest: string) {
+        let project = await this.projectService.getById(idProject);
+
+        if (project?.userId != idUserServer) throw Error("Você não possui permissão para remover o usuário do projeto.");
+
+        await this.projectService.removeParticipant(idProject, idUserRequest);
+    }
+
 }

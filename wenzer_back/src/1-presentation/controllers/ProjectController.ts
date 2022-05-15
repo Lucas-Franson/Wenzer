@@ -138,4 +138,80 @@ export default class ProjectController {
         }
     }
 
+    async getParticipants(req: any, res: any, next: any) {
+        const { _id } = req.params;
+
+        try {
+            if (!_id) {
+                throw new ErroParametro('Falta parâmetro para recuperar participantes do projeto.');
+            }
+            const participants = await req.service.projectAppService.getParticipants(_id);
+
+            res.status(200).json(participants);
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async acceptParticipant(req: any, res: any, next: any) {
+        const { idProject, idUser } = req.params;
+        const { role } = req.body;
+
+        try {
+            if (!idProject || !idUser) {
+                throw new ErroParametro('Falta parâmetro para aceitar solicitação para participar de projeto.');
+            }
+            await req.service.projectAppService.acceptParticipant(req.session.userId, idProject, idUser, role);
+
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async rejectParticipant(req: any, res: any, next: any) {
+        const { idProject, idUser } = req.params;
+
+        try {
+            if (!idProject || !idUser) {
+                throw new ErroParametro('Falta parâmetro para rejeitar solicitação para participar de projeto.');
+            }
+            await req.service.projectAppService.rejectParticipant(req.session.userId, idProject, idUser);
+
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async requestParticipant(req: any, res: any, next: any) {
+        const { _id } = req.params;
+
+        try {
+            if (!_id) {
+                throw new ErroParametro('Falta parâmetro para solicitar participação no projeto.');
+            }
+            await req.service.projectAppService.requestParticipant(req.session.userId, _id);
+
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
+    async removeParticipant(req: any, res: any, next: any) {
+        const { idProject, idUser } = req.params;
+
+        try {
+            if (!idProject || !idUser) {
+                throw new ErroParametro('Falta parâmetro para remover participante do projeto.');
+            }
+            await req.service.projectAppService.removeParticipant(req.session.userId, idProject, idUser);
+
+            res.status(204).json();
+        } catch(err) {
+            next(err);
+        }
+    }
+
 }

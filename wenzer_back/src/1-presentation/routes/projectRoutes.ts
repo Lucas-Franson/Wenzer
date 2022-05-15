@@ -148,6 +148,61 @@ routes.post('/api/project', AuthUser, projectController.create, () => {
             schema: { mensagem: "<mensagem do erro>" },
             description: "Internal server error" }
     */
+})
+.get('/api/project/participant/:_id', AuthUser, projectController.getParticipants, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para buscar participants do projeto.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
+})
+.post('/api/project/participant/accept/:idProject/:idUser', AuthUser, projectController.acceptParticipant, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para aceitar participação de usuário no projeto.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
+})
+.post('/api/project/participant/reject/:idProject/:idUser', AuthUser, projectController.rejectParticipant, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para rejeitar participação de usuário no projeto.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
+})
+.post('/api/project/participant/:_id', AuthUser, projectController.requestParticipant, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para solicitar participação em projeto.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
+})
+.delete('/api/project/participant/:idProject/:idUser', AuthUser, projectController.removeParticipant, () => {
+    /* 
+        #swagger.tags = ["Project"] 
+        #swagger.description = 'Endpoint para remover participante do projeto.'
+        #swagger.responses[200] = {
+            description: "Ok" }
+        #swagger.responses[500] = { 
+            schema: { mensagem: "<mensagem do erro>" },
+            description: "Internal server error" }
+    */
 });
 
 routes.options([
@@ -157,7 +212,10 @@ routes.options([
     '/api/project/post',
     '/api/project/byid',
     '/api/project/goodidea',
-    '/api/project/search'
+    '/api/project/search',
+    '/api/project/participant/',
+    '/api/project/participant/accept',
+    '/api/project/participant/reject'
 ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

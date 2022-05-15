@@ -1,10 +1,13 @@
 import { IFollowerRepository } from "../../4-infra/irepositories/IfollowerRepository";
 import { IInterestRepository } from "../../4-infra/irepositories/IinterestRepository";
+import { IParticipantRepository } from "../../4-infra/irepositories/IparticipantRepository";
 import { IPostRepository } from "../../4-infra/irepositories/IpostRepository";
 import { IProjectRepository } from "../../4-infra/irepositories/IprojectRepository";
 import { Followers } from "../entities/followers";
 import { Interests } from "../entities/interests";
+import { Participant } from "../entities/participant";
 import { Project } from "../entities/project";
+import { User } from "../entities/user";
 import { UserProjectGoodIdea } from "../entities/userProjectGoodIdea";
 import IProjectService from "../Iservices/IProjectService";
 
@@ -14,7 +17,8 @@ export default class ProjectService implements IProjectService {
         private readonly projectRepository: IProjectRepository, 
         private readonly followerRepository: IFollowerRepository,
         private readonly interestRepository: IInterestRepository,
-        private readonly postRepository: IPostRepository
+        private readonly postRepository: IPostRepository,
+        private readonly participantRepository: IParticipantRepository
     ) {
 
     }
@@ -133,6 +137,49 @@ export default class ProjectService implements IProjectService {
 
     async search(userId: string, search: string): Promise<Project[]> {
         return await this.projectRepository.search(userId, search);
+    }
+
+    async getParticipants(_id: string): Promise<User[]> {
+        return await this.participantRepository.getParticipants(_id);
+    }
+    
+    async acceptParticipant(idProject: string, idUserRequest: string, role: string): Promise<void> {
+        let participantRequest = await this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+
+        if (!participantRequest) throw new Error("Solicitação não encontrada para aceitar.");
+
+        if (participantRequest.accepted) throw new Error("Solicitação já foi aceito.");
+
+        participantRequest.accepted = true;
+        participantRequest.role = role;
+
+        await this.participantRepository.updateParticipant(participantRequest);
+    }
+
+    async rejectParticipant(idProject: string, idUserRequest: string): Promise<void> {
+        let participantRequest = await this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+
+        if (!participantRequest) throw new Error("Solicitação não encontrada para rejeitar.");
+        
+        await this.participantRepository.removeParticipant(participantRequest);
+    }
+
+    async requestParticipant(idUserServer: string, idProject: string): Promise<void> {
+        let participant = new Participant(
+            idProject,
+            idUserServer,
+            false,
+            ''
+        );
+        await this.participantRepository.requestParticipant(participant);
+    }
+
+    async removeParticipant(idProject: string, idUserRequest: string): Promise<void> {
+        let participantRequest = await this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+
+        if (!participantRequest) throw new Error("Participante não encontrada para remover.");
+        
+        await this.participantRepository.removeParticipant(participantRequest);
     }
 
 }

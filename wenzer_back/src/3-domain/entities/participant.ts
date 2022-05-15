@@ -1,7 +1,7 @@
 import DomainBase from './domainBase';
 import { v4 as uuid } from 'uuid';
 
-export class Participants extends DomainBase {
+export class Participant extends DomainBase {
 
     constructor(
         public idProject: string,
