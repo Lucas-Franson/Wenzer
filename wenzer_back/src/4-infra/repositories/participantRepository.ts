@@ -16,10 +16,35 @@ export class ParticipantRepository extends Orm<Participant> implements IParticip
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
                 dbo.collection(collection).aggregate([
-                    // Escrever a estrutura de filtro
-                ]).toArray(function(err: any, results: any) {
-                    let interestUser = _self.handleArrayResult(results);
-                    resolve(interestUser);
+                    {
+                        $lookup: {
+                            from: 'User',
+                            localField: 'idUser',
+                            foreignField: '_id',
+                            as: 'user',
+                        }
+                    },
+                    {
+                        $unwind: "$user"
+                    },
+                    {
+                        $match: {
+                            idProject: _id
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: "$idUser",
+                            name: "$user.name",
+                            photo: "$user.photo",
+                            accepted: 1,
+                            role: 1,
+                            created_at: 1
+                        }
+                    }
+                ]).sort({ created_at: -1 }).toArray(function(err: any, results: any) {
+                    if (results) resolve(results);
+                    else resolve([]);
                     db.close();
                 });
             });
