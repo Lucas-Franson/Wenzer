@@ -155,6 +155,82 @@ class ProjectController {
             }
         });
     }
+    getParticipants(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { _id } = req.params;
+            try {
+                if (!_id) {
+                    throw new erros_1.ErroParametro('Falta parâmetro para recuperar participantes do projeto.');
+                }
+                const participants = yield req.service.projectAppService.getParticipants(_id);
+                res.status(200).json(participants);
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+    }
+    acceptParticipant(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idProject, idUser } = req.params;
+            const { role } = req.body;
+            try {
+                if (!idProject || !idUser) {
+                    throw new erros_1.ErroParametro('Falta parâmetro para aceitar solicitação para participar de projeto.');
+                }
+                yield req.service.projectAppService.acceptParticipant(req.session.userId, idProject, idUser, role);
+                res.status(204).json();
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+    }
+    rejectParticipant(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idProject, idUser } = req.params;
+            try {
+                if (!idProject || !idUser) {
+                    throw new erros_1.ErroParametro('Falta parâmetro para rejeitar solicitação para participar de projeto.');
+                }
+                yield req.service.projectAppService.rejectParticipant(req.session.userId, idProject, idUser);
+                res.status(204).json();
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+    }
+    requestParticipant(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { _id } = req.params;
+            try {
+                if (!_id) {
+                    throw new erros_1.ErroParametro('Falta parâmetro para solicitar participação no projeto.');
+                }
+                yield req.service.projectAppService.requestParticipant(req.session.userId, _id);
+                res.status(204).json();
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+    }
+    removeParticipant(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idProject, idUser } = req.params;
+            try {
+                if (!idProject || !idUser) {
+                    throw new erros_1.ErroParametro('Falta parâmetro para remover participante do projeto.');
+                }
+                yield req.service.projectAppService.removeParticipant(req.session.userId, idProject, idUser);
+                res.status(204).json();
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+    }
 }
 exports.default = ProjectController;
 //# sourceMappingURL=ProjectController.js.map

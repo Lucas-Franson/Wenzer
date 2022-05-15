@@ -22,4 +22,9 @@ export default class ProjectAppService {
     follow(userId: string, idProject: string): Promise<void>;
     createPost(userId: string, post: PostCreateViewModel): Promise<void>;
     setUserProjectGoodIdea(idUser: string, idProject: string): Promise<void>;
+    getParticipants(_id: string): Promise<import("../../3-domain/entities/user").User[]>;
+    acceptParticipant(idUserServer: string, idProject: string, idUserRequest: string, role: string): Promise<void>;
+    rejectParticipant(idUserServer: string, idProject: string, idUserRequest: string): Promise<void>;
+    requestParticipant(idUserServer: string, idProject: string): Promise<void>;
+    removeParticipant(idUserServer: string, idProject: string, idUserRequest: string): Promise<void>;
 }

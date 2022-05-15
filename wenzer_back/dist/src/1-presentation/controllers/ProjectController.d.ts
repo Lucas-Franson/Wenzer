@@ -9,4 +9,9 @@ export default class ProjectController {
     follow(req: any, res: any, next: any): Promise<void>;
     createPost(req: any, res: any, next: any): Promise<void>;
     setUserProjectGoodIdea(req: any, res: any, next: any): Promise<void>;
+    getParticipants(req: any, res: any, next: any): Promise<void>;
+    acceptParticipant(req: any, res: any, next: any): Promise<void>;
+    rejectParticipant(req: any, res: any, next: any): Promise<void>;
+    requestParticipant(req: any, res: any, next: any): Promise<void>;
+    removeParticipant(req: any, res: any, next: any): Promise<void>;
 }

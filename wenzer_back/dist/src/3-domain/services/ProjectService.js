@@ -10,13 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const followers_1 = require("../entities/followers");
+const participant_1 = require("../entities/participant");
 const userProjectGoodIdea_1 = require("../entities/userProjectGoodIdea");
 class ProjectService {
-    constructor(projectRepository, followerRepository, interestRepository, postRepository) {
+    constructor(projectRepository, followerRepository, interestRepository, postRepository, participantRepository) {
         this.projectRepository = projectRepository;
         this.followerRepository = followerRepository;
         this.interestRepository = interestRepository;
         this.postRepository = postRepository;
+        this.participantRepository = participantRepository;
     }
     getById(_id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -140,6 +142,56 @@ class ProjectService {
     search(userId, search) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.projectRepository.search(userId, search);
+        });
+    }
+    getParticipants(_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.participantRepository.getParticipants(_id);
+        });
+    }
+    acceptParticipant(idProject, idUserRequest, role) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let participantRequest = yield this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+            if (!participantRequest)
+                throw new Error("Solicitação não encontrada para aceitar.");
+            if (participantRequest.accepted)
+                throw new Error("Solicitação já foi aceito.");
+            participantRequest.accepted = true;
+            participantRequest.role = role;
+            yield this.participantRepository.updateParticipant(participantRequest);
+        });
+    }
+    rejectParticipant(idProject, idUserRequest) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let participantRequest = yield this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+            if (!participantRequest)
+                throw new Error("Solicitação não encontrada para rejeitar.");
+            yield this.participantRepository.removeParticipant(participantRequest);
+        });
+    }
+    requestParticipant(idUserServer, idProject) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let participant = new participant_1.Participant(idProject, idUserServer, false, '');
+            yield this.participantRepository.requestParticipant(participant);
+        });
+    }
+    removeParticipant(idProject, idUserRequest) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let participantRequest = yield this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+            if (!participantRequest)
+                throw new Error("Participante não encontrada para remover.");
+            yield this.participantRepository.removeParticipant(participantRequest);
+        });
+    }
+    createParticipantLeader(proj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let participant = new participant_1.Participant(proj._id, proj.userId, true, 'Líder');
+            yield this.participantRepository.requestParticipant(participant);
+        });
+    }
+    getParticipantByProjectAndUser(idProject, idUserRequest) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
         });
     }
 }

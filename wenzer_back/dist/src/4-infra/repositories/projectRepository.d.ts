@@ -3,6 +3,7 @@ import { IProjectRepository } from "../irepositories/IprojectRepository";
 import { Orm } from "./orm";
 import { UserProjectGoodIdea } from "../../3-domain/entities/userProjectGoodIdea";
 export declare class ProjectRepository extends Orm<Project> implements IProjectRepository {
+    insert(object: any): Promise<void>;
     getProjectsByUser(userId: string): Promise<Project[]>;
     getAllProjectsInHigh(): Promise<Project[]>;
     getProjectsByInterests(interests: string[]): Promise<Project[]>;
