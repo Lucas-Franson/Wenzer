@@ -11,6 +11,17 @@ const database = process.env.BASE_NAME_DATABASE!;
 
 export class ProjectRepository extends Orm<Project> implements IProjectRepository {
 
+    async insert(object: any): Promise<void> {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db?.db(database);
+            dbo?.collection(collection).insertOne(object, function(err, res) {
+                if (err) throw err;
+                db?.close();
+            });
+        });
+    }
+
     async getProjectsByUser(userId: string): Promise<Project[]> {
         var _self = this;
         return new Promise(function(resolve, reject){ 

@@ -32,6 +32,10 @@ export const ContainerModal = styled.div`
     .btnViewing {
         display: flex;
         justify-content: space-between;
+
+        > button {
+            margin: 5px;
+        }
     }
 
     > header {
@@ -200,6 +204,19 @@ export const ContainerModal = styled.div`
             > .buttons {
                 display: flex;
                 gap: 5px;
+            }
+
+            > .coment-user {
+                display: flex;
+                align-items: center;
+
+                > button {
+                    margin-top: 0px;
+                }
+
+                > div > .height-coment {
+                    margin-top: 15px;
+                }
             }
         }
 

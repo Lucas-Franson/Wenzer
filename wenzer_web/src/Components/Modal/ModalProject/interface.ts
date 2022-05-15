@@ -12,5 +12,6 @@ export interface IProjectProps {
     tags: [],
     following: boolean,
     user: any,
-    goodIdea: boolean
+    goodIdea: boolean,
+    participating: boolean
 }

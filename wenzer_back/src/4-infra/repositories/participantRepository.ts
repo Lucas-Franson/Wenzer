@@ -11,7 +11,6 @@ const database = process.env.BASE_NAME_DATABASE!;
 export class ParticipantRepository extends Orm<Participant> implements IParticipantRepository {
     
     getParticipants(_id: string): Promise<User[]> {
-        var _self = this;
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
@@ -35,14 +34,14 @@ export class ParticipantRepository extends Orm<Participant> implements IParticip
                     {
                         $project: {
                             _id: "$idUser",
-                            name: "$user.name",
+                            name: { $concat: [ "$user.name", " ", "$user.lastName" ] },
                             photo: "$user.photo",
                             accepted: 1,
                             role: 1,
                             created_at: 1
                         }
                     }
-                ]).sort({ created_at: -1 }).toArray(function(err: any, results: any) {
+                ]).sort({ created_at: 1 }).toArray(function(err: any, results: any) {
                     if (results) resolve(results);
                     else resolve([]);
                     db.close();

@@ -48,34 +48,16 @@ function TabPanel(props: TabPanelProps) {
 }
 
 interface TabPaticipantsContent {
-
+  idProject: string;
+  viewing: boolean;
 }
 
 function TabParticipantsContent(props: TabPaticipantsContent) {
 
-  const data = [
-    {
-      _id: '1',
-      name: 'Lucas',
-      photo: '',
-      role: 'Desenvolvedor',
-      pending: false
-    },
-    {
-      _id: '2',
-      name: 'Elisson',
-      photo: '',
-      role: 'Advogado',
-      pending: false
-    },
-    {
-      _id: '8',
-      name: 'Matheus',
-      photo: '',
-      role: 'Designer',
-      pending: true
-    }
-  ]
+  const [data, setData] = useState<any[]>([]);
+  const [roleInputControl, setRoleInputControl] = useState<string>("");
+  const [url, setUrl] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
   const { theme } = useTheme();
@@ -89,56 +71,160 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
     history.push(`/profile?user=${_id}`);
   }
 
-  function reject() {
-
+  function reject(event: FormEvent, _id: string) {
+    event.preventDefault();
+    if (_id && _id.trim() != "") {
+      setIsLoading(true);
+      APIServiceAuthenticated.post(`/api/project/participant/reject/${props.idProject}/${_id}`, {
+        headers: {
+          auth: Cookies.get('WenzerToken')
+        }
+      }).then(res => {
+        toastfySuccess("Participante rejeitado!");
+        setData(data.filter(x => x._id != _id));
+        setIsLoading(false);
+      }).catch(err => {
+        toastfyError(err?.response?.data?.mensagem);
+        setIsLoading(false);
+      });
+    } 
+    else{
+      toastfyError("Identificação do usuário não pode ser vazio.");
+      return;
+    }
   }
 
-  function accept() {
-
+  function accept(event: FormEvent, _id: string) {
+    event.preventDefault();
+    if (_id && _id.trim() != "") {
+      setIsLoading(true);
+      let body = { role };
+      APIServiceAuthenticated.post(`/api/project/participant/accept/${props.idProject}/${_id}`, body, {
+        headers: {
+          auth: Cookies.get('WenzerToken')
+        }
+      }).then(res => {
+        toastfySuccess("Participante aceito!");
+        data.find(x => x._id == _id).accepted = true;
+        data.find(x => x._id == _id).role = role;
+        setRoleInputControl("");
+        setData(data);
+        setIsLoading(false);
+      }).catch(err => {
+        toastfyError(err?.response?.data?.mensagem);
+        setIsLoading(false);
+      });
+    } 
+    else{
+      toastfyError("Identificação do usuário não pode ser vazio.");
+      return;
+    }
   }
 
-  function handleOpenModalConfirm() {
-    setOpenModalConfirm(!openModalConfirm)
+  function getData() {
+    APIServiceAuthenticated.get(`/api/project/participant/${props.idProject}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      if (props.viewing) {
+        if (res.data) {
+          let participants = res.data.filter((x: any) => x.accepted == true);
+          setData(participants);
+        } 
+        else {
+          setData([]);
+        }
+      } 
+      else {
+        setData(res.data);
+      }
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+    });
   }
+
+  function handleOpenModalConfirm(_id: string) {
+    setUrl(_id);
+    setOpenModalConfirm(!openModalConfirm);
+  }
+
+  function handleConfirm() {
+    if (url) {
+      setData(data.filter(x => x._id != url));
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
       <div className="content">
         {data && data.map(participant => (
-          <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant">
-            <div className="participantHeader">
-              <div onClick={() => goToUserProfile(participant._id)}>
-                <HeaderAvatar className="thumbUser" src={participant.photo} />
+          <>
+            <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant">
+              <div className="participantHeader">
+                <div onClick={() => goToUserProfile(participant._id)}>
+                  <HeaderAvatar className="thumbUser" src={participant.photo} />
+                </div>
+                <div className="nameAndRole" onClick={() => goToUserProfile(participant._id)}>
+                  <span>{participant.name}</span>
+                  <p>{participant.role}</p>
+                </div>
               </div>
-              <div className="nameAndRole" onClick={() => goToUserProfile(participant._id)}>
-                <span>{participant.name}</span>
-                <p>{participant.role}</p>
-              </div>
+              {
+                !props.viewing && participant.role != "Líder" && (
+                  !participant.accepted ? (
+                    <div className="btnRejectAccept">
+                      <Button onClick={(e: FormEvent) => reject(e, participant._id)}>
+                        {isLoading ? (
+                          <CircularProgress size={16} color="secondary" />
+                        ) : 
+                          "Rejeitar"
+                        }
+                      </Button>
+                      <Button onClick={(e: FormEvent) => {
+                          e.preventDefault();
+                          setRoleInputControl(roleInputControl == participant._id ? "" : participant._id)
+                        }}>
+                        {isLoading ? (
+                          <CircularProgress size={16} color="inherit" />
+                        ) : 
+                          "Aceitar"
+                        }
+                      </Button>
+                    </div>
+                  ) : (
+                    <span className='removeParticipant' onClick={() => handleOpenModalConfirm(participant._id)}>Remover participante</span>
+                  )
+                )
+              }
             </div>
-            {participant.pending ? (
-              <div className="btnRejectAccept">
-                <Button onClick={reject}>
-                  {isLoading ? (
-                    <CircularProgress size={16} color="secondary" />
-                  ) : 
-                    "Rejeitar"
-                  }
-                </Button>
-                <Button onClick={accept}>
-                  {isLoading ? (
-                    <CircularProgress size={16} color="inherit" />
-                  ) : 
-                    "Aceitar"
-                  }
-                </Button>
-              </div>
-            ) : (
-              <span className='removeParticipant' onClick={handleOpenModalConfirm}>Remover participante</span>
-            )}
-          </div>
+            {
+              roleInputControl && roleInputControl == participant._id && (
+                <div className="coment-user">
+                  <InputText 
+                    type="text"
+                    defaultValue={role}
+                    onChange={(e: any) => setRole(e.target.value)}
+                    className="height-coment" 
+                    placeholder="Qual a função do participante?" />
+                  <Button onClick={(e: FormEvent) => accept(e, participant._id)} className="button_coment">
+                    {isLoading ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : (
+                      "Enviar"
+                    )}
+                  </Button>
+                </div>
+              )
+            }
+          </>
         ))}
       </div>
-      <ModalConfirm open={openModalConfirm} setOpen={setOpenModalConfirm} title='participante'/>
+      <ModalConfirm open={openModalConfirm} setOpen={setOpenModalConfirm} setConfirm={handleConfirm} title='participante' url={`/api/project/participant/${props.idProject}/${url}`} />
     </>
   );
 }
@@ -151,9 +237,10 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [typePost, setTypePost] = useState("1");
   const [isLoading, setIsLoading] = useState(false);
   const [project, setProject] = useState<IProjectProps>();
-  const [viewing, setViewing] = useState(false);
+  const [viewing, setViewing] = useState(true);
   const [following, setFollowing] = useState(false);
   const [goodIdea, setGoodIdea] = useState(false);
+  const [participating, setParticipating] = useState(false);
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
   const { theme } = useTheme();
@@ -188,6 +275,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     setInterestsSelected([]);
     setPaymentImpulsionamento(false);
     setTypePost("1");
+    setTabIndex(0);
   };
 
   const handleCancelPayment = () => {
@@ -378,6 +466,26 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     });
   }
 
+  function requestToParticipate(event: FormEvent) {
+    event.preventDefault();
+
+    if (isLoading || !idProject) return;
+    setIsLoading(true);
+    
+    APIServiceAuthenticated.post(`/api/project/participant/${idProject}`, {
+      headers: {
+        auth: Cookies.get('WenzerToken')
+      }
+    }).then(res => {
+      toastfySuccess("Solicitação enviada, aguarde o líder do projeto aceitar.");
+      setParticipating(true);
+      setIsLoading(false);
+    }).catch(err => {
+      toastfyError(err?.response?.data?.mensagem);
+      setIsLoading(false);
+    });
+  }
+
   function handleForm(project: IProjectProps) {
     let publicProject = JSON.parse(project.publicProject + "") ? "1" : "2";
     setTypePost(publicProject);
@@ -387,6 +495,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     setPaymentImpulsionamento(JSON.parse(project.marketing + ""));
     setFollowing(project.following);
     setGoodIdea(project.goodIdea);
+    setParticipating(project.participating);
     if (project.photo && typeof project.photo === 'object') {
       let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
       let file = dataURLtoFile(base64, project.photo.name);
@@ -438,11 +547,11 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         <form>
           <div className="profile">
             <HeaderAvatar src={project && project.user ? project.user.photo : userInfo?.photo} />
-            <select required disabled={viewing} defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
+            {/* <select required disabled={viewing} defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
               {typesProjects.map(item => (
                 <option value={item.value} key={item.value}>{item.label}</option>
               ))}
-            </select>
+            </select> */}
             <div className='payment-check'>
               {paymentImpulsionamento && (
                 <>
@@ -453,7 +562,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
             </div>
           </div>
 
-          <Paper square>
+          <Paper square style={{ display: (viewing && idProject) || (!viewing && idProject) ? "block" : "none" }}>
             <Tabs 
               value={tabIndex} 
               indicatorColor="primary"
@@ -548,10 +657,22 @@ export default function ModalProject({open, setOpen, idProject}: any) {
                   }
                 </Button>
               </div>
+              <div className="btnViewing" style={{ display: viewing && !participating ? 'flex' : 'none' }}>
+                <Button onClick={requestToParticipate}>
+                  {isLoading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : ( 
+                      <div>
+                        <span>Pedir para participar</span>
+                      </div>
+                    )
+                  }
+                </Button>
+              </div>
             </div>
           </TabPanel>
           <TabPanel value={tabIndex} index={1}>
-            <TabParticipantsContent />
+            <TabParticipantsContent idProject={idProject} viewing={viewing} />
           </TabPanel>
         </form>
       </main>

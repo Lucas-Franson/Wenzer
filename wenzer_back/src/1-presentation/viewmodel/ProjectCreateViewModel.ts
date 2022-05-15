@@ -17,7 +17,8 @@ export class ProjectCreateViewModel {
         public userId: string = "",
         public following: boolean = false,
         public user: any = null,
-        public goodIdea: boolean = false
+        public goodIdea: boolean = false,
+        public participating: boolean = false
     ) {
 
     }

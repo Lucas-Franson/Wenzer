@@ -29,4 +29,6 @@ export default interface IProjectService {
     rejectParticipant(idProject: string, idUserRequest: string): Promise<void>;
     requestParticipant(idUserServer: string, idProject: string): Promise<void>;
     removeParticipant(idProject: string, idUserRequest: string): Promise<void>;
+    createParticipantLeader(proj: Project): Promise<void>;
+    getParticipantByProjectAndUser(idProject: string, idUserRequest: string): Promise<Participant>;
 }

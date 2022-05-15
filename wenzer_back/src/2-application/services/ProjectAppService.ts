@@ -22,8 +22,10 @@ export default class ProjectAppService {
     async get(idUser: string, _id: string) {
         let project = await this.projectService.getById(_id);
         let user = null;
+        let participant = null;
         if (project) {
             user = await this.userService.findUserById(project?.userId);
+            participant = await this.projectService.getParticipantByProjectAndUser(project?._id, idUser);
         }
         let interest = await this.interestsService.getInterestsByProject(_id);
         let interestViewModel: InterestsFormViewModel[] = [];
@@ -54,7 +56,8 @@ export default class ProjectAppService {
             project?.userId,
             following,
             user,
-            goodIdea != null
+            goodIdea != null,
+            participant != null
         );
 
         return viewModel;
@@ -76,6 +79,7 @@ export default class ProjectAppService {
             project.countGoodIdea
         );
         await this.projectService.create(proj);
+        await this.projectService.createParticipantLeader(proj);
         this.interestsService.linkProjectToInterests(proj, project.tags);
     }
 

@@ -182,4 +182,18 @@ export default class ProjectService implements IProjectService {
         await this.participantRepository.removeParticipant(participantRequest);
     }
 
+    async createParticipantLeader(proj: Project): Promise<void> {
+        let participant = new Participant(
+            proj._id,
+            proj.userId,
+            true,
+            'Líder'
+        );
+        await this.participantRepository.requestParticipant(participant);
+    }
+
+    async getParticipantByProjectAndUser(idProject: string, idUserRequest: string): Promise<Participant> {
+        return await this.participantRepository.getByProjectAndUser(idProject, idUserRequest);
+    }
+
 }
