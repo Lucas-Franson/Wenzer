@@ -17,6 +17,20 @@ const url = process.env.BASE_URL_DATABASE;
 const collection = "Project";
 const database = process.env.BASE_NAME_DATABASE;
 class ProjectRepository extends orm_1.Orm {
+    insert(object) {
+        return __awaiter(this, void 0, void 0, function* () {
+            mongodb_1.MongoClient.connect(url, function (err, db) {
+                if (err)
+                    throw err;
+                var dbo = db === null || db === void 0 ? void 0 : db.db(database);
+                dbo === null || dbo === void 0 ? void 0 : dbo.collection(collection).insertOne(object, function (err, res) {
+                    if (err)
+                        throw err;
+                    db === null || db === void 0 ? void 0 : db.close();
+                });
+            });
+        });
+    }
     getProjectsByUser(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             var _self = this;
