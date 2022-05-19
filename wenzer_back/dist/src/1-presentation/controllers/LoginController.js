@@ -128,6 +128,17 @@ class LoginController {
             }
         });
     }
+    getUsersActive(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                var count = yield req.service.loginAppService.getUsersActive();
+                return res.status(200).json(count);
+            }
+            catch (err) {
+                return res.status(200).json(0);
+            }
+        });
+    }
 }
 exports.default = LoginController;
 //# sourceMappingURL=LoginController.js.map

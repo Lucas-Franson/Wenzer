@@ -24,4 +24,5 @@ export interface IUserRepository extends IOrm<User> {
     updateConnection(connection: Connections): void;
     insertUser(object: any): Promise<string>;
     search(userId: string, search: string): Promise<User[]>;
+    getUsersActive(): Promise<number>;
 }

@@ -24,6 +24,7 @@ export declare class PostRepository extends Orm<Post> implements IPostRepository
     }[]>;
     getCommentsCommentedByUser(userId: string): Promise<{
         _id: string;
+        idPost: string;
         created_at: Date;
         name: string;
     }[]>;
@@ -38,6 +39,9 @@ export declare class PostRepository extends Orm<Post> implements IPostRepository
     setCommentAsGoodIdea(commentGoodIdea: any): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
     search(userId: string, search: string): Promise<Post[]>;
+    getCountOfGoodIdeaByProject(_id: string): Promise<{
+        idPost: number;
+    }[]>;
     getListUserPostGoodIdeaWebService(whereClause: any, dbo: Db): Promise<UserPostGoodIdea[]>;
     getNewPostToWebService(id: string, alreadySeen: PostAlreadySeen, dbo: Db): Promise<Post[]>;
     getCommentsByPostWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number>;

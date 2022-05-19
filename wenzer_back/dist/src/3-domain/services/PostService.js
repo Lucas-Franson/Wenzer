@@ -187,6 +187,12 @@ class PostService {
             return yield this.postRepository.search(userId, search);
         });
     }
+    getCountOfGoodIdeaByPost(_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let count = yield this.postRepository.getCountOfGoodIdeaByProject(_id);
+            return count[0].idPost;
+        });
+    }
     // WEB SERVICE
     getNewPostToWebService(id, dbo) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -17,6 +17,22 @@ const url = process.env.BASE_URL_DATABASE;
 const collection = "User";
 const database = process.env.BASE_NAME_DATABASE;
 class UserRepository extends orm_1.Orm {
+    getUsersActive() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise(function (resolve, reject) {
+                mongodb_1.MongoClient.connect(url).then(function (db) {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        var dbo = db.db(database);
+                        let count = yield dbo.collection(collection).countDocuments({ emailValid: true });
+                        if (count)
+                            resolve(count);
+                        else
+                            resolve(0);
+                    });
+                });
+            });
+        });
+    }
     setPostAsGoodIdea(postGoodIdea) {
         return __awaiter(this, void 0, void 0, function* () {
             mongodb_1.MongoClient.connect(url, function (err, db) {

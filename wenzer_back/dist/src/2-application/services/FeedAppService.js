@@ -39,7 +39,7 @@ class FeedAppService {
                 const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
                 const user = listUsers.find(x => x._id === value.idUser);
                 let userViewModel = new UserViewModel_1.default(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.email, user === null || user === void 0 ? void 0 : user.password, user === null || user === void 0 ? void 0 : user.title, user === null || user === void 0 ? void 0 : user.photo, user === null || user === void 0 ? void 0 : user.bio, user === null || user === void 0 ? void 0 : user.emailValid, user === null || user === void 0 ? void 0 : user.created_at);
-                const _postViewModel = new PostViewModel_1.default(value._id, value.idUser, value.countViews, value.title, value.description, value.photo, value.idProject, value.created_at, postAsGoodIdea != null, userViewModel);
+                const _postViewModel = new PostViewModel_1.default(value._id, value.idUser, value.countViews, value.title, value.description, value.photo, value.idProject, value.created_at, postAsGoodIdea != null, userViewModel, 0);
                 postViewModel.push(_postViewModel);
             });
             return postViewModel;
@@ -50,10 +50,14 @@ class FeedAppService {
             let post = yield this.postService.getById(_id);
             if (post) {
                 let user = yield this.userService.findUserById(post === null || post === void 0 ? void 0 : post.idUser);
+                let participant = yield this.projectService.getParticipantByProjectAndUser(post.idProject, idUser);
+                if (!post.publicPost && !participant)
+                    throw new Error("Usuário não tem permissão de visualizar essa publicação.");
+                let numberGoodIdea = yield this.postService.getCountOfGoodIdeaByPost(_id);
                 let goodIdea = yield this.postService.getAllGoodIdeaFromUser(idUser);
                 const postAsGoodIdea = goodIdea.find(x => x.idPost === (post === null || post === void 0 ? void 0 : post._id));
                 let userViewModel = new UserViewModel_1.default(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.email, user === null || user === void 0 ? void 0 : user.password, user === null || user === void 0 ? void 0 : user.title, user === null || user === void 0 ? void 0 : user.photo, user === null || user === void 0 ? void 0 : user.bio, user === null || user === void 0 ? void 0 : user.emailValid, user === null || user === void 0 ? void 0 : user.created_at);
-                const _postViewModel = new PostViewModel_1.default(post._id, post.idUser, post.countViews, post.title, post.description, post.photo, post.idProject, post.created_at, postAsGoodIdea != null, userViewModel);
+                const _postViewModel = new PostViewModel_1.default(post._id, post.idUser, post.countViews, post.title, post.description, post.photo, post.idProject, post.created_at, postAsGoodIdea != null, userViewModel, numberGoodIdea);
                 return _postViewModel;
             }
             return post;

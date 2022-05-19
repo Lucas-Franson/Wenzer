@@ -7,4 +7,5 @@ export default class LoginController {
     alterPassword(req: any, res: any, next: any): Promise<any>;
     emailMarketing(req: any, res: any, next: any): Promise<any>;
     confirmarEmailMarketing(req: any, res: any, next: any): Promise<any>;
+    getUsersActive(req: any, res: any, next: any): Promise<any>;
 }

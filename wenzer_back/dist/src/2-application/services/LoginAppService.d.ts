@@ -27,4 +27,5 @@ export default class LoginAppService {
     alterPassword(token: string, password: string): Promise<void>;
     salvarEmailMarketing(email: string): Promise<void>;
     confirmarEmailMarketing(token: string): Promise<void>;
+    getUsersActive(): Promise<number>;
 }

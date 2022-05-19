@@ -38,6 +38,7 @@ export default class PostService implements IPostService {
     deletePost(idPost: string): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
     search(userId: string, search: string): Promise<Post[]>;
+    getCountOfGoodIdeaByPost(_id: string): Promise<number>;
     getNewPostToWebService(id: string, dbo: Db): Promise<Post[] | null>;
     getAllGoodIdeaFromUserWebService(userId: string, dbo: Db): Promise<import("../entities/userPostGoodIdea").UserPostGoodIdea[]>;
 }

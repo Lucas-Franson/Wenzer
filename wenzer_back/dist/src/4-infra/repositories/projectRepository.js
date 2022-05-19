@@ -37,7 +37,33 @@ class ProjectRepository extends orm_1.Orm {
             return new Promise(function (resolve, reject) {
                 mongodb_1.MongoClient.connect(url).then(function (db) {
                     var dbo = db.db(database);
-                    dbo.collection(collection).find({ userId }).toArray(function (err, results) {
+                    dbo.collection(collection).aggregate([
+                        {
+                            $lookup: {
+                                from: 'Participant',
+                                localField: '_id',
+                                foreignField: 'idProject',
+                                as: 'participants'
+                            }
+                        },
+                        {
+                            $match: {
+                                $or: [
+                                    {
+                                        participants: {
+                                            $elemMatch: {
+                                                idUser: userId,
+                                                accepted: true
+                                            }
+                                        }
+                                    },
+                                    {
+                                        userId
+                                    }
+                                ]
+                            }
+                        }
+                    ]).toArray(function (err, results) {
                         const projects = _self.handleArrayResult(results);
                         resolve(projects);
                         db.close();
@@ -198,6 +224,9 @@ class ProjectRepository extends orm_1.Orm {
                                     $elemMatch: {
                                         idUser
                                     }
+                                },
+                                userId: {
+                                    $ne: idUser
                                 }
                             }
                         },

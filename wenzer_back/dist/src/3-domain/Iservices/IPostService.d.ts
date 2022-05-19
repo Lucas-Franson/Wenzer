@@ -36,4 +36,5 @@ export default interface IPostService {
     deletePost(idPost: string): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
     search(userId: string, search: string): Promise<Post[]>;
+    getCountOfGoodIdeaByPost(_id: string): Promise<number>;
 }

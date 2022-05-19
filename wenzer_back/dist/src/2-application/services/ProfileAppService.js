@@ -102,7 +102,7 @@ class ProfileAppService {
             let userViewModel = new UserViewModel_1.default(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.email, user === null || user === void 0 ? void 0 : user.password, user === null || user === void 0 ? void 0 : user.title, user === null || user === void 0 ? void 0 : user.photo, user === null || user === void 0 ? void 0 : user.bio, user === null || user === void 0 ? void 0 : user.emailValid, user === null || user === void 0 ? void 0 : user.created_at);
             post.map((value) => {
                 const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
-                const _postViewModel = new PostViewModel_1.default(value._id, value.idUser, value.countViews, value.title, value.description, value.photo, value.idProject, value.created_at, postAsGoodIdea != null, userViewModel);
+                const _postViewModel = new PostViewModel_1.default(value._id, value.idUser, value.countViews, value.title, value.description, value.photo, value.idProject, value.created_at, postAsGoodIdea != null, userViewModel, 0);
                 postViewModel.push(_postViewModel);
             });
             return postViewModel;

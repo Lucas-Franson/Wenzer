@@ -23,6 +23,11 @@ class UserService {
         this.userRepository = userRepository;
         this.connectionRepository = connectionRepository;
     }
+    getUsersActive() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.userRepository.getUsersActive();
+        });
+    }
     findUserByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const where = { email };

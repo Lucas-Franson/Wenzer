@@ -74,7 +74,7 @@ function websocket(io) {
             let postViewModel = [];
             post.map((value) => {
                 const postAsGoodIdea = goodIdea.find(x => x.idPost === value._id);
-                const _postViewModel = new PostViewModel_1.default(value._id, value.idUser, value.countViews, value.title, value.description, value.photo, value.idProject, value.created_at, postAsGoodIdea != null, userViewModel);
+                const _postViewModel = new PostViewModel_1.default(value._id, value.idUser, value.countViews, value.title, value.description, value.photo, value.idProject, value.created_at, postAsGoodIdea != null, userViewModel, 0);
                 postViewModel.push(_postViewModel);
             });
             return postViewModel;

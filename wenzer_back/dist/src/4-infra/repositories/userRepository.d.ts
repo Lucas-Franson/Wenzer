@@ -5,6 +5,7 @@ import { Orm } from "./orm";
 import { NotificationType } from "../../1-presentation/viewmodel/NotificationViewModel";
 import { Connections } from "../../3-domain/entities/conections";
 export default class UserRepository extends Orm<User> implements IUserRepository {
+    getUsersActive(): Promise<number>;
     setPostAsGoodIdea(postGoodIdea: any): Promise<void>;
     removePostAsGoodIdea(idUser: string, idPost: string): Promise<void>;
     getAllUsersByArrOfIds(idUserArr: string[]): Promise<User[]>;

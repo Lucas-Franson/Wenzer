@@ -9,6 +9,7 @@ export default class UserService implements IUserService {
     private readonly userRepository;
     private readonly connectionRepository;
     constructor(userRepository: IUserRepository, connectionRepository: IConnectionRepository);
+    getUsersActive(): Promise<number>;
     findUserByEmail(email: string): Promise<User | null>;
     findUserByToken(token: string): Promise<User | null>;
     findUserById(userId: string): Promise<User | null>;

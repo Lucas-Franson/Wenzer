@@ -61,6 +61,14 @@ class PostRepository extends orm_1.Orm {
                             }
                         },
                         {
+                            $lookup: {
+                                from: 'Participant',
+                                localField: 'idProject',
+                                foreignField: 'idProject',
+                                as: 'participants'
+                            }
+                        },
+                        {
                             $match: {
                                 $or: [
                                     {
@@ -74,6 +82,15 @@ class PostRepository extends orm_1.Orm {
                                                     }
                                                 }
                                             }
+                                        },
+                                        publicPost: true
+                                    },
+                                    {
+                                        participants: {
+                                            $elemMatch: {
+                                                idUser,
+                                                accepted: true
+                                            }
                                         }
                                     },
                                     {
@@ -85,7 +102,8 @@ class PostRepository extends orm_1.Orm {
                                                 idFollower: idUser,
                                                 accepted: true
                                             }
-                                        }
+                                        },
+                                        publicPost: true
                                     },
                                     {
                                         userTwo: {
@@ -93,7 +111,8 @@ class PostRepository extends orm_1.Orm {
                                                 idUser,
                                                 accepted: true
                                             }
-                                        }
+                                        },
+                                        publicPost: true
                                     }
                                 ]
                             }
@@ -117,8 +136,30 @@ class PostRepository extends orm_1.Orm {
                 var dbo = db.db(database);
                 dbo.collection(collection).aggregate([
                     {
+                        $lookup: {
+                            from: 'Participant',
+                            localField: 'idProject',
+                            foreignField: 'idProject',
+                            as: 'participants'
+                        }
+                    },
+                    {
                         $match: {
-                            idUser: userId
+                            $or: [
+                                {
+                                    idUser: userId,
+                                    publicPost: true
+                                },
+                                {
+                                    idUser: userId,
+                                    participants: {
+                                        $elemMatch: {
+                                            idUser: userId,
+                                            accepted: true
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     {
@@ -337,6 +378,7 @@ class PostRepository extends orm_1.Orm {
                         {
                             $project: {
                                 _id: "$idPostComment",
+                                idPost: "$postComment.idPost",
                                 name: "$user.name",
                                 created_at: 1
                             }
@@ -485,9 +527,37 @@ class PostRepository extends orm_1.Orm {
                     let filter = new RegExp(["(", search.split(" ").join("|"), ")"].join(""), "i");
                     dbo === null || dbo === void 0 ? void 0 : dbo.collection(collection).find({
                         title: filter,
-                        idUser: { $ne: userId }
+                        idUser: { $ne: userId },
+                        publicPost: true
                     }).project({ _id: 1, title: 1, description: 1, photo: 1 }).toArray(function (err, results) {
                         resolve(results);
+                        db === null || db === void 0 ? void 0 : db.close();
+                    });
+                });
+            });
+        });
+    }
+    getCountOfGoodIdeaByProject(_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise(function (resolve, reject) {
+                mongodb_1.MongoClient.connect(url, function (err, db) {
+                    if (err)
+                        throw err;
+                    var dbo = db === null || db === void 0 ? void 0 : db.db(database);
+                    dbo === null || dbo === void 0 ? void 0 : dbo.collection('UserPostGoodIdea').aggregate([
+                        {
+                            $match: {
+                                idPost: _id
+                            }
+                        },
+                        {
+                            $count: "idPost"
+                        }
+                    ]).toArray(function (err, results) {
+                        if (results && results.length > 0)
+                            resolve(results);
+                        else
+                            resolve([{ idPost: 0 }]);
                         db === null || db === void 0 ? void 0 : db.close();
                     });
                 });
@@ -546,6 +616,14 @@ class PostRepository extends orm_1.Orm {
                         }
                     },
                     {
+                        $lookup: {
+                            from: 'Participant',
+                            localField: 'idProject',
+                            foreignField: 'idProject',
+                            as: 'participants'
+                        }
+                    },
+                    {
                         $match: {
                             $or: [
                                 {
@@ -559,6 +637,15 @@ class PostRepository extends orm_1.Orm {
                                                 }
                                             }
                                         }
+                                    },
+                                    publicPost: true
+                                },
+                                {
+                                    participants: {
+                                        $elemMatch: {
+                                            idUser: id,
+                                            accepted: true
+                                        }
                                     }
                                 },
                                 {
@@ -569,14 +656,16 @@ class PostRepository extends orm_1.Orm {
                                         $elemMatch: {
                                             idFollower: id
                                         }
-                                    }
+                                    },
+                                    publicPost: true
                                 },
                                 {
                                     userTwo: {
                                         $elemMatch: {
                                             idUser: id
                                         }
-                                    }
+                                    },
+                                    publicPost: true
                                 }
                             ],
                             $and: [

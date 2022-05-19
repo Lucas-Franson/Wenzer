@@ -31,6 +31,7 @@ export interface IPostRepository extends IOrm<Post> {
     getCommentsCommentedByUserWebService(dbo: Db, idUser: string, idNotifications: string[]): Promise<number>;
     getCommentsCommentedByUser(userId: string): Promise<{
         _id: string;
+        idPost: string;
         created_at: Date;
         name: string;
     }[]>;
@@ -42,4 +43,7 @@ export interface IPostRepository extends IOrm<Post> {
     setCommentAsGoodIdea(commentGoodIdea: UserCommentGoodIdea): void;
     getAllCommentGoodIdeaFromUser(userId: string): Promise<UserCommentGoodIdea[]>;
     search(userId: string, search: string): Promise<Post[]>;
+    getCountOfGoodIdeaByProject(_id: string): Promise<{
+        idPost: number;
+    }[]>;
 }

@@ -136,6 +136,11 @@ class LoginAppService {
             }
         });
     }
+    getUsersActive() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.userService.getUsersActive();
+        });
+    }
 }
 exports.default = LoginAppService;
 //# sourceMappingURL=LoginAppService.js.map
