@@ -145,4 +145,8 @@ export default class LoginAppService {
         }
     }
 
+    async getUsersActive() {
+        return await this.userService.getUsersActive();
+    }
+
 }

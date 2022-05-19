@@ -18,6 +18,10 @@ export default class UserService implements IUserService {
         private readonly connectionRepository: IConnectionRepository
     ) {
     }
+    
+    async getUsersActive(): Promise<number> {
+        return await this.userRepository.getUsersActive();
+    }
 
     async findUserByEmail(email: string): Promise<User | null> {
         const where = { email };

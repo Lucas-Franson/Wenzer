@@ -179,6 +179,18 @@ routes.post('/api/login', loginController.login, () =>{
                 schema: { message: "<mensagem do erro>" },
                 description: "Internal server error" }
         */ 
+    })
+    .get('/api/getUsersActive', loginController.getUsersActive, () =>{ 
+        /* 
+            #swagger.tags = ["Login"] 
+            #swagger.description = 'Endpoint para obter quantidade de usuários ativos na plataforma.'
+            #swagger.responses[200] = { 
+                schema: { message: "Usuário desconectado" },
+                description: "Ok" }
+            #swagger.responses[500] = { 
+                schema: { message: "<mensagem do erro>" },
+                description: "Internal server error" }
+        */ 
     });
 
 routes.options(
@@ -188,7 +200,8 @@ routes.options(
         '/api/recupera-senha', 
         '/api/alterar-senha/:token',
         '/api/confirmar-email-marketing/:token',
-        '/api/salvar-email-marketing'
+        '/api/salvar-email-marketing',
+        '/api/getUsersActive'
     ], (req: any, res: any) => {
     res.set('Access-Control-Allow-Methods', ['POST', 'GET']);
     res.set('Access-Control-Allow-Headers', [ 'content-type', 'auth' ]);

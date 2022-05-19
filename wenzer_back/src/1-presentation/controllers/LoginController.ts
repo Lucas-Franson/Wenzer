@@ -115,4 +115,14 @@ export default class LoginController {
         } 
     }
 
+    async getUsersActive(req: any, res: any, next: any) {
+        try {
+            var count = await req.service.loginAppService.getUsersActive();
+            return res.status(200).json(count);
+        } catch(err: any) {
+            return res.status(200).json(0);
+        } 
+    }
+
+
 }

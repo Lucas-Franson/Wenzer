@@ -11,6 +11,7 @@ import { CircularProgress } from "@material-ui/core";
 
 import { Container } from "./styles";
 import { toastfyError } from "../../../../Components/Toastfy";
+import { useEffect } from "react";
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -18,8 +19,20 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
   const { singIn } = useAuth();
+  const [usersActive, setUsersActive] = useState(0);
 
   const history = useHistory();
+
+  async function getUsersActive() {
+    await api
+    .get(`/api/getUsersActive`)
+    .then((res) => {
+      setUsersActive(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -45,6 +58,10 @@ function Login() {
       setIsRequesting(false);
     });
   }
+
+  useEffect(() => {
+    getUsersActive();
+  }, []);
 
   return (
     <Container>
@@ -73,6 +90,11 @@ function Login() {
       </form>
       <span>
         Não tem uma conta Wenzer? <a href="/register">Cadastre-se aqui.</a>
+      </span>
+      <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '5px' }}>
+        <div style={{ backgroundColor: 'green', borderRadius: '50%', width: '15px', height: '15px' }}></div>
+
+         Usuários conectados: {usersActive} 
       </span>
     </Container>
   );

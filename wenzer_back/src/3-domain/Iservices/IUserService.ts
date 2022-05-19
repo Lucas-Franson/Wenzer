@@ -27,4 +27,5 @@ export interface IUserService {
     getFriendRequest(userId: string): Promise<{ _id: string, created_at: Date, name: string}[]>;
     search(userId: string, search: string): Promise<User[]>;
     alreadyConnected(idUserServer: string, idUser: string): Promise<boolean>;
+    getUsersActive(): Promise<number>;
 }

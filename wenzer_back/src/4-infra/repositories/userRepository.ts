@@ -12,6 +12,17 @@ const database = process.env.BASE_NAME_DATABASE!;
 
 export default class UserRepository extends Orm<User> implements IUserRepository {
     
+    async getUsersActive(): Promise<number> {
+        return new Promise(function(resolve, reject){ 
+            MongoClient.connect(url).then(async function(db){
+                var dbo = db.db(database);
+                let count = await dbo.collection(collection).countDocuments({ emailValid: true });
+                if (count) resolve(count);
+                else resolve(0);
+            });
+        });
+    }
+    
     async setPostAsGoodIdea(postGoodIdea: any) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;

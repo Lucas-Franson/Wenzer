@@ -27,6 +27,9 @@ import {
 } from "./styles";
 import { useHistory } from 'react-router-dom';
 
+import api from "../../Services/api/apiService";
+import { useEffect } from 'react';
+
 function Welcome(): ReactElement {
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isTerms, setIsTerms] = useState(false);
@@ -58,7 +61,9 @@ function Welcome(): ReactElement {
             </a>
           </header>
 
-          <main><Login/></main>
+          <main>
+            <Login/>
+          </main>
         </ContainerLogin>
 
         <ContainerAbout id="about">
