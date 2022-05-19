@@ -50,6 +50,14 @@ export const ContainerButton = styled.button`
       gap: 15px;
     }
 
+    &.svg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    
+    }
+
     &.white-content {
       color: ${(props) => props.theme.colors.white.light};
 

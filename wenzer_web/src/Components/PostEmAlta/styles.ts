@@ -5,7 +5,7 @@ export const Container = styled.div`
 `;
 
 export const ContainerPostProject = styled.div`
-  width: 30%;
+  width: 345px;
   max-height: 345px;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ export const ContainerPostProject = styled.div`
   border-radius: 8px;
 
   padding: 10px;
-  margin: 0px 15px 15px 0px;
+  margin: 12px;
   
   &:hover {
     box-shadow: 1px 3px 4px #8a00ff;

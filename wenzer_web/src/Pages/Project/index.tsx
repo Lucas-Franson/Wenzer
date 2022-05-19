@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import PostProfile from '../../Components/PostProfile';
+import PostProfile from '../../Components/PostEmAlta';
 import { toastfyError } from '../../Components/Toastfy';
 import { screens, searchTypes } from '../../Constants/MediaSettings';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
@@ -30,24 +30,22 @@ const Projetos: React.FC = () => {
   }, []);
 
   return (
-      <Container>
-          <ContainerProjects>
-          <div className="wraper">
-            {projects.map((item: any, index: number) => (
-              <PostProfile 
-                index={index}
-                _id={item._id}
-                name={item.name}
-                type={searchTypes.Project}
-                photo={item.photo}
-                countOfGoodIdea={item.CountOfGoodIdea}
-                countOfActions={item.CountOfActions}
-                screen={screens.MyProjects}
-                key={item._id}/>
-            ))} 
-          </div>
-        </ContainerProjects>
-      </Container>
+    <Container>
+      <ContainerProjects>
+        {projects.map((item: any, index: number) => (
+          <PostProfile 
+            index={index}
+            _id={item._id}
+            name={item.name}
+            type={searchTypes.Project}
+            photo={item.photo}
+            countOfGoodIdea={item.CountOfGoodIdea}
+            countOfActions={item.CountOfActions}
+            screen={screens.MyProjects}
+            key={item._id}/>
+        ))} 
+      </ContainerProjects>
+    </Container>
   )
 }
 

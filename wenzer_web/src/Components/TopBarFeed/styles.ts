@@ -20,21 +20,23 @@ export const Container = styled.div`
   }
 
   header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    > form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    padding-left: 3rem;
-    font-size: 1rem;
-
-    h1 {
-      font-weight: 400;
-      color: ${(props) => props.theme.colors.white.light};
-    }
-
-    img {
-      width: 3rem;
-      margin-right: 10px;
+      padding-left: 3rem;
+      font-size: 1rem;
+    
+      h1 {
+          font-weight: 400;
+          color: ${(props) => props.theme.colors.white.light};
+        }
+        
+      img {
+          width: 3rem;
+          margin-right: 10px;
+        }
     }
   }
 

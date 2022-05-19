@@ -1,4 +1,4 @@
-import { memo, ReactElement, useState, useRef } from "react";
+import { memo, ReactElement, useState, useRef, FormEvent } from "react";
 import Avatar from "./components/Avatar";
 import Notify from "./components/Notify";
 import InputSearch from "../InputSearch";
@@ -28,7 +28,7 @@ function TopBarFeed(): ReactElement {
   const openMenuRef = useRef(false);
   const { singOut } = useAuth();
 
-  const { setSearchKey, searchKey } = useWenzer();
+  const { setSearchKey, searchKey, isSearching } = useWenzer();
   
   const history = useHistory();
 
@@ -86,14 +86,16 @@ function TopBarFeed(): ReactElement {
     </ContainerMenu>
   );
 
-  function moveToExplore(e: any) {
-    setSearchKey(e.target.value);
-    if (e.key === 'Enter') {
-      let filter = e.target.value;
-      if (filter && filter != '' && filter.trim() != '' && filter.length > 0) {
-        history.push(`/explore?search=${e.target.value.trim()}`);
-      }
+  function moveToExplore(e: FormEvent) {
+    e.preventDefault();
+    let filter = searchKey;
+    if (filter && filter != '' && filter.trim() != '' && filter.length > 0) {
+      history.push(`/explore?search=${searchKey.trim()}`);
     }
+  }
+
+  function hangleChange(event: any){
+    setSearchKey(event.target.value);
   }
 
   return (
@@ -101,10 +103,12 @@ function TopBarFeed(): ReactElement {
       <Container>
         {/* LOGO WENZER -------------------------------------------------------------------- */}
         <header>
-          <Link to="/">
-            <img src={WenzerLogo} alt="Wenzer" />
-          </Link>
-          <InputSearch placeholder="Pesquisar no Wenzer" defaultValue={searchKey} onKeyDown={(e) => moveToExplore(e)} />
+          <form onSubmit={moveToExplore}>
+            <Link to="/">
+              <img src={WenzerLogo} alt="Wenzer" />
+            </Link>
+            <InputSearch placeholder="Pesquisar no Wenzer" defaultValue={searchKey} onChange={(e) => hangleChange(e)} />
+          </form>
         </header>
 
         {/* OPÇÕES -------------------------------------------------------------------- */}
