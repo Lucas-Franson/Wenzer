@@ -8,4 +8,6 @@ export interface IWenzerContext {
     openModalProject: boolean;
     setOpenModalProject(state: boolean): void;
     getSocketIOClient(): Socket;
+    isSearching: any;
+    setIsSearching: any
 };

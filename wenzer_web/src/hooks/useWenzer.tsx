@@ -18,6 +18,7 @@ const WenzerProvider = ({ children }: any) => {
   const [openModalProject, setOpenModalProject] = useState(false);
   const [_socketIOClient, setSocketIOClient] = useState<Socket>();
   const [searchKey, setSearchKey] = useState('');
+  const [isSearching, setIsSearching] = useState<any>()
   const { userInfo } = useAuth();
 
   function getSocketIOClient() {
@@ -38,7 +39,9 @@ const WenzerProvider = ({ children }: any) => {
         setOpenModalProject,
         getSocketIOClient,
         searchKey,
-        setSearchKey
+        setSearchKey,
+        isSearching,
+        setIsSearching
       }}
     >
       {children}

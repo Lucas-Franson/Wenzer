@@ -1,9 +1,11 @@
 import Cookies from 'js-cookie';
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useLayoutEffect, useState } from 'react';
 import { useEffect } from 'react';
-import { MdSearch } from 'react-icons/md';
+import { AiFillFire } from 'react-icons/ai';
+import { useHistory } from 'react-router-dom';
+import SplashScreen from '../../Components/Animation/SplashScreen';
 import Button from '../../Components/Button';
-import PostProfile from '../../Components/PostProfile';
+import PostEmAlta from '../../Components/PostEmAlta';
 import { toastfyError } from '../../Components/Toastfy';
 import { screens, searchTypes } from '../../Constants/MediaSettings';
 import { useWenzer } from '../../hooks/useWenzer';
@@ -20,8 +22,12 @@ function Explorar(): ReactElement {
   const [project, setProject] = useState(false);
   const [post, setPost] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const { searchKey, setIsSearching, setSearchKey } = useWenzer();
   const { userInfo } = useAuth();
-  const { setSearchKey, searchKey } = useWenzer();
+
+  const history = useHistory();
 
   function loadSearchFilter() {
     let searchForFilter = window.location.search;
@@ -39,9 +45,11 @@ function Explorar(): ReactElement {
     }).then(res => {
       setObjects(res.data);
       setAlreadyGetProjects(true);
+      setLoading(false);
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
+      setLoading(false);
     })
   }
 
@@ -49,16 +57,19 @@ function Explorar(): ReactElement {
     let filterByPerson = person ? "&types[]=0" : "";
     let filterByProject = project ? "&types[]=1" : "";
     let filterByPost = post ? "&types[]=2" : "";
-    APIServiceAuthenticated.get(`/api/project/search?search=${loadSearchFilter()}${filterByPerson}${filterByProject}${filterByPost}`, {
+    
+    APIServiceAuthenticated.get(`/api/project/search?search=${searchKey}${filterByPerson}${filterByProject}${filterByPost}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
       setObjects(res.data);
       setAlreadySearch(true);
+      setLoading(false);
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
+      setLoading(false);
     })
   }
 
@@ -67,6 +78,11 @@ function Explorar(): ReactElement {
     setProject(project);
     setPerson(person);
     setAlreadySearch(false);
+  }
+
+  function resetSearchKey() {
+    setSearchKey('');
+    history.push('/explore')
   }
 
   useEffect(() => {
@@ -82,11 +98,11 @@ function Explorar(): ReactElement {
       }
       setIsFiltering(false);
     }
-  }, [alreadyGetProjects, alreadySearch]);
+  }, [alreadyGetProjects, alreadySearch, searchKey]);
 
   return (
       <Container>
-        <ContainerSearch style={{ display: isFiltering ? 'block' : 'none' }}>
+        <ContainerSearch style={{ display: isFiltering ? '' : 'none' }}>
           <h4>Filtrar por:</h4>
           <div>
             <div>
@@ -102,12 +118,18 @@ function Explorar(): ReactElement {
               <span>Publicação</span>
             </div>
           </div>
+          <Button className="svg" onClick={resetSearchKey}>
+            Projetos Em Alta
+            <AiFillFire size={30}/> 
+          </Button>
         </ContainerSearch>
 
-        <ContainerProjects>
-          <div className="wraper">
+        {loading ? (
+          <SplashScreen />
+        ) : (
+          <ContainerProjects>
             {objects.map((item: any, index: number) => (
-              <PostProfile 
+              <PostEmAlta 
                 index={index}
                 _id={item._id}
                 name={item.name}
@@ -119,8 +141,8 @@ function Explorar(): ReactElement {
                 screen={isFiltering ? screens.Search : screens.HotProjects}
                 key={item._id}/>
             ))} 
-          </div>
-        </ContainerProjects>
+          </ContainerProjects>
+        )}
       </Container>
   )
 }

@@ -4,7 +4,6 @@ import { MediaQueries } from '../../Constants/MediaSettings';
 export const Container = styled.div`
   width: min(92vw, 1350px);
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   color: ${(props) => props.theme.colors.white.light};
   margin: auto;
@@ -40,24 +39,19 @@ export const Container = styled.div`
 export const ContainerProjects = styled.main`
   width: 100%;
   border-radius: 8px;
-  height: 900px;
-
-  margin-bottom: 15px;
-
-  .wraper {
-    width: 100%;
-    height: 70%;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
+  
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;  
 `;
 
 export const ContainerSearch = styled.div`
-  width: 100%;
-  height: 100px;
+  width: 250px;
+  height: 300px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 15px;
   margin-bottom: 20px;
   border-radius: 8px;
@@ -65,10 +59,18 @@ export const ContainerSearch = styled.div`
   border-bottom:1px solid ${props => props.theme.colors.succes};
   box-sizing: border-box;
   padding: 10px;
+  margin-top: 12px;
+
+  > h4 {
+    font-weight: 400;
+  }
 
   > div {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
     
     div {
       display: flex;

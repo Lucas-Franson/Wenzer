@@ -32,15 +32,8 @@ margin-top: 5rem;
 export const ContainerProjects = styled.main`
   width: 100%;
   border-radius: 8px;
-  height: 900px;
-
-  margin-bottom: 15px;
-
-  .wraper {
-    width: 100%;
-    height: 70%;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
+  
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;  
 `;
