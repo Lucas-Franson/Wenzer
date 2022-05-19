@@ -61,7 +61,7 @@ export default class NotificationService implements INotificationService {
         commentsCommentedByUser.map((comment: any) => {
             if (comment && comment.name) {
                 let name = comment.name.charAt(0).toUpperCase() + comment.name.slice(1);
-                let notification = new NotificationViewModel(NotificationType.CommentedOnYourComment, `${name.trim()} comentou em um comentário seu.`, comment._id, comment.created_at);
+                let notification = new NotificationViewModel(NotificationType.CommentedOnYourComment, `${name.trim()} comentou em um comentário seu.`, comment.idPost, comment.created_at);
                 notifications.push(notification);
                 let exist = idNotifications.find(x => x.idNotification === comment._id);
                 if (!exist) {

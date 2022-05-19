@@ -52,7 +52,7 @@ function Welcome(): ReactElement {
           <header>
             <h1>Compartilhe experiências, ideias e projetos!</h1>
             <h2>
-              Uma plataforma para ganhar experiencia, publicar suas idéias ou 
+              Uma plataforma para ganhar experiência, publicar suas idéias ou 
               participar de projetos que poderá agregar para sua vida
               pessoal ou profissional!
             </h2>
@@ -72,13 +72,12 @@ function Welcome(): ReactElement {
               <img src={bg_about} alt="Sobre o Wenzer" />
             </div>
             <div className="alignRight">
-              <p>Wenzer é uma rede social para projetos e ideias</p>
+              <p>Wenzer é uma rede social para projetos e idéias</p>
               <span>
                 No Wenzer você pode publicar seu projeto ou ideia (ex: um
-                website e-commerce ou projeto social), seja ele colaborativo para você ganhar
+                website e-commerce ou projeto social), podendo ele ser colaborativo para você ganhar
                 experiência encontrando outras pessoas para desenvolver com
-                você, ou cobrando um valor $$ para que alguem desenvolva sua
-                ideia! No fim todos evoluem juntos!
+                você! No fim todos evoluem juntos!
               </span>
             </div>
           </header>
@@ -114,7 +113,7 @@ function Welcome(): ReactElement {
           </footer>
         </ContainerNetworking>
 
-        <ContainerProject id="project">
+        {/* <ContainerProject id="project">
           <header>
             <p>Você pode publicar seu projeto em 3 modalidades</p>
           </header>
@@ -139,7 +138,7 @@ function Welcome(): ReactElement {
               <FaLock size={80} />
             </CardProject>
           </main>
-        </ContainerProject>
+        </ContainerProject> */}
 
         <ContainerFooter>
           <div>
@@ -148,7 +147,7 @@ function Welcome(): ReactElement {
               <strong>Informações</strong>
               <a href="#about">O que é o Wenzer</a>
               <a href="#networking">Networking</a>
-              <a href="#projects">Projetos</a>
+              {/* <a href="#projects">Projetos</a> */}
             </section>
             <section>
               <strong>Plataforma</strong>
@@ -197,7 +196,7 @@ function Welcome(): ReactElement {
                 Politica de Privacidade |
               </span>{" "}
               <span>
-               wenzer.help@gmail.com |
+               suporte@wenzer.com.br |
               </span>{" "}
               <span>
                 Wenzer 2022 ©

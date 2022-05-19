@@ -39,9 +39,9 @@ function TopBarWelcome(): ReactElement {
           <a href="/#networking">Networking</a>
         </div>
 
-        <div>
+        {/* <div>
           <a href="/#project">Projetos</a>
-        </div>
+        </div> */}
 
         <div>
           <a href="/login">
@@ -84,7 +84,7 @@ function TopBarWelcome(): ReactElement {
       <div>
         <a href="/#about">O que é</a>
         <a href="/#networking">Networking</a>
-        <a href="/#project">Projetos</a>
+        {/* <a href="/#project">Projetos</a> */}
       </div>
 
       <div>

@@ -318,7 +318,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
         });
     }
 
-    async getCommentsCommentedByUser(userId: string): Promise<{ _id: string; created_at: Date; name: string; }[]> {
+    async getCommentsCommentedByUser(userId: string): Promise<{ _id: string; idPost: string; created_at: Date; name: string; }[]> {
         return new Promise(function(resolve, reject){ 
             MongoClient.connect(url).then(function(db){
                 var dbo = db.db(database);
@@ -361,7 +361,8 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     },
                     {
                         $project: {
-                            _id: "$postComment.idPost",
+                            _id: "$idPostComment",
+                            idPost: "$postComment.idPost",
                             name: "$user.name",
                             created_at: 1
                         }
