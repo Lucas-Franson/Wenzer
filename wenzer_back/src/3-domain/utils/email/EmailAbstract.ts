@@ -1,6 +1,10 @@
 import Logger from '../../../4-infra/utils/logger';
 import nodemailer from 'nodemailer';
 
+const EMAIL_HOST = process.env.EMAIL_HOST;
+const EMAIL_USUARIO = process.env.EMAIL_USUARIO;
+const EMAIL_SENHA = process.env.EMAIL_SENHA;
+
 export abstract class Email {
 
     From: string = '';
@@ -23,12 +27,12 @@ export abstract class Email {
     async sendEmail() {
       try {
         var transporter = nodemailer.createTransport({
-          host: 'smtp.hostinger.com',
+          host: EMAIL_HOST,
           port: 465,
           secure: true,
           auth: {
-            user: 'suporte@wenzer.com.br',
-            pass: 'Wenzer#2022!'
+            user: EMAIL_USUARIO,
+            pass: EMAIL_SENHA
           }
         });
 

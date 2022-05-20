@@ -15,6 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Email = void 0;
 const logger_1 = __importDefault(require("../../../4-infra/utils/logger"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const EMAIL_HOST = process.env.EMAIL_HOST;
+const EMAIL_USUARIO = process.env.EMAIL_USUARIO;
+const EMAIL_SENHA = process.env.EMAIL_SENHA;
 class Email {
     constructor(_from, _to, _subject, _text, _html) {
         this.From = '';
@@ -35,12 +38,12 @@ class Email {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 var transporter = nodemailer_1.default.createTransport({
-                    host: 'smtp.hostinger.com',
+                    host: EMAIL_HOST,
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'suporte@wenzer.com.br',
-                        pass: 'Wenzer#2022!'
+                        user: EMAIL_USUARIO,
+                        pass: EMAIL_SENHA
                     }
                 });
                 var mailOptions = {
