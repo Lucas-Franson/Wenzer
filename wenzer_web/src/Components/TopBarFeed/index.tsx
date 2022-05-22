@@ -7,8 +7,8 @@ import { Link, useHistory } from 'react-router-dom';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import { BsSun, BsMoon } from "react-icons/bs";
-import { AiFillFire, AiFillHome, AiFillProject} from "react-icons/ai";
-import { MdAddCircle, MdMenu, MdExitToApp, MdPerson } from "react-icons/md";
+import { AiFillFire, AiFillHome, AiFillProject, AiOutlineSearch} from "react-icons/ai";
+import { MdAddCircle, MdMenu, MdExitToApp, MdPerson, MdSearch } from "react-icons/md";
 import { Button } from "@material-ui/core";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import WenzerLogo from "../../Utils/image/wenzer_web.svg";
@@ -58,7 +58,14 @@ function TopBarFeed(): ReactElement {
         </div>
 
         <div>
-          <Link to="##" onClick={handleOpenModalProject} > <MdAddCircle size={25}/> <p>Projeto</p></Link>
+          <Link to="##" onClick={handleOpenModalProject} > <MdAddCircle size={25}/> <p>Novo Projeto</p></Link>
+        </div>
+
+        <div>
+          <Link to="/projects">
+            <AiFillProject size={25} />
+            <p>Meus Projetos</p>
+          </Link>
         </div>
 
         {/* <div>
@@ -86,56 +93,49 @@ function TopBarFeed(): ReactElement {
     </ContainerMenu>
   );
 
-  function moveToExplore(e: FormEvent) {
-    e.preventDefault();
-    let filter = searchKey;
-    if (filter && filter != '' && filter.trim() != '' && filter.length > 0) {
-      history.push(`/explore?search=${searchKey.trim()}`);
-    }
+  function moveToExplore() {
+    history.push('/explore');
   }
 
-  function hangleChange(event: any){
-    setSearchKey(event.target.value);
-  }
 
   return (
     <>
       <Container>
         {/* LOGO WENZER -------------------------------------------------------------------- */}
         <header>
-          <form onSubmit={moveToExplore}>
-            <Link to="/">
-              <img src={WenzerLogo} alt="Wenzer" />
-            </Link>
-            <InputSearch placeholder="Pesquisar no Wenzer" defaultValue={searchKey} onChange={(e) => hangleChange(e)} />
-          </form>
+          <Link to="/">
+            <img src={WenzerLogo} alt="Wenzer" />
+          </Link>
+          <div>
+            <span>Wenzer</span>
+          </div>
         </header>
 
         {/* OPÇÕES -------------------------------------------------------------------- */}
         <div className="opcoes">
           <Tooltip title="Página Inicial" placement="bottom" >
             <Link to="/">
-              <AiFillHome size={30}/> 
+              <AiFillHome size={25}/> 
             </Link>
           </Tooltip>
 
-          <Tooltip title="Em Alta" placement="bottom" >
+          <Tooltip title="Explorar" placement="bottom" >
             <Link to="/explore">
-              <AiFillFire size={30}/> 
+              <AiOutlineSearch size={25}/> 
             </Link>
           </Tooltip>
 
           <Tooltip title="Meus Projetos" placement="bottom" className="mobileProject" >
             <Link to="/projects">
-              <AiFillProject size={30} />
+              <AiFillProject size={25} />
             </Link>
           </Tooltip>
 
-          {/* <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
+          <Tooltip title="Notificação" placement="bottom" className="mobileNotify" >
             <Link to="/notify">         
               <Notify />
             </Link>
-          </Tooltip> */}
+          </Tooltip>
         </div>
 
         {/* BUTTONS ACTION-------------------------------------------------------------------- */}
