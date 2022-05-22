@@ -5,8 +5,8 @@ export const Container = styled.div`
 `;
 
 export const ContainerPostProject = styled.div`
-  width: 345px;
-  max-height: 345px;
+  width: 290px;
+  max-height: 290px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -29,7 +29,7 @@ export const ContainerPostProject = styled.div`
   
   > img {
     width: 100%;
-    max-height: 250px;
+    max-height: 180px;
     object-fit: contain;
   }
   

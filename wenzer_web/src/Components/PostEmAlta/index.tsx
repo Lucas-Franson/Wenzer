@@ -5,9 +5,8 @@ import { screens, searchTypes } from '../../Constants/MediaSettings';
 import { useWenzer } from '../../hooks/useWenzer';
 
 import imageTeste from '../../Utils/image/bgFgtsDescktop.jpg';
-import SplashScreen from '../Animation/SplashScreen';
 import ModalProject from '../Modal/ModalProject';
-import { Container, ContainerPostProject } from './styles';
+import { ContainerPostProject } from './styles';
 
 const PostProfile = ({ index, _id, name, bio, type, photo, countGoodIdea, countFollowers, screen }: any) => {
 

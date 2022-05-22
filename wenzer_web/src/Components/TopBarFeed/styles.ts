@@ -20,23 +20,23 @@ export const Container = styled.div`
   }
 
   header {
-    > form {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-      padding-left: 3rem;
-      font-size: 1rem;
-    
-      h1 {
-          font-weight: 400;
-          color: ${(props) => props.theme.colors.white.light};
-        }
-        
-      img {
-          width: 3rem;
-          margin-right: 10px;
-        }
+    padding-left: 3rem;
+    font-size: 1rem;
+
+    img {
+      width: 3rem;
+      margin-right: 10px;
+    }
+
+    div {
+      > span {
+        font-size: 1.2rem;
+        font-weight: 400;
+      }
     }
   }
 
@@ -117,7 +117,7 @@ export const Container = styled.div`
     header {
       padding-left: 1rem;
 
-      input, svg {
+      svg, div {
         display: none;
       }
     }

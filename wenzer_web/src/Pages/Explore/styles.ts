@@ -41,60 +41,71 @@ export const ContainerProjects = styled.main`
   border-radius: 8px;
   
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;  
+
+  .noContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
 `;
 
 export const ContainerSearch = styled.div`
-  width: 250px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  background-color: ${props => props.theme.colors.secondary};
-  border-bottom:1px solid ${props => props.theme.colors.succes};
-  box-sizing: border-box;
-  padding: 10px;
-  margin-top: 12px;
-
-  > h4 {
-    font-weight: 400;
-  }
-
-  > div {
+  > form {
+    width: 300px;
+    height: 350px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     gap: 15px;
-    
-    div {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: ${props => props.theme.colors.secondary};
+    border-bottom:1px solid ${props => props.theme.colors.succes};
+    box-sizing: border-box;
+    padding: 10px;
+    margin-top: 12px;
+
+    > h4 {
+      font-weight: 400;
+    }
+
+    > div {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
 
-      input {
-        border: none;
-        transform: scale(1.5);
+        input {
+          border: none;
+          transform: scale(1.5);
 
-        @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
-          transform: scale(1);
+          @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
+            transform: scale(1);
+          }
+        }
+
+        input:checked {
+          background-color: #ff0000;
         }
       }
 
-      input:checked {
-        background-color: #ff0000;
+      @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
+        align-items: flex-start;
       }
     }
-
-    @media ${MediaQueries.MEDIUM}, ${MediaQueries.SMALL}, ${MediaQueries.XSMALL} {
-      align-items: flex-start;
-    }
   }
-
 `;

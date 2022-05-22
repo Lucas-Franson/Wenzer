@@ -35,5 +35,6 @@ export const ContainerProjects = styled.main`
   
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
   flex-wrap: wrap;  
 `;

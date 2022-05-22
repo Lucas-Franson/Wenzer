@@ -55,7 +55,6 @@ export const ContainerButton = styled.button`
       align-items: center;
       justify-content: center;
       gap: 8px;
-    
     }
 
     &.white-content {
