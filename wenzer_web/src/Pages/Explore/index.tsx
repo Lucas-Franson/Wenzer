@@ -1,14 +1,16 @@
 import Cookies from 'js-cookie';
-import { ReactElement, useLayoutEffect, useState } from 'react';
+import { FormEvent, ReactElement, useLayoutEffect, useState } from 'react';
 import { useEffect } from 'react';
 import { AiFillFire } from 'react-icons/ai';
+import { MdSearch } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
+import NoContent from '../../Components/Animation/NoContent';
 import SplashScreen from '../../Components/Animation/SplashScreen';
 import Button from '../../Components/Button';
+import InputSearch from '../../Components/InputSearch';
 import PostEmAlta from '../../Components/PostEmAlta';
 import { toastfyError } from '../../Components/Toastfy';
 import { screens, searchTypes } from '../../Constants/MediaSettings';
-import { useWenzer } from '../../hooks/useWenzer';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import { useAuth } from '../../Services/Authentication/auth';
 
@@ -23,8 +25,8 @@ function Explorar(): ReactElement {
   const [post, setPost] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchWord, setSearchWord] = useState('');
 
-  const { searchKey, setIsSearching, setSearchKey } = useWenzer();
   const { userInfo } = useAuth();
 
   const history = useHistory();
@@ -37,7 +39,7 @@ function Explorar(): ReactElement {
     return getSearch;
   }
 
-  function getProjectsOnHigh(userId: string) {
+  function getProjectsOnHigh() {
     APIServiceAuthenticated.get(`/api/project/onhigh`, {
       headers: {
         auth: Cookies.get('WenzerToken')
@@ -53,12 +55,14 @@ function Explorar(): ReactElement {
     })
   }
 
-  function search() {
+  function search(event?: FormEvent) {
+    event?.preventDefault();
+    setLoading(true);
     let filterByPerson = person ? "&types[]=0" : "";
     let filterByProject = project ? "&types[]=1" : "";
     let filterByPost = post ? "&types[]=2" : "";
     
-    APIServiceAuthenticated.get(`/api/project/search?search=${searchKey}${filterByPerson}${filterByProject}${filterByPost}`, {
+    APIServiceAuthenticated.get(`/api/project/search?search=${searchWord}${filterByPerson}${filterByProject}${filterByPost}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
@@ -70,6 +74,7 @@ function Explorar(): ReactElement {
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       setLoading(false);
+      getProjectsOnHigh();
     })
   }
 
@@ -80,8 +85,13 @@ function Explorar(): ReactElement {
     setAlreadySearch(false);
   }
 
-  function resetSearchKey() {
-    setSearchKey('');
+  function resetSearchWord() {
+    setSearchWord('');
+    setPerson(false);
+    setProject(false);
+    setPost(false);
+    setAlreadySearch(false);
+    getProjectsOnHigh()
     history.push('/explore')
   }
 
@@ -94,53 +104,67 @@ function Explorar(): ReactElement {
       setIsFiltering(true);
     } else {
       if(!alreadyGetProjects) {
-        getProjectsOnHigh(userInfo?.id!);
+        getProjectsOnHigh();
       }
       setIsFiltering(false);
     }
-  }, [alreadyGetProjects, alreadySearch, searchKey]);
+  }, [alreadyGetProjects, alreadySearch]);
 
   return (
       <Container>
-        <ContainerSearch style={{ display: isFiltering ? '' : 'none' }}>
-          <h4>Filtrar por:</h4>
-          <div>
+        <ContainerSearch>
+          <form onSubmit={search}>
+            <InputSearch placeholder='Pesquisar' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}/>
+            <h4>Filtrar por:</h4>
             <div>
-              <input type="checkbox" onChange={(e) => setFilterState(post, project, !person)} />
-              <span>Pessoa</span>
+              <div>
+                <input type="checkbox" checked={person} onChange={(e) => setFilterState(post, project, !person)} />
+                <span>Pessoa</span>
+              </div>
+              <div>
+                <input type="checkbox" checked={project} onChange={(e) => setFilterState(post, !project, person)} />
+                <span>Projeto</span>
+              </div>
+              <div>
+                <input type="checkbox" checked={post} onChange={(e) => setFilterState(!post, project, person)} />
+                <span>Publicação</span>
+              </div>
             </div>
-            <div>
-              <input type="checkbox" onChange={(e) => setFilterState(post, !project, person)} />
-              <span>Projeto</span>
-            </div>
-            <div>
-              <input type="checkbox" onChange={(e) => setFilterState(!post, project, person)} />
-              <span>Publicação</span>
-            </div>
-          </div>
-          <Button className="svg" onClick={resetSearchKey}>
-            Projetos Em Alta
-            <AiFillFire size={30}/> 
-          </Button>
+            <Button className="svg" type="submit">
+              Pesquisar
+              <MdSearch size={22}/> 
+            </Button>
+            <Button className="onlyBorder svg" onClick={resetSearchWord}>
+              Em Alta
+              <AiFillFire size={22}/> 
+            </Button>
+          </form>
         </ContainerSearch>
 
         {loading ? (
           <SplashScreen />
         ) : (
           <ContainerProjects>
-            {objects.map((item: any, index: number) => (
-              <PostEmAlta 
-                index={index}
-                _id={item._id}
-                name={item.name}
-                bio={item.bio}
-                type={item.type ?? searchTypes.Project}
-                photo={item.photo}
-                countGoodIdea={item.countGoodIdea}
-                countFollowers={item.countFollowers}
-                screen={isFiltering ? screens.Search : screens.HotProjects}
-                key={item._id}/>
-            ))} 
+            {objects.length === 0 ? (
+              <div className='noContent'>
+                <span>Sua pesquisa não encontrou nenhum resultado.</span>
+                <NoContent/>
+              </div>
+            ) : (
+              objects.map((item: any, index: number) => (
+                <PostEmAlta 
+                  index={index}
+                  _id={item._id}
+                  name={item.name}
+                  bio={item.bio}
+                  type={item.type ?? searchTypes.Project}
+                  photo={item.photo}
+                  countGoodIdea={item.countGoodIdea}
+                  countFollowers={item.countFollowers}
+                  screen={isFiltering ? screens.Search : screens.HotProjects}
+                  key={item._id}/>
+              ))
+            )} 
           </ContainerProjects>
         )}
       </Container>
