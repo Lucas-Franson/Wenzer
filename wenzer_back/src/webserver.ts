@@ -63,6 +63,7 @@ export function websocket(io: any) {
         return new UserViewModel(
             user?._id!,
             user?.name!,
+            user?.lastName!,
             user?.email!,
             user?.password!,
             user?.title!,

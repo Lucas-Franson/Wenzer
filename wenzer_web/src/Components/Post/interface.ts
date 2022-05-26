@@ -8,7 +8,7 @@ export interface IPostProps {
     title: string;
     updated_at?: Date;
     goodIdea: boolean;
-    user: { _id: string, name: string, photo: any };
+    user: { _id: string, name: string, lastName: string, photo: any };
     removePost: any;
     type: PostTypeEnum;
     countGoodIdea: number;

@@ -40,6 +40,7 @@ export default class FeedAppService {
             let userViewModel = new UserViewModel(
                 user?._id!,
                 user?.name!,
+                user?.lastName!,
                 user?.email!,
                 user?.password!,
                 user?.title!,
@@ -84,6 +85,7 @@ export default class FeedAppService {
             let userViewModel = new UserViewModel(
                 user?._id!,
                 user?.name!,
+                user?.lastName!,
                 user?.email!,
                 user?.password!,
                 user?.title!,

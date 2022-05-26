@@ -159,7 +159,6 @@ function PostScreen(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      debugger;
       setPost(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);

@@ -108,6 +108,7 @@ export default class ProfileAppService {
         let userViewModel = new UserViewModel(
             user?._id!,
             user?.name!,
+            user?.lastName!,
             user?.email!,
             user?.password!,
             user?.title!,

@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import { toastfyError, toastfySuccess, toastfyWarning } from '../../Toastfy';
 import { useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
+import SplashScreen from '../../Animation/SplashScreen';
 
 export default function ModalPost({open, setOpen}: any) {
   const [imageToPost, setImageToPost] = useState<File>();
@@ -22,6 +23,7 @@ export default function ModalPost({open, setOpen}: any) {
   const [projectSelected, setProjectSelected] = useState("0");
   const [allProject, setAllProject] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [splashScreenActive, setSplashScreenActive] = useState(true);
   const { userInfo } = useAuth();
 
   const filepickerRef = useRef<HTMLDivElement | any>(null);
@@ -35,6 +37,7 @@ export default function ModalPost({open, setOpen}: any) {
     setDescriptionPost('');
     setTypePost('1');
     setProjectSelected('0');
+    setSplashScreenActive(true);
   };
 
   const typesProjects = [
@@ -58,14 +61,12 @@ export default function ModalPost({open, setOpen}: any) {
     }).then(res => {
       if (res.data.length > 0) {
         setAllProject(res.data);
-        if (res.data.length == 1) {
-          setProjectSelected(res.data[0]._id);
-        }
+        setProjectSelected(res.data[0]._id);
       } else {
         setAllProject([{ name: "Nenhum projeto criado.", _id: "0" }]);
         setProjectSelected("0");
       }
-
+      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     });
@@ -97,7 +98,7 @@ export default function ModalPost({open, setOpen}: any) {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
-
+    
     if (!projectSelected || projectSelected == "0") {
       toastfyWarning("Selecione algum projeto para continuar.");
       return;
@@ -134,55 +135,59 @@ export default function ModalPost({open, setOpen}: any) {
         <MdClose onClick={handleClose} size={25} />
       </header>
       
-      <main>
-        <form onSubmit={onSubmit}>
-          <div className="profile">
-            <HeaderAvatar src={userInfo?.photo} />
-            <select required defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
-              {typesProjects.map(item => (
-                <option value={item.value} key={item.value}>{item.label}</option>
-              ))}
-            </select>
-            <select required defaultValue={projectSelected} onChange={(e) => setProjectSelected(e.target.value)}>
-              {allProject.map(item => (
-                <option value={item._id} key={item._id}>{item.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="content">
-            <InputText required placeholder="Titulo" maxLength={80} onChange={(e: any) => setTitlePost(e.target.value)} />
-            <InputTextArea required placeholder="Qual a sua idéia?" maxLength={1000} onChange={(e: any) => setDescriptionPost(e.target.value)}/>
-
-            <div className="image">
-              <div className="flex" onClick={() => filepickerRef.current.click()}>
-                <MdImage size={25} />
-                <span>Foto</span>
-                <input
-                  type='file'
-                  onChange={addImageToPost}
-                  ref={filepickerRef}
-                  hidden
-                />
-              </div>
-
-              {imageToPost && (
-                <div className='imagePost' onClick={removeImage}>
-                  <img src={previewImagePost} alt="postagem" />
-                </div>
-              )}
-              
+      {splashScreenActive ? (
+        <SplashScreen />
+      ) : (
+        <main>
+          <form onSubmit={onSubmit}>
+            <div className="profile">
+              <HeaderAvatar src={userInfo?.photo} />
+              <select required defaultValue={typePost} onChange={(e) => setTypePost(e.target.value)}>
+                {typesProjects.map(item => (
+                  <option value={item.value} key={item.value}>{item.label}</option>
+                ))}
+              </select>
+              <select required defaultValue={projectSelected} onChange={(e) => setProjectSelected(e.target.value)}>
+                {allProject.map(item => (
+                  <option value={item._id} key={item._id}>{item.name}</option>
+                ))}
+              </select>
             </div>
-            <Button>
-            {isLoading ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              "Publicar"
-            )}
-            </Button>
-          </div>
-        </form>
-      </main>
+
+            <div className="content">
+              <InputText required placeholder="Titulo" maxLength={80} onChange={(e: any) => setTitlePost(e.target.value)} />
+              <InputTextArea required placeholder="Qual a sua idéia?" maxLength={1000} onChange={(e: any) => setDescriptionPost(e.target.value)}/>
+
+              <div className="image">
+                <div className="flex" onClick={() => filepickerRef.current.click()}>
+                  <MdImage size={25} />
+                  <span>Foto</span>
+                  <input
+                    type='file'
+                    onChange={addImageToPost}
+                    ref={filepickerRef}
+                    hidden
+                  />
+                </div>
+
+                {imageToPost && (
+                  <div className='imagePost' onClick={removeImage}>
+                    <img src={previewImagePost} alt="postagem" />
+                  </div>
+                )}
+                
+              </div>
+              <Button>
+              {isLoading ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : (
+                "Publicar"
+              )}
+              </Button>
+            </div>
+          </form>
+        </main>
+      )}
     </ContainerModal>
   )
 

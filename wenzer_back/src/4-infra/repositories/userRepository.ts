@@ -202,7 +202,7 @@ export default class UserRepository extends Orm<User> implements IUserRepository
             dbo.collection("Connection").aggregate([
                 {
                     $match: {
-                        _id: {
+                        idFollower: {
                             $nin: idNotifications
                         },
                         accepted: false,
