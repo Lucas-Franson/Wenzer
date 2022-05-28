@@ -20,6 +20,8 @@ import { AiFillBulb, AiOutlineBulb } from 'react-icons/ai';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from '../../../Styles/Hook/theme';
 import ModalConfirm from '../ModalConfirm';
+import SplashScreen from '../../Animation/SplashScreen';
+import NoContent from '../../Animation/NoContent';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -61,6 +63,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
   const { theme } = useTheme();
+  const [splashScreenActive, setSplashScreenActive] = useState(true);
   const [darkTheme, setDarkTheme] = useState(() =>
     theme.title === "dark" ? true : false
   );
@@ -139,6 +142,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
       else {
         setData(res.data);
       }
+      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     });
@@ -161,70 +165,83 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
 
   return (
     <>
-      <div className="content">
-        {data && data.map(participant => (
-          <>
-            <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant">
-              <div className="participantHeader">
-                <div onClick={() => goToUserProfile(participant._id)}>
-                  <HeaderAvatar className="thumbUser" src={participant.photo} />
-                </div>
-                <div className="nameAndRole" onClick={() => goToUserProfile(participant._id)}>
-                  <span>{participant.name}</span>
-                  <p>{participant.role}</p>
-                </div>
-              </div>
-              {
-                !props.viewing && participant.role != "Líder" && (
-                  !participant.accepted ? (
-                    <div className="btnRejectAccept">
-                      <Button onClick={(e: FormEvent) => reject(e, participant._id)}>
-                        {isLoading ? (
-                          <CircularProgress size={16} color="secondary" />
-                        ) : 
-                          "Rejeitar"
-                        }
-                      </Button>
-                      <Button onClick={(e: FormEvent) => {
-                          e.preventDefault();
-                          setRoleInputControl(roleInputControl == participant._id ? "" : participant._id)
-                        }}>
-                        {isLoading ? (
-                          <CircularProgress size={16} color="inherit" />
-                        ) : 
-                          "Aceitar"
-                        }
-                      </Button>
+      {splashScreenActive ? (
+        <SplashScreen />
+      ) : (
+        <>
+          <div className="content">
+            {data && data.length > 0 ? (
+              data && data.map(participant => (
+                <>
+                  <div key={participant._id} style={{ backgroundColor: darkTheme ? '#333' : '#ccc' }} className="participant">
+                    <div className="participantHeader">
+                      <div onClick={() => goToUserProfile(participant._id)}>
+                        <HeaderAvatar className="thumbUser" src={participant.photo} />
+                      </div>
+                      <div className="nameAndRole" onClick={() => goToUserProfile(participant._id)}>
+                        <span>{participant.name}</span>
+                        <p>{participant.role}</p>
+                      </div>
                     </div>
-                  ) : (
-                    <span className='removeParticipant' onClick={() => handleOpenModalConfirm(participant._id)}>Remover participante</span>
-                  )
-                )
-              }
-            </div>
-            {
-              roleInputControl && roleInputControl == participant._id && (
-                <div className="coment-user">
-                  <InputText 
-                    type="text"
-                    defaultValue={role}
-                    onChange={(e: any) => setRole(e.target.value)}
-                    className="height-coment" 
-                    placeholder="Qual a função do participante?" />
-                  <Button onClick={(e: FormEvent) => accept(e, participant._id)} className="button_coment">
-                    {isLoading ? (
-                      <CircularProgress size={16} color="inherit" />
-                    ) : (
-                      "Enviar"
-                    )}
-                  </Button>
-                </div>
-              )
-            }
-          </>
-        ))}
-      </div>
-      <ModalConfirm open={openModalConfirm} setOpen={setOpenModalConfirm} setConfirm={handleConfirm} title='participante' url={`/api/project/participant/${props.idProject}/${url}`} />
+                    {
+                      !props.viewing && participant.role != "Líder" && (
+                        !participant.accepted ? (
+                          <div className="btnRejectAccept">
+                            <Button onClick={(e: FormEvent) => reject(e, participant._id)}>
+                              {isLoading ? (
+                                <CircularProgress size={16} color="secondary" />
+                              ) : 
+                                "Rejeitar"
+                              }
+                            </Button>
+                            <Button onClick={(e: FormEvent) => {
+                                e.preventDefault();
+                                setRoleInputControl(roleInputControl == participant._id ? "" : participant._id)
+                              }}>
+                              {isLoading ? (
+                                <CircularProgress size={16} color="inherit" />
+                              ) : 
+                                "Aceitar"
+                              }
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className='removeParticipant' onClick={() => handleOpenModalConfirm(participant._id)}>Remover participante</span>
+                        )
+                      )
+                    }
+                  </div>
+                  {
+                    roleInputControl && roleInputControl == participant._id && (
+                      <div className="coment-user">
+                        <InputText 
+                          type="text"
+                          defaultValue={role}
+                          onChange={(e: any) => setRole(e.target.value)}
+                          className="height-coment" 
+                          placeholder="Qual a função do participante?" />
+                        <Button onClick={(e: FormEvent) => accept(e, participant._id)} className="button_coment">
+                          {isLoading ? (
+                            <CircularProgress size={16} color="inherit" />
+                          ) : (
+                            "Enviar"
+                          )}
+                        </Button>
+                      </div>
+                    )
+                  }
+                </>
+              ))
+            ) : (
+              <div className='noContent'>
+                <NoContent/>
+                <span>Não existem participantes nesse projeto.</span>
+              </div>
+            )}
+          </div>
+          <ModalConfirm open={openModalConfirm} setOpen={setOpenModalConfirm} setConfirm={handleConfirm} title='participante' url={`/api/project/participant/${props.idProject}/${url}`} />
+        </>
+      )}
     </>
   );
 }
@@ -241,6 +258,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [following, setFollowing] = useState(false);
   const [goodIdea, setGoodIdea] = useState(false);
   const [participating, setParticipating] = useState(false);
+  const [splashScreenActive, setSplashScreenActive] = useState(true);
   const filepickerRef = useRef<HTMLDivElement | any>(null);
 
   const { theme } = useTheme();
@@ -368,8 +386,8 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
     }).then(res => {
       toastfySuccess("Projeto criado com sucesso!");
-      setIsLoading(false);
       handleClose();
+      setIsLoading(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       setIsLoading(false);
@@ -383,8 +401,8 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
     }).then(res => {
       toastfySuccess("Projeto editado com sucesso!");
-      setIsLoading(false);
       handleClose();
+      setIsLoading(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       setIsLoading(false);
@@ -398,12 +416,14 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
     }).then(res => {
       if (isMounted) setInterests(res.data);
+      if (!idProject) setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     });
   }
 
   function getProject(isMounted: boolean) {
+    if (!idProject) return;
     APIServiceAuthenticated.get(`/api/project/byid/${idProject}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
@@ -415,11 +435,29 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
       
       if (isMounted) {
-        setProject(res.data);
-        handleForm(res.data);
+        let project = res.data;
+        setProject(project);
+
+        let publicProject = JSON.parse(project.publicProject + "") ? "1" : "2";
+        setTypePost(publicProject);
+        setTitlePost(project.name);
+        setDescriptionPost(project.description);
+        setInterestsSelected(project.tags);
+        setPaymentImpulsionamento(JSON.parse(project.marketing + ""));
+        setFollowing(project.following);
+        setGoodIdea(project.goodIdea);
+        setParticipating(project.participating);
+        if (project.photo && typeof project.photo === 'object') {
+          let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
+          let file = dataURLtoFile(base64, project.photo.name);
+          setImageToPost(file);
+          setPreviewImagePost(base64);
+        }
+
         if (res.data.userId != userInfo?.id) setViewing(true);
         else setViewing(false);
       }
+      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       handleClose();
@@ -486,24 +524,6 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     });
   }
 
-  function handleForm(project: IProjectProps) {
-    let publicProject = JSON.parse(project.publicProject + "") ? "1" : "2";
-    setTypePost(publicProject);
-    setTitlePost(project.name);
-    setDescriptionPost(project.description);
-    setInterestsSelected(project.tags);
-    setPaymentImpulsionamento(JSON.parse(project.marketing + ""));
-    setFollowing(project.following);
-    setGoodIdea(project.goodIdea);
-    setParticipating(project.participating);
-    if (project.photo && typeof project.photo === 'object') {
-      let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
-      let file = dataURLtoFile(base64, project.photo.name);
-      setImageToPost(file);
-      setPreviewImagePost(base64);
-    }
-  }
-
   function dataURLtoFile(dataurl: string, filename: string) {
     var arr: any = dataurl.split(',');
     if (arr && arr.length > 0) {
@@ -542,7 +562,11 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         <h2>{viewing ? "Visualizando" : (idProject ? "Editando" : "Novo")} Projeto</h2>
         <MdClose onClick={handleClose} size={25} />
       </header>
-      
+
+    {splashScreenActive ? (
+        <SplashScreen />
+      ) : (  
+        
       <main>
         <form>
           <div className="profile">
@@ -676,6 +700,9 @@ export default function ModalProject({open, setOpen, idProject}: any) {
           </TabPanel>
         </form>
       </main>
+      
+      )}
+    
     </ContainerModal>
   )
 

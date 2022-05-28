@@ -118,7 +118,7 @@ export default class ProjectAppService {
                 user.map((data) => {
                     let searchViewModel = new SearchViewModel(
                         data._id,
-                        data.name + " " + data.lastName,
+                        (data.name ?? "") + " " + (data.lastName ?? ""),
                         data.bio,
                         SearchType.People,
                         data.photo

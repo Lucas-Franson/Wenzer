@@ -215,7 +215,7 @@ function Profile(): ReactElement {
       obj.hasCompany = hasCompany;
       setUserProfileInfo(obj);
       setInterestsOfUser(interestsSelected);
-
+      handleChangeEditProfile();
       toastfySuccess("Perfil editado!");
       setIsLoading(false);
     }).catch(err => {

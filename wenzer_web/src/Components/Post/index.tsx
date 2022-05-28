@@ -46,7 +46,6 @@ function Post({
         auth: Cookies.get('WenzerToken')
       }
     }).then(data => {
-      debugger;
       if (!hasLiked) {
         let newCount = ++countGoodIdeaState;
         setCountGoodIdeaState(newCount);
@@ -95,7 +94,7 @@ function Post({
          <header>
           <HeaderAvatar onClick={goToUserProfile} src={user?.photo} />
           <div className="userInfo">
-            <p onClick={goToUserProfile}>{user?.name}</p>
+            <p onClick={goToUserProfile}>{(user?.name ?? "") + " " + (user?.lastName ?? "")}</p>
             <span>{created_at ? new Date(created_at!).toLocaleString('pt-BR') : ""}</span>
           </div>
           <div className='menuPost' style={{ display: userInfo?.id == idUser ? 'block' : 'none' }} onClick={handleOpenMenuSettings}>

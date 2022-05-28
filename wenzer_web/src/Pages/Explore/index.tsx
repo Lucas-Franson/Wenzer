@@ -147,8 +147,8 @@ function Explorar(): ReactElement {
           <ContainerProjects>
             {objects.length === 0 ? (
               <div className='noContent'>
-                <span>Sua pesquisa não encontrou nenhum resultado.</span>
                 <NoContent/>
+                <span>Sua pesquisa não encontrou nenhum resultado.</span>
               </div>
             ) : (
               objects.map((item: any, index: number) => (
