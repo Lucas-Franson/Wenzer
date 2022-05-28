@@ -227,7 +227,7 @@ class UserRepository extends orm_1.Orm {
             dbo.collection("Connection").aggregate([
                 {
                     $match: {
-                        _id: {
+                        idFollower: {
                             $nin: idNotifications
                         },
                         accepted: false,

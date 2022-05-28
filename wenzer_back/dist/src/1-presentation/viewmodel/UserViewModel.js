@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class UserViewModel {
-    constructor(_id, name, email, password, title, photo, bio, emailValid, created_at) {
+    constructor(_id, name, lastName, email, password, title, photo, bio, emailValid, created_at) {
         this._id = _id;
         this.name = name;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.title = title;

@@ -81,7 +81,8 @@ class ProjectAppService {
                 let user = yield this.userService.search(userId, search.toLowerCase().trim());
                 if (user) {
                     user.map((data) => {
-                        let searchViewModel = new SearchViewModel_1.SearchViewModel(data._id, data.name + " " + data.lastName, data.bio, SearchViewModel_1.SearchType.People, data.photo);
+                        var _a, _b;
+                        let searchViewModel = new SearchViewModel_1.SearchViewModel(data._id, ((_a = data.name) !== null && _a !== void 0 ? _a : "") + " " + ((_b = data.lastName) !== null && _b !== void 0 ? _b : ""), data.bio, SearchViewModel_1.SearchType.People, data.photo);
                         found.push(searchViewModel);
                     });
                 }
