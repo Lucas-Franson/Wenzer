@@ -22,6 +22,7 @@ import { useTheme } from '../../../Styles/Hook/theme';
 import ModalConfirm from '../ModalConfirm';
 import SplashScreen from '../../Animation/SplashScreen';
 import NoContent from '../../Animation/NoContent';
+import Compress from 'compress.js';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -247,7 +248,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
 }
 
 export default function ModalProject({open, setOpen, idProject}: any) {
-  const [imageToPost, setImageToPost] = useState<File>();
+  const [imageToPost, setImageToPost] = useState<string>();
   const [previewImagePost, setPreviewImagePost] = useState('');
   const [titlePost, setTitlePost] = useState('');
   const [descriptionPost, setDescriptionPost] = useState('');
@@ -299,17 +300,6 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const handleCancelPayment = () => {
     setPaymentImpulsionamento(false);
   }
-
-  const typesProjects = [
-    {
-      value: 1,
-      label: 'Público'
-    },
-    {
-      value: 2,
-      label: 'Privado'
-    },
-  ];
   
   function handleOpenModalPayment() {
     if(paymentImpulsionamento) {
@@ -328,8 +318,18 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       toastfyError("Tamanho da foto deve ser menor que 1MB.");
       return;
     }
+    
+    let c = new Compress();
+    c.compress([event.target.files[0]], {
+      size: 1, // the max size in MB, defaults to 2MB
+      quality: .75, // the quality of the image, max is 1,
+      maxWidth: 1920, // the max width of the output image, defaults to 1920px
+      maxHeight: 1920, // the max height of the output image, defaults to 1920px
+      resize: true, // defaults to true, set false if you do not want to resize the image width and height
+    }).then((data: any) => {
+      setImageToPost(data[0].prefix + data[0].data);
+    });
 
-    setImageToPost(event.target.files[0]);
     const selectedImagesPreview = URL.createObjectURL(event.target.files[0]);
     setPreviewImagePost(selectedImagesPreview);
   }
@@ -447,11 +447,9 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         setFollowing(project.following);
         setGoodIdea(project.goodIdea);
         setParticipating(project.participating);
-        if (project.photo && typeof project.photo === 'object') {
-          let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
-          let file = dataURLtoFile(base64, project.photo.name);
-          setImageToPost(file);
-          setPreviewImagePost(base64);
+        if (project.photo && typeof project.photo === 'string') {
+          setImageToPost(project.photo);
+          setPreviewImagePost(project.photo);
         }
 
         if (res.data.userId != userInfo?.id) setViewing(true);

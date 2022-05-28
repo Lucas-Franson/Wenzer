@@ -9,6 +9,7 @@ import { ContainerModal, Container } from '../styles';
 import { useAuth } from '../../../Services/Authentication/auth';
 import { useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
+import Compress from 'compress.js';
 
 export default function ModalProfilePic({open, setOpen}: any) {
   const [file, setFile] = useState<File>();
@@ -41,7 +42,16 @@ export default function ModalProfilePic({open, setOpen}: any) {
     const selectedImagesPreview = URL.createObjectURL(event.target.files[0]);
     setPreviewImagePost(selectedImagesPreview);
     
-    setFile(event.target.files[0]);
+    let c = new Compress();
+    c.compress([event.target.files[0]], {
+      size: 1, // the max size in MB, defaults to 2MB
+      quality: .75, // the quality of the image, max is 1,
+      maxWidth: 1920, // the max width of the output image, defaults to 1920px
+      maxHeight: 1920, // the max height of the output image, defaults to 1920px
+      resize: true, // defaults to true, set false if you do not want to resize the image width and height
+    }).then((data: any) => {
+      setFile(data[0].prefix + data[0].data);
+    });
   }
 
   const removeImage = () => {

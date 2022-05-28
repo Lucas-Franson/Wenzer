@@ -23,18 +23,13 @@ export default class PostService implements IPostService {
 
     async create(userId: string, post: PostCreateViewModel) {
         if (post != null) {
-            let photo = "";
-            if (post.photo) {
-                const reader = Buffer.from(new Uint8Array(post.photo.data));
-                photo = `data:${post.photo.mimetype};base64, ${reader.toString("base64")}`;
-            }
 
             const objPost = new Post(
                 userId,
                 0,
                 post.title,
                 post.description,
-                photo,
+                post.photo,
                 post.idProject,
                 post.publicPost == "true"
             );
