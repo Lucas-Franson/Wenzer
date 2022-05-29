@@ -103,7 +103,7 @@ class UserRepository extends orm_1.Orm {
                         {
                             $project: {
                                 _id: "$user._id",
-                                name: "$user.name",
+                                name: { $concat: ["$user.name", " ", "$user.lastName"] },
                                 created_at: 1
                             }
                         }

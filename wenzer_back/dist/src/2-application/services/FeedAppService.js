@@ -87,10 +87,11 @@ class FeedAppService {
         });
     }
     setSubComment(userId, idPostComment, text) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             let comment = yield this.postService.setSubComment(userId, idPostComment, text);
             let user = yield this.userService.findUserById(comment.idUser);
-            let userViewModel = new UserPostCommentViewModel_1.UserPostCommentViewModel(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.photo);
+            let userViewModel = new UserPostCommentViewModel_1.UserPostCommentViewModel(user === null || user === void 0 ? void 0 : user._id, (user === null || user === void 0 ? void 0 : user.name) + " " + ((_a = user === null || user === void 0 ? void 0 : user.lastName) !== null && _a !== void 0 ? _a : ""), user === null || user === void 0 ? void 0 : user.photo);
             const commentCommented = new CommentCommentedViewModel_1.CommentCommentedViewModel(comment._id, comment.idUser, comment.idPostComment, comment.text, userViewModel, comment.created_at);
             return commentCommented;
         });
@@ -116,14 +117,16 @@ class FeedAppService {
                 let userGoodIdea = yield this.postService.getAllCommentGoodIdeaFromUser(userId);
                 let commentsViewModel = [];
                 comments.forEach((comment) => {
+                    var _a;
                     const user = users.find(x => x._id == comment.idUser);
                     if (user != undefined) {
-                        const userViewModel = new UserPostCommentViewModel_1.UserPostCommentViewModel(user === null || user === void 0 ? void 0 : user._id, user === null || user === void 0 ? void 0 : user.name, user === null || user === void 0 ? void 0 : user.photo);
+                        const userViewModel = new UserPostCommentViewModel_1.UserPostCommentViewModel(user === null || user === void 0 ? void 0 : user._id, (user === null || user === void 0 ? void 0 : user.name) + " " + ((_a = user === null || user === void 0 ? void 0 : user.lastName) !== null && _a !== void 0 ? _a : ""), user === null || user === void 0 ? void 0 : user.photo);
                         const subComments = [];
                         listSubComments.filter(x => x.idPostComment === comment._id).map((data) => {
+                            var _a;
                             const userSubComment = users.find(x => x._id == data.idUser);
                             if (userSubComment) {
-                                const userSubCommentViewModel = new UserPostCommentViewModel_1.UserPostCommentViewModel(userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment._id, userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment.name, userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment.photo);
+                                const userSubCommentViewModel = new UserPostCommentViewModel_1.UserPostCommentViewModel(userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment._id, (userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment.name) + " " + ((_a = userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment.lastName) !== null && _a !== void 0 ? _a : ""), userSubComment === null || userSubComment === void 0 ? void 0 : userSubComment.photo);
                                 const commentCommented = new CommentCommentedViewModel_1.CommentCommentedViewModel(data._id, data.idUser, data.idPostComment, data.text, userSubCommentViewModel, data.created_at);
                                 subComments.push(commentCommented);
                             }

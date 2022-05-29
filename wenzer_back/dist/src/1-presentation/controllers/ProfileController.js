@@ -52,7 +52,7 @@ class ProfileController {
     editPhoto(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const file = yield req.service.profileAppService.editPhoto(req.session.userId, req.files.file);
+                const file = yield req.service.profileAppService.editPhoto(req.session.userId, req.body.file);
                 res.status(200).json({ photo: file });
             }
             catch (err) {

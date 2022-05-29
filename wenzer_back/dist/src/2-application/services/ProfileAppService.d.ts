@@ -14,7 +14,7 @@ export default class ProfileAppService {
     getAllInterests(): Promise<InterestsFormViewModel[]>;
     getInfoUser(idUserServer: string, idUser: string): Promise<ProfileViewModel>;
     editProfile(userId: string, profile: ProfileViewModel): Promise<void>;
-    editPhoto(userId: string, photo: any): Promise<string>;
+    editPhoto(userId: string, photo: any): Promise<any>;
     followUser(userId: string, idUserToFollow: string): Promise<void>;
     getConnections(idUser: string): Promise<any>;
     getInterests(idUser: string): Promise<InterestsFormViewModel[]>;

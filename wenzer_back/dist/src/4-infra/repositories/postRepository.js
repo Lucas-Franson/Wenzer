@@ -321,7 +321,7 @@ class PostRepository extends orm_1.Orm {
                         {
                             $project: {
                                 _id: "$post._id",
-                                name: "$user.name",
+                                name: { $concat: ["$user.name", " ", "$user.lastName"] },
                                 created_at: 1
                             }
                         }
@@ -379,7 +379,7 @@ class PostRepository extends orm_1.Orm {
                             $project: {
                                 _id: "$idPostComment",
                                 idPost: "$postComment.idPost",
-                                name: "$user.name",
+                                name: { $concat: ["$user.name", " ", "$user.lastName"] },
                                 created_at: 1
                             }
                         }
@@ -705,17 +705,6 @@ class PostRepository extends orm_1.Orm {
                     },
                     {
                         $unwind: "$post"
-                    },
-                    {
-                        $lookup: {
-                            from: 'User',
-                            localField: 'idUser',
-                            foreignField: '_id',
-                            as: 'user'
-                        }
-                    },
-                    {
-                        $unwind: "$user"
                     },
                     {
                         $match: {

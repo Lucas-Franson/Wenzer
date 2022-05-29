@@ -59,8 +59,8 @@ class ConnectionRepository extends orm_1.Orm {
                             name: {
                                 $cond: {
                                     if: { $eq: [idUser, "$userOne._id"] },
-                                    then: "$userTwo.name",
-                                    else: "$userOne.name"
+                                    then: { $concat: ["$userTwo.name", " ", "$userTwo.lastName"] },
+                                    else: { $concat: ["$userOne.name", " ", "$userOne.lastName"] }
                                 }
                             },
                             photo: {

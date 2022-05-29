@@ -26,12 +26,7 @@ class PostService {
     create(userId, post) {
         return __awaiter(this, void 0, void 0, function* () {
             if (post != null) {
-                let photo = "";
-                if (post.photo) {
-                    const reader = Buffer.from(new Uint8Array(post.photo.data));
-                    photo = `data:${post.photo.mimetype};base64, ${reader.toString("base64")}`;
-                }
-                const objPost = new post_1.Post(userId, 0, post.title, post.description, photo, post.idProject, post.publicPost == "true");
+                const objPost = new post_1.Post(userId, 0, post.title, post.description, post.photo, post.idProject, post.publicPost == "true");
                 yield this.postRepository.insert(objPost);
             }
         });

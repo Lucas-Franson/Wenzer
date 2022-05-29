@@ -60,10 +60,10 @@ class ProfileAppService {
             var user = yield this.userService.findUserById(userId);
             if (!user)
                 throw new Error('Usuário não encontrado.');
-            const reader = Buffer.from(new Uint8Array(photo.data));
-            const file = `data:${photo.mimetype};base64, ${reader.toString("base64")}`;
-            yield this.userService.updateUserPhoto(user, file);
-            return file;
+            // const reader = Buffer.from(new Uint8Array(photo.data));
+            // const file = `data:${photo.mimetype};base64, ${reader.toString("base64")}`;
+            yield this.userService.updateUserPhoto(user, photo);
+            return photo;
         });
     }
     followUser(userId, idUserToFollow) {
