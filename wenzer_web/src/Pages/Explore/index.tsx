@@ -9,7 +9,7 @@ import SplashScreen from '../../Components/Animation/SplashScreen';
 import Button from '../../Components/Button';
 import InputSearch from '../../Components/InputSearch';
 import PostEmAlta from '../../Components/PostEmAlta';
-import { toastfyError } from '../../Components/Toastfy';
+import { toastfyError, toastfyWarning } from '../../Components/Toastfy';
 import { screens, searchTypes } from '../../Constants/MediaSettings';
 import APIServiceAuthenticated from '../../Services/api/apiServiceAuthenticated';
 import { useAuth } from '../../Services/Authentication/auth';
@@ -39,25 +39,38 @@ function Explorar(): ReactElement {
     return getSearch;
   }
 
-  function getProjectsOnHigh() {
+  function getProjectsOnHigh(isMounted: boolean) {
+    debugger;
     APIServiceAuthenticated.get(`/api/project/onhigh`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setObjects(res.data);
-      setAlreadyGetProjects(true);
-      setLoading(false);
+      if (isMounted) {
+        setObjects(res.data);
+        setAlreadyGetProjects(true);
+        setLoading(false);
+        setIsFiltering(false);
+      }
 
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setLoading(false);
+      if (isMounted) setLoading(false);
     })
   }
 
-  function search(event?: FormEvent) {
-    event?.preventDefault();
-    setLoading(true);
+  function search(e: FormEvent, isMounted: boolean) {
+    e.preventDefault();
+    searchRequest(isMounted);
+  }
+
+  function searchRequest(isMounted: boolean) {
+    if (isMounted) setLoading(true);
+    if ((searchWord && !searchWord.trim()) || !searchWord) {
+      setLoading(false);
+      toastfyWarning("Preencha o campo de pesquisar.");
+      return;
+    }
     let filterByPerson = person ? "&types[]=0" : "";
     let filterByProject = project ? "&types[]=1" : "";
     let filterByPost = post ? "&types[]=2" : "";
@@ -67,15 +80,19 @@ function Explorar(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setObjects(res.data);
-      setAlreadySearch(true);
-      setLoading(false);
-
+      if (isMounted) {
+        setObjects(res.data);
+        setAlreadySearch(true);
+        setLoading(false);
+        setIsFiltering(true);
+      }
     }).catch(err => {
-      toastfyError(err?.response?.data?.mensagem);
-      setLoading(false);
-      getProjectsOnHigh();
-    })
+      if (isFiltering) toastfyError(err?.response?.data?.mensagem);
+      if (isMounted) {
+        setLoading(false);
+        getProjectsOnHigh(isMounted);
+      }
+    });
   }
 
   function setFilterState(post: boolean, project: boolean, person: boolean) {
@@ -85,35 +102,40 @@ function Explorar(): ReactElement {
     setAlreadySearch(false);
   }
 
-  function resetSearchWord() {
+  function resetSearchWord(e: FormEvent) {
+    e.preventDefault();
     setSearchWord('');
     setPerson(false);
     setProject(false);
     setPost(false);
     setAlreadySearch(false);
-    getProjectsOnHigh()
-    history.push('/explore')
+    getProjectsOnHigh(true);
+    setIsFiltering(false);
+    // history.push('/explore')
   }
 
   useEffect(() => {
+    let isMounted = true;
+    debugger;
     let filterParams = loadSearchFilter();
     if (filterParams) {
       if (!alreadySearch) {
-        search();
+        searchRequest(isMounted);
       }
-      setIsFiltering(true);
+      if (isMounted) setIsFiltering(true);
     } else {
       if(!alreadyGetProjects) {
-        getProjectsOnHigh();
+        getProjectsOnHigh(isMounted);
       }
-      setIsFiltering(false);
+      if (isMounted) setIsFiltering(false);
     }
+    return () => { isMounted = false }
   }, [alreadyGetProjects, alreadySearch]);
 
   return (
       <Container>
         <ContainerSearch>
-          <form onSubmit={search}>
+          <form onSubmit={(e) => search(e, true)}>
             <InputSearch placeholder='Pesquisar' value={searchWord} onChange={(e) => setSearchWord(e.target.value)}/>
             <h4>Filtrar por:</h4>
             <div>
@@ -134,7 +156,7 @@ function Explorar(): ReactElement {
               Pesquisar
               <MdSearch size={22}/> 
             </Button>
-            <Button className="onlyBorder svg" onClick={resetSearchWord}>
+            <Button className="onlyBorder svg" onClick={(e: any) => resetSearchWord(e)}>
               Em Alta
               <AiFillFire size={22}/> 
             </Button>

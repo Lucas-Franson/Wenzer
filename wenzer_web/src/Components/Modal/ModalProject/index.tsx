@@ -22,6 +22,7 @@ import { useTheme } from '../../../Styles/Hook/theme';
 import ModalConfirm from '../ModalConfirm';
 import SplashScreen from '../../Animation/SplashScreen';
 import NoContent from '../../Animation/NoContent';
+import Compress from 'compress.js';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -124,25 +125,27 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
     }
   }
 
-  function getData() {
+  function getData(isMounted: boolean) {
     APIServiceAuthenticated.get(`/api/project/participant/${props.idProject}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      if (props.viewing) {
-        if (res.data) {
-          let participants = res.data.filter((x: any) => x.accepted == true);
-          setData(participants);
+      if (isMounted) {
+        if (props.viewing) {
+          if (res.data) {
+            let participants = res.data.filter((x: any) => x.accepted == true);
+            setData(participants);
+          } 
+          else {
+            setData([]);
+          }
         } 
         else {
-          setData([]);
+          setData(res.data);
         }
-      } 
-      else {
-        setData(res.data);
+        setSplashScreenActive(false);
       }
-      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     });
@@ -160,7 +163,9 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
   }
 
   useEffect(() => {
-    getData();
+    let isMounted = true;
+    getData(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (
@@ -213,7 +218,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
                   </div>
                   {
                     roleInputControl && roleInputControl == participant._id && (
-                      <div className="coment-user">
+                      <div key={"input" + participant._id} className="coment-user">
                         <InputText 
                           type="text"
                           defaultValue={role}
@@ -247,7 +252,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
 }
 
 export default function ModalProject({open, setOpen, idProject}: any) {
-  const [imageToPost, setImageToPost] = useState<File>();
+  const [imageToPost, setImageToPost] = useState<string>();
   const [previewImagePost, setPreviewImagePost] = useState('');
   const [titlePost, setTitlePost] = useState('');
   const [descriptionPost, setDescriptionPost] = useState('');
@@ -260,6 +265,10 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [participating, setParticipating] = useState(false);
   const [splashScreenActive, setSplashScreenActive] = useState(true);
   const filepickerRef = useRef<HTMLDivElement | any>(null);
+  const [isLoadingFollowProject, setIsLoadingFollowProject] = useState(false);
+  const [isLoadingGoodIdea, setIsLoadingGoodIdea] = useState(false);
+  const [isLoadingRequestParticipate, setIsLoadingRequestParticipate] = useState(false);
+
 
   const { theme } = useTheme();
   const [darkTheme, setDarkTheme] = useState(() =>
@@ -299,17 +308,6 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const handleCancelPayment = () => {
     setPaymentImpulsionamento(false);
   }
-
-  const typesProjects = [
-    {
-      value: 1,
-      label: 'Público'
-    },
-    {
-      value: 2,
-      label: 'Privado'
-    },
-  ];
   
   function handleOpenModalPayment() {
     if(paymentImpulsionamento) {
@@ -328,8 +326,18 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       toastfyError("Tamanho da foto deve ser menor que 1MB.");
       return;
     }
+    
+    let c = new Compress();
+    c.compress([event.target.files[0]], {
+      size: 1, // the max size in MB, defaults to 2MB
+      quality: .75, // the quality of the image, max is 1,
+      maxWidth: 1920, // the max width of the output image, defaults to 1920px
+      maxHeight: 1920, // the max height of the output image, defaults to 1920px
+      resize: true, // defaults to true, set false if you do not want to resize the image width and height
+    }).then((data: any) => {
+      setImageToPost(data[0].prefix + data[0].data);
+    });
 
-    setImageToPost(event.target.files[0]);
     const selectedImagesPreview = URL.createObjectURL(event.target.files[0]);
     setPreviewImagePost(selectedImagesPreview);
   }
@@ -429,12 +437,12 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {  
-      if (!res.data) {
-        toastfyError("Nenhum projeto encontrado.");
-        handleClose();  
-      }
       
       if (isMounted) {
+        if (!res.data) {
+          toastfyError("Nenhum projeto encontrado.");
+          handleClose();  
+        }
         let project = res.data;
         setProject(project);
 
@@ -447,17 +455,15 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         setFollowing(project.following);
         setGoodIdea(project.goodIdea);
         setParticipating(project.participating);
-        if (project.photo && typeof project.photo === 'object') {
-          let base64 = `data:${project.photo.mimetype};base64, ${project.photo.data}`;
-          let file = dataURLtoFile(base64, project.photo.name);
-          setImageToPost(file);
-          setPreviewImagePost(base64);
+        if (project.photo && typeof project.photo === 'string') {
+          setImageToPost(project.photo);
+          setPreviewImagePost(project.photo);
         }
 
         if (res.data.userId != userInfo?.id) setViewing(true);
         else setViewing(false);
+        setSplashScreenActive(false);
       }
-      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       handleClose();
@@ -467,8 +473,8 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   function followProject(event: FormEvent) {
     event.preventDefault();
     
-    if (isLoading) return;
-    setIsLoading(true);
+    if (isLoadingFollowProject) return;
+    setIsLoadingFollowProject(true);
 
     APIServiceAuthenticated.post(`/api/project/follower`, { idProject }, {
       headers: {
@@ -478,18 +484,18 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       setFollowing(!following);
       let message = !following ? "Você começou a seguir este projeto." : "Voce deixou de seguir este projeto.";
       toastfySuccess(message);
-      setIsLoading(false);
+      setIsLoadingFollowProject(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      setIsLoadingFollowProject(false);
     });
   }
 
   function goodIdeaProject(event: FormEvent) {
     event.preventDefault();
 
-    if (isLoading || !idProject) return;
-    setIsLoading(true);
+    if (isLoadingGoodIdea || !idProject) return;
+    setIsLoadingGoodIdea(true);
     
     APIServiceAuthenticated.post(`/api/project/goodidea/${idProject}`, {
       headers: {
@@ -497,18 +503,18 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
     }).then(res => {
       setGoodIdea(!goodIdea);
-      setIsLoading(false);
+      setIsLoadingGoodIdea(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      setIsLoadingGoodIdea(false);
     });
   }
 
   function requestToParticipate(event: FormEvent) {
     event.preventDefault();
 
-    if (isLoading || !idProject) return;
-    setIsLoading(true);
+    if (isLoadingRequestParticipate || !idProject) return;
+    setIsLoadingRequestParticipate(true);
     
     APIServiceAuthenticated.post(`/api/project/participant/${idProject}`, {
       headers: {
@@ -517,10 +523,10 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     }).then(res => {
       toastfySuccess("Solicitação enviada, aguarde o líder do projeto aceitar.");
       setParticipating(true);
-      setIsLoading(false);
+      setIsLoadingRequestParticipate(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      setIsLoadingRequestParticipate(false);
     });
   }
 
@@ -663,17 +669,17 @@ export default function ModalProject({open, setOpen, idProject}: any) {
               </Button>
               <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
                 <Button onClick={followProject}>
-                  {isLoading ? (
+                  {isLoadingFollowProject ? (
                     <CircularProgress size={16} color="inherit" />
                   ) : 
                     following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
                   }
                 </Button>
                 <Button onClick={goodIdeaProject}>
-                  {isLoading ? (
+                  {isLoadingGoodIdea ? (
                     <CircularProgress size={16} color="inherit" />
                   ) : ( 
-                      <div>
+                      <div className="btnLike">
                         {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
                         <span>Boa ideia</span>
                       </div>
@@ -683,7 +689,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
               </div>
               <div className="btnViewing" style={{ display: viewing && !participating ? 'flex' : 'none' }}>
                 <Button onClick={requestToParticipate}>
-                  {isLoading ? (
+                  {isLoadingRequestParticipate ? (
                     <CircularProgress size={16} color="inherit" />
                   ) : ( 
                       <div>

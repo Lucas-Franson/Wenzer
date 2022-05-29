@@ -23,3 +23,184 @@
 2022-03-10T02:10:40.027Z [ Verificar Token ] : JsonWebTokenError: jwt must be provided 
 2022-03-10T02:25:29.344Z [ Verificar Token ] : TokenExpiredError: jwt expired 
 2022-03-10T02:25:32.011Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-11T17:38:29.294Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-11T17:41:43.188Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-11T17:42:16.752Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-11T17:42:44.193Z [ Login ] : Error: read ECONNRESET 
+2022-03-11T17:59:57.222Z [ Login ] : Error: read ECONNRESET 
+2022-03-11T18:00:57.251Z [ Login ] : Error: Cannot enqueue Query after fatal error. 
+2022-03-11T18:01:08.850Z [ Login ] : Error: Cannot enqueue Query after fatal error. 
+2022-03-11T18:14:51.886Z [ Login ] : Error: read ECONNRESET 
+2022-03-11T18:18:34.504Z [ Login ] : Error: Cannot enqueue Query after fatal error. 
+2022-03-11T18:18:41.633Z [ Login ] : Error: Cannot enqueue Query after fatal error. 
+2022-03-11T18:19:36.725Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:19:36.728Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:19:47.722Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:21:03.459Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:22:13.137Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:24:38.317Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:24:48.282Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:25:51.975Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:25:56.121Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:26:19.179Z [ Login ] : Error: read ECONNRESET 
+2022-03-11T18:26:57.902Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:26:57.909Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:29:54.865Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:29:58.751Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:30:03.465Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:30:03.471Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T18:31:22.224Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-11T19:37:49.185Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-11T19:37:55.115Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-11T19:38:00.003Z [ Login ] : Error: Cannot enqueue Query after fatal error. 
+2022-03-15T21:22:05.959Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-15T21:26:20.591Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-15T21:26:26.810Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-15T21:26:41.834Z [ Login ] : TypeError: Cannot read property 'query' of undefined 
+2022-03-15T21:26:44.624Z [ Login ] : TypeError: Cannot read property 'query' of undefined 
+2022-03-17T01:25:42.773Z [ Login ] : TypeError: Cannot read property 'query' of undefined 
+2022-03-18T20:42:31.538Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-19T00:13:21.284Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-19T01:11:21.344Z [ Login ] : NaoAutorizado: Email ou senha não encontrados. 
+2022-03-19T01:11:43.727Z [ Login ] : NaoAutorizado: Email ou senha não encontrados. 
+2022-03-30T22:20:09.222Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T22:20:09.227Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T22:20:09.229Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T22:20:09.231Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T22:20:15.265Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:58.188Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:58.192Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:58.201Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:58.200Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:59.780Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:59.787Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:59.789Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:28:59.802Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:29:00.438Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:29:00.443Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:29:00.448Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:29:00.449Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:42.845Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:42.862Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:42.864Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:42.869Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:54.964Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:54.984Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:54.994Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-30T23:43:54.996Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:02:08.338Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:02:08.346Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:02:08.348Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:02:08.350Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:24.976Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:25.067Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:25.072Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:25.075Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.184Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.190Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.193Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.207Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.811Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.817Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.821Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:06:26.819Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:04.559Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:04.561Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:04.563Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:04.565Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:05.745Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:05.747Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:05.754Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:05.763Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:06.316Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:06.321Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:06.324Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:07:06.336Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:10:10.924Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:10:10.925Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:10:10.926Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:10:10.928Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:11:17.975Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:11:17.982Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:11:17.984Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:11:17.985Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:13.240Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:13.290Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:13.294Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:13.296Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:59.224Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:59.249Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:59.251Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:21:59.253Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:45.850Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:45.862Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:45.863Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:45.865Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:59.331Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:59.332Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:59.334Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:22:59.333Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:33.954Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:33.955Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:33.958Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:33.960Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:56.857Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:56.859Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:56.861Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:24:56.862Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:35.856Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:35.857Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:35.859Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:35.861Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:41.895Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:41.901Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:41.904Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:25:41.903Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:26:06.493Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:26:06.494Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:26:06.498Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:26:06.499Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:27:53.468Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:27:53.467Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:27:53.469Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:27:53.470Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:32.907Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:32.955Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:32.957Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:32.958Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:42.689Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:42.758Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:42.760Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:30:42.761Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:40.744Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:40.745Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:40.751Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:40.749Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.215Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.221Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.223Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.230Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.851Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.855Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.865Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:33:44.863Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:19.635Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:19.637Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:19.638Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:19.641Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:37.843Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:37.844Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:37.912Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T00:58:37.910Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T01:00:46.578Z [ Verificar Token ] : TokenExpiredError: jwt expired 
+2022-03-31T21:28:28.463Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-31T21:28:28.474Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-31T21:28:28.480Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-31T21:28:28.482Z [ Verificar Token ] : JsonWebTokenError: jwt malformed 
+2022-03-31T21:28:33.583Z [ Login ] : TypeError: Cannot read property 'query' of undefined 
+2022-04-08T00:26:24.786Z [ Login ] : TypeError: Cannot read property 'query' of undefined 
+2022-04-14T00:34:37.307Z [ Login ] : NaoEncontrado: Email ou senha não encontrados. 
+2022-04-14T00:35:15.864Z [ Send Email Error ] : MessageRejected: Email address is not verified. The following identities failed the check in region US-EAST-1: matheus-goes13@hotmail.com 
+2022-04-14T00:38:56.098Z [ Sent Email ] : 0100018025824626-62cdbe7c-c1e9-4b2e-b823-bf297384b489-000000 
+2022-04-14T00:49:24.935Z [ Sent Email ] : 01000180258bde5c-8ed5ffb8-0b23-4de7-8979-743526f3ed6a-000000 
+2022-05-18T23:22:22.572Z [ Transporter Send Email Error ] : Invalid login: 535 5.7.8 Error: authentication failed:  

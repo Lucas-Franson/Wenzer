@@ -16,22 +16,26 @@ const Projetos: React.FC = () => {
   const { userInfo } = useAuth();
   const [splashScreenActive, setSplashScreenActive] = useState(true);
 
-  function getProjects() {
+  function getProjects(isMounted: boolean) {
     APIServiceAuthenticated.get(`/api/project/${userInfo?.id}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setProjects(res.data);
-      setSplashScreenActive(false);
+      if (isMounted) {
+        setProjects(res.data);
+        setSplashScreenActive(false);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setSplashScreenActive(false);
+      if (isMounted) setSplashScreenActive(false);
     });
   }
 
   useEffect(() => {
-    if (userInfo) getProjects();
+    let isMounted = true;
+    if (userInfo) getProjects(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (

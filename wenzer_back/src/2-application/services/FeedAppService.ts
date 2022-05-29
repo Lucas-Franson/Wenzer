@@ -158,7 +158,7 @@ export default class FeedAppService {
 
         let userViewModel = new UserPostCommentViewModel(
             user?._id!,
-            user?.name!,
+            user?.name! + " " + (user?.lastName ?? ""),
             user?.photo
         );
 
@@ -202,7 +202,7 @@ export default class FeedAppService {
                 if (user != undefined) {
                     const userViewModel = new UserPostCommentViewModel(
                         user?._id!,
-                        user?.name!,
+                        user?.name! + " " + (user?.lastName ?? ""),
                         user?.photo
                     );
                     const subComments: CommentCommentedViewModel[] = [];
@@ -211,7 +211,7 @@ export default class FeedAppService {
                         if (userSubComment) {
                             const userSubCommentViewModel = new UserPostCommentViewModel(
                                 userSubComment?._id!,
-                                userSubComment?.name!,
+                                userSubComment?.name! + " " + (userSubComment?.lastName ?? ""),
                                 userSubComment?.photo
                             );
                             const commentCommented = new CommentCommentedViewModel(

@@ -78,8 +78,8 @@ export const MainComent = styled.div`
         gap: 10px;
         font-size: 0.8rem;
         
+        
         span {
-          cursor: pointer;
 
           &:hover {
             opacity: 0.7;

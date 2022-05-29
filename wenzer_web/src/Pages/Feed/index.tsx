@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { MdImage, MdTextFormat, MdUpdate, MdVideoCall } from "react-icons/md";
 import NoPostHere from "../../Components/Animation/NoPostHere";
 import Modal from '../../Components/Modal/ModalPost';
@@ -17,7 +17,6 @@ import { CircularProgress } from "@material-ui/core";
 import Ads1 from '../../Utils/image/adscoca.jpg';
 import Ads2 from '../../Utils/image/adsuniso.jpg';
 import PostRecomendado from "../../Components/PostRecomendado";
-import { searchTypes } from "../../Constants/MediaSettings";
 
 export default function Feed(): ReactElement {
   const [post, setPost] = useState<any>([]);
@@ -25,47 +24,79 @@ export default function Feed(): ReactElement {
   const [recommendedProjects, setRecommendedProjects] = useState<any[]>([]);
   const [openModalPost, setOpenModalPost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingLazyLoading, setIsLoadingLazyLoading] = useState(false);
+  const [noMorePost, setNoMorePost] = useState(false);
   const [idProject, setIdProject] = useState(null);
+  const [page, setPage] = useState<number>(1);
   const { userInfo } = useAuth();
-  const { getSocketIOClient } = useWenzer();
+  const { getSocketIOClient, scrollBottom, setScrollBottom } = useWenzer();
 
-  function getAllPost() {
+  const listInnerRef = useRef<any>();
 
+  const onScroll = () => {
+    setScrollBottom(false);
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        setScrollBottom(true);
+      }
+    }
+  };
+
+  function getAllPost(isMounted: boolean) {
+    if (isMounted) setIsLoadingLazyLoading(true);
     APIServiceAuthenticated.get('/api/getallposts', {
       headers: {
         auth: Cookies.get('WenzerToken')
       },
       params: {
-        page: 1,
+        page,
         countPerPage: 5
       }
     }).then(res => {
-      if (res.data.length > 0) {
-        setDateOfLastPost(res.data[0].created_at);
-      } else {
-        setDateOfLastPost(new Date());
+      if (isMounted) {
+        if (res.data.length > 0) {
+          setDateOfLastPost(res.data[0].created_at);
+        } else {
+          setDateOfLastPost(new Date());
+        }
+        
+        if (res.data && res.data.length > 0) {
+          if (!post.find((x: any) => x._id === res.data[0]._id)) {
+            setPost([...post, ...res.data]);
+          }
+          setNoMorePost(false);
+        } else {
+          setNoMorePost(true);
+        }
+        setIsLoadingLazyLoading(false);
       }
-      setPost(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
+      if (isMounted) {
+        setIsLoadingLazyLoading(false);
+        setNoMorePost(false);
+      }
     })
   }
 
-  function getAllRecommendedProjects() {
+  function getAllRecommendedProjects(isMounted: boolean) {
 
     APIServiceAuthenticated.get('/api/feed/projectsByInterests', {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setRecommendedProjects(res.data);
+      if (isMounted) {
+        setRecommendedProjects(res.data);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
   }
 
   function handleOpenModalPost() {
-    setOpenModalPost(true)
+    setOpenModalPost(true);
   }
 
   function handleNewPost() {
@@ -91,10 +122,10 @@ export default function Feed(): ReactElement {
     })
   }
 
-  function createWebService() {
+  function createWebService(isMounted: boolean) {
     let socketConn = getSocketIOClient();
     socketConn.on("GetPost", data => {
-      if (!isLoading) {
+      if (!isLoading && isMounted) {
         setNewPost(data);
       }
     });
@@ -106,16 +137,33 @@ export default function Feed(): ReactElement {
   }
 
   useEffect(() => {
-    getAllPost();
-    getAllRecommendedProjects();
-  }, []);
+    let isMounted = true;
+    if (!noMorePost) {
+      if (page == 1 && isMounted) setPost([]);
+      getAllPost(isMounted);
+    }
+    return () => { isMounted = false }
+  }, [page]);
 
   useEffect(() => {
-    createWebService();
+    let isMounted = true;
+    if (scrollBottom && isMounted) {
+      setPage(page+1);
+    }
+    return () => { isMounted = false }
+  }, [scrollBottom]);
+  
+  useEffect(() => {
+    let isMounted = true;
+    createWebService(isMounted);
+    getAllRecommendedProjects(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (
-    <Container>
+    <Container
+      onScroll={onScroll}
+      ref={listInnerRef}>
       <ContainerNewPost>
         <header>
           <HeaderAvatar src={userInfo?.photo} />
@@ -160,33 +208,45 @@ export default function Feed(): ReactElement {
         )
       }
 
-      {post.length !== 0 ? (
-          post.map(({ 
-            created_at, description, _id, idProject, idUser, photo, title, goodIdea, user, countGoodIdea
-          }: IPostProps) => (
-            <Post
-              key={_id}
-              created_at={created_at}
-              description={description}
-              _id={_id}
-              idProject={idProject}
-              idUser={idUser}
-              photo={photo}
-              title={title}
-              goodIdea={goodIdea}
-              user={user}
-              removePost={removePost}
-              type={PostTypeEnum.Feed}
-              countGoodIdea={countGoodIdea}
-            />
-          ))
-        ) : (
+      <div>
+        {post.length !== 0 ? (
+            post.map(({ 
+              created_at, description, _id, idProject, idUser, photo, title, goodIdea, user, countGoodIdea
+            }: IPostProps) => (
+              <Post
+                key={_id}
+                created_at={created_at}
+                description={description}
+                _id={_id}
+                idProject={idProject}
+                idUser={idUser}
+                photo={photo}
+                title={title}
+                goodIdea={goodIdea}
+                user={user}
+                removePost={removePost}
+                type={PostTypeEnum.Feed}
+                countGoodIdea={countGoodIdea}
+              />
+            ))
+          ) : (
+            <div>
+              <NoPostHere/>
+              Procurando publicações...
+            </div>
+          )
+        }
+        {post.length !== 0 && isLoadingLazyLoading && (
+          <div>
+            <CircularProgress size={16} color="inherit" /> Procurando publicações... 
+          </div>
+        )}
+        {post.length !== 0 && !isLoadingLazyLoading && noMorePost && (
           <div>
             <NoPostHere/>
-            Procurando publicações...
           </div>
-        )
-      }
+        )}
+      </div>
       <ContainerAds>
         <div>
           <img src={Ads1} alt="adsense" />

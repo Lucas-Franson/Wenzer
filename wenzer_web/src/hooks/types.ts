@@ -9,5 +9,7 @@ export interface IWenzerContext {
     setOpenModalProject(state: boolean): void;
     getSocketIOClient(): Socket;
     isSearching: any;
-    setIsSearching: any
+    setIsSearching: any;
+    scrollBottom: boolean;
+    setScrollBottom(state: boolean): void;
 };

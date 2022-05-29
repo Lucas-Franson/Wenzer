@@ -16,10 +16,12 @@ export default function Notify() {
   const { getSocketIOClient } = useWenzer();
 
   useEffect(() => {
+    let isMounted = true;
     let socketConn = getSocketIOClient();
     socketConn.on("GetNotification", data => {
-      setCount(data);
+      if (isMounted) setCount(data);
     });
+    return () => { isMounted = false }
   }, []);
 
   return (

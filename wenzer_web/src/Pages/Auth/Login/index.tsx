@@ -10,7 +10,8 @@ import { Container } from "./styles";
 function Login(): ReactElement {
 
   useEffect(() => {
-    async function loadTokenEmail() {
+    let isMounted = true;
+    async function loadTokenEmail(isMounted: boolean) {
       let searchForToken = window.location.search;
       let token = new URLSearchParams(searchForToken);
       let getToken = token.get("token");
@@ -28,7 +29,8 @@ function Login(): ReactElement {
       }
     }
 
-    loadTokenEmail();
+    loadTokenEmail(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (

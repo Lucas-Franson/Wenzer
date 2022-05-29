@@ -85,7 +85,7 @@ export default class UserRepository extends Orm<User> implements IUserRepository
                     {
                         $project: {
                             _id: "$user._id",
-                            name: "$user.name",
+                            name: { $concat: ["$user.name", " ", "$user.lastName"] },
                             created_at: 1
                         }
                     }
