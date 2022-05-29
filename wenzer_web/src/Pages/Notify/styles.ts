@@ -31,10 +31,15 @@ export const ContainerNotify = styled.div`
   }
 
   > main {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    > div {
+      width: 100%;
+    }
   }
 `;
 

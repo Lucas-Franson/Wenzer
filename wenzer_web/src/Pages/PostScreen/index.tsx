@@ -57,7 +57,7 @@ function CommentComponent(props: ICommentComponent) {
     <MyComent>
       <InputText 
         type="text"
-        defaultValue={txtComment}
+        value={txtComment}
         onChange={(e: any) => setTxtComment(e.target.value)}
         placeholder="Escreva um comentário"/>
       <Button onClick={onSave} className="button_my-coment">
@@ -231,9 +231,9 @@ function PostScreen(): ReactElement {
                     <span onClick={() => handleSubComent(data?._id)}>Comentar</span>
                     <div onClick={() => handleLikedComent(data?._id)}>
                       <p>{data?.countGoodIdea}</p>
-                      {!likeComent?.find(x => x === data?._id) ? <AiOutlineBulb size="18"/> : <AiFillBulb className='active' size="18"/>}
+                      {!likeComent?.find(x => x === data?._id) ? <span> <AiOutlineBulb size="18"/> </span>: <AiFillBulb className='active' size="18"/>}
                       <span>Boa ideia</span>
-                      <span>{ data.createdAt ? new Date(data.createdAt!).toLocaleString('pt-BR') : "" }</span>
+                      <p>{ data.createdAt ? new Date(data.createdAt!).toLocaleString('pt-BR') : "" }</p>
                     </div>
                   </div>
                 </div>

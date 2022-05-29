@@ -1,5 +1,4 @@
 import { ReactElement } from 'react';
-import { HeaderAvatar } from '../../Post/styles';
 import { Container } from '../styles';
 import { IoMdPersonAdd } from 'react-icons/io';
 import { MdCancel, MdCheckCircle } from 'react-icons/md';
@@ -46,15 +45,19 @@ function NotifyFriendRequest({
   }
 
   return(
-      <Container>
-          <HeaderAvatar style={{ cursor: 'pointer' }} onClick={goToUserProfile} className='avatar-notify'/>
-          <div style={{ cursor: 'pointer' }} onClick={goToUserProfile} className="content">
-            <p>{text} <IoMdPersonAdd size={20}/> </p>
-            <span>{new Date(created_at).toLocaleString('pt-BR')}</span>
-          </div>
+      <Container onClick={goToUserProfile}>
+          <div>
+            <header onClick={goToUserProfile}>
+              <IoMdPersonAdd size={22}/>
+            </header>
+            <div style={{ cursor: 'pointer' }} onClick={goToUserProfile} className="content">
+              <p>{text}</p>
+              <span>{new Date(created_at).toLocaleString('pt-BR')}</span>
+            </div>
+            </div>
           <div className="actions">
-            <MdCheckCircle onClick={acceptFriendRequest} size={22}/>
-            <MdCancel onClick={rejectFriendRequest} size={22}/>
+            <MdCheckCircle onClick={acceptFriendRequest} size={36} className="accept"/>
+            <MdCancel onClick={rejectFriendRequest} size={36} className="deny"/>
           </div>
       </Container>
   )

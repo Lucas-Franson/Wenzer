@@ -261,6 +261,10 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   const [participating, setParticipating] = useState(false);
   const [splashScreenActive, setSplashScreenActive] = useState(true);
   const filepickerRef = useRef<HTMLDivElement | any>(null);
+  const [isLoadingFollowProject, setIsLoadingFollowProject] = useState(false);
+  const [isLoadingGoodIdea, setIsLoadingGoodIdea] = useState(false);
+  const [isLoadingRequestParticipate, setIsLoadingRequestParticipate] = useState(false);
+
 
   const { theme } = useTheme();
   const [darkTheme, setDarkTheme] = useState(() =>
@@ -465,8 +469,8 @@ export default function ModalProject({open, setOpen, idProject}: any) {
   function followProject(event: FormEvent) {
     event.preventDefault();
     
-    if (isLoading) return;
-    setIsLoading(true);
+    if (isLoadingFollowProject) return;
+    setIsLoadingFollowProject(true);
 
     APIServiceAuthenticated.post(`/api/project/follower`, { idProject }, {
       headers: {
@@ -476,18 +480,18 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       setFollowing(!following);
       let message = !following ? "Você começou a seguir este projeto." : "Voce deixou de seguir este projeto.";
       toastfySuccess(message);
-      setIsLoading(false);
+      setIsLoadingFollowProject(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      setIsLoadingFollowProject(false);
     });
   }
 
   function goodIdeaProject(event: FormEvent) {
     event.preventDefault();
 
-    if (isLoading || !idProject) return;
-    setIsLoading(true);
+    if (isLoadingGoodIdea || !idProject) return;
+    setIsLoadingGoodIdea(true);
     
     APIServiceAuthenticated.post(`/api/project/goodidea/${idProject}`, {
       headers: {
@@ -495,18 +499,18 @@ export default function ModalProject({open, setOpen, idProject}: any) {
       }
     }).then(res => {
       setGoodIdea(!goodIdea);
-      setIsLoading(false);
+      setIsLoadingGoodIdea(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      setIsLoadingGoodIdea(false);
     });
   }
 
   function requestToParticipate(event: FormEvent) {
     event.preventDefault();
 
-    if (isLoading || !idProject) return;
-    setIsLoading(true);
+    if (isLoadingRequestParticipate || !idProject) return;
+    setIsLoadingRequestParticipate(true);
     
     APIServiceAuthenticated.post(`/api/project/participant/${idProject}`, {
       headers: {
@@ -515,10 +519,10 @@ export default function ModalProject({open, setOpen, idProject}: any) {
     }).then(res => {
       toastfySuccess("Solicitação enviada, aguarde o líder do projeto aceitar.");
       setParticipating(true);
-      setIsLoading(false);
+      setIsLoadingRequestParticipate(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      setIsLoadingRequestParticipate(false);
     });
   }
 
@@ -661,17 +665,17 @@ export default function ModalProject({open, setOpen, idProject}: any) {
               </Button>
               <div className="btnViewing" style={{ display: viewing ? 'flex' : 'none' }}>
                 <Button onClick={followProject}>
-                  {isLoading ? (
+                  {isLoadingFollowProject ? (
                     <CircularProgress size={16} color="inherit" />
                   ) : 
                     following ? ( "Deixar de seguir projeto") : ("Seguir projeto")
                   }
                 </Button>
                 <Button onClick={goodIdeaProject}>
-                  {isLoading ? (
+                  {isLoadingGoodIdea ? (
                     <CircularProgress size={16} color="inherit" />
                   ) : ( 
-                      <div>
+                      <div className="btnLike">
                         {!goodIdea ? <AiOutlineBulb size="22"/> : <AiFillBulb className='active' size="22"/>}
                         <span>Boa ideia</span>
                       </div>
@@ -681,7 +685,7 @@ export default function ModalProject({open, setOpen, idProject}: any) {
               </div>
               <div className="btnViewing" style={{ display: viewing && !participating ? 'flex' : 'none' }}>
                 <Button onClick={requestToParticipate}>
-                  {isLoading ? (
+                  {isLoadingRequestParticipate ? (
                     <CircularProgress size={16} color="inherit" />
                   ) : ( 
                       <div>

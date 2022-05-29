@@ -33,9 +33,23 @@ export const ContainerModal = styled.div`
         display: flex;
         justify-content: space-between;
 
-        > button {
+        button {
             margin: 5px;
+
+            .btnLike {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                
+                > svg {
+                    &.active {
+                    color: yellow;
+                    }
+                }
+            }
+
         }
+
     }
 
     > header {
