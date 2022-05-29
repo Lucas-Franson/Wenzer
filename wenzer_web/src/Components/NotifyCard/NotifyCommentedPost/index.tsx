@@ -25,6 +25,7 @@ function NotifyCommentedOnYourPost({
           <div>
             <header onClick={goToUserProfile}>
               <GoComment size={22}/>
+              
             </header>
             <div style={{ cursor: 'pointer' }} onClick={goToUserProfile} className="content">
               <p>{text}</p>
