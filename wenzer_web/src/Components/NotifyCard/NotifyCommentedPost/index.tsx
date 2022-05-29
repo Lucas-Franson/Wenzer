@@ -1,11 +1,7 @@
 import { ReactElement } from 'react';
 import { Container } from '../styles';
-import { IoMdPersonAdd } from 'react-icons/io';
 import { GoComment } from 'react-icons/go';
 import { useHistory } from 'react-router-dom';
-import APIServiceAuthenticated from '../../../Services/api/apiServiceAuthenticated';
-import Cookies from 'js-cookie';
-import { toastfyError, toastfySuccess } from '../../Toastfy';
 
 function NotifyCommentedOnYourPost({
   _id,
@@ -15,19 +11,19 @@ function NotifyCommentedOnYourPost({
 }: any): ReactElement {
   const history = useHistory();
 
-  function goToUserProfile() {
+  function goToPostComment() {
     if (_id)
-      history.push(`/profile?user=${_id}`);
+      history.push(`/post/${_id}`);
   }
 
   return(
-      <Container onClick={goToUserProfile}>
+      <Container onClick={goToPostComment}>
           <div>
-            <header onClick={goToUserProfile}>
+            <header onClick={goToPostComment}>
               <GoComment size={22}/>
               
             </header>
-            <div style={{ cursor: 'pointer' }} onClick={goToUserProfile} className="content">
+            <div style={{ cursor: 'pointer' }} onClick={goToPostComment} className="content">
               <p>{text}</p>
               <span>{new Date(created_at).toLocaleString('pt-BR')}</span>
             </div>

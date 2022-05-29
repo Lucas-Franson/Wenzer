@@ -125,25 +125,27 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
     }
   }
 
-  function getData() {
+  function getData(isMounted: boolean) {
     APIServiceAuthenticated.get(`/api/project/participant/${props.idProject}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      if (props.viewing) {
-        if (res.data) {
-          let participants = res.data.filter((x: any) => x.accepted == true);
-          setData(participants);
+      if (isMounted) {
+        if (props.viewing) {
+          if (res.data) {
+            let participants = res.data.filter((x: any) => x.accepted == true);
+            setData(participants);
+          } 
+          else {
+            setData([]);
+          }
         } 
         else {
-          setData([]);
+          setData(res.data);
         }
-      } 
-      else {
-        setData(res.data);
+        setSplashScreenActive(false);
       }
-      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     });
@@ -161,7 +163,9 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
   }
 
   useEffect(() => {
-    getData();
+    let isMounted = true;
+    getData(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (
@@ -214,7 +218,7 @@ function TabParticipantsContent(props: TabPaticipantsContent) {
                   </div>
                   {
                     roleInputControl && roleInputControl == participant._id && (
-                      <div className="coment-user">
+                      <div key={"input" + participant._id} className="coment-user">
                         <InputText 
                           type="text"
                           defaultValue={role}
@@ -433,12 +437,12 @@ export default function ModalProject({open, setOpen, idProject}: any) {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {  
-      if (!res.data) {
-        toastfyError("Nenhum projeto encontrado.");
-        handleClose();  
-      }
       
       if (isMounted) {
+        if (!res.data) {
+          toastfyError("Nenhum projeto encontrado.");
+          handleClose();  
+        }
         let project = res.data;
         setProject(project);
 
@@ -458,8 +462,8 @@ export default function ModalProject({open, setOpen, idProject}: any) {
 
         if (res.data.userId != userInfo?.id) setViewing(true);
         else setViewing(false);
+        setSplashScreenActive(false);
       }
-      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       handleClose();

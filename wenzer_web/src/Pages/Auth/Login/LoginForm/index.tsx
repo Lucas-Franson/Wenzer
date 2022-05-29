@@ -23,11 +23,11 @@ function Login() {
 
   const history = useHistory();
 
-  async function getUsersActive() {
+  async function getUsersActive(isMounted: boolean) {
     await api
     .get(`/api/getUsersActive`)
     .then((res) => {
-      setUsersActive(res.data);
+      if (isMounted) setUsersActive(res.data);
     })
     .catch((err) => {
       console.log(err);
@@ -60,7 +60,9 @@ function Login() {
   }
 
   useEffect(() => {
-    getUsersActive();
+    let isMounted = true;
+    getUsersActive(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (

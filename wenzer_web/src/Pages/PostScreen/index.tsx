@@ -152,14 +152,14 @@ function PostScreen(): ReactElement {
     })
   }
 
-  function getPost() {
+  function getPost(isMounted: boolean) {
     if (!params || !params.id) return;
     APIServiceAuthenticated.get(`/api/feed/post/${params.id}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setPost(res.data);
+      if (isMounted) setPost(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       if (err?.response?.data?.mensagem.includes("Usuário não tem permissão")) {
@@ -168,7 +168,7 @@ function PostScreen(): ReactElement {
     })
   }
 
-  function getComments() {
+  function getComments(isMounted: boolean) {
     if (!params?.id) return;
     
     APIServiceAuthenticated.get(`/api/getAllComments/${params?.id}`, {
@@ -176,24 +176,35 @@ function PostScreen(): ReactElement {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      res.data.map((data: any) => {
-        if (data.goodIdea) {
-          likeComent.push(data._id);
-          setLikeComent(likeComent);
-        } 
-      });
-      setComments(res.data);
+      if (isMounted) {
+        res.data.map((data: any) => {
+          if (data.goodIdea) {
+            likeComent.push(data._id);
+            setLikeComent(likeComent);
+          } 
+        });
+        setComments(res.data);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
   }
 
+  function goToUserProfile(_id: string) {
+    if (_id)
+      history.push(`/profile?user=${_id}`);
+  }
+
   useEffect(() => {
-    getPost();
+    let isMounted = true;
+    getPost(isMounted);
+    return () => { isMounted = false }
   }, []);
   
   useEffect(() => {
-    getComments();
+    let isMounted = true;
+    getComments(isMounted);
+    return () => { isMounted = false }
   }, [reloadComments]);
 
   return (
@@ -221,9 +232,9 @@ function PostScreen(): ReactElement {
           {comments.map((data: any) => (
             <div key={data?._id}>
               <div className="coment">
-                <HeaderAvatar src={data.usuario.photo} />
+                <HeaderAvatar onClick={() => goToUserProfile(data.usuario._id)} src={data.usuario.photo} />
                 <div className="coment-user">
-                  <p>{data.usuario.name}</p>
+                  <p onClick={() => goToUserProfile(data.usuario._id)} style={{ cursor: 'pointer' }} >{data.usuario.name}</p>
                   <Coment>
                     {data.text}
                   </Coment>
@@ -241,9 +252,9 @@ function PostScreen(): ReactElement {
               <SubComent>
                 {data.subComments.map((subData: any) => (
                   <div key={subData._id} className="coment">
-                    <HeaderAvatar src={subData.usuario.photo} />
+                    <HeaderAvatar onClick={() => goToUserProfile(subData.usuario._id)} src={subData.usuario.photo} />
                     <div className="coment-user">
-                      <p>{subData.usuario.name}</p>
+                      <p onClick={() => goToUserProfile(subData.usuario._id)} style={{ cursor: 'pointer' }}>{subData.usuario.name}</p>
                       <Coment>
                         {subData.text}
                       </Coment>

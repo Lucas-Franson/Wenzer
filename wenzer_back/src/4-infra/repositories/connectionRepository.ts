@@ -60,8 +60,8 @@ export class ConnectionRepository extends Orm<Connections> implements IConnectio
                             name: { 
                                 $cond: {
                                     if: { $eq: [ idUser, "$userOne._id" ]},
-                                    then: "$userTwo.name",
-                                    else: "$userOne.name"
+                                    then: { $concat: ["$userTwo.name", " ", "$userTwo.lastName"] },
+                                    else: { $concat: ["$userOne.name", " ", "$userOne.lastName"] }
                                 }
                             },
                             photo: { 

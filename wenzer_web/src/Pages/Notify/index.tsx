@@ -29,23 +29,28 @@ function Notify(): ReactElement {
     dispatch(removeAllNotify());
   });
 
-  function getAllNotification() {
-    setIsLoading(true);
+  function getAllNotification(isMounted: boolean) {
+
+    if (isMounted) setIsLoading(true);
     APIServiceAuthenticated.get('/api/notification', {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setNotification(res.data);
-      setIsLoading(false);
+      if (isMounted) {
+        setNotification(res.data);
+        setIsLoading(false);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoading(false);
+      if (isMounted) setIsLoading(false);
     });
   }
 
   useEffect(() => {
-    getAllNotification();
+    let isMounted = true;
+    getAllNotification(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (
@@ -83,7 +88,7 @@ function Notify(): ReactElement {
                           />
                         )}
 
-                        {data.type === NotificationType.CommentedOnYourComment && (
+                        {data.type === NotificationType.CommentedOnYourPost && (
                           <NotifyCommentedOnYourPost 
                             key={data._id}
                             _id={data._id}

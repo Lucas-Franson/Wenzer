@@ -71,7 +71,7 @@ function Profile(): ReactElement {
     setAnchorEl(event.currentTarget);
   };
 
-  function getAllPost(userId: string) {
+  function getAllPost(isMounted: boolean, userId: string) {
 
     APIServiceAuthenticated.get(`/api/profile/publications/${userId}`, {
       headers: {
@@ -82,7 +82,7 @@ function Profile(): ReactElement {
         countPerPage: 5
       }
     }).then(res => {
-      setPost(res.data);
+      if (isMounted) setPost(res.data);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
@@ -96,27 +96,28 @@ function Profile(): ReactElement {
     return getToken;
   }
 
-  function getConnections(userId: string) {
+  function getConnections(isMounted: boolean, userId: string) {
     APIServiceAuthenticated.get(`/api/profile/connections/${userId}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setConnections(res.data);
-      setAlreadyGetConnections(true);
-
+      if (isMounted) {
+        setConnections(res.data);
+        setAlreadyGetConnections(true);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
  }
 
-  function getInterestsOfUser(userId: string) {
+  function getInterestsOfUser(isMounted: boolean, userId: string) {
     APIServiceAuthenticated.get(`/api/profile/interests/${userId}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      if (res.data) {
+      if (res.data && isMounted) {
         setInterestsSelected(res.data);
         setInterestsOfUser(res.data);
         setAlreadyGetInterests(true);
@@ -127,27 +128,28 @@ function Profile(): ReactElement {
     })
   }
 
-  function getAllInterests() {
+  function getAllInterests(isMounted: boolean) {
     APIServiceAuthenticated.get(`/api/getAllInterests`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setInterests(res.data);
-      setAlreadyGetAllInterests(true);
-
+      if (isMounted) {
+        setInterests(res.data);
+        setAlreadyGetAllInterests(true);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
   }
 
-  function getUserProfile(userId: string) {
+  function getUserProfile(isMounted: boolean, userId: string) {
     APIServiceAuthenticated.get(`/api/profile/info/${userId}`, {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      if (res.data) {
+      if (res.data && isMounted) {
         setAlreadyConnected(res.data.alreadyConnected);
         setName(res.data.name);
         setLastName(res.data.lastName);
@@ -249,35 +251,45 @@ function Profile(): ReactElement {
   }
 
   useEffect(() => {
+    let isMounted = true;
     if(!alreadyGetConnections) {
       let user = loadTokenEmail();
-      getConnections(user ? user : userInfo?.id!);
+      getConnections(isMounted, user ? user : userInfo?.id!);
     }
+    return () => { isMounted = false }
   }, [alreadyGetConnections]);
 
   useEffect(() => {
+    let isMounted = true;
     if(!alreadyGetInterests) {
       let user = loadTokenEmail();
-      getInterestsOfUser(user ? user : userInfo?.id!);
+      getInterestsOfUser(isMounted, user ? user : userInfo?.id!);
     }
+    return () => { isMounted = false }
   }, [alreadyGetInterests]);
 
   useEffect(() => {
+    let isMounted = true;
     if(!alreadyGetUserInfo) {
       let user = loadTokenEmail();
-      getUserProfile(user ? user : userInfo?.id!);
+      getUserProfile(isMounted, user ? user : userInfo?.id!);
     }
+    return () => { isMounted = false }
   }, [alreadyGetUserInfo]);
 
   useEffect(() => {
+    let isMounted = true;
     if (!alreadyGetAllInterests) {
-      getAllInterests();
+      getAllInterests(isMounted);
     }
+    return () => { isMounted = false }
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
     let user = loadTokenEmail();
-    getAllPost(user ? user : userInfo?.id!);
+    getAllPost(isMounted, user ? user : userInfo?.id!);
+    return () => { isMounted = false }
   }, [alreadyGetUserInfo]);
 
   function handleName(e: any) {

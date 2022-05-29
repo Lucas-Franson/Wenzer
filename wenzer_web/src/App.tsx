@@ -3,7 +3,8 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './Styles/GlobalStyles';
 import { useTheme } from './Styles/Hook/theme';
 import { AuthProvider } from './Services/Authentication/auth';
-import { WenzerProvider } from './hooks/useWenzer';
+import { useWenzer, WenzerProvider } from './hooks/useWenzer';
+import { useRef } from 'react';
 
 function App() {
   const { theme } = useTheme();

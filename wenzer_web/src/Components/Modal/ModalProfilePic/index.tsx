@@ -25,7 +25,9 @@ export default function ModalProfilePic({open, setOpen}: any) {
   };
 
   useEffect(() => {
-    if (previewImagePost == '') setPreviewImagePost(userInfo?.photo!);
+    let isMounted = true;
+    if (previewImagePost == '' && isMounted) setPreviewImagePost(userInfo?.photo!);
+    return () => { isMounted = false }
   });
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {

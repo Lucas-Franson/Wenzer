@@ -29,11 +29,22 @@ export default function Feed(): ReactElement {
   const [idProject, setIdProject] = useState(null);
   const [page, setPage] = useState<number>(1);
   const { userInfo } = useAuth();
-  const { getSocketIOClient } = useWenzer();
+  const { getSocketIOClient, scrollBottom, setScrollBottom } = useWenzer();
+
   const listInnerRef = useRef<any>();
 
-  function getAllPost() {
-    setIsLoadingLazyLoading(true);
+  const onScroll = () => {
+    setScrollBottom(false);
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        setScrollBottom(true);
+      }
+    }
+  };
+
+  function getAllPost(isMounted: boolean) {
+    if (isMounted) setIsLoadingLazyLoading(true);
     APIServiceAuthenticated.get('/api/getallposts', {
       headers: {
         auth: Cookies.get('WenzerToken')
@@ -43,36 +54,42 @@ export default function Feed(): ReactElement {
         countPerPage: 5
       }
     }).then(res => {
-      if (res.data.length > 0) {
-        setDateOfLastPost(res.data[0].created_at);
-      } else {
-        setDateOfLastPost(new Date());
-      }
-      
-      if (res.data && res.data.length > 0) {
-        if (!post.find((x: any) => x._id === res.data[0]._id)) {
-          setPost([...post, ...res.data]);
+      if (isMounted) {
+        if (res.data.length > 0) {
+          setDateOfLastPost(res.data[0].created_at);
+        } else {
+          setDateOfLastPost(new Date());
         }
-        setNoMorePost(false);
-      } else {
-        setNoMorePost(true);
+        
+        if (res.data && res.data.length > 0) {
+          if (!post.find((x: any) => x._id === res.data[0]._id)) {
+            setPost([...post, ...res.data]);
+          }
+          setNoMorePost(false);
+        } else {
+          setNoMorePost(true);
+        }
+        setIsLoadingLazyLoading(false);
       }
-      setIsLoadingLazyLoading(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
-      setIsLoadingLazyLoading(false);
-      setNoMorePost(false);
+      if (isMounted) {
+        setIsLoadingLazyLoading(false);
+        setNoMorePost(false);
+      }
     })
   }
 
-  function getAllRecommendedProjects() {
+  function getAllRecommendedProjects(isMounted: boolean) {
 
     APIServiceAuthenticated.get('/api/feed/projectsByInterests', {
       headers: {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      setRecommendedProjects(res.data);
+      if (isMounted) {
+        setRecommendedProjects(res.data);
+      }
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     })
@@ -105,10 +122,10 @@ export default function Feed(): ReactElement {
     })
   }
 
-  function createWebService() {
+  function createWebService(isMounted: boolean) {
     let socketConn = getSocketIOClient();
     socketConn.on("GetPost", data => {
-      if (!isLoading) {
+      if (!isLoading && isMounted) {
         setNewPost(data);
       }
     });
@@ -119,25 +136,28 @@ export default function Feed(): ReactElement {
     setPost(newListPost);
   }
 
-  const onScroll = () => {
-    if (listInnerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-      if (scrollTop + clientHeight === scrollHeight) {
-        setPage(post+1);
-      }
+  useEffect(() => {
+    let isMounted = true;
+    if (!noMorePost) {
+      if (page == 1 && isMounted) setPost([]);
+      getAllPost(isMounted);
     }
-  };
+    return () => { isMounted = false }
+  }, [page]);
 
   useEffect(() => {
-    if (!noMorePost) {
-      if (page == 1) setPost([]);
-      getAllPost();
+    let isMounted = true;
+    if (scrollBottom && isMounted) {
+      setPage(page+1);
     }
-  }, [page]);
+    return () => { isMounted = false }
+  }, [scrollBottom]);
   
   useEffect(() => {
-    createWebService();
-    getAllRecommendedProjects();
+    let isMounted = true;
+    createWebService(isMounted);
+    getAllRecommendedProjects(isMounted);
+    return () => { isMounted = false }
   }, []);
 
   return (

@@ -52,7 +52,7 @@ export default function ModalPost({open, setOpen}: any) {
     },
   ];
 
-  function getAllProjects() { 
+  function getAllProjects(isMounted: boolean) { 
     if (!open) return;
 
     APIServiceAuthenticated.get(`/api/project/${userInfo?.id}`, {
@@ -60,21 +60,25 @@ export default function ModalPost({open, setOpen}: any) {
         auth: Cookies.get('WenzerToken')
       }
     }).then(res => {
-      if (res.data.length > 0) {
-        setAllProject(res.data);
-        setProjectSelected(res.data[0]._id);
-      } else {
-        setAllProject([{ name: "Nenhum projeto criado.", _id: "0" }]);
-        setProjectSelected("0");
+      if (isMounted) {
+        if (res.data.length > 0) {
+          setAllProject(res.data);
+          setProjectSelected(res.data[0]._id);
+        } else {
+          setAllProject([{ name: "Nenhum projeto criado.", _id: "0" }]);
+          setProjectSelected("0");
+        }
+        setSplashScreenActive(false);
       }
-      setSplashScreenActive(false);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
     });
   }
 
   useEffect(() => {
-    getAllProjects();
+    let isMounted = true;
+    getAllProjects(isMounted);
+    return () => { isMounted = false }
   }, [open]);
 
   const addImageToPost = (event: ChangeEvent<HTMLInputElement>) => {

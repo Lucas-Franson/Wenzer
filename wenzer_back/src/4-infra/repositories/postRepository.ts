@@ -306,7 +306,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                     {
                         $project: {
                             _id: "$post._id",
-                            name: "$user.name",
+                            name: { $concat: ["$user.name", " ", "$user.lastName"] },
                             created_at: 1
                         }
                     }
@@ -363,7 +363,7 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                         $project: {
                             _id: "$idPostComment",
                             idPost: "$postComment.idPost",
-                            name: "$user.name",
+                            name: { $concat: ["$user.name", " ", "$user.lastName"] },
                             created_at: 1
                         }
                     }
@@ -670,17 +670,6 @@ export class PostRepository extends Orm<Post> implements IPostRepository {
                 },
                 {
                     $unwind: "$post"
-                },
-                {
-                    $lookup: {
-                        from: 'User',
-                        localField: 'idUser',
-                        foreignField: '_id',
-                        as: 'user'
-                    }
-                },
-                {
-                    $unwind: "$user"
                 },
                 {
                     $match: {

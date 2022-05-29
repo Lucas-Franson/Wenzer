@@ -1,4 +1,5 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, useRef } from 'react';
+import { useWenzer } from '../../../hooks/useWenzer';
 import TopBarFeed from '../../TopBarFeed';
 
 import { Container } from './styles';
@@ -8,6 +9,9 @@ interface ILayoutWelcomeProps {
 }
 
 function LayoutFeed({ children }: ILayoutWelcomeProps): ReactElement {
+
+  
+  
   return (
     <Container>
         <TopBarFeed/>
