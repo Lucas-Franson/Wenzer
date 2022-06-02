@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-8626703872918648227-185",
+  "private_key_id": "50b4c6f3855e779be1bf396cbe92759888452547",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC54KW6Pf/R5Lct\nSYagqYGeVQVKs3AF0frGOdqUxPq0/dtTG/BjiLOrrfz4Xxf8/QpnkYs7AxtWhUID\nJsmmCWGL1vqENHpQ4bPJVvUbdA1v7TEsP2upG+tgKsigoi+HDDmMrr9uIPS8qK+u\nYkE9KqBzo97vxA2DSIbKDbG4XwgCs4yFrglxNzxtxqzgcYHMwxCGOHx0Qe+jHnZU\nZuClqubMBqMLVGAY9ukilSeZb0xG9vCB93HUcs5nQh+u9QcR6NBajuqk5pVcB7Gg\nWIX+ln24pG9KeP68ogJZlNR36xY3TdjgS/UCYT5yXd8PXWhyLO7CzBk9Jm5Lnv6M\n5G4r9FofAgMBAAECggEAHL8c8lY3U6c7GxJlc0BzzuBYPqrMluHYFkMJRnvGSCqA\nenR2M3aHTvRMDL9sLtCVhNnx/fDnj/Rw9prPkdGel+lp+ftBtXOKggdkRdgnYdl9\ngtnWFSO/vbIwMAOVNR4TYmn+KhKHtwuhi+cfLs4CXZAI4OzhqB2V1vbSNvDfhMcr\nZxShurLKlL8DNul9v7/iAaeGRowCRD/WGSDCxUhrmh81Bc1FLSWcxIbCU57Ny2xN\nNlfeeUh+nyoGQYz1/odW/PbwfjDc3ViXmcA5Geuv7oNIS6PA+IqGdZPcSxiYWUKx\n0Yr5RFP6aYD/k3Eu+Fu53iqLaQdhPGIEOHk6nG8uIQKBgQDeD23jBIiDr+CiG1di\nfiB4WX1WneT10JThgkwuJGLjBkFQgS1h32sLvBxTKmltali3jN0kZFykG9t86tmj\nXmHab28uTWFZuq3Gkd+GXgwq2EilgxiL2OSBnhEuj+P5J7km7qkpZwvWNrq+70On\nIsy7UKoWVA5j6uisDf1s5c14IQKBgQDWSX4zWSHqS+us8HOoL30uZPD/xakeviOh\n2sis3xVznOIgD9JUYY9aQi0I9dH+RtZNzdZm0WsL2tx9knUXXCb0mOynKPLjWWFe\n3ghgwI9UGKpRxL+q8RbNORZ2SLEpqwqO9LXBjyc3n/aZsUaQiUlwIVxa1/L+TEW1\nOoFw/2KKPwKBgQCacWa/Bu8fj9qPRK7hPNG+gpcvAAA3i0uREHuFeB8iwL36jO2Q\nbcBY2AtnOE89H0L23k0MO5VHOmzMk9aszj8GmoxcSstTigfE3L33CUAzKFxWaThQ\nQ5iiIdrXZJJtPtiCoGkc96N+6G+3zldiTkzQVskFYI7lpYMP72b8L1RZoQKBgQDA\n0XKwi6Sb6eLQQ7EehlTS2VuOGvMZyafQbUijXT01QdarWPE+ombWpbNWW7OwZVdS\nvUQOUqRLD43VpGKeOXqIH87af1tHPdcDATFytfKCjos7dpmtHLESyyquFqzrvI+M\noR+nYsO8JsFD/KNtTUt6jVpIGAb70e/rqhBteC/YCwKBgQCE14i+7ytn6+8cQBi1\nHNHci4mi7XIZ85fno761CPoI/IjiJiFBhh8fvf1+OGN5+7NixhksUSRJd71NcRH/\nGGXFHW+m02HF/CNJgl4BDimQRPHqFt6W/HqAotBhddrEAaHEUcWZefA3IeYC0QFU\noxXMosCZZD/lA6FhN+6ncbNgXg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "expo-wenzer-app@pc-api-8626703872918648227-185.iam.gserviceaccount.com",
+  "client_id": "101674222796683948542",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/expo-wenzer-app%40pc-api-8626703872918648227-185.iam.gserviceaccount.com"
+}

@@ -15,8 +15,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#999'
+    flex: 1
   },
   webview: {
     flex: 1,
