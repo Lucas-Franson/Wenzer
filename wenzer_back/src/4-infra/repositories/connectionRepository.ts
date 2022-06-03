@@ -38,6 +38,7 @@ export class ConnectionRepository extends Orm<Connections> implements IConnectio
                     },
                     {
                         $match: {
+                            accepted: true,
                             $or: [
                                 {
                                     idFollower: idUser

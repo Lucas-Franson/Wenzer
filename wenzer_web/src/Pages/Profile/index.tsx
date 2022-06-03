@@ -32,6 +32,7 @@ function Profile(): ReactElement {
   const [interestsOfUser, setInterestsOfUser] = useState<{ label: string, value: string }[]>([]);
   const [userProfileInfo, setUserProfileInfo] = useState<IProfileProps>();
   const [openModalProfilePic, setOpenModalProfilePic] = useState(false);
+  const [showAllInterests, setShowAllInterests] = useState(false);
   const [post, setPost] = useState<any>([]);
   const history = useHistory();
   
@@ -190,8 +191,8 @@ function Profile(): ReactElement {
       return;
     }
 
-    let arrAreEqual = interestsOfUser.filter(x => interestsSelected.some(y => x.value !== y.value)).length === 0;
-
+    let arrAreEqual = interestsOfUser.length === interestsSelected.length && interestsOfUser.filter(x => interestsSelected.some(y => x.value !== y.value)).length === 0;
+    
     if (name === userProfileInfo?.name && 
       bio === userProfileInfo.bio && 
       arrAreEqual &&
@@ -414,9 +415,29 @@ function Profile(): ReactElement {
         <CardInfo>
           <h3>Interesses</h3>
           {interestsOfUser.length > 0 ? (
-            interestsOfUser.map((value) => (
-              <span key={value?.value}> {value?.label} </span>
-            ))
+            interestsOfUser.length > 10 ? (
+              showAllInterests ? (
+                <div className="interesses">
+                  {interestsOfUser.map((value) => (
+                    <span key={value?.value}> {value?.label} </span>
+                  ))}
+                  <span style={{ cursor: 'pointer' }} onClick={() => setShowAllInterests(false)}>mostrar menos...</span>
+                </div>
+              ) : (
+                <div className="interesses">
+                  {interestsOfUser.slice(0, 10).map((value) => (
+                    <span key={value?.value}> {value?.label} </span>
+                  ))}
+                  <span style={{ cursor: 'pointer' }} onClick={() => setShowAllInterests(true)}>mostrar mais...</span>
+                </div>
+              )
+            ) : (
+              <div className="interesses">
+                {interestsOfUser.map((value) => (
+                  <span key={value?.value}> {value?.label} </span>
+                ))}
+              </div>
+            )
           ):(
             <span>Você ainda não tem nenhum interesse</span>
           )}

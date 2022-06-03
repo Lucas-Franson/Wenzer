@@ -102,7 +102,11 @@ export default function Feed(): ReactElement {
   function handleNewPost() {
     if (newPost.length > 0 && !isLoading) {
       setIsLoading(true);
-      setPost([...newPost, ...post]);
+
+      if (!post.find((x: any) => x._id === newPost[0]._id)) {
+        setPost([...newPost, ...post]);
+      }
+
       let created_at = newPost[0].created_at;
       setDateOfLastPost(created_at!);
     }
@@ -116,17 +120,22 @@ export default function Feed(): ReactElement {
       }
     }).then(res => {
       setIsLoading(false);
+      setNewPost([]);
     }).catch(err => {
       toastfyError(err?.response?.data?.mensagem);
       setIsLoading(false);
+      setNewPost([]);
     })
   }
 
   function createWebService(isMounted: boolean) {
     let socketConn = getSocketIOClient();
     socketConn.on("GetPost", data => {
-      if (!isLoading && isMounted) {
-        setNewPost(data);
+      if (!isLoading && isMounted && data && newPost.length != data.length && data.length > 0) {
+        let alreadyExist = post.find((x: any) => x._id == data[0]._id);
+        if (!alreadyExist) {
+          setNewPost(data);
+        }
       }
     });
   }
@@ -193,7 +202,7 @@ export default function Feed(): ReactElement {
 
       </ContainerNewPost>  
       {
-        newPost.length > 0 ? (
+        newPost.length > 0 && !post.find((x: any) => x._id === newPost[0]._id) ? (
           <Button className="flex button_coment" onClick={handleNewPost}>
             <MdUpdate size={22}/> 
             {isLoading ? (
@@ -208,7 +217,7 @@ export default function Feed(): ReactElement {
         )
       }
 
-      <div>
+      <div style={{ width: '100%' }}>
         {post.length !== 0 ? (
             post.map(({ 
               created_at, description, _id, idProject, idUser, photo, title, goodIdea, user, countGoodIdea

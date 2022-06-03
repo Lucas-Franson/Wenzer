@@ -110,6 +110,18 @@ export const CardInfo = styled.div`
   border-radius: 8px;
 
   padding: 10px;
+
+  > .interesses {
+    display: flex;
+    flex-direction: column;
+
+    > span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: ${props => props.theme.colors.grey}
+    }
+
+  }
   
   > h3 {
     font-size: 1.1rem;
