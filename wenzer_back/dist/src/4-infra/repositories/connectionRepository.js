@@ -37,6 +37,7 @@ class ConnectionRepository extends orm_1.Orm {
                     },
                     {
                         $match: {
+                            accepted: true,
                             $or: [
                                 {
                                     idFollower: idUser
