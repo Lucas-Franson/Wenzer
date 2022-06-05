@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
-    "version": "3.1.0",
+    "name": "Wenzer",
+    "slug": "Wenzer",
+    "version": "3.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -26,7 +26,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.uniso.wenzer",
-      "versionCode": "3"
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"

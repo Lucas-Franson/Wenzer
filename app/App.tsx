@@ -4,12 +4,10 @@ import Constants from 'expo-constants'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <WebView 
-        style={styles.webview}
-        source={{ uri: 'http://wenzer.com.br' }}
-      />
-    </View>
+    <WebView 
+      style={styles.webview}
+      source={{ uri: 'http://wenzer.com.br' }}
+    />
   );
 }
 
